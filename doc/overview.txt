@@ -1,0 +1,11 @@
+#
+# overview
+#
+
+mi_tool is MoriiIsm tool.
+
+Programs are written in C++.
+Scripts are in R, sh, perl, and python.
+
+
+

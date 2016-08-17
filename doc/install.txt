@@ -1,0 +1,26 @@
+#
+# install
+#
+
+su root 
+# mkdir /soft/mitool
+# chown morii /soft/mitool
+# exit
+
+cd /soft/mitool
+mkdir YYMMDD
+cd YYMMDD
+git clone https://<your account name>@github.com/moriiism/mitool.git
+
+emacs Makefile.in &
+emacs setup/setup.sh &
+
+cd /soft/mitool/***
+
+make > make.log 2>&1 &
+tail -f make.log
+
+
+
+
+

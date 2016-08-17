@@ -1,0 +1,39 @@
+#
+# Makefile.in
+#
+
+MI_ROOT_DIR = /home/morii/work/github/moriiism/mitool
+
+MI_BIN_DIR = ${MI_ROOT_DIR}/bin
+MI_LIB_DIR = ${MI_ROOT_DIR}/lib
+MI_INC_DIR = ${MI_ROOT_DIR}/include
+
+INST_BIN_DIR = ${MI_BIN_DIR}
+INST_LIB_DIR = ${MI_LIB_DIR}
+INST_INC_DIR = ${MI_INC_DIR}
+
+### milib
+MILIB_DIR = ${MI_ROOT_DIR}
+MILIB_INC = -I$(MILIB_DIR)/include
+MILIB_LIB = -L$(MILIB_DIR)/lib -lmilib
+
+### library
+LIB = -lm -lrt
+# -lreadline -ltermcap -ldl
+
+# compiler
+FC = f77
+# FC = gfortran
+CC = gcc
+CXX = g++
+LD = gcc
+
+FFLAGS   = -Wall -g -O2 -fPIC
+CFLAGS   = -Wall -g -O2 -fPIC
+CXXFLAGS = -Wall -g -O3 -fPIC
+LDFLAGS  = -g -O2
+
+FCN     = $(FC) $(FFLAGS) $(INCLUDE)
+CCN     = $(CC) $(CFLAGS) $(INCLUDE)
+CXXN    = $(CXX) $(CXXFLAGS) $(INCLUDE)
+
