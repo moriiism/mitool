@@ -1,4 +1,4 @@
-ALL = include src doc
+ALL = include  src
 
 all:
 	for dir in $(ALL); do \

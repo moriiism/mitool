@@ -1,4 +1,4 @@
-ALL = doc milib script setup
+ALL = mipllib  sample
 
 all:
 	for dir in $(ALL); do \

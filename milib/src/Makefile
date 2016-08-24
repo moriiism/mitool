@@ -1,5 +1,5 @@
 
-include ../Makefile.in
+include ../../Makefile.in
 
 INCLUDE = $(MILIB_INC) $(CFITSIO_INC) $(MT_INC)
 
