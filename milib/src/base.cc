@@ -4,13 +4,15 @@
 // MiObject
 //
 
-// public
+// protected
 
 void MiObject::CopyMiObject(const MiObject* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
 
+    // class_name_ should not be copied.
+    // only title_ is copied.
     title_      = org->title_;
 }
 

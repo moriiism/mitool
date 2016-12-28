@@ -62,6 +62,25 @@ namespace MiSort
         else
             std::nth_element(index, index + k, index + n, CompareAsc<const Element*>(a) );
     }
+
+
+    template <typename T>
+    long BinarySearch(long n, const T *array, T value)
+    {
+        // Binary search in an array of n values to locate value.
+        //
+        // Array is supposed  to be sorted prior to this call.
+        // If match is found, function returns position of element.
+        // If no match found, function gives nearest element smaller than value.
+
+        const T* pind;
+        pind = std::lower_bound(array, array + n, value);
+        if ( (pind != array + n) && (*pind == value) )
+            return (pind - array);
+        else
+            return ( pind - array - 1);
+    }
+    
 }
 
 #endif // MORIIISM_MILIB_SORT_H_

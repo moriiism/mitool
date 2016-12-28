@@ -24,7 +24,7 @@ int MiFits::InFitsImageF(string infile,
     int naxis = 0;
     fits_get_img_dim(fptr_in, &naxis, &status);
     printf("naxis = %d\n", naxis);
-    if(2 != naxis){
+    if(2 > naxis){
         printf("bad naxis (= %d)\n", naxis);
         abort();
     }
@@ -42,13 +42,23 @@ int MiFits::InFitsImageF(string infile,
     naxes_sub[1] = img_info->GetNaxesArrElm(1);
     long npix_image_sub_vec = naxes_sub[0] * naxes_sub[1];
 
+    printf("jjjj\n");
+    
     float* image_sub_vec = new float [npix_image_sub_vec];
     long inc[2] = {1,1};
     fits_read_subset(fptr_in, TFLOAT,
                      img_info->GetFpixelArr(), img_info->GetLpixelArr(),
                      inc, NULL, image_sub_vec, NULL, &status);
+    printf("aaaa\n");
+    
     fits_close_file(fptr_in, &status);
+
+    printf("kkkk\n");
+    
     fits_report_error(stderr, status);
+
+    printf("ssss\n");
+    
 
     // float --> double
     double* data_arr = new double [npix_image_sub_vec];
@@ -60,6 +70,9 @@ int MiFits::InFitsImageF(string infile,
     
     *data_arr_ptr = data_arr;
 
+
+
+    
     return (status);
 }
 

@@ -2,10 +2,6 @@
 # overview
 #
 
-mi_tool is MoriiIsm tool.
-
+The mi_tool is MoriiIsm tool written by Mikio Morii @ ISM.
 Programs are written in C++.
-Scripts are in R, sh, perl, and python.
-
-
-
+Scripts are written in R, sh, perl, and python.

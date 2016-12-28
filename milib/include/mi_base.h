@@ -2,8 +2,6 @@
 #define MORIIISM_MILIB_BASE_H_
 
 #include "mi_par.h"
-#include "mi_mathpar.h"
-#include "mi_physpar.h"
 
 #define MPrintErr(msg)         (printf("ERROR: %s: %u: %s(): %s\n", __FILE__, __LINE__, __func__, msg))
 #define MPrintWarn(msg)        (printf("WARNING: %s: %u: %s(): %s\n", __FILE__, __LINE__, __func__, msg))
@@ -11,7 +9,7 @@
 #define MPrintErrClass(msg)    (printf("ERROR: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
 #define MPrintWarnClass(msg)   (printf("WARNING: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
 #define MPrintInfoClass(msg)   (printf("INFO: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
-#define MPrintErrVFunc         (MPrintErr("wrong virtual function usage."))
+#define MPrintErrVFunc         (MPrintErr("Wrong virtual function call."))
 
 #include <string.h>
 #include <typeinfo>

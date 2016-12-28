@@ -7,7 +7,8 @@ TARGET = libmilib.a
 # libmilib.so
 
 OBJ = base.o  str.o  iolib.o  rand.o  math.o  linalg.o \
-	img_info.o  fits.o  time.o
+	img_info.o  fits.o  time.o  interval.o  stat1d.o \
+	data1d.o  data1d_nerr.o  data1d_serr.o  data1d_terr.o
 
 all: $(TARGET)
 

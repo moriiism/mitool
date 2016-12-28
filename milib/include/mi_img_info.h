@@ -12,7 +12,10 @@
 //   # x(pixel)  y(pixel)  t(frame)
 //   fpixel[0] fpixel[1] fpixel[2]
 //   lpixel[0] lpixel[1] lpixel[2]
-//
+// 4-dim data :
+//   # x(pixel)  y(pixel)  freq        pol
+//   fpixel[0] fpixel[1] fpixel[2]  fpixel[3]
+//   lpixel[0] lpixel[1] lpixel[2]  lpixel[3]
 
 class MiImgInfo : public MiObject{
 public:
@@ -30,6 +33,9 @@ public:
                     long lpixel0, long lpixel1);
     void InitSetCube(long fpixel0, long fpixel1, long fpixel2,
                      long lpixel0, long lpixel1, long lpixel2);
+    void InitSet4dim(long fpixel0, long fpixel1, long fpixel2, long fpixel3,
+                     long lpixel0, long lpixel1, long lpixel2, long lpixel3);
+    
     // Load
     void Load(string file);
 

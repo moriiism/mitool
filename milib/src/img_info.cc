@@ -24,6 +24,22 @@ void MiImgInfo::InitSetCube(long fpixel0, long fpixel1, long fpixel2,
     SetNaxesArr();
 }
 
+void MiImgInfo::InitSet4dim(long fpixel0, long fpixel1, long fpixel2, long fpixel3,
+                            long lpixel0, long lpixel1, long lpixel2, long lpixel3)
+{
+    Init(4);
+    SetFpixelArrElm(0, fpixel0);
+    SetFpixelArrElm(1, fpixel1);
+    SetFpixelArrElm(2, fpixel2);
+    SetFpixelArrElm(3, fpixel3);
+    SetLpixelArrElm(0, lpixel0);
+    SetLpixelArrElm(1, lpixel1);
+    SetLpixelArrElm(2, lpixel2);
+    SetLpixelArrElm(3, lpixel3);
+    SetNaxesArr();
+}
+
+
 void MiImgInfo::Load(string file)
 {
     string* line_arr = NULL;
@@ -37,7 +53,7 @@ void MiImgInfo::Load(string file)
     int nsplit = 0;
     string* split_arr = NULL;
     MiStr::GenSplit(line_arr[0], &nsplit, &split_arr);
-    if( ! ( 2 == nsplit || 3 == nsplit ) ){
+    if( ! ( 2 == nsplit || 3 == nsplit || 4 == nsplit) ){
         printf("bad ncolumb of data: %d\n", nsplit);
         abort();
     }
@@ -50,7 +66,7 @@ void MiImgInfo::Load(string file)
     // read the second line
     nsplit = 0;
     MiStr::GenSplit(line_arr[1], &nsplit, &split_arr);
-    if( ! ( 2 == nsplit || 3 == nsplit ) ){
+    if( ! ( 2 == nsplit || 3 == nsplit || 4 == nsplit) ){
         printf("bad ncolumb of data: %d\n", nsplit);
         abort();
     }
@@ -96,7 +112,11 @@ long MiImgInfo::GetNpixelTotal() const
     if(2 == naxis_){
         npixel_total = GetNaxesArrElm(0) * GetNaxesArrElm(1);
     } else if(3 == naxis_){
-        npixel_total = GetNaxesArrElm(0) * GetNaxesArrElm(1) * GetNaxesArrElm(2);
+        npixel_total = GetNaxesArrElm(0) * GetNaxesArrElm(1)
+            * GetNaxesArrElm(2);
+    } else if(4 == naxis_){
+        npixel_total = GetNaxesArrElm(0) * GetNaxesArrElm(1)
+            * GetNaxesArrElm(2) * GetNaxesArrElm(3);
     } else {
         printf("error\n");
         abort();
