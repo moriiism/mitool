@@ -1,4 +1,4 @@
-ALL = doc milib miblaslib mifitslib mirootlib script setup
+ALL = 
 
 all:
 	for dir in $(ALL); do \

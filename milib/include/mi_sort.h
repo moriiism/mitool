@@ -1,6 +1,8 @@
 #ifndef MORIIISM_MILIB_SORT_H_
 #define MORIIISM_MILIB_SORT_H_
 
+#include "mi_base.h"
+
 //
 // made from TMath.h of ROOT tool developed at CERN.
 //

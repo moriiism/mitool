@@ -1,4 +1,4 @@
-ALL = doc milib miblaslib mifitslib mirootlib script setup
+ALL = include  src  test
 
 all:
 	for dir in $(ALL); do \

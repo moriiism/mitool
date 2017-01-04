@@ -76,8 +76,6 @@ private:
 
 class MiArgBase: public MiObject{
 public:
-    explicit MiArgBase(string title = "") :
-        MiObject("MiArgBase", title) {}
     MiArgBase(string class_name, string title) :
         MiObject(class_name, title) {}
     virtual ~MiArgBase() {}

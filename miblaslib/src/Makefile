@@ -1,25 +1,23 @@
 
 include ../../Makefile.in
 
-INCLUDE = $(MILIB_INC) $(MT_INC)
+INCLUDE = $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
 
-TARGET = libmilib.a
-# libmilib.so
+TARGET = libmiblaslib.a
 
-OBJ = base.o  str.o  iolib.o  rand.o  time.o
-
+OBJ = linalg.o
 
 all: $(TARGET)
 
 LIB_DEST = ../lib
-libmilib.a: ${OBJ}
+libmiblaslib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
 	if [ ! -d $(LIB_DEST) ]; then mkdir $(LIB_DEST); fi
 	cp $@ ${LIB_DEST}
 	ranlib ${LIB_DEST}/$@
 
-libmilib.so: ${OBJ}
+libmiblaslib.so: ${OBJ}
 	$(CC) -shared -g -O2 -o $@ ${OBJ}
 	if [ ! -d $(LIB_DEST) ]; then mkdir $(LIB_DEST); fi
 	cp $@ ${LIB_DEST}

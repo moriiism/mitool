@@ -15,12 +15,11 @@ git clone https://<your account name>@github.com/moriiism/mitool.git
 emacs Makefile.in &
 emacs setup/setup.sh &
 
-cd /soft/mitool/***
+cd /soft/mitool/YYMMDD
 
+source setup/setup.sh
 make > make.log 2>&1 &
 tail -f make.log
 
-
-
-
-
+# Check make.log and remove compile errors and warnings
+# If you find bugs, please contact with Mikio Morii.
