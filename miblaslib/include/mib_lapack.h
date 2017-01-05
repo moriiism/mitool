@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MIBLASLIB_LAPACK_H_
-#define MORIIISM_MIBLASLIB_LAPACK_H_
+#ifndef MORIIISM_MITOOL_MIBLASLIB_LAPACK_H_
+#define MORIIISM_MITOOL_MIBLASLIB_LAPACK_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,4 +23,4 @@ extern "C" {
 }
 #endif
 
-#endif // MORIIISM_MIBLASLIB_LAPACK_H_
+#endif // MORIIISM_MITOOL_MIBLASLIB_LAPACK_H_

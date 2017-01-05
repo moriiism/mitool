@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MIFITSLIB_IMG_INFO_H_
-#define MORIIISM_MIFITSLIB_IMG_INFO_H_
+#ifndef MORIIISM_MITOOL_MIFITSLIB_IMG_INFO_H_
+#define MORIIISM_MITOOL_MIFITSLIB_IMG_INFO_H_
 
 #include "mi_iolib.h"
 
@@ -69,4 +69,4 @@ private:
     void SetNaxesArr();
 };
 
-#endif // MORIIISM_MIFITSLIB_IMG_INFO_H_
+#endif // MORIIISM_MITOOL_MIFITSLIB_IMG_INFO_H_

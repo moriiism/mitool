@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MIBLASLIB_LINALG_H_
-#define MORIIISM_MIBLASLIB_LINALG_H_
+#ifndef MORIIISM_MITOOL_MIBLASLIB_LINALG_H_
+#define MORIIISM_MITOOL_MIBLASLIB_LINALG_H_
 
 
 #include "mi_base.h"
@@ -14,4 +14,4 @@ namespace MibLinalg
     
 } //  namespace MibLinalg
 
-#endif // MORIIISM_MIBLASLIB_LINALG_H_
+#endif // MORIIISM_MITOOL_MIBLASLIB_LINALG_H_

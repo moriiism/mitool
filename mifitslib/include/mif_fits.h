@@ -1,12 +1,11 @@
-#ifndef MORIIISM_MIFITSLIB_FITS_H_
-#define MORIIISM_MIFITSLIB_FITS_H_
+#ifndef MORIIISM_MITOOL_MIFITSLIB_FITS_H_
+#define MORIIISM_MITOOL_MIFITSLIB_FITS_H_
 
 #include "fitsio.h"
 #include "mi_str.h"
 #include "mi_iolib.h"
 #include "mi_rand.h"
 #include "mi_sort.h"
-//#include "mib_linalg.h"
 #include "mif_img_info.h"
 
 namespace MifFits
@@ -27,4 +26,4 @@ namespace MifFits
 
 }  // namespace MifFits
 
-#endif // MORIIISM_MIFITSLIB_FITS_H_
+#endif // MORIIISM_MITOOL_MIFITSLIB_FITS_H_
