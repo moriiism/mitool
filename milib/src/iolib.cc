@@ -19,8 +19,9 @@ int MiIolib::GenReadFile(string file,
         string* split_arr = NULL;
         MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
         if(1 != nsplit){
-            printf("nsplit != 1\n");
-            abort();
+            char msg[kLineSize];
+            sprintf(msg, "nsplit != 1 at iline = %ld", iline);
+            MPrintErr(msg); abort();
         }
         valx_arr[iline] = atof(split_arr[0].c_str());
         MiStr::DelSplit(split_arr);
@@ -49,8 +50,9 @@ int MiIolib::GenReadFile(string file,
         string* split_arr = NULL;
         MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
         if(2 != nsplit){
-            printf("nsplit != 2\n");
-            abort();
+            char msg[kLineSize];
+            sprintf(msg, "nsplit != 2 at iline = %ld", iline);
+            MPrintErr(msg); abort();
         }
         valx1_arr[iline] = atof(split_arr[0].c_str());
         valx2_arr[iline] = atof(split_arr[1].c_str());
@@ -84,8 +86,9 @@ int MiIolib::GenReadFile(string file,
         string* split_arr = NULL;
         MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
         if(3 != nsplit){
-            printf("nsplit != 3\n");
-            abort();
+            char msg[kLineSize];
+            sprintf(msg, "nsplit != 3 at iline = %ld", iline);
+            MPrintErr(msg); abort();
         }
         valx1_arr[iline] = atof(split_arr[0].c_str());
         valx2_arr[iline] = atof(split_arr[1].c_str());
