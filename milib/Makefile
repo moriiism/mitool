@@ -1,4 +1,4 @@
-ALL = include  src
+ALL = include  src  test
 
 all:
 	for dir in $(ALL); do \

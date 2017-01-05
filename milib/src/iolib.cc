@@ -1,96 +1,62 @@
 #include "mi_iolib.h"
 
-
 //
 // Read File
 //
 
-
 int MiIolib::GenReadFile(string file,
-                           double** const valx_arr_ptr,
-                           long* const nline_ptr)
+                         double** const valx_arr_ptr,
+                         long* const nline_ptr)
 {
     int ret = kRetNormal;    
 
-    FILE* fp = NULL;
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-
-    long iline = 0;
-    char line[kLineSize];    
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        iline ++;
-    }
-    fclose(fp);
-    long nline = iline;
+    string* lines_arr = NULL;
+    long nline = 0;
+    GenReadFile(file, &lines_arr, &nline);
     double* valx_arr = new double [nline];
     for(long iline = 0; iline < nline; iline ++){
-        valx_arr[iline] = 0.0;
+        int nsplit = 0;
+        string* split_arr = NULL;
+        MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
+        if(1 != nsplit){
+            printf("nsplit != 1\n");
+            abort();
+        }
+        valx_arr[iline] = atof(split_arr[0].c_str());
+        MiStr::DelSplit(split_arr);
     }
-
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-    iline = 0;
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        sscanf(line, "%lf", &valx_arr[iline]);
-        iline++;
-    }
-    fclose(fp);
-
+    DelReadFile(lines_arr);
+        
     *valx_arr_ptr = valx_arr;
     *nline_ptr = nline;
     return ret;
 }
 
 int MiIolib::GenReadFile(string file,
-                           double** const valx1_arr_ptr,
-                           double** const valx2_arr_ptr,
-                           long* const nline_ptr)
+                         double** const valx1_arr_ptr,
+                         double** const valx2_arr_ptr,
+                         long* const nline_ptr)
 {
     int ret = kRetNormal;
     
-    FILE* fp = NULL;
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-
-    long iline = 0;
-    char line[kLineSize];
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        iline++;
-    }
-    fclose(fp);
-    long nline = iline;
+    string* lines_arr = NULL;
+    long nline = 0;
+    GenReadFile(file, &lines_arr, &nline);
     double* valx1_arr = new double [nline];
-    double* valx2_arr = new double [nline];
+    double* valx2_arr = new double [nline];    
     for(long iline = 0; iline < nline; iline ++){
-        valx1_arr[iline] = 0.0;
-        valx2_arr[iline] = 0.0;
+        int nsplit = 0;
+        string* split_arr = NULL;
+        MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
+        if(2 != nsplit){
+            printf("nsplit != 2\n");
+            abort();
+        }
+        valx1_arr[iline] = atof(split_arr[0].c_str());
+        valx2_arr[iline] = atof(split_arr[1].c_str());
+        MiStr::DelSplit(split_arr);
     }
-    
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-    iline = 0;
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        sscanf(line, "%lf %lf", &valx1_arr[iline], &valx2_arr[iline]);
-        iline++;
-    }
-    fclose(fp);
+    DelReadFile(lines_arr);
 
     *valx1_arr_ptr = valx1_arr;
     *valx2_arr_ptr = valx2_arr;
@@ -100,48 +66,33 @@ int MiIolib::GenReadFile(string file,
 
 
 int MiIolib::GenReadFile(string file,
-                           double** const valx1_arr_ptr,
-                           double** const valx2_arr_ptr,
-                           double** const valx3_arr_ptr,
-                           long* const nline_ptr)
+                         double** const valx1_arr_ptr,
+                         double** const valx2_arr_ptr,
+                         double** const valx3_arr_ptr,
+                         long* const nline_ptr)
 {
     int ret = kRetNormal;
-    FILE* fp = NULL;
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-    long iline = 0;    
-    char line[kLineSize];
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        iline++;
-    }
-    fclose(fp);
-    long nline = iline;
+    
+    string* lines_arr = NULL;
+    long nline = 0;
+    GenReadFile(file, &lines_arr, &nline);
     double* valx1_arr = new double [nline];
     double* valx2_arr = new double [nline];
     double* valx3_arr = new double [nline];
     for(long iline = 0; iline < nline; iline ++){
-        valx1_arr[iline] = 0.0;
-        valx2_arr[iline] = 0.0;
-        valx3_arr[iline] = 0.0;
+        int nsplit = 0;
+        string* split_arr = NULL;
+        MiStr::GenSplit(lines_arr[iline], &nsplit, &split_arr);
+        if(3 != nsplit){
+            printf("nsplit != 3\n");
+            abort();
+        }
+        valx1_arr[iline] = atof(split_arr[0].c_str());
+        valx2_arr[iline] = atof(split_arr[1].c_str());
+        valx3_arr[iline] = atof(split_arr[2].c_str());
+        MiStr::DelSplit(split_arr);
     }
-    
-
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-    iline = 0;
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        sscanf(line, "%lf %lf %lf", &valx1_arr[iline], &valx2_arr[iline], &valx3_arr[iline]);
-        iline++;
-    }
-    fclose(fp);
+    DelReadFile(lines_arr);
 
     *valx1_arr_ptr = valx1_arr;
     *valx2_arr_ptr = valx2_arr;
@@ -150,56 +101,9 @@ int MiIolib::GenReadFile(string file,
     return ret;
 }
 
-
-int MiIolib::GenReadFile(string file,              // file name
-                           char*** const lines_ptr,  // To store the lines
-                           long* const nline_ptr)     // # of lines
-{
-    int ret = kRetNormal;
-
-    FILE* fp = NULL;
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-
-    long iline = 0;    
-    char line[kLineSize];
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        iline++;
-    }
-    fclose(fp);
-    long nline = iline;
-
-    char** lines = new char* [nline];
-    for(long iline = 0; iline < nline; iline ++){
-        lines[iline] = new char [kLineSize];
-    }
-    
-    if(NULL == (fp = fopen(file.c_str(), "r"))){
-        MPrintErr("file open error.");
-        abort();
-    }
-    iline = 0;
-    while(1){
-        if(NULL == fgets( line, sizeof(line), fp))
-            break;
-        strcpy(lines[iline], line);
-        MiStr::Chomp(lines[iline]);
-        iline ++;
-    }
-    fclose(fp);
-
-    *lines_ptr = lines;
-    *nline_ptr = nline;
-    return ret;
-}
-
 int MiIolib::GenReadFile(string file,
-                           string** const lines_ptr,
-                           long* const nline_ptr)
+                         string** const lines_ptr,
+                         long* const nline_ptr)
 {
     int ret = kRetNormal;
     string buf;
@@ -210,8 +114,6 @@ int MiIolib::GenReadFile(string file,
         buf_vec.push_back(buf);
     }
     ifs.close();
-
-    printf("debug: buf_vec.size() = %d\n", (int) buf_vec.size());
 
     long nline = buf_vec.size();
     string* lines = new string [nline];
@@ -230,8 +132,8 @@ int MiIolib::GenReadFile(string file,
 //
 
 int MiIolib::GenReadFileSkipComment(string file,
-                                      string** const lines_ptr,
-                                      long* const nline_ptr)
+                                    string** const lines_ptr,
+                                    long* const nline_ptr)
 {
     int ret = kRetNormal;
     string buf;
@@ -273,8 +175,8 @@ int MiIolib::GenReadFileSkipComment(string file,
 //
 
 int MiIolib::GenReadFileComment(string file,
-                                  string** const lines_ptr,
-                                  long* const nline_ptr)
+                                string** const lines_ptr,
+                                long* const nline_ptr)
 {
     int ret = kRetNormal;
     string buf;
@@ -310,9 +212,9 @@ int MiIolib::GenReadFileComment(string file,
 //
 
 int MiIolib::GenRowsByReadFileSkipComment(string file,
-                                            vector<long> sel_row_list_vec,
-                                            string** const lines_ptr,
-                                            long* const nline_ptr)
+                                          vector<long> sel_row_list_vec,
+                                          string** const lines_ptr,
+                                          long* const nline_ptr)
 {
     string* lines_tmp = NULL;
     long nline_tmp = 0;
@@ -333,14 +235,6 @@ int MiIolib::GenRowsByReadFileSkipComment(string file,
 void MiIolib::DelReadFile(double* val_arr)
 {
     delete [] val_arr; val_arr = NULL;
-}
-
-void MiIolib::DelReadFile(long nline, char** line_arr)
-{
-    for(long iline = 0; iline < nline; iline ++){
-        delete [] line_arr[iline]; line_arr[iline] = NULL;
-    }
-    delete [] line_arr; line_arr = NULL;
 }
 
 void MiIolib::DelReadFile(string* line_arr)

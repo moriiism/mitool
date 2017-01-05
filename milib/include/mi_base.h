@@ -1,15 +1,24 @@
-#ifndef MORIIISM_MILIB_BASE_H_
-#define MORIIISM_MILIB_BASE_H_
+#ifndef MORIIISM_MITOOL_MILIB_BASE_H_
+#define MORIIISM_MITOOL_MILIB_BASE_H_
 
 #include "mi_par.h"
 
-#define MPrintErr(msg)         (printf("ERROR: %s: %u: %s(): %s\n", __FILE__, __LINE__, __func__, msg))
-#define MPrintWarn(msg)        (printf("WARNING: %s: %u: %s(): %s\n", __FILE__, __LINE__, __func__, msg))
-#define MPrintInfo(msg)        (printf("INFO: %s: %u: %s(): %s\n", __FILE__, __LINE__, __func__, msg))
-#define MPrintErrClass(msg)    (printf("ERROR: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
-#define MPrintWarnClass(msg)   (printf("WARNING: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
-#define MPrintInfoClass(msg)   (printf("INFO: %s: %u: %s::%s():%s: %s\n", __FILE__, __LINE__, GetClassName().c_str(), __func__, GetTitle().c_str(), msg))
-#define MPrintErrVFunc         (MPrintErr("Wrong virtual function call."))
+#define MPrintErr(msg)       (printf("ERROR: %s: %u: %s(): %s\n", \
+                             __FILE__, __LINE__, __func__, msg))
+#define MPrintWarn(msg)      (printf("WARNING: %s: %u: %s(): %s\n", \
+                             __FILE__, __LINE__, __func__, msg))
+#define MPrintInfo(msg)      (printf("INFO: %s: %u: %s(): %s\n", \
+                             __FILE__, __LINE__, __func__, msg))
+#define MPrintErrClass(msg)  (printf("ERROR: %s: %u: %s::%s():%s: %s\n", \
+                             __FILE__, __LINE__, GetClassName().c_str(), \
+                             __func__, GetTitle().c_str(), msg))
+#define MPrintWarnClass(msg) (printf("WARNING: %s: %u: %s::%s():%s: %s\n", \
+                             __FILE__, __LINE__, GetClassName().c_str(), \
+                             __func__, GetTitle().c_str(), msg))
+#define MPrintInfoClass(msg) (printf("INFO: %s: %u: %s::%s():%s: %s\n", \
+                             __FILE__, __LINE__, GetClassName().c_str(), \
+                             __func__, GetTitle().c_str(), msg))
+#define MPrintErrVFunc       (MPrintErr("Wrong virtual function call."))
 
 #include <string.h>
 #include <typeinfo>
@@ -45,9 +54,6 @@ private:
 
 class MiObject: private Uncopyable{
 public:
-    explicit MiObject(string title = "") :
-        class_name_("MiObject"),
-        title_(title) {}
     MiObject(string class_name, string title) :
         class_name_(class_name),
         title_(title) {}
@@ -89,4 +95,4 @@ private:
     virtual void Usage(FILE* fp) const = 0;
 };
 
-#endif // MORIIISM_MILIB_BASE_H_
+#endif // MORIIISM_MITOOL_MILIB_BASE_H_

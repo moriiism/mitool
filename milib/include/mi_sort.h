@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MILIB_SORT_H_
-#define MORIIISM_MILIB_SORT_H_
+#ifndef MORIIISM_MITOOL_MILIB_SORT_H_
+#define MORIIISM_MITOOL_MILIB_SORT_H_
 
 #include "mi_base.h"
 
@@ -85,4 +85,4 @@ namespace MiSort
     
 }
 
-#endif // MORIIISM_MILIB_SORT_H_
+#endif // MORIIISM_MITOOL_MILIB_SORT_H_

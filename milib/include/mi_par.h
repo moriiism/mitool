@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MILIB_PAR_H_
-#define MORIIISM_MILIB_PAR_H_
+#ifndef MORIIISM_MITOOL_MILIB_PAR_H_
+#define MORIIISM_MITOOL_MILIB_PAR_H_
 
 #include <limits>
 #include <cfloat>
@@ -15,5 +15,4 @@ extern int g_flag_debug;
 extern int g_flag_help;
 extern int g_flag_verbose;
 
-
-#endif // MORIIISM_MILIB_PAR_H_
+#endif // MORIIISM_MITOOL_MILIB_PAR_H_

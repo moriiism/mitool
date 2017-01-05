@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MILIB_STR_H_
-#define MORIIISM_MILIB_STR_H_
+#ifndef MORIIISM_MITOOL_MILIB_STR_H_
+#define MORIIISM_MITOOL_MILIB_STR_H_
 
 #include "mi_base.h"
 
@@ -25,4 +25,4 @@ namespace MiStr
     
 }  //  namespace MiStr
 
-#endif // MORIIISM_MILIB_STR_H_
+#endif // MORIIISM_MITOOL_MILIB_STR_H_

@@ -1,5 +1,5 @@
-#ifndef MORIIISM_MILIB_RAND_H_
-#define MORIIISM_MILIB_RAND_H_
+#ifndef MORIIISM_MITOOL_MILIB_RAND_H_
+#define MORIIISM_MITOOL_MILIB_RAND_H_
 
 #include <stdlib.h>
 #include <time.h>
@@ -14,4 +14,4 @@ namespace MiRand
     
 }  //  namespace MiRand
 
-#endif // MORIIISM_MILIB_RAND_H_
+#endif // MORIIISM_MITOOL_MILIB_RAND_H_
