@@ -1,17 +1,17 @@
 
 include ../../Makefile.in
 
-INCLUDE = $(MILIB_INC) $(MT_INC)
+INCLUDE := $(MILIB_INC) $(MT_INC)
 
-TARGET = libmilib.a
+TARGET := libmilib.a
 # libmilib.so
 
-OBJ = base.o  str.o  iolib.o  rand.o  time.o
+OBJ := base.o  str.o  iolib.o  rand.o  time.o
 
 
 all: $(TARGET)
 
-LIB_DEST = ../lib
+LIB_DEST := ../lib
 libmilib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
@@ -48,3 +48,4 @@ clean:
 
 cleaner: clean
 	-rm -f ${TARGET} *% *~ core
+	-rm -R $(LIB_DEST)

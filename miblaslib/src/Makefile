@@ -1,15 +1,15 @@
 
 include ../../Makefile.in
 
-INCLUDE = $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
+INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
 
-TARGET = libmiblaslib.a
+TARGET := libmiblaslib.a
 
-OBJ = linalg.o
+OBJ := linalg.o
 
 all: $(TARGET)
 
-LIB_DEST = ../lib
+LIB_DEST := ../lib
 libmiblaslib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
@@ -46,3 +46,4 @@ clean:
 
 cleaner: clean
 	-rm -f ${TARGET} *% *~ core
+	-rm -R $(LIB_DEST)

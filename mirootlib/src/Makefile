@@ -1,16 +1,17 @@
 
 include ../../Makefile.in
+include ../Makefile.in
 
-INCLUDE = $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
+INCLUDE := $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
 
-TARGET = libmirootlib.a
+TARGET := libmirootlib.a
 
-OBJ = math.o  interval.o  stat1d.o \
+OBJ := math.o  interval.o  stat1d.o \
 	data1d.o  data1d_nerr.o  data1d_serr.o  data1d_terr.o
 
 all: $(TARGET)
 
-LIB_DEST = ../lib
+LIB_DEST := ../lib
 libmirootlib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
@@ -47,3 +48,4 @@ clean:
 
 cleaner: clean
 	-rm -f ${TARGET} *% *~ core
+	-rm -R $(LIB_DEST)

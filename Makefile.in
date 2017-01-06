@@ -2,56 +2,54 @@
 # Makefile.in
 #
 
-MITOOL_DIR = /home/morii/work/github/moriiism/mitool
+MITOOL_DIR := /home/morii/work/github/moriiism/mitool
 
 ### MersenneTwister
-MT_DIR = /soft/MersenneTwister/mt19937-64
-MT_INC = -I$(MT_DIR)
-MT_LIB = -L$(MT_DIR) -lmt19937-64
+MT_DIR := /soft/MersenneTwister/mt19937-64
+MT_INC := -I$(MT_DIR)
+MT_LIB := -L$(MT_DIR) -lmt19937-64
 
 ### cfitsio
-CFITSIO_DIR = /soft/cfitsio/3380
-CFITSIO_INC = -I$(CFITSIO_DIR)/include
-CFITSIO_LIB = -L$(CFITSIO_DIR)/lib -lcfitsio
+CFITSIO_DIR := /soft/cfitsio/3380
+CFITSIO_INC := -I$(CFITSIO_DIR)/include
+CFITSIO_LIB := -L$(CFITSIO_DIR)/lib -lcfitsio
 
 ### milib
-MILIB_DIR = ${MITOOL_DIR}/milib
-MILIB_INC = -I$(MILIB_DIR)/include
-MILIB_LIB = -L$(MILIB_DIR)/lib -lmilib
+MILIB_DIR := ${MITOOL_DIR}/milib
+MILIB_INC := -I$(MILIB_DIR)/include
+MILIB_LIB := -L$(MILIB_DIR)/lib -lmilib
 
 ### miblaslib
-MIBLASLIB_DIR = ${MITOOL_DIR}/miblaslib
-MIBLASLIB_INC = -I$(MIBLASLIB_DIR)/include
-MIBLASLIB_LIB = -L$(MIBLASLIB_DIR)/lib -lmiblaslib
+MIBLASLIB_DIR := ${MITOOL_DIR}/miblaslib
+MIBLASLIB_INC := -I$(MIBLASLIB_DIR)/include
+MIBLASLIB_LIB := -L$(MIBLASLIB_DIR)/lib -lmiblaslib
 
 ### mifitslib
-MIFITSLIB_DIR = ${MITOOL_DIR}/mifitslib
-MIFITSLIB_INC = -I$(MIFITSLIB_DIR)/include
-MIFITSLIB_LIB = -L$(MIFITSLIB_DIR)/lib -lmifitslib
+MIFITSLIB_DIR := ${MITOOL_DIR}/mifitslib
+MIFITSLIB_INC := -I$(MIFITSLIB_DIR)/include
+MIFITSLIB_LIB := -L$(MIFITSLIB_DIR)/lib -lmifitslib
 
 ### mirootlib
-MIROOTLIB_DIR = ${MITOOL_DIR}/mirootlib
-MIROOTLIB_INC = -I$(MIROOTLIB_DIR)/include
-MIROOTLIB_LIB = -L$(MIROOTLIB_DIR)/lib -lmirootlib
-
+MIROOTLIB_DIR := ${MITOOL_DIR}/mirootlib
+MIROOTLIB_INC := -I$(MIROOTLIB_DIR)/include
+MIROOTLIB_LIB := -L$(MIROOTLIB_DIR)/lib -lmirootlib
 
 ### library
-LIB = -lm -lrt
+LIB := -lm -lrt
 # -lreadline -ltermcap -ldl
 
 # compiler
-FC = f77
+FC := f77
 # FC = gfortran
-CC = gcc
-CXX = g++
-LD = gcc
+CC := gcc
+CXX := g++
+LD := gcc
 
-FFLAGS   = -Wall -g -O2 -fPIC
-CFLAGS   = -Wall -g -O2 -fPIC
-CXXFLAGS = -Wall -g -O3 -fPIC
-LDFLAGS  = -g -O2
+FFLAGS   := -Wall -g -O2 -fPIC
+CFLAGS   := -Wall -g -O2 -fPIC
+CXXFLAGS := -Wall -g -O3 -fPIC
+LDFLAGS  := -g -O2
 
 FCN     = $(FC) $(FFLAGS) $(INCLUDE)
 CCN     = $(CC) $(CFLAGS) $(INCLUDE)
 CXXN    = $(CXX) $(CXXFLAGS) $(INCLUDE)
-

@@ -1,0 +1,15 @@
+#
+# Makefile.in
+#
+
+### Root
+ROOT_INC := -I$(shell root-config --incdir)
+ROOT_CFLAGS := $(shell root-config --cflags)
+ROOT_LDFLAGS := $(shell root-config --ldflags)
+ROOT_LIBS := $(shell root-config --libs)
+ROOT_GLIBS := $(shell root-config --glibs)
+ROOT_ALLLIBS := $(ROOT_LIBS) $(ROOT_GLIBS)
+
+CFLAGS   := -Wall -g -O2 -fPIC $(ROOT_CFLAGS)
+CXXFLAGS := -Wall -g -O3 -fPIC $(ROOT_CFLAGS)
+LDFLAGS  := -g -O2 $(ROOT_LDLAGS)

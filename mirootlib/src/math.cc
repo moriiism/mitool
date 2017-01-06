@@ -410,7 +410,11 @@ double MirMath::GetRMS(long narr, const double* const val_arr)
     return rms;
 }
 
-
+double MirMath::GetMedian(long narr, const double* const val_arr)
+{
+    double ans = TMath::Median(narr, val_arr);
+    return ans;
+}
 
 // For N values without errors
 //  for vector
@@ -510,6 +514,11 @@ double MirMath::GetRMS(vector<double> vec)
     delete [] val_arr;
     return ans;
 }
+
+
+
+
+
 
 // For N values with gaussian errors
 

@@ -1,14 +1,11 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_MATH_H_
 #define MORIIISM_MITOOL_MIROOTLIB_MATH_H_
 
-#include <string>
-#include <vector>
-#include <cmath>
-
-using std::string;
-using std::vector;
-
 #include "mi_base.h"
+
+#include "TMath.h"
+//#include "Math/QuantFuncMathMore.h"
+#include "Math/QuantFuncMathCore.h"
 
 // "Average" and "mean" are ambiguous, then we do not use these names.
 // Instead, we use the followings:
@@ -111,6 +108,8 @@ namespace MirMath
     double GetRMS(long narr, const double* const val_arr);
     // RMS = Root Mean Square = sqrt[ (Sum x_i^2) / N ]
 
+    double GetMedian(long narr, const double* const val_arr);
+
     //  for vector
     double GetMin(vector<double> vec);
     double GetMax(vector<double> vec);
@@ -124,7 +123,7 @@ namespace MirMath
     double GetSqrtOfUnbiasedVariance(vector<double> vec);
     double GetRMS(vector<double> vec);
     double GetMedian(vector<double> vec);
-    
+    double GetMedian(vector<double> vec);
     
     // For N values with gaussian errors
     //   for array

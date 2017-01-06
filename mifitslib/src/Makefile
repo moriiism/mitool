@@ -1,15 +1,15 @@
 
 include ../../Makefile.in
 
-INCLUDE = $(MIFITSLIB_INC) $(MILIB_INC) $(CFITSIO_INC) $(MT_INC)
+INCLUDE := $(MIFITSLIB_INC) $(MILIB_INC) $(CFITSIO_INC) $(MT_INC)
 
-TARGET = libmifitslib.a
+TARGET := libmifitslib.a
 
-OBJ = img_info.o  fits.o
+OBJ := img_info.o  fits.o
 
 all: $(TARGET)
 
-LIB_DEST = ../lib
+LIB_DEST := ../lib
 libmifitslib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
@@ -46,3 +46,4 @@ clean:
 
 cleaner: clean
 	-rm -f ${TARGET} *% *~ core
+	-rm -R $(LIB_DEST)

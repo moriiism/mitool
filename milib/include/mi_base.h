@@ -38,7 +38,6 @@ using std::pair;
 using std::type_info;
 using std::istringstream;
 using std::stringstream;
-using std::isinf;
 
 #include <getopt.h>
 
