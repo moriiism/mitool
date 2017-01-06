@@ -38,6 +38,7 @@ public:
 
     void Load(string file);
     void Copy(const Interval* const org);
+    Interval* const Clone() const;
 
     // get
     long GetNterm() const {return nterm_;};
@@ -129,6 +130,7 @@ public:
                  const Interval* const interval_y);
 
     void Copy(const Interval2dim* const org);
+    Interval2dim* const Clone() const;    
 
     // get
     const Interval* const GetIntervalX() const {return interval_x_;};
@@ -173,7 +175,7 @@ public:
                  const Interval* const* const interval_arr);
 
     void Copy(const IntervalNdim* const org);
-    
+    IntervalNdim* const Clone() const;
 
     // get
     long GetNdim() const {return ndim_;};

@@ -150,7 +150,6 @@ public:
     
     // kinds of InitSet
     void Copy(const DataArray1d* const org);
-    virtual DataArray1d* const Clone() const = 0;
     virtual void Load(string file) = 0;
     static void ReadInfo(string file, int* flag_val_sorted_ptr);
 
@@ -310,6 +309,9 @@ public:
 
     // output
     // mode: 0, 1, 2
+    //    0: data
+    //    1: index data
+    //    2: data   1.0
     void Save(string outfile, int mode, double offset_val) const;
     void SaveData(string outfile, int mode, double offset_val) const;
     void PrintInfo(FILE* fp) const;

@@ -102,7 +102,7 @@ void DataArray1d::Copy(const DataArray1d* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
-    
+
     CopyMiObject(org);
     Init(org->GetNdata());
     Set(org);

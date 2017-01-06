@@ -61,6 +61,8 @@ public:
         NullMiObject();
     }
 
+    virtual MiObject* const Clone() const = 0;
+    
     string GetClassName() const {return class_name_;};
     string GetTitle() const {return title_;};
 
