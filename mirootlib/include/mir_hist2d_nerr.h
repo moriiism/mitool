@@ -6,13 +6,9 @@
 class HistDataNerr2d : public HistData2d{
 public:
     explicit HistDataNerr2d(string title = "") :
-        HistData2d("HistDataNerr2d", title),
-        oval_arr_(NULL) {}
-    HistDataNerr2d(string class_name, string title) :
-        HistData2d(class_name, title),
-        oval_arr_(NULL) {}
+        HistData2d("HistDataNerr2d", title) {}
     virtual ~HistDataNerr2d() {
-        Null();
+        NullHistData2d();
     }
    
     // Set
@@ -247,7 +243,7 @@ public:
                                 string title_oaxis = "",
                                 string style = "def") const;
     void MkTH2Fig(string outfig,
-                  MxkwRootTool* const root_tool,
+                  MirRootTool* const root_tool,
                   double offset_xval = 0.0,
                   double offset_yval = 0.0,
                   double offset_oval = 0.0,
@@ -256,7 +252,7 @@ public:
                   string title_oaxis = "",
                   string style = "def") const;
     void MkTH2FigZrange(string outfig,
-                        MxkwRootTool* const root_tool,
+                        MirRootTool* const root_tool,
                         double zrange_lo, double zrange_up,
                         double offset_xval = 0.0,
                         double offset_yval = 0.0,
@@ -270,16 +266,16 @@ public:
 
 
     // poisson error
-    virtual void FillRandom(const MxkwFunc* const func,
-                            const MxkwFuncPar* const func_par,
+    virtual void FillRandom(const MirFunc* const func,
+                            const MirFuncPar* const func_par,
                             int rand_seed = 1)
         {MPrintErrVFunc; abort();};
 
     // gaussian error
-    virtual void FillRandom(const MxkwFunc* const func,
-                            const MxkwFuncPar* const func_par,
-                            const MxkwFunc* const func_sigma,
-                            const MxkwFuncPar* const func_par_sigma,
+    virtual void FillRandom(const MirFunc* const func,
+                            const MirFuncPar* const func_par,
+                            const MirFunc* const func_sigma,
+                            const MirFuncPar* const func_par_sigma,
                             int rand_seed = 1)
         {MPrintErrVFunc; abort();};    
 
@@ -303,10 +299,11 @@ public:
     int IsValidRangeX(double xval) const;
     int IsValidRangeY(double yval) const;
 
-    
-private:    
-    DataArrayNerr1d* oval_arr_;
-    long num_outer_;
+    // calc_mode: "add", "integral", "amean", "min", "max"
+    void GetProject(long ndata,
+                    const double* const array,
+                    string calc_mode, double bin_width,
+                    double* const val_proj_ptr) const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_NERR_H_

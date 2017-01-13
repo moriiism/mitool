@@ -28,36 +28,54 @@ int MirMath::IsOneOrZero(double val)
 
 int MirMath::IsPlus(double val)
 {
-    if (val > 0) return 1;
-    return 0;
+    if (val > 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int MirMath::IsMinus(double val)
 {
-    if (val < 0) return 1;
-    return 0;
+    if (val < 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
-
 
 int MirMath::Sign(double val)
 {
-    if (val > 0) return 1;
-    if (val < 0) return -1;
-    return 0;
+    if (val > 0) {
+        return 1;
+    } else if (val < 0) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 double MirMath::FilterPlus(double val)
 {
-    if (val > 0) return val;
-    return 0;
+    if (val > 0) {
+        return val;
+    } else {
+        return 0.0;
+    }
 }
 
 double MirMath::FilterMinus(double val)
 {
-    if (val < 0) return val;
-    return 0;
+    if (val < 0) {
+        return val;
+    } else {
+        return 0.0;
+    }
 }
 
+// 0 --> 1
+// 1 --> 0
+// others --> abort
 int MirMath::Not(double val)
 {
     if(1 != IsOneOrZero(val)){
@@ -71,6 +89,9 @@ int MirMath::Not(double val)
     return ans;
 }
 
+// 0 --> 1
+// 1 --> 0
+// others --> abort
 int MirMath::Not(int val)
 {
     int ans = 0;
@@ -91,7 +112,7 @@ int MirMath::Not(int val)
 // For a value with a gaussian error
 
 void MirMath::GetScaled(double val, double val_err, double scale, double offset,
-                         double* const ans_ptr, double* const ans_err_ptr)
+                        double* const ans_ptr, double* const ans_err_ptr)
 {
     double ans     = scale * val + offset;
     double ans_err = fabs(scale) * val_err;
@@ -165,7 +186,7 @@ double MirMath::GetAMean(double aval, double bval)
 // For two values with gaussian errors
 
 void MirMath::GetAdd(double val1, double val1_err, double val2, double val2_err,
-                      double* const ans_ptr, double* const ans_err_ptr)
+                     double* const ans_ptr, double* const ans_err_ptr)
 {
     double ans     = val1 + val2;
     double ans_err = sqrt( pow(val1_err, 2) + pow(val2_err, 2) );
@@ -174,7 +195,7 @@ void MirMath::GetAdd(double val1, double val1_err, double val2, double val2_err,
 }
 
 void MirMath::GetSub(double val1, double val1_err, double val2, double val2_err,
-                      double* const ans_ptr, double* const ans_err_ptr)
+                     double* const ans_ptr, double* const ans_err_ptr)
 {
     double ans     = val1 - val2;
     double ans_err = sqrt( pow(val1_err, 2) + pow(val2_err, 2) );
@@ -183,7 +204,7 @@ void MirMath::GetSub(double val1, double val1_err, double val2, double val2_err,
 }
 
 void MirMath::GetMul(double val1, double val1_err, double val2, double val2_err,
-                      double* const ans_ptr, double* const ans_err_ptr)
+                     double* const ans_ptr, double* const ans_err_ptr)
 {
     double ans     = val1 * val2;
     double ans_err = sqrt( pow( val1_err * val2, 2) +
@@ -193,7 +214,7 @@ void MirMath::GetMul(double val1, double val1_err, double val2, double val2_err,
 }
 
 int MirMath::GetDiv(double val_num, double val_num_err, double val_den, double val_den_err,
-                     double* const ans_ptr, double* const ans_err_ptr)
+                    double* const ans_ptr, double* const ans_err_ptr)
 {
     int status = kRetNormal;
   
@@ -214,21 +235,19 @@ int MirMath::GetDiv(double val_num, double val_num_err, double val_den, double v
 }
 
 
-int MirMath::GetAMean(double val1, double val1_err, double val2, double val2_err,
+void MirMath::GetAMean(double val1, double val1_err, double val2, double val2_err,
                        double* const amean_ptr, double* const amean_err_ptr)
 {
-    int status = kRetNormal;
     double amean = (val1 + val2) / 2.;
     double amean_err = sqrt(pow(val1_err, 2) + pow(val2_err, 2)) / 2.;
     
     *amean_ptr = amean;
     *amean_err_ptr = amean_err;
-    return status;
 }
 
 
 int MirMath::GetWMean(double val1, double val1_err, double val2, double val2_err,
-                       double* const wmean_ptr, double* const wmean_err_ptr)
+                      double* const wmean_ptr, double* const wmean_err_ptr)
 {
     int status = kRetNormal;
     if(val1_err < DBL_EPSILON || val2_err < DBL_EPSILON) {
@@ -248,7 +267,7 @@ int MirMath::GetWMean(double val1, double val1_err, double val2, double val2_err
 
 // sub_add_ratio = (val1 - val2) / (val1 + val2)
 int MirMath::GetSubAddRatio(double val1, double val1_err, double val2, double val2_err,
-                             double* const ans_ptr, double* const ans_err_ptr)
+                            double* const ans_ptr, double* const ans_err_ptr)
 {
     int status = kRetNormal;
   
@@ -274,24 +293,31 @@ int MirMath::GetSubAddRatio(double val1, double val1_err, double val2, double va
 
 double MirMath::GetMin(long narr, const double* const val_arr)
 {
-    double val = *std::min_element(val_arr, val_arr + narr);
-    return val;
+    MiBase::IsValidArray(narr, val_arr);
+    double min = val_arr[0];
+    for(long iarr = 1; iarr < narr; iarr ++){
+        if(min > val_arr[iarr]){
+            min = val_arr[iarr];
+        }
+    }
+    return min;
 }
 
 double MirMath::GetMax(long narr, const double* const val_arr)
 {
-    double val = *std::max_element(val_arr, val_arr + narr);
-    return val;
+    MiBase::IsValidArray(narr, val_arr);    
+    double max = val_arr[0];
+    for(long iarr = 1; iarr < narr; iarr ++){
+        if(max < val_arr[iarr]){
+            max = val_arr[iarr];
+        }
+    }
+    return max;
 }
 
 long MirMath::GetLocMin(long narr, const double* const val_arr)
 {
-    if(narr <= 0){
-        abort();
-    }
-    if(NULL == val_arr){
-        abort();
-    }
+    MiBase::IsValidArray(narr, val_arr);
     double min = val_arr[0];
     long imin = 0;
     for(long iarr = 1; iarr < narr; iarr ++){
@@ -305,12 +331,7 @@ long MirMath::GetLocMin(long narr, const double* const val_arr)
 
 long MirMath::GetLocMax(long narr, const double* const val_arr)
 {
-    if(narr <= 0){
-        abort();
-    }
-    if(NULL == val_arr){
-        abort();
-    }
+    MiBase::IsValidArray(narr, val_arr);    
     double max = val_arr[0];
     long imax = 0;
     for(long iarr = 1; iarr < narr; iarr ++){
@@ -324,6 +345,7 @@ long MirMath::GetLocMax(long narr, const double* const val_arr)
 
 double MirMath::GetAdd(long narr, const double* const val_arr)
 {
+    MiBase::IsValidArray(narr, val_arr);
     double ans = 0.0;
     for(long idata = 0; idata < narr; idata++){
         ans += val_arr[idata];
@@ -333,12 +355,7 @@ double MirMath::GetAdd(long narr, const double* const val_arr)
 
 double MirMath::GetAMean(long narr, const double* const val_arr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
-  
+    MiBase::IsValidArray(narr, val_arr);    
     double sum = 0.0;
     for (long index = 0; index < narr; index++){
         sum += val_arr[index];
@@ -347,14 +364,9 @@ double MirMath::GetAMean(long narr, const double* const val_arr)
     return ave;
 }
 
-
 double MirMath::GetVariance(long narr, const double* const val_arr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
+    MiBase::IsValidArray(narr, val_arr);    
     double sum = 0;
     double sum2 = 0;
     for (long index = 0; index < narr; index++){
@@ -367,15 +379,18 @@ double MirMath::GetVariance(long narr, const double* const val_arr)
 
 double MirMath::GetStddev(long narr, const double* const val_arr)
 {
+    MiBase::IsValidArray(narr, val_arr);    
     double stddev = sqrt( GetVariance(narr, val_arr) );
     return stddev;
 }
 
 double MirMath::GetUnbiasedVariance(long narr, const double* const val_arr)
 {
+    MiBase::IsValidArray(narr, val_arr);    
     if(narr < 2){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
+        char msg[kLineSize];
+        sprintf(msg, "narr (=%ld) < 2", narr);
+        MPrintErr(msg);
         abort();
     }
     double sum = 0;
@@ -390,6 +405,7 @@ double MirMath::GetUnbiasedVariance(long narr, const double* const val_arr)
 
 double MirMath::GetSqrtOfUnbiasedVariance(long narr, const double* const val_arr)
 {
+    MiBase::IsValidArray(narr, val_arr);
     double sqrt_of_unbiased_variance = sqrt( GetUnbiasedVariance(narr, val_arr) );
     return sqrt_of_unbiased_variance;
 }
@@ -397,11 +413,7 @@ double MirMath::GetSqrtOfUnbiasedVariance(long narr, const double* const val_arr
 
 double MirMath::GetRMS(long narr, const double* const val_arr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
+    MiBase::IsValidArray(narr, val_arr);    
     double sum2 = 0;
     for (long index = 0; index < narr; index++){
         sum2 += val_arr[index] * val_arr[index];
@@ -412,6 +424,7 @@ double MirMath::GetRMS(long narr, const double* const val_arr)
 
 double MirMath::GetMedian(long narr, const double* const val_arr)
 {
+    MiBase::IsValidArray(narr, val_arr);
     double ans = TMath::Median(narr, val_arr);
     return ans;
 }
@@ -421,110 +434,102 @@ double MirMath::GetMedian(long narr, const double* const val_arr)
 
 double MirMath::GetMin(vector<double> vec)
 {
-    double val = *min_element(vec.begin(), vec.end());
-    return val;
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    double ans = GetMin(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
 }
 
 double MirMath::GetMax(vector<double> vec)
 {
-    double val = *max_element(vec.begin(), vec.end());
-    return val;
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    double ans = GetMax(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
 }
 
 double MirMath::GetAdd(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetAdd(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetAMean(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetAMean(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetVariance(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetVariance(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetStddev(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetStddev(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetUnbiasedVariance(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetUnbiasedVariance(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetSqrtOfUnbiasedVariance(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetSqrtOfUnbiasedVariance(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
 
 double MirMath::GetRMS(vector<double> vec)
 {
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
     double ans = GetRMS(narr, val_arr);
-    delete [] val_arr;
+    MiBase::DelArray(val_arr);
     return ans;
 }
-
-
-
-
 
 
 // For N values with gaussian errors
 
 void MirMath::GetAdd(long narr, const double* const val_arr, const double* const val_err_arr,
-                      double* const val_add_ptr, double* const val_add_err_ptr)
+                     double* const val_add_ptr, double* const val_add_err_ptr)
 {
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
     double val_add      = 0.0;
     double val_add_err  = 0.0;
     double val_add_err2 = 0.0;
@@ -539,14 +544,10 @@ void MirMath::GetAdd(long narr, const double* const val_arr, const double* const
 }
 
 void MirMath::GetAMean(long narr, const double* const val_arr, const double* const val_err_arr,
-                        double* const amean_ptr, double* const amean_err_ptr)
+                       double* const amean_ptr, double* const amean_err_ptr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
-
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
     double sum = 0.0;
     double sum_err2 = 0.0;
     for(long index = 0; index < narr; index++){
@@ -561,15 +562,11 @@ void MirMath::GetAMean(long narr, const double* const val_arr, const double* con
 }
 
 int MirMath::GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
-                       double* const wmean_ptr, double* const wmean_err_ptr,
-                       vector<long>* const index_bad_vec_ptr)
+                      double* const wmean_ptr, double* const wmean_err_ptr,
+                      vector<long>* const index_bad_vec_ptr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
-  
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
     long num_bad = 0;
     vector<long> index_bad_vec;
     double num = 0.0;
@@ -595,9 +592,12 @@ int MirMath::GetWMean(long narr, const double* const val_arr, const double* cons
 
 
 void MirMath::GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-                              const int* const mask_arr,
-                              double* const val_add_ptr, double* const val_add_err_ptr)
+                             const int* const mask_arr,
+                             double* const val_add_ptr, double* const val_add_err_ptr)
 {
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
+    MiBase::IsValidArray(narr, mask_arr);
     double val_add      = 0.0;
     double val_add_err  = 0.0;
     double val_add_err2 = 0.0;
@@ -612,16 +612,13 @@ void MirMath::GetAddWithMask(long narr, const double* const val_arr, const doubl
 }
 
 int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-                               const int* const mask_arr,
-                               double* const wmean_ptr, double* const wmean_err_ptr,
-                               vector<long>* const index_bad_vec_ptr)
+                              const int* const mask_arr,
+                              double* const wmean_ptr, double* const wmean_err_ptr,
+                              vector<long>* const index_bad_vec_ptr)
 {
-    if(narr < 1){
-        printf("ERROR: %s: %u: %s(): bad narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, narr);
-        abort();
-    }
-  
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
+    MiBase::IsValidArray(narr, mask_arr);
     long num_bad = 0;
     vector<long> index_bad_vec;
     double num = 0.0;
@@ -661,13 +658,10 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
     return num_bad;
 }
 
-
-// --------------------------------------------------
-
 // ichiji-hokan
 double MirMath::IntPolLin(double xval,
-                           double xval_lo, double xval_up,
-                           double yval_lo, double yval_up){
+                          double xval_lo, double xval_up,
+                          double yval_lo, double yval_up){
     double yval = 0.0;
     if( fabs(xval_up - xval_lo) < DBL_EPSILON ) {
         yval = (yval_up + yval_lo) / 2.;
@@ -681,10 +675,10 @@ double MirMath::IntPolLin(double xval,
 
 
 double MirMath::IntPolLin(double xval, double yval,
-                           double xval0, double xval1,
-                           double yval0, double yval1,
-                           double oval_x0y0, double oval_x1y0,
-                           double oval_x1y1, double oval_x0y1)
+                          double xval0, double xval1,
+                          double yval0, double yval1,
+                          double oval_x0y0, double oval_x1y0,
+                          double oval_x1y1, double oval_x0y1)
 //
 // Ichiji-hokan in two demension.
 //  
@@ -711,10 +705,6 @@ double MirMath::IntPolLin(double xval, double yval,
     return oval;
 }
 
-
-// ---------------------------
-
-
 // statistics
 
 double MirMath::ProbGaus(double xval, double mu, double sigma)
@@ -725,7 +715,7 @@ double MirMath::ProbGaus(double xval, double mu, double sigma)
 }
 
 double MirMath::ProbGausAsym(double xval, double mu,
-                              double sigma_plus, double sigma_minus)
+                             double sigma_plus, double sigma_minus)
 {
     double sigma_mean = (sigma_plus + sigma_minus) / 2.0;
     double ans = 0.0;
@@ -789,7 +779,7 @@ long MirMath::GetNbinEven(double val_lo, double val_up, double delta_val)
 
 
 void MirMath::GetRangeQdp(double min, double max,
-                           double* const low_ptr, double* const up_ptr)
+                          double* const low_ptr, double* const up_ptr)
 {
     double width = (max - min) * 1.2;
     double center = (max + min) / 2.;
@@ -801,14 +791,7 @@ void MirMath::GetRangeQdp(double min, double max,
 
 int MirMath::IsSorted(long narr, const double* const val_arr)
 {
-    if(narr < 1){
-        MPrintErr("bad narr");
-        abort();
-    }
-    if(NULL == val_arr){
-        MPrintErr("bad val_arr (=NULL)");
-        abort();
-    }
+    MiBase::IsValidArray(narr, val_arr);    
     int ans = 1;
     double val_pre = val_arr[0];
     for (long index = 1; index < narr; index++){
@@ -821,24 +804,15 @@ int MirMath::IsSorted(long narr, const double* const val_arr)
     return ans;
 }
 
-
-// vector --> array
-
-double* const MirMath::GenArray(vector<double> vec)
-{
-    long narr = vec.size();
-    double* val_arr = new double [narr];
-    for(long idata = 0; idata < narr; idata ++){
-        val_arr[idata] = vec[idata];
-    }
-    return val_arr;
-}
-
 // inner product
 double MirMath::GetInProd(double vec0_xval, double vec0_yval,
-                           double vec1_xval, double vec1_yval)
+                          double vec1_xval, double vec1_yval)
 {
     double ans = 0.0;
     ans = vec0_xval * vec1_xval + vec0_yval * vec1_yval;
     return ans;
 }
+
+
+
+

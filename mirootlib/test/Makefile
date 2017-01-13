@@ -4,9 +4,13 @@ include ../Makefile.in
 INCLUDE := $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
 LDLIBS  := $(MIROOTLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(LIB)
 
-TARGET := test_data1d  test_hist2d_nerr
+TARGET := test_math
+# test_data1d  test_hist2d_nerr
 
 all: $(TARGET) 
+
+test_math: test_math.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
 
 test_data1d: test_data1d.o
 	$(CXXN) $@.o ${LDLIBS} -o $@

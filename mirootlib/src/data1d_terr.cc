@@ -86,74 +86,6 @@ void DataArrayTerr1d::SetValTerr(vector<double> val_terr_plus,
 }
 
 
-void DataArrayTerr1d::SetValAndTerr(long ndata,
-                                    const double* const val,
-                                    const double* const val_serr)
-{
-    SetVal(ndata, val);
-    SetValTerr(ndata, val_serr);
-}
-
-void DataArrayTerr1d::SetValAndTerr(vector<double> val,
-                                    vector<double> val_serr)
-{
-    SetVal(val);
-    SetValTerr(val_serr);
-}
-
-
-void DataArrayTerr1d::SetValAndTerr(long ndata,
-                                    const double* const val,
-                                    const double* const val_terr_plus,
-                                    const double* const val_terr_minus)
-{
-    SetVal(ndata, val);
-    SetValTerr(ndata, val_terr_plus, val_terr_minus);
-}
-
-void DataArrayTerr1d::SetValAndTerr(vector<double> val,
-                                    vector<double> val_terr_plus,
-                                    vector<double> val_terr_minus)
-{
-    SetVal(val);
-    SetValTerr(val_terr_plus, val_terr_minus);
-}
-
-// Init & Set
-
-void DataArrayTerr1d::InitSetValAndTerr(long ndata,
-                                        const double* const val,
-                                        const double* const val_serr)
-{
-    Init(ndata);
-    SetValAndTerr(ndata, val, val_serr);
-}
-    
-void DataArrayTerr1d::InitSetValAndTerr(vector<double> val,
-                                        vector<double> val_serr)
-{
-    Init(val.size());
-    SetValAndTerr(val, val_serr);
-}
-
-void DataArrayTerr1d::InitSetValAndTerr(long ndata,
-                                        const double* const val,
-                                        const double* const val_terr_plus,
-                                        const double* const val_terr_minus)
-{
-    Init(ndata);
-    SetValAndTerr(ndata, val, val_terr_plus, val_terr_minus);
-}
-
-void DataArrayTerr1d::InitSetValAndTerr(vector<double> val,
-                                        vector<double> val_terr_plus,
-                                        vector<double> val_terr_minus)
-{
-    Init(val.size());
-    SetValAndTerr(val, val_terr_plus, val_terr_minus);
-}
-
-
 void DataArrayTerr1d::SetValTerrElm(long idata, double val_serr)
 {
     if(1 != IsValTerrNotNull()){
@@ -262,23 +194,6 @@ void DataArrayTerr1d::FillByMin(long idata,
     }
 }
 
-void DataArrayTerr1d::SetZero()
-{
-    for(long idata = 0; idata < GetNdata(); idata ++){
-        SetValElm(idata, 0.0);
-        SetValTerrPlusElm(idata, 0.0);
-        SetValTerrMinusElm(idata, 0.0);
-    }
-}
-
-void DataArrayTerr1d::SetOne()
-{
-    for(long idata = 0; idata < GetNdata(); idata ++){
-        SetValElm(idata, 1.0);
-        SetValTerrPlusElm(idata, 1.0);
-        SetValTerrMinusElm(idata, -1.0);
-    }
-}
 
 void DataArrayTerr1d::SetConst(double constant)
 {
@@ -332,69 +247,9 @@ void DataArrayTerr1d::Load(string file)
     MiIolib::DelReadFile(line_arr);
 
     int flag_val_sorted = 0;
-    ReadInfo(file, &flag_val_sorted);
+    DataArray1dOpe::ReadInfo(file, &flag_val_sorted);
     SetFlagValSorted(flag_val_sorted);
 }
-
-//
-//// operation
-//
-//void DataArrayTerr1d::Sort()
-//{
-//    if(1 == GetFlagValSorted()){
-//        MPrintInfoClass("It has been already sorted.");
-//        return;
-//    }
-//    if(NULL == GetVal() ||
-//       NULL == GetValTerrPlus() ||
-//       NULL == GetValTerrMinus() ){
-//        MPrintErrClass("GetVal() == NULL or "
-//                       "GetValTerrPlus() == NULL or GetValTerrMinus() == NULL");
-//        abort();
-//    }
-//
-//    long ndata = GetNdata();
-//    double* val_org = new double [ndata];
-//    double* val_terr_plus_org  = new double [ndata];
-//    double* val_terr_minus_org = new double [ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        val_org[idata]            = GetValElm(idata);
-//        val_terr_plus_org[idata]  = GetValTerrPlusElm(idata);
-//        val_terr_minus_org[idata] = GetValTerrMinusElm(idata);
-//    }
-//
-//    long* index = new long [ndata];  // to store sort result
-//    TMath::Sort(ndata, val_org, index, kFALSE);
-//
-//    for(long idata = 0; idata < ndata; idata++){
-//        SetValElm(idata, val_org[index[idata]]);
-//        SetValTerrPlusElm(idata, val_terr_plus_org[index[idata]]);
-//        SetValTerrMinusElm(idata, val_terr_minus_org[index[idata]]);
-//    }
-//
-//    delete [] index;               index = NULL;
-//    delete [] val_org;             val_org = NULL;
-//    delete [] val_terr_plus_org;   val_terr_plus_org = NULL;
-//    delete [] val_terr_minus_org;  val_terr_minus_org = NULL;
-//
-//    SetFlagValSorted(1);    
-//    if(0 < g_flag_verbose){
-//        MPrintInfoClass("sorted.");
-//    }
-//}
-//
-//
-//void DataArrayTerr1d::Scale(const DataArray1d* const data_array,
-//                            double scale, double offset)
-//{
-//    DataArrayTerr1d* data_array_tmp = new DataArrayTerr1d;
-//    data_array_tmp->Copy(data_array);
-//    DataArrayTerr1d* out = new DataArrayTerr1d;
-//    DataArray1dOpe::GetScale(data_array_tmp, scale, offset, out);
-//    Copy(out);
-//    delete data_array_tmp;
-//    delete out;
-//}
 
 // get
 

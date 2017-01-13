@@ -1,5 +1,29 @@
 #include "mir_data1d_ope.h"
 
+void DataArray1dOpe::ReadInfo(string file, int* flag_val_sorted_ptr)
+{
+    int flag_val_sorted = 0;
+    
+    string* line_arr = NULL;
+    long ndata = 0;
+    MiIolib::GenReadFileComment(file, &line_arr, &ndata);
+    for(long idata = 0; idata < ndata; idata ++){
+        int ncolumn = 0;
+        string* split_arr = NULL;
+        MiStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
+        if(4 != ncolumn){
+            continue;
+        }
+        if("flag_val_sorted_" == split_arr[1]){
+            flag_val_sorted = atoi(split_arr[3].c_str());
+        }
+        delete [] split_arr;
+    }
+    MiIolib::DelReadFile(line_arr);
+
+    *flag_val_sorted_ptr = flag_val_sorted;
+}
+
 DataArray1d* const DataArray1dOpe::GenDa1dByLoad(string file, string format)
 {
     DataArray1d* da1d = NULL;
@@ -25,14 +49,14 @@ void DataArray1dOpe::GetNot(const DataArrayNerr1d* const data_array,
     long ndata = data_array->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double ans = MxkwMath::Not( data_array->GetValElm(idata) );
+        double ans = MirMath::Not( data_array->GetValElm(idata) );
         data_array_out->SetValElm(idata, ans);
     }
 }
 
-void DataArray1dOpe::GetScale(const DataArray1d* const data_array,
+void DataArray1dOpe::GetScale(const DataArrayNerr1d* const data_array,
                               double scale, double offset,
-                              DataArray1d* data_array_out)
+                              DataArrayNerr1d* data_array_out)
 {
     long ndata = data_array->GetNdata();
     data_array_out->Init(ndata);
@@ -50,10 +74,10 @@ void DataArray1dOpe::GetScale(const DataArraySerr1d* const data_array,
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;
-        MxkwMath::GetScaled(data_array->GetValElm(idata),
-                            data_array->GetValSerrElm(idata),
-                            scale, offset,
-                            &val, &val_serr);
+        MirMath::GetScaled(data_array->GetValElm(idata),
+                           data_array->GetValSerrElm(idata),
+                           scale, offset,
+                           &val, &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
     }
@@ -78,16 +102,16 @@ void DataArray1dOpe::GetScale(const DataArrayTerr1d* const data_array,
 
 // For two DataArray1d
 
-void DataArray1dOpe::GetMin(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArray1d* data_array_out)
+void DataArray1dOpe::GetMin(const DataArrayNerr1d* const data_array1,
+                            const DataArrayNerr1d* const data_array2,
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMin(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMin(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
     }
 }
@@ -100,12 +124,12 @@ void DataArray1dOpe::GetMin(const DataArraySerr1d* const data_array1,
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMin(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMin(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
         
-        int index  = MxkwMath::GetLocMin(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
+        int index  = MirMath::GetLocMin(data_array1->GetValElm(idata),
+                                        data_array2->GetValElm(idata));
         double val_serr = 0.0;
         if(0 == index){
             val_serr = data_array1->GetValSerrElm(idata);
@@ -126,12 +150,12 @@ void DataArray1dOpe::GetMin(const DataArrayTerr1d* const data_array1,
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMin(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMin(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
         
-        int index  = MxkwMath::GetLocMin(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
+        int index  = MirMath::GetLocMin(data_array1->GetValElm(idata),
+                                        data_array2->GetValElm(idata));
         double val_terr_plus  = 0.0;
         double val_terr_minus = 0.0;
         if(0 == index){
@@ -148,16 +172,16 @@ void DataArray1dOpe::GetMin(const DataArrayTerr1d* const data_array1,
     }
 }
 
-void DataArray1dOpe::GetMax(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArray1d* data_array_out)
+void DataArray1dOpe::GetMax(const DataArrayNerr1d* const data_array1,
+                            const DataArrayNerr1d* const data_array2,
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMax(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMax(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
     }
 }
@@ -170,12 +194,12 @@ void DataArray1dOpe::GetMax(const DataArraySerr1d* const data_array1,
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMax(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMax(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
         
-        int index  = MxkwMath::GetLocMax(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
+        int index  = MirMath::GetLocMax(data_array1->GetValElm(idata),
+                                        data_array2->GetValElm(idata));
         double val_serr = 0.0;
         if(0 == index){
             val_serr = data_array1->GetValSerrElm(idata);
@@ -196,12 +220,12 @@ void DataArray1dOpe::GetMax(const DataArrayTerr1d* const data_array1,
     long ndata = data_array1->GetNdata();
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetMax(data_array1->GetValElm(idata),
-                                      data_array2->GetValElm(idata));
+        double val = MirMath::GetMax(data_array1->GetValElm(idata),
+                                     data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
         
-        int index  = MxkwMath::GetLocMax(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
+        int index  = MirMath::GetLocMax(data_array1->GetValElm(idata),
+                                        data_array2->GetValElm(idata));
         double val_terr_plus  = 0.0;
         double val_terr_minus = 0.0;
         if(0 == index){
@@ -241,11 +265,11 @@ void DataArray1dOpe::GetAdd(const DataArraySerr1d* const data_array1,
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;
-        MxkwMath::GetAdd(data_array1->GetValElm(idata),
-                         data_array1->GetValSerrElm(idata),
-                         data_array2->GetValElm(idata),
-                         data_array2->GetValSerrElm(idata),
-                         &val, &val_serr);
+        MirMath::GetAdd(data_array1->GetValElm(idata),
+                        data_array1->GetValSerrElm(idata),
+                        data_array2->GetValElm(idata),
+                        data_array2->GetValSerrElm(idata),
+                        &val, &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
     }
@@ -275,11 +299,11 @@ void DataArray1dOpe::GetSub(const DataArraySerr1d* const data_array1,
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;
-        MxkwMath::GetSub(data_array1->GetValElm(idata),
-                         data_array1->GetValSerrElm(idata),
-                         data_array2->GetValElm(idata),
-                         data_array2->GetValSerrElm(idata),
-                         &val, &val_serr);
+        MirMath::GetSub(data_array1->GetValElm(idata),
+                        data_array1->GetValSerrElm(idata),
+                        data_array2->GetValElm(idata),
+                        data_array2->GetValSerrElm(idata),
+                        &val, &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
     }
@@ -308,11 +332,11 @@ void DataArray1dOpe::GetMul(const DataArraySerr1d* const data_array1,
     data_array_out->Init(ndata);
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;
-        MxkwMath::GetMul(data_array1->GetValElm(idata),
-                         data_array1->GetValSerrElm(idata),
-                         data_array2->GetValElm(idata),
-                         data_array2->GetValSerrElm(idata),
-                         &val, &val_serr);
+        MirMath::GetMul(data_array1->GetValElm(idata),
+                        data_array1->GetValSerrElm(idata),
+                        data_array2->GetValElm(idata),
+                        data_array2->GetValSerrElm(idata),
+                        &val, &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
     }
@@ -320,9 +344,9 @@ void DataArray1dOpe::GetMul(const DataArraySerr1d* const data_array1,
 
 
 long DataArray1dOpe::GetDiv(const DataArray1d* const data_array_num,
-                           const DataArray1d* const data_array_den,
-                           vector<long>* const index_bad_vec_ptr,
-                           DataArray1d* data_array_out)
+                            const DataArray1d* const data_array_den,
+                            vector<long>* const index_bad_vec_ptr,
+                            DataArray1d* data_array_out)
 {
     IsFormatSame(data_array_num, data_array_den);
     long ndata = data_array_num->GetNdata();
@@ -355,11 +379,11 @@ long DataArray1dOpe::GetDiv(const DataArraySerr1d* const data_array_num,
     vector<long> index_bad_vec;
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;
-        int ret = MxkwMath::GetDiv(data_array_num->GetValElm(idata),
-                                   data_array_num->GetValSerrElm(idata),
-                                   data_array_den->GetValElm(idata),
-                                   data_array_den->GetValSerrElm(idata),
-                                   &val, &val_serr);
+        int ret = MirMath::GetDiv(data_array_num->GetValElm(idata),
+                                  data_array_num->GetValSerrElm(idata),
+                                  data_array_den->GetValElm(idata),
+                                  data_array_den->GetValSerrElm(idata),
+                                  &val, &val_serr);
         if(kRetNormal != ret){
             index_bad_vec.push_back(idata);
             data_array_out->SetValElm(idata, 0.0);
@@ -382,8 +406,8 @@ void DataArray1dOpe::GetAMean(const DataArray1d* const data_array1,
     data_array_out->Init(ndata);
 
     for(long idata = 0; idata < ndata; idata++){
-        double val = MxkwMath::GetAMean(data_array1->GetValElm(idata),
-                                        data_array2->GetValElm(idata));
+        double val = MirMath::GetAMean(data_array1->GetValElm(idata),
+                                       data_array2->GetValElm(idata));
         data_array_out->SetValElm(idata, val);
     }
 }
@@ -399,11 +423,11 @@ void DataArray1dOpe::GetAMean(const DataArraySerr1d* const data_array1,
     for(long idata = 0; idata < ndata; idata++){
         double amean;
         double amean_err;
-        MxkwMath::GetAMean(data_array1->GetValElm(idata),
-                           data_array1->GetValSerrElm(idata),
-                           data_array2->GetValElm(idata),
-                           data_array2->GetValSerrElm(idata),
-                           &amean, &amean_err);
+        MirMath::GetAMean(data_array1->GetValElm(idata),
+                          data_array1->GetValSerrElm(idata),
+                          data_array2->GetValElm(idata),
+                          data_array2->GetValSerrElm(idata),
+                          &amean, &amean_err);
         data_array_out->SetValElm(idata, amean);
         data_array_out->SetValSerrElm(idata, amean_err);
     }
@@ -421,11 +445,11 @@ long DataArray1dOpe::GetWMean(const DataArraySerr1d* const data_array1,
     vector<long> index_bad_vec;
     for(long idata = 0; idata < ndata; idata++){
         double val, val_serr;        
-        int ret = MxkwMath::GetWMean(data_array1->GetValElm(idata),
-                                     data_array1->GetValSerrElm(idata),
-                                     data_array2->GetValElm(idata),
-                                     data_array2->GetValSerrElm(idata),
-                                     &val, &val_serr);
+        int ret = MirMath::GetWMean(data_array1->GetValElm(idata),
+                                    data_array1->GetValSerrElm(idata),
+                                    data_array2->GetValElm(idata),
+                                    data_array2->GetValSerrElm(idata),
+                                    &val, &val_serr);
         if(kRetNormal != ret){
             index_bad_vec.push_back(idata);
             data_array_out->SetValElm(idata, 0.0);
@@ -480,8 +504,8 @@ long DataArray1dOpe::GetSubAddRatio(const DataArraySerr1d* const data_array1,
         double val2_err = data_array2->GetValSerrElm(idata);
         double ans;
         double ans_err;
-        int ret = MxkwMath::GetSubAddRatio(val1, val1_err, val2, val2_err,
-                                           &ans, &ans_err);
+        int ret = MirMath::GetSubAddRatio(val1, val1_err, val2, val2_err,
+                                          &ans, &ans_err);
         if(kRetNormal != ret){
             index_bad_vec.push_back(idata);
             data_array_out->SetValElm(idata, 0.0);
@@ -511,7 +535,7 @@ void DataArray1dOpe::GetMin(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMin(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMin(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -530,10 +554,10 @@ void DataArray1dOpe::GetMin(const DataArraySerr1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMin(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMin(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
 
-        int index = MxkwMath::GetLocMin(ndata_array, val_arr_tmp);
+        int index = MirMath::GetLocMin(ndata_array, val_arr_tmp);
         double val_serr = data_array_arr[index]->GetValSerrElm(idata);
         data_array_out->SetValSerrElm(idata, val_serr);
         delete [] val_arr_tmp;
@@ -553,10 +577,10 @@ void DataArray1dOpe::GetMin(const DataArrayTerr1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMin(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMin(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
 
-        int index = MxkwMath::GetLocMin(ndata_array, val_arr_tmp);
+        int index = MirMath::GetLocMin(ndata_array, val_arr_tmp);
         double val_terr_plus  = data_array_arr[index]->GetValTerrPlusElm(idata);
         double val_terr_minus = data_array_arr[index]->GetValTerrMinusElm(idata);
         data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
@@ -578,7 +602,7 @@ void DataArray1dOpe::GetMax(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMax(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMax(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -598,10 +622,10 @@ void DataArray1dOpe::GetMax(const DataArraySerr1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMax(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMax(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
 
-        int index = MxkwMath::GetLocMax(ndata_array, val_arr_tmp);
+        int index = MirMath::GetLocMax(ndata_array, val_arr_tmp);
         double val_serr = data_array_arr[index]->GetValSerrElm(idata);
         data_array_out->SetValSerrElm(idata, val_serr);
         delete [] val_arr_tmp;
@@ -621,10 +645,10 @@ void DataArray1dOpe::GetMax(const DataArrayTerr1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMax(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMax(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
 
-        int index = MxkwMath::GetLocMax(ndata_array, val_arr_tmp);
+        int index = MirMath::GetLocMax(ndata_array, val_arr_tmp);
         double val_terr_plus  = data_array_arr[index]->GetValTerrPlusElm(idata);
         double val_terr_minus = data_array_arr[index]->GetValTerrMinusElm(idata);
         data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
@@ -647,7 +671,7 @@ void DataArray1dOpe::GetAdd(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetAdd(ndata_array, val_arr_tmp);
+        double val = MirMath::GetAdd(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -671,11 +695,11 @@ void DataArray1dOpe::GetAdd(const DataArraySerr1d* const* const data_array_arr,
                 = data_array_arr[idata_array]->GetValSerrElm(idata);
         }
         double val, val_serr;
-        MxkwMath::GetAdd(ndata_array,
-                         val_arr_tmp,
-                         val_err_arr_tmp,
-                         &val,
-                         &val_serr);
+        MirMath::GetAdd(ndata_array,
+                        val_arr_tmp,
+                        val_err_arr_tmp,
+                        &val,
+                        &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
         delete [] val_arr_tmp;
@@ -696,7 +720,7 @@ void DataArray1dOpe::GetAMean(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetAMean(ndata_array, val_arr_tmp);
+        double val = MirMath::GetAMean(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -720,8 +744,8 @@ void DataArray1dOpe::GetAMean(const DataArraySerr1d* const* const data_array_arr
         }
         double amean;
         double amean_err;
-        MxkwMath::GetAMean(ndata_array, val_arr_tmp, val_err_arr_tmp,
-                           &amean, &amean_err);
+        MirMath::GetAMean(ndata_array, val_arr_tmp, val_err_arr_tmp,
+                          &amean, &amean_err);
         data_array_out->SetValElm(idata, amean);
         data_array_out->SetValSerrElm(idata, amean_err);
         delete [] val_arr_tmp;
@@ -749,7 +773,7 @@ long DataArray1dOpe::GetWMean(const DataArraySerr1d* const* const data_array_arr
         }
         vector<long> index_bad_vec_tmp;
         double val, val_serr;
-        long num_bad = MxkwMath::GetWMean(ndata_array,
+        long num_bad = MirMath::GetWMean(ndata_array,
                                          val_arr_tmp,
                                          val_err_arr_tmp,
                                          &val,
@@ -784,7 +808,7 @@ void DataArray1dOpe::GetVariance(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetVariance(ndata_array, val_arr_tmp);
+        double val = MirMath::GetVariance(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -804,7 +828,7 @@ void DataArray1dOpe::GetStddev(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetStddev(ndata_array, val_arr_tmp);
+        double val = MirMath::GetStddev(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -824,7 +848,7 @@ void DataArray1dOpe::GetUnbiasedVariance(const DataArray1d* const* const data_ar
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetUnbiasedVariance(ndata_array, val_arr_tmp);
+        double val = MirMath::GetUnbiasedVariance(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -843,7 +867,7 @@ void DataArray1dOpe::GetSqrtOfUnbiasedVariance(const DataArray1d* const* const d
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetSqrtOfUnbiasedVariance(ndata_array, val_arr_tmp);
+        double val = MirMath::GetSqrtOfUnbiasedVariance(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -863,7 +887,7 @@ void DataArray1dOpe::GetRMS(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetRMS(ndata_array, val_arr_tmp);
+        double val = MirMath::GetRMS(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -882,7 +906,7 @@ void DataArray1dOpe::GetMedian(const DataArray1d* const* const data_array_arr,
             val_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValElm(idata);
         }
-        double val = MxkwMath::GetMedian(ndata_array, val_arr_tmp);
+        double val = MirMath::GetMedian(ndata_array, val_arr_tmp);
         data_array_out->SetValElm(idata, val);
         delete [] val_arr_tmp;
     }
@@ -933,12 +957,12 @@ void DataArray1dOpe::GetAddWithMask(const DataArraySerr1d* const* const data_arr
                 = (int)(mask_array_arr[idata_array]->GetValElm(idata));
         }
         double val, val_serr;
-        MxkwMath::GetAddWithMask(ndata_array,
-                                 val_arr_tmp,
-                                 val_err_arr_tmp,
-                                 mask_arr_tmp,
-                                 &val,
-                                 &val_serr);
+        MirMath::GetAddWithMask(ndata_array,
+                                val_arr_tmp,
+                                val_err_arr_tmp,
+                                mask_arr_tmp,
+                                &val,
+                                &val_serr);
         data_array_out->SetValElm(idata, val);
         data_array_out->SetValSerrElm(idata, val_serr);
         delete [] val_arr_tmp;
@@ -1006,7 +1030,7 @@ int DataArray1dOpe::IsFormatSame(const DataArray1d* const data_array1,
 }
 
 
-int DataArray1dOpe::IsFormatSame(const DataArray1d* const* const data_array_arr,
+int DataArray1dOpe::IsFormatSame(const DataArrayNerr1d* const* const data_array_arr,
                                  int ndata_array)
 {
     if(ndata_array < 2){
@@ -1081,9 +1105,9 @@ int DataArray1dOpe::IsFormatSame(const DataArrayTerr1d* const* const data_array_
 
 // Select
 
-void DataArray1dOpe::GetSelectDa1dByInterval(const DataArray1d* const data_array,
+void DataArray1dOpe::GetSelectDa1dByInterval(const DataArrayNerr1d* const data_array,
                                              const Interval* const interval,
-                                             DataArray1d* const data_array_out)
+                                             DataArrayNerr1d* const data_array_out)
 {
     vector<double> val_vec;    
     int nterm = interval->GetNterm();
@@ -1150,9 +1174,9 @@ void DataArray1dOpe::GetSelectDa1dByInterval(const DataArrayTerr1d* const data_a
 }
 
 
-void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArray1d* const data_array,
+void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArrayNerr1d* const data_array,
                                                 const Interval* const interval,
-                                                DataArray1d*** data_array_arr_ptr)
+                                                DataArrayNerr1d*** data_array_arr_ptr)
 {
     int nterm = interval->GetNterm();
     DataArray1d** data_array_arr = new DataArray1d* [nterm];

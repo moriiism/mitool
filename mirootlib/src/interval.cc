@@ -127,10 +127,10 @@ void Interval::Load(string file)
 
 void Interval::Copy(const Interval* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
-    CopyMiObject(org);
+    CopyTitle(org);
     InitSet(org->GetNterm(),
             org->GetTstart(),
             org->GetTstop());
@@ -169,20 +169,20 @@ double Interval::GetTermHalfWidthElm(long iterm) const
 
 int Interval::IsOrdered() const
 {
-    int status = 1;
+    int ans = 1;
     for(int iterm = 0; iterm < nterm_; iterm++){
         if(tstart_[iterm] > tstop_[iterm]){
-            status = 0;
-            return status;
+            ans = 0;
+            return ans;
         }
     }
     for(int iterm = 0; iterm < nterm_ - 1; iterm++){
         if(tstop_[iterm] > tstart_[iterm + 1]){
-            status = 0;
-            return status;
+            ans = 0;
+            return ans;
         }
     }
-    return status;
+    return ans;
 }
 
 int Interval::IsIn(double val) const
@@ -844,18 +844,18 @@ void Interval::Null()
 
 int Interval::IsValid() const
 {
-    int status = 1;
+    int valid = 1;
     if(nterm_ < 0){
-        status = 0;
-        return status;
+        valid = 0;
+        return valid;
     }
     for(long iterm = 0; iterm < nterm_; iterm++){
         if(tstart_[iterm] > tstop_[iterm]){
-            status = 0;
-            return status;
+            valid = 0;
+            return valid;
         }
     }
-    return status;
+    return valid;
 }
 
 
@@ -891,10 +891,10 @@ void Interval2dim::InitSet(const Interval* const interval_x,
 
 void Interval2dim::Copy(const Interval2dim* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
-    CopyMiObject(org);
+    CopyTitle(org);
     InitSet(org->GetIntervalX(),
             org->GetIntervalY());
 }
@@ -968,10 +968,10 @@ void IntervalNdim::InitSet(long ndim,
 
 void IntervalNdim::Copy(const IntervalNdim* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
 
-    CopyMiObject(org);
+    CopyTitle(org);
     InitSet(org->GetNdim(),
             org->GetIntervalArr());
 }

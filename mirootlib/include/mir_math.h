@@ -50,6 +50,7 @@ namespace MirMath
     int Not(int val);
     // 0 ---> 1
     // 1 ---> 0
+    // others ---> abort
     
     // For a value with a gaussian error
     void GetScaled(double val, double val_err, double scale, double offset,
@@ -60,8 +61,8 @@ namespace MirMath
         
     double GetMin(double aval, double bval);
     double GetMax(double aval, double bval);
-    int GetLocMin(double aval, double bval); // 0, 1
-    int GetLocMax(double aval, double bval); // 0, 1
+    int GetLocMin(double aval, double bval);
+    int GetLocMax(double aval, double bval);
     double GetAMean(double aval, double bval);
 
     // For two values with gaussian errors
@@ -73,8 +74,8 @@ namespace MirMath
                 double* const ans_ptr, double* const ans_err_ptr);
     int GetDiv(double val_num, double val_num_err, double val_den, double val_den_err,
                double* const ans_ptr, double* const ans_err_ptr);
-    int GetAMean(double val1, double val1_err, double val2, double val2_err,
-                 double* const amean_ptr, double* const amean_err_ptr);
+    void GetAMean(double val1, double val1_err, double val2, double val2_err,
+                  double* const amean_ptr, double* const amean_err_ptr);
     int GetWMean(double val1, double val1_err, double val2, double val2_err,
                  double* const wmean_ptr, double* const wmean_err_ptr);
 
@@ -190,9 +191,6 @@ namespace MirMath
                      double* const low_ptr, double* const up_ptr);
 
     int IsSorted(long narr, const double* const val_arr);
-
-    // vector --> arrray
-    double* const GenArray(vector<double> vec);
 
 
     // inner product

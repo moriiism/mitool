@@ -70,9 +70,7 @@ public:
     // class_name_ should be set at the initialization.
 
 protected:
-    void CopyMiObject(const MiObject* const org);
-    // class_name_ should not be copied.
-    // only title_ is copied.
+    void CopyTitle(const MiObject* const org);
     
 private:
     string class_name_;  
@@ -81,10 +79,9 @@ private:
     void NullMiObject();
 };
 
-class MiArgBase: public MiObject{
+class MiArgBase: private Uncopyable{
 public:
-    MiArgBase(string class_name, string title) :
-        MiObject(class_name, title) {}
+    MiArgBase() {}
     virtual ~MiArgBase() {}
     
     virtual void Init(int argc, char* argv[]) = 0;
@@ -95,5 +92,17 @@ private:
     virtual void SetOption(int argc, char* argv[], option* long_options) = 0;
     virtual void Usage(FILE* fp) const = 0;
 };
+
+namespace MiBase
+{
+    void IsValidArray(long narr, const int* const val_arr);    
+    void IsValidArray(long narr, const double* const val_arr);
+
+    // vector --> arrray
+    void GenArray(vector<double> vec,
+                  long* narr_ptr,
+                  double** val_arr_ptr);
+    void DelArray(double* val_arr);
+}
 
 #endif // MORIIISM_MITOOL_MILIB_BASE_H_

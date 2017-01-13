@@ -26,6 +26,7 @@ public:
     void InitSetByMidPoint(double md, double bin_width, double half_width, string mode);
     void Load(string file);
     void Copy(const HistInfo1d* const org);
+    HistInfo1d* const Clone() const;
 
     // const func
     long GetNbin() const {return nbin_;};
@@ -93,6 +94,7 @@ public:
                            double md_y, double bin_width_y, double half_width_y, string mode_y);
     void Load(string file);
     void Copy(const HistInfo2d* const org);
+    HistInfo2d* const Clone() const;
 
     // const func
     HistInfo1d* const GetHistInfoX() const {return hist_info_x_;};

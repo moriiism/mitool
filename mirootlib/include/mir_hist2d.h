@@ -1,8 +1,8 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_HIST2D_H_
 #define MORIIISM_MITOOL_MIROOTLIB_HIST2D_H_
 
-#include "mir_data1d.h"
 #include "mir_hist_info.h"
+#include "mir_data1d.h"
 
 class HistDataNerr2d;
 class HistDataSerr2d;
@@ -10,12 +10,10 @@ class HistDataTerr2d;
 
 class HistData2d : public MiObject{
 public:
-    explicit HistData2d(string title = "") :
-        MiObject("HistData2d", title),
-        hist_info_(NULL) {}
     HistData2d(string class_name, string title) :
         MiObject(class_name, title),
-        hist_info_(NULL) {}
+        hi2d_(NULL),
+        oval_arr_(NULL) {}
     virtual ~HistData2d() {}
    
     // Init
@@ -334,7 +332,7 @@ public:
                                 string title_oaxis = "",
                                 string style = "def") const;
     void MkTH2Fig(string outfig,
-                  MxkwRootTool* const root_tool,
+                  MirRootTool* const root_tool,
                   double offset_xval = 0.0,
                   double offset_yval = 0.0,
                   double offset_oval = 0.0,
@@ -343,7 +341,7 @@ public:
                   string title_oaxis = "",
                   string style = "def") const;
     void MkTH2FigZrange(string outfig,
-                        MxkwRootTool* const root_tool,
+                        MirRootTool* const root_tool,
                         double zrange_lo, double zrange_up,
                         double offset_xval = 0.0,
                         double offset_yval = 0.0,
@@ -357,16 +355,16 @@ public:
 
 
     // poisson error
-    virtual void FillRandom(const MxkwFunc* const func,
-                            const MxkwFuncPar* const func_par,
+    virtual void FillRandom(const MirFunc* const func,
+                            const MirFuncPar* const func_par,
                             int rand_seed = 1)
         {MPrintErrVFunc; abort();};
 
     // gaussian error
-    virtual void FillRandom(const MxkwFunc* const func,
-                            const MxkwFuncPar* const func_par,
-                            const MxkwFunc* const func_sigma,
-                            const MxkwFuncPar* const func_par_sigma,
+    virtual void FillRandom(const MirFunc* const func,
+                            const MirFuncPar* const func_par,
+                            const MirFunc* const func_sigma,
+                            const MirFuncPar* const func_par_sigma,
                             int rand_seed = 1)
         {MPrintErrVFunc; abort();};    
 
@@ -391,28 +389,21 @@ public:
     int IsValidRangeY(double yval) const;
     
 
-   
+//    virtual void Null() = 0;
+//    void NewOvalArrAsDataArray1d();
+//    void NewOvalArrAsDataArraySerr1d();
+//    void NewOvalArrAsDataArrayTerr1d();
+//    DataArray1d* GetOvalArrNonConst() const {return oval_arr_;};
+//
+//    int IsOvalNotNull() const;
+    
 private:
     // ibin_xval_ = 0, 1, ..., nbin_xval_
     // ibin_yval_ = 0, 1, ..., nbin_yval_
     // ibin = ibin_xval_ + nbin_xval_ * ibin_yval_
     
-    HistInfo2d* hist_info_;
-
-    virtual void Null() = 0;
-    void NewOvalArrAsDataArray1d();
-    void NewOvalArrAsDataArraySerr1d();
-    void NewOvalArrAsDataArrayTerr1d();
-    DataArray1d* GetOvalArrNonConst() const {return oval_arr_;};
-
-    int IsOvalNotNull() const;
-
-    
-    // calc_mode: "add", "integral", "amean", "min", "max"
-    void GetProject(long ndata,
-                    const double* const array,
-                    string calc_mode, double bin_width,
-                    double* const val_proj_ptr) const;
+    HistInfo2d* hi2d_;
+    DataArray1d* oval_arr_;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_H_

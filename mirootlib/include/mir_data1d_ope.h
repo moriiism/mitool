@@ -181,8 +181,8 @@ namespace DataArray1dOpe
                           DataArraySerr1d* const nvalid_array_out,
                           DataArraySerr1d* data_array_out);
 
-    int IsFormatSame(const DataArrayNerr1d* const data_array1,
-                     const DataArrayNerr1d* const data_array2);
+    int IsFormatSame(const DataArray1d* const data_array1,
+                     const DataArray1d* const data_array2);
     int IsFormatSame(const DataArrayNerr1d* const* const data_array_arr,
                      int ndata_array);
     int IsFormatSame(const DataArraySerr1d* const* const data_array_arr,

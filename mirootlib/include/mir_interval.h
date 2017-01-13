@@ -101,7 +101,7 @@ private:
     double* tstop_;
 
     void Null();    
-    int IsValid() const;
+    int IsValid() const;  // valid: 1/0
 };
 
 
