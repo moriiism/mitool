@@ -11,43 +11,19 @@ public:
         NullGraphData2d();
     }
 
-    // Init
     void Init();
-
-    // Init & Set by Func
-    void InitSetByFunc(const MirFunc* const func, const double* const par,
-                       long nbin_xval, double xval_lo, double xval_up,
-                       string scale);
-
-    virtual GraphDataNerr2d* const Clone() const;
-
-    //
-    // const functions
-    //
-
-    // stat
-    double GetXvalAtOvalMin() const;
-    double GetXvalAtOvalMax() const;
-    double GetOvalAtXvalMin() const;
-    double GetOvalAtXvalMax() const;
-
-    // get Range Qdp
-    void GetXRangeQdp(double* const low_ptr,
-                      double* const up_ptr) const;
-    void GetORangeQdp(double* const low_ptr,
-                      double* const up_ptr) const;
+    GraphDataNerr2d* const Clone() const;
+    void Load(string file);
+    void Load(string file, string format);
+    void Sort();
     
-    // output
+    const DataArrayNerr1d* const GetXvalArr() const;
+    const DataArrayNerr1d* const GetOvalArr() const;
     void PrintData(FILE* fp, string format,
                    double offset_xval,
                    double offset_oval) const;
-
     TGraph* const GenTGraph(double offset_xval,
                             double offset_oval) const;
-    
-    double GetOffsetXFromTag(string offset_tag) const;
-    double GetOffsetOFromTag(string offset_tag) const;
-
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_NERR_H_

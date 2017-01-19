@@ -53,25 +53,7 @@ int main(int argc, char* argv[])
         delete da1d;
         printf("=== \n");
     }
-//    void Set(const DataArray1d* const org);
-    {
-        printf("--- test Set(const DataArray1d* const org)\n");
-        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
-        da1d_1->Init(2);
-        da1d_1->SetValElm(0, 5);
-        da1d_1->SetValElm(1, 10);
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-        DataArrayNerr1d* da1d_2 = new DataArrayNerr1d("da1d_2");
-        da1d_2->Init(2);
-        da1d_2->Set(da1d_1);
-        delete da1d_1;
-        da1d_2->PrintInfo(stdout);
-        da1d_2->PrintData(stdout, 1, 0.0);
-        delete da1d_2;
-        printf("=== \n");
-    }
-    
+
 //    void SetVal(long ndata, const double* const val);
     {
         printf("--- test SetVal(long ndata, const double* const val)\n");
@@ -172,41 +154,6 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    void InitSetVal(long ndata, const double* const val);
-    {
-        printf("--- test InitSetVal(long ndata, const double* const val)\n");
-        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
-        int ndata = 2;
-        double* val_arr = new double [ndata];
-        val_arr[0] = 5.0;
-        val_arr[1] = 6.0;
-        da1d_1->InitSetVal(ndata, val_arr);
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-
-        delete da1d_1;
-        delete [] val_arr;
-        
-        printf("=== \n");
-    }
-
-//    void InitSetVal(vector<double> val);
-    {
-        printf("--- test InitSetVal(vector<double> val)\n");
-        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
-        int ndata = 2;
-        vector<double> val_vec(ndata);
-        val_vec[0] = 5.0;
-        val_vec[1] = 6.0;
-        da1d_1->InitSetVal(val_vec);
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-
-        delete da1d_1;
-        
-        printf("=== \n");
-    }
-
 //    void SetValElm(long idata, double val);
     {
         printf("--- test SetValElm(long idata, double val)\n");
@@ -327,50 +274,6 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-//    virtual void SetZero() = 0;
-    {
-        printf("--- test SetZero()\n");
-        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
-        int ndata = 2;
-        da1d_1->Init(ndata);
-        vector<double> val_vec(ndata);
-        val_vec[0] = 5.0;
-        val_vec[1] = 6.0;
-        da1d_1->SetVal(val_vec);
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-
-        da1d_1->SetZero();
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-        
-        delete da1d_1;
-        
-        printf("=== \n");
-    }
-   
-//    virtual void SetOne() = 0;
-    {
-        printf("--- test SetOne()\n");
-        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
-        int ndata = 2;
-        da1d_1->Init(ndata);
-        vector<double> val_vec(ndata);
-        val_vec[0] = 5.0;
-        val_vec[1] = 6.0;
-        da1d_1->SetVal(val_vec);
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-
-        da1d_1->SetOne();
-        da1d_1->PrintInfo(stdout);
-        da1d_1->PrintData(stdout, 1, 0.0);
-        
-        delete da1d_1;
-        
-        printf("=== \n");
-    }
-    
 //    virtual void SetConst(double constant) = 0;
     {
         printf("--- test SetConst(double constant)\n");
@@ -462,121 +365,537 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-//    void Copy(const DataArray1d* const org);
+//    virtual void Load(string file) = 0;
     {
-        printf("--- test Copy(const DataArray1d* const org)\n");
+        printf("--- test Load(string file)\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        da1d_1->Load("data/test_data1d_nerr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_1->Load("data/test_data1d_serr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_1->Load("data/test_data1d_terr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);                
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+    {
+        printf("--- test Load(string file)\n");
+        DataArraySerr1d* da1d_1 = new DataArraySerr1d("da1d_1");
+        da1d_1->Load("data/test_data1d_nerr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_1->Load("data/test_data1d_serr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_1->Load("data/test_data1d_terr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);                
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+    {
+        printf("--- test Load(string file)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        //   da1d_1->Load("data/test_data1d_nerr.dat");
+        //da1d_1->PrintInfo(stdout);
+        //da1d_1->PrintData(stdout, 1, 0.0);
+
+        // da1d_1->Load("data/test_data1d_serr.dat");
+        // da1d_1->PrintInfo(stdout);
+        // da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_1->Load("data/test_data1d_terr.dat");
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);                
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+    
+//    long GetNdata() const {return ndata_;};
+    {
+        printf("--- test GetNdata()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        printf("da1d_1->GetNdata() = %ld\n", da1d_1->GetNdata());
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    const double* const GetVal() const {return val_;};
+    {
+        printf("--- test GetVal()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        for(long idata = 0; idata < da1d_1->GetNdata(); idata ++){
+            printf("%ld , %e\n", idata, da1d_1->GetVal()[idata]);
+        }
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    double GetValElm(long idata) const;
+    {
+        printf("--- test GetValElm(long idata)\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        for(long idata = 0; idata < da1d_1->GetNdata(); idata ++){
+            printf("%ld , %e\n", idata, da1d_1->GetValElm(idata));
+        }
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    int GetFlagValSorted() const {return flag_val_sorted_;};
+    {
+        printf("--- test GetFlagValSorted()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        
+        printf("GetFlagValSorted() = %d\n", da1d_1->GetFlagValSorted());
+
+        da1d_1->Sort();
+
+        printf("GetFlagValSorted() = %d\n", da1d_1->GetFlagValSorted());        
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    double GetValMin() const;
+    {
+        printf("--- test GetValMin()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        printf("%e\n", da1d_1->GetValMin());
+        
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    double GetValMax() const;
+    {
+        printf("--- test GetValMax()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        printf("%e\n", da1d_1->GetValMax());
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+   
+//    long GetLocValMin() const;
+    {
+        printf("--- test GetLocValMin()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        printf("%ld\n", da1d_1->GetLocValMin());
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+   
+//    long GetLocValMax() const;
+    {
+        printf("--- test GetLocValMax()\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        printf("%ld\n", da1d_1->GetLocValMax());
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    virtual double GetValAndErrMin() const = 0;
+//    virtual double GetValAndErrMax() const = 0;            
+    {
+        printf("--- test GetValAndErrMin()\n");
+        printf("--- test GetValAndErrMax()\n");        
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+        printf("%e , %e\n", da1d_1->GetValAndErrMin(), da1d_1->GetValAndErrMax());
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+    {
+        printf("--- test GetValAndErrMin()\n");
+        printf("--- test GetValAndErrMax()\n");        
         DataArraySerr1d* da1d_1 = new DataArraySerr1d("da1d_1");
         int ndata = 2;
         da1d_1->Init(ndata);
         vector<double> val_vec(ndata);
         val_vec[0] = 5.0;
         val_vec[1] = 6.0;
-        vector<double> val_vec_serr(ndata);
-        val_vec_serr[0] = 0.1;
-        val_vec_serr[1] = 0.2;        
-        da1d_1->SetValAndSerr(val_vec, val_vec_serr);
-        da1d_1->PrintInfo(stdout);
+        vector<double> val_serr_vec(ndata);
+        val_serr_vec[0] = 0.5;
+        val_serr_vec[1] = 0.6;
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValSerr(val_serr_vec);
         da1d_1->PrintData(stdout, 1, 0.0);
-
-        DataArrayNerr1d* da1d_2 = new DataArrayNerr1d("da1d_2");
-        da1d_2->Copy(da1d_1);
-        da1d_2->PrintInfo(stdout);
-        da1d_2->PrintData(stdout, 1, 0.0);
-
+        printf("%e , %e\n", da1d_1->GetValAndErrMin(), da1d_1->GetValAndErrMax());
         delete da1d_1;
-        delete da1d_2;
         
         printf("=== \n");
     }
 
-//    void Copy(const DataArray1d* const org);
     {
-        printf("--- test Copy(const DataArray1d* const org)\n");
-        DataArray1d* da1d_1 = new DataArraySerr1d("da1d_1");
+        printf("--- test GetValAndErrMin()\n");
+        printf("--- test GetValAndErrMax()\n");        
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         int ndata = 2;
         da1d_1->Init(ndata);
         vector<double> val_vec(ndata);
         val_vec[0] = 5.0;
         val_vec[1] = 6.0;
-        vector<double> val_vec_serr(ndata);
-        val_vec_serr[0] = 0.1;
-        val_vec_serr[1] = 0.2;        
-        da1d_1->SetValAndSerr(val_vec, val_vec_serr);
-        da1d_1->PrintInfo(stdout);
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
         da1d_1->PrintData(stdout, 1, 0.0);
-
-        DataArraySerr1d* da1d_2 = new DataArraySerr1d("da1d_2");
-        da1d_2->Copy(da1d_1);
-        da1d_2->PrintInfo(stdout);
-        da1d_2->PrintData(stdout, 1, 0.0);
-
+        printf("%e , %e\n", da1d_1->GetValAndErrMin(), da1d_1->GetValAndErrMax());
         delete da1d_1;
-        delete da1d_2;
         
         printf("=== \n");
     }
 
-    
-    
-//    virtual DataArray1d* const Clone() const = 0;
-//    virtual void Load(string file) = 0;
-//    static void ReadInfo(string file, int* flag_val_sorted_ptr);
-////    virtual void Sort() = 0;
-
-//    long GetNdata() const {return ndata_;};
-//    const double* const GetVal() const {return val_;};
-//    double GetValElm(long idata) const;
-//    int GetFlagValSorted() const {return flag_val_sorted_;};
-//    virtual const double* const GetValSerr() const
-//    virtual const double* const GetValTerrPlus() const
-//    virtual const double* const GetValTerrMinus() const
-//    virtual double GetValSerrElm(long idata) const
-//    virtual double GetValTerrPlusElm(long idata) const
-//    virtual double GetValTerrMinusElm(long idata) const
-//    virtual double* const GenValSerr() const
-//    double GetValMin() const;
-//    double GetValMax() const;
-//    long GetLocValMin() const;
-//    long GetLocValMax() const;
-//    double GetSum() const;
-//    virtual void GetSum(double* const add_ptr,
-//                        double* const add_err_ptr) const
-//    double GetAMean() const;
-//    double GetVariance() const;
-//    double GetStddev() const;
-//    double GetUnbiasedVariance() const;
-//    double GetSqrtOfUnbiasedVariance() const;
-//    double GetRMS() const;
-//    double GetMedian() const;
-//    virtual long GetWMean(double* const wmean_ptr,
-//                          double* const wmean_err_ptr,
-//                          vector<long>* const index_bad_vec_ptr) const
-//    virtual double GetAMeanOfSerr() const
-//    virtual long GetChi2byConst(double* const chi2_ptr,
-//                                int* const dof_ptr,
-//                                double* const chi2_red_ptr,
-//                                double* const prob_ptr) const
-//    // virtual void GetStat1dim(Stat1dim* const stat_1dim_out) const {};
-//    virtual double GetValAndErrMin() const
-//    virtual double GetValAndErrMax() const
-//    void GetRangeIndexQdp(double* const lo_ptr,
-//                          double* const up_ptr) const;
-//    virtual void GetRangeValQdp(double* const lo_ptr,
-//                                double* const up_ptr) const = 0;
 //    void Save(string outfile, int mode, double offset_val) const;
+    {
+        printf("--- test Save(string outfile, int mode, double offset_val)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        da1d_1->Save("temp.dat", 1, 0.0);
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
 //    void SaveData(string outfile, int mode, double offset_val) const;
+    {
+        printf("--- test SaveData(string outfile, int mode, double offset_val)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        da1d_1->SaveData("temp.dat", 1, 0.0);
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
 //    void PrintInfo(FILE* fp) const;
+    {
+        printf("--- test PrintInfo(FILE* fp)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        da1d_1->PrintInfo(stdout);
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
 //    virtual void PrintData(FILE* fp, int mode,
 //                           double offset_val) const = 0;
-//    int IsAllOne() const;
-//    double GetOffsetIndexFromTag(string offset_tag) const;
-//    virtual double GetOffsetValFromTag(string offset_tag) const = 0;
-//    void NullDataArray1d();
-//    void InitDataArray1d(long ndata);
-//    int IsValNotNull() const;
-//    int IsValSerrPlus(double val_serr) const;
-//    int IsValidRange(long idata) const;
+    {
+        printf("--- test PrintData\n");
+        DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
 
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+    {
+        printf("--- test PrintData\n");
+        DataArraySerr1d* da1d_1 = new DataArraySerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_serr_vec(ndata);
+        val_serr_vec[0] = 0.5;
+        val_serr_vec[1] = 0.6;
+
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValSerr(val_serr_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+    {
+        printf("--- test PrintData\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+//    int IsAllOne() const;
+    {
+        printf("--- test IsAllOne()\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 1.0;
+        val_vec[1] = 1.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        printf("%d\n", da1d_1->IsAllOne());
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+
+//    double GetOffsetIndexFromTag(string offset_tag) const;
+    {
+        printf("--- test GetOffsetIndexFromTag(string offset_tag)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        printf("st = %e\n", da1d_1->GetOffsetIndexFromTag("st"));
+        printf("md = %e\n", da1d_1->GetOffsetIndexFromTag("md"));
+        printf("ed = %e\n", da1d_1->GetOffsetIndexFromTag("ed"));
+        printf("no = %e\n", da1d_1->GetOffsetIndexFromTag("no"));
+        printf("value = %e\n", da1d_1->GetOffsetIndexFromTag("777.0"));
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+//    virtual double GetOffsetValFromTag(string offset_tag) const = 0;
+    {
+        printf("--- test GetOffsetValFromTag(string offset_tag)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        printf("st = %e\n", da1d_1->GetOffsetValFromTag("st"));
+        printf("md = %e\n", da1d_1->GetOffsetValFromTag("md"));
+        printf("ed = %e\n", da1d_1->GetOffsetValFromTag("ed"));
+        printf("no = %e\n", da1d_1->GetOffsetValFromTag("no"));
+        printf("value = %e\n", da1d_1->GetOffsetValFromTag("777.0"));
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
+    
+//    static void ReadInfo(string file, int* flag_val_sorted_ptr);
+    {
+        printf("--- test ReadInfo(string file, int* flag_val_sorted_ptr)\n");
+        DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
+        int ndata = 2;
+        da1d_1->Init(ndata);
+        vector<double> val_vec(ndata);
+        val_vec[0] = 5.0;
+        val_vec[1] = 6.0;
+        vector<double> val_terr_plus_vec(ndata);
+        val_terr_plus_vec[0] = 0.5;
+        val_terr_plus_vec[1] = 0.6;
+        vector<double> val_terr_minus_vec(ndata);
+        val_terr_minus_vec[0] = -1.5;
+        val_terr_minus_vec[1] = -1.6;
+        
+        da1d_1->SetVal(val_vec);
+        da1d_1->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
+        da1d_1->Save("temp.dat", 1, 0.0);
+
+        int flag_val_sorted = 3;
+        DataArray1d::ReadInfo("temp.dat", &flag_val_sorted);
+        printf("flag_val_sorted = %d\n", flag_val_sorted);
+        
+        
+
+        delete da1d_1;
+        
+        printf("=== \n");
+    }
 
     return status_prog;
 }

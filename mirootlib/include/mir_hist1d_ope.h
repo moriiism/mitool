@@ -16,6 +16,7 @@
 
 namespace HistData1dOpe
 {
+    HistData1d* const GenHd1dByLoad(string file);
 
     // select_type: center, exclusive
     //   center:      select a bin whose center is located in an interval.

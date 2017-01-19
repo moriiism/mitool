@@ -2,6 +2,9 @@
 #define MORIIISM_MITOOL_MIROOTLIB_DATA1D_H_
 
 #include "mi_base.h"
+#include "mi_iolib.h"
+#include "mi_str.h"
+#include "mir_math.h"
 
 class DataArrayNerr1d;
 class DataArraySerr1d;
@@ -62,8 +65,8 @@ public:
     virtual void Fill(long idata, double weight) = 0;
     // add weight events on the idata-bin of the data
 
-    virtual void FillByMax(long idata, double val)
-        {MPrintErrVFunc; abort();};
+    // poisson error
+    virtual void FillByMax(long idata, double val) = 0;
     virtual void FillByMax(long idata,
                            double val,
                            double val_serr)
@@ -74,8 +77,7 @@ public:
                            double val_terr_minus)
         {MPrintErrVFunc; abort();};
 
-    virtual void FillByMin(long idata, double val)
-        {MPrintErrVFunc; abort();};
+    virtual void FillByMin(long idata, double val) = 0;
     virtual void FillByMin(long idata,
                            double val,
                            double val_serr)
@@ -93,6 +95,9 @@ public:
     
     void Copy(const DataArray1d* const org);
     virtual void Load(string file) = 0;
+
+    // operation
+    virtual void Sort() = 0;
 
     //
     // const functions
@@ -121,6 +126,14 @@ public:
     virtual double* const GenValSerr() const
         {MPrintErrVFunc; abort(); return NULL;};
 
+    double GetValMin() const;
+    double GetValMax() const;
+    long GetLocValMin() const;
+    long GetLocValMax() const;
+    virtual double GetValAndErrMin() const = 0;
+    virtual double GetValAndErrMax() const = 0;
+
+    
     // output
     // mode: 0, 1, 2
     //    0: data
@@ -139,13 +152,18 @@ public:
     double GetOffsetIndexFromTag(string offset_tag) const;
     virtual double GetOffsetValFromTag(string offset_tag) const = 0;
 
-    void ReadInfo(string file, int* flag_val_sorted_ptr);
+    //
+    // static
+    //
+    static void ReadInfo(string file, int* flag_val_sorted_ptr);
+
 
 protected:
     void NullDataArray1d();
     void InitDataArray1d(long ndata);
     void IsValNotNull() const;
     void IsValidRange(long idata) const;
+    void IsValSerrPlus(double val_serr) const;
     
 private:
     long ndata_;

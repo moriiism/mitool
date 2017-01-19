@@ -1,29 +1,5 @@
 #include "mir_data1d_ope.h"
 
-void DataArray1dOpe::ReadInfo(string file, int* flag_val_sorted_ptr)
-{
-    int flag_val_sorted = 0;
-    
-    string* line_arr = NULL;
-    long ndata = 0;
-    MiIolib::GenReadFileComment(file, &line_arr, &ndata);
-    for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = 0;
-        string* split_arr = NULL;
-        MiStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
-        if(4 != ncolumn){
-            continue;
-        }
-        if("flag_val_sorted_" == split_arr[1]){
-            flag_val_sorted = atoi(split_arr[3].c_str());
-        }
-        delete [] split_arr;
-    }
-    MiIolib::DelReadFile(line_arr);
-
-    *flag_val_sorted_ptr = flag_val_sorted;
-}
-
 DataArray1d* const DataArray1dOpe::GenDa1dByLoad(string file, string format)
 {
     DataArray1d* da1d = NULL;

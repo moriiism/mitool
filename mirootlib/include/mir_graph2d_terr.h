@@ -11,10 +11,7 @@ public:
         NullGraphData2d();
     }
 
-    // Init
     void Init();
-
-    // Set point
     using GraphData2d::SetPoint;
     void SetPoint(long idata,
                   double xval,
@@ -23,46 +20,26 @@ public:
                   double oval,
                   double oval_terr_plus,
                   double oval_terr_minus);
-
     void SetOvalErrArrByPoissonErr();
-
-
     GraphDataTerr2d* const Clone() const;
-
     void Load(string file);
     void Load(string file, string format);    
-
-    // operation
     void Sort();
 
-    //
-    // const functions
-    //
-
-    // get
     const DataArrayTerr1d* const GetXvalArr() const;
     const DataArrayTerr1d* const GetOvalArr() const;
-
-    // get Range Qdp
-    void GetXRangeQdp(double* const low_ptr,
-                      double* const up_ptr) const;
-    void GetORangeQdp(double* const low_ptr,
-                      double* const up_ptr) const;
-    
-    // output
+    double GetXvalTerrPlusElm(long idata) const;
+    double GetXvalTerrMinusElm(long idata) const;
+    double GetOvalTerrPlusElm(long idata) const;
+    double GetOvalTerrMinusElm(long idata) const;
     void PrintData(FILE* fp, string format,
-                   double offset_xval = 0.0,
-                   double offset_oval = 0.0) const;
-
-    TGraphAsymmErrors* const GenTGraph(double offset_xval = 0.0,
-                                       double offset_oval = 0.0) const;
-
+                   double offset_xval,
+                   double offset_oval) const;
+    TGraphAsymmErrors* const GenTGraph(double offset_xval,
+                                       double offset_oval) const;
     Interval* const GenInterval() const;    
     Interval* const GenIntervalAboveThreshold(double threshold) const;
     Interval* const GenIntervalBelowThreshold(double threshold) const;
-
-    double GetOffsetXFromTag(string offset_tag) const;
-    double GetOffsetOFromTag(string offset_tag) const;    
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_TERR_H_

@@ -1,6 +1,29 @@
 #include "mir_data_ope.h"
 #include "mir_hist1d_ope.h"
 
+HistData1d* const HistData1d::GenHd1dByLoad(string file)
+{
+    HistData1d* hd1d = NULL;
+    long nbin_xval = 0;
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    string format = "";
+    ReadInfo(file, &nbin_xval, &xval_lo, &xval_up, &format);
+    
+    if("x,y" == format){
+        hd1d = new HistData1d;
+    } else if("x,y,ye" == format){
+        hd1d = new HistDataSerr1d;
+    } else if("x,y,ye+,ye-" == format){
+        hd1d = new HistDataTerr1d;        
+    } else {
+        MPrintErr("bad format");
+        abort();
+    }
+    hd1d->Load(file);
+    return hd1d;
+}
+
 // For a HistData1d
 
 void HistData1dOpe::GetPowSpec(const HistData1d* const hist_data,

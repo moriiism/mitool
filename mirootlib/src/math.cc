@@ -452,6 +452,26 @@ double MirMath::GetMax(vector<double> vec)
     return ans;
 }
 
+long MirMath::GetLocMin(vector<double> vec)
+{
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    long ans = GetLocMin(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
+}
+
+long MirMath::GetLocMax(vector<double> vec)
+{
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    long ans = GetLocMax(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
+}
+
 double MirMath::GetAdd(vector<double> vec)
 {
     long narr = 0;
@@ -522,6 +542,15 @@ double MirMath::GetRMS(vector<double> vec)
     return ans;
 }
 
+double MirMath::GetMedian(vector<double> vec)
+{
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    double ans = GetMedian(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
+}
 
 // For N values with gaussian errors
 
@@ -775,18 +804,6 @@ long MirMath::GetNbinEven(double val_lo, double val_up, double delta_val)
     } else {
         return nbin_floor + 1;
     }
-}
-
-
-void MirMath::GetRangeQdp(double min, double max,
-                          double* const low_ptr, double* const up_ptr)
-{
-    double width = (max - min) * 1.2;
-    double center = (max + min) / 2.;
-    double low = center - width / 2.;
-    double up  = center + width / 2.;
-    *low_ptr = low;
-    *up_ptr  = up;
 }
 
 int MirMath::IsSorted(long narr, const double* const val_arr)

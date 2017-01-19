@@ -1,5 +1,91 @@
 #include "mir_qdp_tool.h"
 
+void MirQdpTool::GetRangeQdp(double min, double max,
+                             double* const low_ptr, double* const up_ptr)
+{
+    double width = (max - min) * 1.2;
+    double center = (max + min) / 2.;
+    double low = center - width / 2.;
+    double up  = center + width / 2.;
+    *low_ptr = low;
+    *up_ptr  = up;
+}
+
+void MirQdpTool::GetRangeQdp(const Interval* const interval,
+                             double* const low_ptr, double* const up_ptr)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(interval->GetFirst(), interval->GetLast(), &xval_lo, &xval_up);
+    *low_ptr = xval_lo;
+    *up_ptr = xval_up;
+}
+
+//void MirQdpTool::GetXRangeQdp(double* const low_ptr, double* const up_ptr) const
+//{
+//    double low, up;
+//    MirMath::GetRangeQdp(GetXvalArr()->GetValMin(), GetXvalArr()->GetValMax(), &low, &up);
+//    *low_ptr = low;
+//    *up_ptr  = up;
+//}
+//
+//void GraphData2d::GetORangeQdp(double* const low_ptr, double* const up_ptr) const
+//{
+//    double low, up;
+//    MirMath::GetRangeQdp(GetOvalArr()->GetValMin(), GetOvalArr()->GetValMax(), &low, &up);
+//    *low_ptr = low;
+//    *up_ptr  = up;
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//void DataArrayTerr1d::GetRangeValQdp(const DataArray1d* const da1d,
+//                                     double* const lo_ptr,
+//                                     double* const up_ptr) const
+//{
+//    double lo, up;
+//    GetRangeQdp(da1d->GetValAndErrMin(), da1d->GetValAndErrMax(), &lo, &up);
+//    *lo_ptr = lo;
+//    *up_ptr = up;
+//}
+//
+//
+//// get Range Qdp
+//
+//void GraphDataSerr2d::GetXRangeQdp(double* const low_ptr, double* const up_ptr) const
+//{
+//    double low, up;
+//    MirMath::GetRangeQdp(GetXvalArr()->GetValAndErrMin(), GetXvalArr()->GetValAndErrMax(), &low, &up);
+//    *low_ptr = low;
+//    *up_ptr  = up;
+//    if(0 < g_flag_verbose){
+//        MPrintInfo("done.");
+//    }
+//}
+//
+//void GraphDataSerr2d::GetORangeQdp(double* const low_ptr, double* const up_ptr) const
+//{
+//    double low, up;
+//    MirMath::GetRangeQdp(GetOvalArr()->GetValAndErrMin(), GetOvalArr()->GetValAndErrMax(), &low, &up);
+//    *low_ptr = low;
+//    *up_ptr  = up;
+//    if(0 < g_flag_verbose){
+//        MPrintInfo("done.");
+//    }
+//}
+//
+
+
+
 void MirQdpTool::PrintQdpRead(FILE* fp, string format)
 {
     fprintf(fp, "\n");    

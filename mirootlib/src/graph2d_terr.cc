@@ -14,75 +14,6 @@ void GraphDataTerr2d::Init()
     SetFlagXvalSorted(0);
 }
 
-// xval
-void GraphDataTerr2d::SetXvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(ndata, val, val_serr);
-}
-
-void GraphDataTerr2d::SetXvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(val, val_serr);
-}
-
-void GraphDataTerr2d::SetXvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_terr_plus,
-                                           const double* const val_terr_minus)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(ndata,
-                                            val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-void GraphDataTerr2d::SetXvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_terr_plus,
-                                           vector<double> val_terr_minus)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-
-// oval
-void GraphDataTerr2d::SetOvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(ndata, val, val_serr);
-}
-
-void GraphDataTerr2d::SetOvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(val, val_serr);
-}
-
-void GraphDataTerr2d::SetOvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_terr_plus,
-                                           const double* const val_terr_minus)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(ndata,
-                                            val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-void GraphDataTerr2d::SetOvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_terr_plus,
-                                           vector<double> val_terr_minus)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
 void GraphDataTerr2d::SetPoint(long idata,
                                double xval,
                                double xval_terr_plus,
@@ -116,16 +47,16 @@ GraphDataTerr2d* const GraphDataTerr2d::Clone() const
 
 void GraphDataTerr2d::Load(string file)
 {
-    Null();
+    NullGraphData2d();
 
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetOvalArrNonConst()->Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(6 != ncolumn){
             MPrintWarnClass("ncolumn != 6");
         }
@@ -138,28 +69,27 @@ void GraphDataTerr2d::Load(string file)
                  xval, xval_terr_plus, xval_terr_minus,
                  oval, oval_terr_plus, oval_terr_minus);
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
+    int flag_xval_sorted = 0;
+    ReadInfo(file, &flag_xval_sorted);
+    SetFlagXvalSorted(flag_xval_sorted);
 }
 
 void GraphDataTerr2d::Load(string file, string format)
 {
-    Null();
+    NullGraphData2d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetOvalArrNonConst()->Init(ndata);
-    
     double xval, xval_terr_plus, xval_terr_minus;
     double oval, oval_terr_plus, oval_terr_minus;
     if("x,y" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(2 != ncolumn){
                 MPrintWarnClass("ncolumn != 2");
             }
@@ -176,7 +106,7 @@ void GraphDataTerr2d::Load(string file, string format)
     } else if("x,y,ye" == format){
         double oval_serr;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
                 MPrintWarnClass("ncolumn != 3");
             }
@@ -192,7 +122,7 @@ void GraphDataTerr2d::Load(string file, string format)
         }
     } else if("x,y,ye+,ye-" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
                 MPrintWarnClass("ncolumn != 4");
             }
@@ -208,7 +138,7 @@ void GraphDataTerr2d::Load(string file, string format)
     } else if("x,xe,y" == format){
         double xval_serr;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
                 MPrintWarnClass("ncolumn != 3");
             }
@@ -225,7 +155,7 @@ void GraphDataTerr2d::Load(string file, string format)
     } else if("x,xe,y,ye" == format){
         double xval_serr, oval_serr;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
                 MPrintWarnClass("ncolumn != 4");
             }
@@ -242,7 +172,7 @@ void GraphDataTerr2d::Load(string file, string format)
     } else if("x,xe,y,ye+,ye-" == format){
         double xval_serr;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
                 MPrintWarnClass("ncolumn != 5");
             }
@@ -257,7 +187,7 @@ void GraphDataTerr2d::Load(string file, string format)
         }
     } else if("x,xe+,xe-,y" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
                 MPrintWarnClass("ncolumn != 4");
             }
@@ -273,7 +203,7 @@ void GraphDataTerr2d::Load(string file, string format)
     } else if("x,xe+,xe-,y,ye" == format){
         double oval_serr;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
                 MPrintWarnClass("ncolumn != 5");
             }
@@ -288,7 +218,7 @@ void GraphDataTerr2d::Load(string file, string format)
         }
     } else if("x,xe+,xe-,y,ye+,ye-" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(6 != ncolumn){
                 MPrintWarnClass("ncolumn != 6");
             }
@@ -303,10 +233,10 @@ void GraphDataTerr2d::Load(string file, string format)
         MPrintErrClass("bad format");
         abort();
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
+    int flag_xval_sorted = 0;
+    ReadInfo(file, &flag_xval_sorted);
+    SetFlagXvalSorted(flag_xval_sorted);
 }
 
 
@@ -357,63 +287,44 @@ void GraphDataTerr2d::Sort()
     delete [] oval_terr_plus_org;
     delete [] oval_terr_minus_org;
     delete [] index;
-    
+
     SetFlagXvalSorted(1);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("sorted.");
-    }
 }
-
-
-//
-// const functions
-//
-
-// get
 
 const DataArrayTerr1d* const GraphDataTerr2d::GetXvalArr() const
 {
-    const DataArray1d* xval_arr = GraphData2d::GetXvalArr();
-    return dynamic_cast<const DataArrayTerr1d*>(xval_arr);
-};
-
+    return dynamic_cast<const DataArrayTerr1d*>(GetXvalArrNonConst());
+}
+    
 const DataArrayTerr1d* const GraphDataTerr2d::GetOvalArr() const
 {
-    const DataArray1d* oval_arr = GraphData2d::GetOvalArr();
-    return dynamic_cast<const DataArrayTerr1d*>(oval_arr);
-};
-
-// get Range Qdp
-
-void GraphDataTerr2d::GetXRangeQdp(double* const low_ptr, double* const up_ptr) const
-{
-    double low, up;
-    MirMath::GetRangeQdp(GetXvalArr()->GetValAndErrMin(), GetXvalArr()->GetValAndErrMax(), &low, &up);
-    *low_ptr = low;
-    *up_ptr  = up;
-    if(0 < g_flag_verbose){
-        MPrintInfo("done.");
-    }
-}
-
-void GraphDataTerr2d::GetORangeQdp(double* const low_ptr, double* const up_ptr) const
-{
-    double low, up;
-    MirMath::GetRangeQdp(GetOvalArr()->GetValAndErrMin(), GetOvalArr()->GetValAndErrMax(), &low, &up);
-    *low_ptr = low;
-    *up_ptr  = up;
-    if(0 < g_flag_verbose){
-        MPrintInfo("done.");
-    }
+    return dynamic_cast<const DataArrayTerr1d*>(GetOvalArrNonConst());
 }
 
 
-//
-// output
-//
+double GraphDataTerr2d::GetXvalTerrPlusElm(long idata) const
+{
+    return GetXvalArr()->GetValTerrPlusElm(idata);
+}
+
+double GraphDataTerr2d::GetXvalTerrMinusElm(long idata) const
+{
+    return GetXvalArr()->GetValTerrMinusElm(idata);
+}
+
+double GraphDataTerr2d::GetOvalTerrPlusElm(long idata) const
+{
+    return GetOvalArr()->GetValTerrPlusElm(idata);
+}
+
+double GraphDataTerr2d::GetOvalTerrMinusElm(long idata) const
+{
+    return GetOvalArr()->GetValTerrMinusElm(idata);
+}
 
 void GraphDataTerr2d::PrintData(FILE* fp, string format,
-                                double offset_xval, double offset_oval) const
+                                double offset_xval,
+                                double offset_oval) const
 {
     long ndata = GetNdata();
     if("x,y" == format){
@@ -477,13 +388,11 @@ void GraphDataTerr2d::PrintData(FILE* fp, string format,
         MPrintErrClass(msg);
         abort();
     }
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
 
-TGraphAsymmErrors* const GraphDataTerr2d::GenTGraph(double offset_xval, double offset_oval) const
+TGraphAsymmErrors* const GraphDataTerr2d::GenTGraph(double offset_xval,
+                                                    double offset_oval) const
 {
     long ndata = GetNdata();
     double* xval_arr = new double [ndata];
@@ -516,10 +425,6 @@ TGraphAsymmErrors* const GraphDataTerr2d::GenTGraph(double offset_xval, double o
     delete [] xval_terr_minus_arr;    
     delete [] oval_terr_plus_arr;
     delete [] oval_terr_minus_arr;        
-
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
     return tgraph;
 }
 
@@ -536,7 +441,8 @@ Interval* const GraphDataTerr2d::GenInterval() const
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -559,7 +465,8 @@ Interval* const GraphDataTerr2d::GenIntervalAboveThreshold(double threshold) con
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -583,7 +490,8 @@ Interval* const GraphDataTerr2d::GenIntervalBelowThreshold(double threshold) con
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -591,39 +499,3 @@ Interval* const GraphDataTerr2d::GenIntervalBelowThreshold(double threshold) con
     delete [] term_half_width_arr;
     return interval;
 }
-
-
-double GraphDataTerr2d::GetOffsetXFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetXvalArr()->GetValAndErrMin() + GetXvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-double GraphDataTerr2d::GetOffsetOFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValAndErrMin() + GetOvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-

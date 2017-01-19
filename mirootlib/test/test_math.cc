@@ -479,35 +479,377 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-    
 //    double GetVariance(long narr, const double* const val_arr);
+    {
+        printf("--- test GetVariance\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetVariance(narr, val_arr);
+        printf("ans = %e\n", ans);
+
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0)/5. = 12.0
+        // ( (10.0 - 12.0)**2 + (11.0 - 12.0)**2 + (12.0 - 12.0)**2
+        // + (13.0 - 12.0)**2 + (14.0 - 12.0)**2 ) / 5. = 2.0
+        printf("=== \n");
+    }
+   
 //    double GetStddev(long narr, const double* const val_arr);
+    {
+        printf("--- test GetStddev\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetStddev(narr, val_arr);
+        printf("ans = %e\n", ans);
+        printf("=== \n");
+    }
+
+
 //    double GetUnbiasedVariance(long narr, const double* const val_arr);
+    {
+        printf("--- test GetUnbiasedVariance\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetUnbiasedVariance(narr, val_arr);
+        printf("ans = %e\n", ans);
+        printf("=== \n");
+    }
+
 //    double GetSqrtOfUnbiasedVariance(long narr, const double* const val_arr);
+    {
+        printf("--- test GetSqrtOfUnbiasedVariance\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetSqrtOfUnbiasedVariance(narr, val_arr);
+        printf("ans = %e\n", ans);
+        printf("=== \n");
+    }
+    
 //    double GetRMS(long narr, const double* const val_arr);
+    {
+        printf("--- test GetRMS\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetRMS(narr, val_arr);
+        printf("ans = %e\n", ans);
+        // sqrt( ( 10.0**2 + 11.0**2 + 12.0**2 + 13.0**2 + 14.0**2 ) / 5.) = 12.08304597
+        printf("=== \n");
+    }
+    
 //    double GetMedian(long narr, const double* const val_arr);
-//
+    {
+        printf("--- test GetMedian\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        double ans = MirMath::GetMedian(narr, val_arr);
+        printf("ans = %e\n", ans);
+        printf("=== \n");
+    }
+
 //    double GetMin(vector<double> vec);
+    {
+        printf("--- test GetMin\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetMin(val_vec);
+        printf("val = %e\n", val);
+        
+        printf("=== \n");
+    }
+    
 //    double GetMax(vector<double> vec);
+    {
+        printf("--- test GetMax\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetMax(val_vec);
+        printf("val = %e\n", val);
+        
+        printf("=== \n");
+    }
+    
 //    long GetLocMin(vector<double> vec);
+    {
+        printf("--- test GetLocMin\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        long index = MirMath::GetLocMin(val_vec);
+        printf("index = %ld\n", index);
+        
+        printf("=== \n");
+    }
+
+    
 //    long GetLocMax(vector<double> vec);
+    {
+        printf("--- test GetLocMax\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        long index = MirMath::GetLocMax(val_vec);
+        printf("index = %ld\n", index);
+        
+        printf("=== \n");
+    }
+
 //    double GetAdd(vector<double> vec);
+    {
+        printf("--- test GetAdd\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetAdd(val_vec);
+        printf("val = %e\n", val);
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0) = 60.0
+        printf("=== \n");
+    }
+    
 //    double GetAMean(vector<double> vec);
+    {
+        printf("--- test GetAMean\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetAMean(val_vec);
+        printf("val = %e\n", val);
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0)/5. = 12.0
+        printf("=== \n");
+    }
+   
 //    double GetVariance(vector<double> vec);
+    {
+        printf("--- test GetVariance\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetVariance(val_vec);
+        printf("val = %e\n", val);
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0)/5. = 12.0
+        // ( (10.0 - 12.0)**2 + (11.0 - 12.0)**2 + (12.0 - 12.0)**2
+        // + (13.0 - 12.0)**2 + (14.0 - 12.0)**2 ) / 5. = 2.0
+        printf("=== \n");
+    }
+    
 //    double GetStddev(vector<double> vec);
+    {
+        printf("--- test GetStddev\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetStddev(val_vec);
+        printf("val = %e\n", val);
+        // sqrt(variance) = sqrt(2.0) = 1.4142135623731
+        printf("=== \n");
+    }
+    
 //    double GetUnbiasedVariance(vector<double> vec);
+    {
+        printf("--- test GetUnbiasedVariance\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetUnbiasedVariance(val_vec);
+        printf("val = %e\n", val);
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0)/5. = 12.0
+        // ( (10.0 - 12.0)**2 + (11.0 - 12.0)**2 + (12.0 - 12.0)**2
+        // + (13.0 - 12.0)**2 + (14.0 - 12.0)**2 ) / 4.  = 2.5
+        printf("=== \n");
+    }
+    
 //    double GetSqrtOfUnbiasedVariance(vector<double> vec);
+    {
+        printf("--- test GetSqrtOfUnbiasedVariance\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetSqrtOfUnbiasedVariance(val_vec);
+        printf("val = %e\n", val);
+        // sqrt(unbiased variance) = sqrt(2.5) = 1.58113883008419
+        printf("=== \n");
+    }
+    
 //    double GetRMS(vector<double> vec);
+    {
+        printf("--- test GetRMS\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetRMS(val_vec);
+        printf("val = %e\n", val);
+        // sqrt( ( 10.0**2 + 11.0**2 + 12.0**2 + 13.0**2 + 14.0**2 ) / 5.) = 12.08304597         
+        printf("=== \n");
+    }
+    
 //    double GetMedian(vector<double> vec);
-//    double GetMedian(vector<double> vec);
-//    
+    {
+        printf("--- test GetMedian\n");
+        long narr = 5;
+        vector<double> val_vec(narr);
+        val_vec[0] = 10.0;
+        val_vec[1] = 11.0;
+        val_vec[2] = 12.0;
+        val_vec[3] = 13.0;
+        val_vec[4] = 14.0;
+        double val = MirMath::GetMedian(val_vec);
+        printf("val = %e\n", val);
+        printf("=== \n");
+    }
+    
 //    void GetAdd(long narr, const double* const val_arr, const double* const val_err_arr,
 //                double* const val_add_ptr, double* const val_add_err_ptr);
+    {
+        printf("--- test GetAdd\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        double ans = 0.0;
+        double ans_err = 0.0;
+        MirMath::GetAdd(narr, val_arr, val_err_arr, &ans, &ans_err);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+        // 10.0 + 11.0 + 12.0 + 13.0 + 14.0 = 60.0
+        // sqrt(1.0**2 + 2.0**2 + 3.0**2 + 4.0**2 + 5.**2) = 7.41619848709566
+        printf("=== \n");
+    }
+    
 //    void GetAMean(long narr, const double* const val_arr, const double* const val_err_arr,
 //                  double* const amean_ptr, double* const amean_err_ptr);
-//    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
-//                 double* const wmean_ptr, double* const wmean_err_ptr,
-//                 vector<long>* const index_bad_vec_ptr);
+    {
+        printf("--- test GetAMean\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        double ans = 0.0;
+        double ans_err = 0.0;
+        MirMath::GetAMean(narr, val_arr, val_err_arr, &ans, &ans_err);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+        // (10.0 + 11.0 + 12.0 + 13.0 + 14.0)/5. = 12.0
+        // ( sqrt(1.0**2 + 2.0**2 + 3.0**2 + 4.0**2 + 5.**2))/5. = 1.48323969741913
+        printf("=== \n");
+    }
+   
+////    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
+////                 double* const wmean_ptr, double* const wmean_err_ptr,
+////                 vector<long>* const index_bad_vec_ptr);
+//    {
+//        printf("--- test GetWMean\n");
+//        long narr = 5;
+//        double val_arr[5];
+//        double val_err_arr[5];
+//        val_arr[0] = 10.0;
+//        val_arr[1] = 11.0;
+//        val_arr[2] = 12.0;
+//        val_arr[3] = 13.0;
+//        val_arr[4] = 14.0;
+//        val_err_arr[0] = 1.0;
+//        val_err_arr[1] = 2.0;
+//        val_err_arr[2] = 3.0;
+//        val_err_arr[3] = 4.0;
+//        val_err_arr[4] = 5.0;
+//        double ans = 0.0;
+//        double ans_err = 0.0;
+//        vector<long> index_bad_vec;
+//        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err, &index_bad_vec);
+//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+//        printf("=== \n");
+//    }
+
+    
 //
 //    void GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
 //                        const int* const mask_arr,
@@ -543,8 +885,6 @@ int main(int argc, char* argv[])
 //    int GetCombination(int n, int r);
 //    long GetNbin(double val_lo, double val_up, double delta_val, string mode);
 //    long GetNbinEven(double val_lo, double val_up, double delta_val);
-//    void GetRangeQdp(double min, double max,
-//                     double* const low_ptr, double* const up_ptr);
 //    int IsSorted(long narr, const double* const val_arr);
 //    double* const GenArray(vector<double> vec);
 //    double GetInProd(double vec0_xval, double vec0_yval,

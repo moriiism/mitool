@@ -21,6 +21,19 @@
 
 namespace MirQdpTool
 {
+    void GetRangeQdp(double min, double max,
+                     double* const low_ptr, double* const up_ptr);
+    void GetRangeQdp(const Interval* const interval,
+                     double* const low_ptr, double* const up_ptr);
+    void GetXRangeQdp(const GraphData2d* const gd2d,
+                      double* const low_ptr, double* const up_ptr);
+    void GetORangeQdp(const GraphData2d* const gd2d,
+                      double* const low_ptr, double* const up_ptr);
+    void GetXRangeQdp(const HistData1d* const hd1d,
+                      double* const low_ptr, double* const up_ptr);
+    void GetORangeQdp(const HistData1d* const hd1d,
+                      double* const low_ptr, double* const up_ptr);
+    
     void PrintQdpRead(FILE* fp, string format);
     void PrintQdpCmdStd(FILE* fp);
     void PrintQdpAxisRescale(FILE* fp, string xy,

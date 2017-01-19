@@ -14,35 +14,6 @@ void GraphDataSerr2d::Init()
     SetFlagXvalSorted(0);
 }
 
-// xval
-void GraphDataSerr2d::SetXvalAndSerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndSerr(ndata, val, val_serr);
-}
-
-void GraphDataSerr2d::SetXvalAndSerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndSerr(val, val_serr);
-}
-
-// oval
-void GraphDataSerr2d::SetOvalAndSerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndSerr(ndata, val, val_serr);
-}
-
-void GraphDataSerr2d::SetOvalAndSerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndSerr(val, val_serr);
-}
-
-
 void GraphDataSerr2d::SetPoint(long idata,
                                double xval, double xval_serr,
                                double oval, double oval_serr)
@@ -66,20 +37,18 @@ GraphDataSerr2d* const GraphDataSerr2d::Clone() const
     return obj_new;
 }
 
-
-
 void GraphDataSerr2d::Load(string file)
 {
-    Null();
+    NullGraphData2d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetOvalArrNonConst()->Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(4 != ncolumn){
             MPrintWarnClass("ncolumn != 4");
         }
@@ -88,27 +57,28 @@ void GraphDataSerr2d::Load(string file)
         iss >> xval >> xval_serr >> oval >> oval_serr;
         SetPoint(idata, xval, xval_serr, oval, oval_serr);
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
-}
+    MiIolib::DelReadFile(line_arr);
 
+    int flag_xval_sorted = 0;
+    ReadInfo(file, &flag_xval_sorted);
+    SetFlagXvalSorted(flag_xval_sorted);
+    
+}
 
 void GraphDataSerr2d::Load(string file, string format)
 {
-    Null();
+    NullGraphData2d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetOvalArrNonConst()->Init(ndata);
     double xval, xval_serr, oval, oval_serr;
     if("x,xe,y,ye" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
                 MPrintWarnClass("ncolumn != 4");
             }
@@ -119,7 +89,7 @@ void GraphDataSerr2d::Load(string file, string format)
     } else if("x,y,ye" == format){
         xval_serr = 0.0;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
                 MPrintWarnClass("ncolumn != 3");
             }
@@ -130,7 +100,7 @@ void GraphDataSerr2d::Load(string file, string format)
     } else if("x,xe,y" == format){
         oval_serr = 0.0;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
                 MPrintWarnClass("ncolumn != 3");
             }
@@ -142,7 +112,7 @@ void GraphDataSerr2d::Load(string file, string format)
         xval_serr = 0.0;
         oval_serr = 0.0;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(2 != ncolumn){
                 MPrintWarnClass("ncolumn != 2");
             }
@@ -154,10 +124,11 @@ void GraphDataSerr2d::Load(string file, string format)
         MPrintErrClass("bad format");
         abort();
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
+
+    int flag_xval_sorted = 0;
+    ReadInfo(file, &flag_xval_sorted);
+    SetFlagXvalSorted(flag_xval_sorted);
 }
 
 
@@ -200,62 +171,33 @@ void GraphDataSerr2d::Sort()
     delete [] index;
   
     SetFlagXvalSorted(1);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("sorted.");
-    }
 }
-
-
-
-// get
 
 const DataArraySerr1d* const GraphDataSerr2d::GetXvalArr() const
 {
-    const DataArray1d* xval_arr = GraphData2d::GetXvalArr();
-    return dynamic_cast<const DataArraySerr1d*>(xval_arr);
+    return dynamic_cast<const DataArraySerr1d*>(GetXvalArrNonConst());
 }
     
 const DataArraySerr1d* const GraphDataSerr2d::GetOvalArr() const
 {
-    const DataArray1d* oval_arr = GraphData2d::GetOvalArr();
-    return dynamic_cast<const DataArraySerr1d*>(oval_arr);
+    return dynamic_cast<const DataArraySerr1d*>(GetOvalArrNonConst());
 }
 
-
-// get Range Qdp
-
-void GraphDataSerr2d::GetXRangeQdp(double* const low_ptr, double* const up_ptr) const
+double GraphDataSerr2d::GetXvalSerrElm(long idata) const
 {
-    double low, up;
-    MirMath::GetRangeQdp(GetXvalArr()->GetValAndErrMin(), GetXvalArr()->GetValAndErrMax(), &low, &up);
-    *low_ptr = low;
-    *up_ptr  = up;
-    if(0 < g_flag_verbose){
-        MPrintInfo("done.");
-    }
+    return GetXvalArr()->GetValSerrElm(idata);
 }
 
-void GraphDataSerr2d::GetORangeQdp(double* const low_ptr, double* const up_ptr) const
+double GraphDataSerr2d::GetOvalSerrElm(long idata) const
 {
-    double low, up;
-    MirMath::GetRangeQdp(GetOvalArr()->GetValAndErrMin(), GetOvalArr()->GetValAndErrMax(), &low, &up);
-    *low_ptr = low;
-    *up_ptr  = up;
-    if(0 < g_flag_verbose){
-        MPrintInfo("done.");
-    }
+    return GetOvalArr()->GetValSerrElm(idata);
 }
-
-
-
-//
-// output
-//
 
 void GraphDataSerr2d::PrintData(FILE* fp, string format,
-                                double offset_xval, double offset_oval) const
+                                double offset_xval,
+                                double offset_oval) const
 {
-    long ndata = GetXvalArr()->GetNdata();
+    long ndata = GetNdata();
     if("x,y" == format){
         for(long idata = 0; idata < ndata; idata ++){
             fprintf(fp, "%.15e  %.15e\n",
@@ -298,9 +240,6 @@ void GraphDataSerr2d::PrintData(FILE* fp, string format,
         MPrintErrClass(msg);
         abort();
     }
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
 TGraphErrors* const GraphDataSerr2d::GenTGraph(double offset_xval,
@@ -316,13 +255,10 @@ TGraphErrors* const GraphDataSerr2d::GenTGraph(double offset_xval,
     TGraphErrors* tgraph = new TGraphErrors(ndata,
                                             xval_arr,
                                             oval_arr,
-                                            GetXvalSerrArrDbl(),
-                                            GetOvalSerrArrDbl());
+                                            GetXvalArr()->GetValSerr(),
+                                            GetOvalArr()->GetValSerr());
     delete [] xval_arr;
     delete [] oval_arr;
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
     return tgraph;
 }
 
@@ -338,7 +274,8 @@ Interval* const GraphDataSerr2d::GenInterval() const
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -361,7 +298,8 @@ Interval* const GraphDataSerr2d::GenIntervalAboveThreshold(double threshold) con
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -384,7 +322,8 @@ Interval* const GraphDataSerr2d::GenIntervalBelowThreshold(double threshold) con
     Interval* interval = new Interval;
     interval->InitSet(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
-    double term_half_width_min = MirMath::GetMin(interval->GetNterm(), term_half_width_arr);
+    double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
+                                                 term_half_width_arr);
 
     double tdiff = term_half_width_min / 10.; 
     interval->Clean(tdiff);
@@ -393,75 +332,3 @@ Interval* const GraphDataSerr2d::GenIntervalBelowThreshold(double threshold) con
     return interval;
 }
 
-double GraphDataSerr2d::GetOffsetXFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetXvalArr()->GetValAndErrMin() + GetXvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-double GraphDataSerr2d::GetOffsetOFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValAndErrMin() + GetOvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-void GraphDataSerr2d::GetValBinned(vector<double> xval_vec,
-                                   vector<double> xval_serr_vec,
-                                   vector<double> oval_vec,
-                                   vector<double> oval_serr_vec,
-                                   double* xval_bin_center_ptr,
-                                   double* xval_bin_half_width_ptr,
-                                   double* wmean_ptr,
-                                   double* wmean_err_ptr)
-{
-    double* oval_arr = MirMath::GenArray(oval_vec);
-    double* oval_serr_arr = MirMath::GenArray(oval_serr_vec);
-    double wmean = 0.0;
-    double wmean_err = 0.0;
-    vector<long> index_bad_vec;
-    MirMath::GetWMean(oval_vec.size(),
-                       oval_arr,
-                       oval_serr_arr,
-                       &wmean,
-                       &wmean_err,
-                       &index_bad_vec);
-    delete [] oval_arr;
-    delete [] oval_serr_arr;
-
-    double xval_min = MirMath::GetMin(xval_vec);
-    double xval_max = MirMath::GetMax(xval_vec);
-    long index_min = MirMath::GetLocMin(xval_vec);
-    long index_max = MirMath::GetLocMax(xval_vec);
-            
-    double xval_lo = xval_min - xval_serr_vec[index_min];
-    double xval_up = xval_max + xval_serr_vec[index_max];
-    double xval_bin_center = (xval_lo + xval_up) / 2.;
-    double xval_bin_half_width = (xval_up - xval_lo) / 2.;
-
-    *xval_bin_center_ptr = xval_bin_center;
-    *xval_bin_half_width_ptr = xval_bin_half_width;
-    *wmean_ptr = wmean;
-    *wmean_err_ptr = wmean_err;
-}

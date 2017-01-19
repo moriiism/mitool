@@ -155,7 +155,7 @@ void MirRootTool::InitTCanvas(string type)
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad root style (= %s).\n", type.c_str());
-        MPrintErrClass(msg);
+        MPrintErr(msg);
         abort();
     }
 

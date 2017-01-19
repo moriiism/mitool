@@ -43,14 +43,69 @@ void DataArray1d::Copy(const DataArray1d* const org)
 
     CopyTitle(org);
     Init(org->GetNdata());
-    SetVal(org->GetNdata(), org->GetVal());
     SetFlagValSorted(org->GetFlagValSorted());
+    if("DataArrayNerr1d" == GetClassName()){
+        SetVal(org->GetNdata(), org->GetVal());
+    } else if("DataArraySerr1d" == GetClassName()){
+        if("DataArrayNerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            SetValErrByPoissonErr();
+        } else if("DataArraySerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            SetValSerr(org->GetNdata(), org->GetValSerr());
+        } else if("DataArrayTerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            double* val_serr = org->GenValSerr();
+            SetValSerr(org->GetNdata(), val_serr);
+            delete [] val_serr;
+        }
+    } else if("DataArrayTerr1d" == GetClassName()){
+        if("DataArrayNerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            SetValErrByPoissonErr();
+        } else if("DataArraySerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            SetValTerr(org->GetNdata(), org->GetValSerr());
+        } else if("DataArrayTerr1d" == org->GetClassName()){
+            SetVal(org->GetNdata(), org->GetVal());
+            SetValTerr(org->GetNdata(),
+                       org->GetValTerrPlus(),
+                       org->GetValTerrMinus());
+        }
+    }
 }
 
 double DataArray1d::GetValElm(long idata) const
 {
     IsValidRange(idata);
     return val_[idata];
+}
+
+
+// statistic
+
+double DataArray1d::GetValMin() const
+{
+    double ans = MirMath::GetMin(GetNdata(), GetVal());
+    return ans;
+}
+
+double DataArray1d::GetValMax() const
+{
+    double ans = MirMath::GetMax(GetNdata(), GetVal());
+    return ans;
+}
+
+long DataArray1d::GetLocValMin() const
+{
+    long ans = MirMath::GetLocMin(GetNdata(), GetVal());
+    return ans;
+}
+
+long DataArray1d::GetLocValMax() const
+{
+    long ans = MirMath::GetLocMax(GetNdata(), GetVal());
+    return ans;
 }
 
 void DataArray1d::Save(string outfile, int mode, double offset_val) const
@@ -108,6 +163,34 @@ double DataArray1d::GetOffsetIndexFromTag(string offset_tag) const
 }
 
 //
+// static
+//
+
+void DataArray1d::ReadInfo(string file, int* flag_val_sorted_ptr)
+{
+    int flag_val_sorted = 0;
+    
+    string* line_arr = NULL;
+    long ndata = 0;
+    MiIolib::GenReadFileComment(file, &line_arr, &ndata);
+    for(long idata = 0; idata < ndata; idata ++){
+        int ncolumn = 0;
+        string* split_arr = NULL;
+        MiStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
+        if(4 != ncolumn){
+            continue;
+        }
+        if("flag_val_sorted_" == split_arr[1]){
+            flag_val_sorted = atoi(split_arr[3].c_str());
+        }
+        delete [] split_arr;
+    }
+    MiIolib::DelReadFile(line_arr);
+
+    *flag_val_sorted_ptr = flag_val_sorted;
+}
+
+//
 // protected
 //
 
@@ -144,6 +227,17 @@ void DataArray1d::IsValidRange(long idata) const
     if(idata < 0 || GetNdata() <= idata){
         char msg[kLineSize];
         sprintf(msg, "idata (=%ld)", idata);
+        MPrintErr(msg);
+        abort();
+    }
+}
+
+
+void DataArray1d::IsValSerrPlus(double val_serr) const
+{
+    if(val_serr < 0.0){
+        char msg[kLineSize];
+        sprintf(msg, "val_serr(=%e) < 0.0", val_serr);
         MPrintErr(msg);
         abort();
     }

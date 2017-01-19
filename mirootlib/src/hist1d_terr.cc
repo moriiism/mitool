@@ -8,74 +8,43 @@ void HistDataTerr1d::Init(long nbin_xval,
                           double xval_lo,
                           double xval_up)
 {
-    Null();
-    SetInfo(nbin_xval, xval_lo, xval_up);
+    NullHistData1d();
+    NewHi1d();
+    GetHi1dNonConst()->InitSetByNbin(xval_lo, xval_up, nbin_xval);
     NewOvalArrAsDataArrayTerr1d();
     GetOvalArrNonConst()->Init(nbin_xval);
 }
 
-// SetData
-void HistDataTerr1d::SetData(long nbin_xval,
-                             const double* const oval,
-                             const double* const oval_terr_plus,
-                             const double* const oval_terr_minus)
+void HistDataTerr1d::Init(const HistInfo1d* const hist_info)
 {
-    if(GetNbinX() != nbin_xval){
-        MPrintErrClass("GetNbinX() != nbin_xval");
-        abort();
-    }
-    GetOvalArrNonConst()->SetValAndTerr(nbin_xval,
-                                        oval,
-                                        oval_terr_plus,
-                                        oval_terr_minus);
+    NullHistData1d();
+    NewHi1d();
+    GetHi1dNonConst()->InitSetByNbin(hist_info->GetLo(),
+                                     hist_info->GetUp(),
+                                     hist_info->GetNbin());
+    NewOvalArrAsDataArrayTerr1d();
+    GetOvalArrNonConst()->Init(hist_info->GetNbin());
 }
 
-// InitSet
-void HistDataTerr1d::InitSet(long nbin_xval,
-                             double xval_lo,
-                             double xval_up,
-                             const double* const oval,
-                             const double* const oval_terr_plus,
-                             const double* const oval_terr_minus)
+void HistDataTerr1d::SetOvalTerrElm(long ibin,
+                                    double oval_serr)
 {
-    Init(nbin_xval, xval_lo, xval_up);
-    SetData(nbin_xval, oval, oval_terr_plus, oval_terr_minus);
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValTerrElm(ibin, oval_serr);
 }
 
-void HistDataTerr1d::InitSet(const TH1D* const th1d)
-{
-    Null();
-    
-    long nbin_xval = th1d->GetNbinsX();
-    double xval_lo = th1d->GetXaxis()->GetXmin();
-    double xval_up = th1d->GetXaxis()->GetXmax();
-    Init(nbin_xval, xval_lo, xval_up);
-
-    double* oval            = new double [nbin_xval];
-    double* oval_terr_plus  = new double [nbin_xval];
-    double* oval_terr_minus = new double [nbin_xval];    
-    for(long ibin = 0; ibin < nbin_xval; ibin ++){
-        oval[ibin]      = th1d->GetBinContent(ibin + 1);
-        oval_terr_plus[ibin] = th1d->GetBinError(ibin + 1);
-        oval_terr_minus[ibin] = -1 * th1d->GetBinError(ibin + 1);
-    }
-    SetData(nbin_xval, oval, oval_terr_plus, oval_terr_minus);
-    delete [] oval;
-    delete [] oval_terr_plus;
-    delete [] oval_terr_minus;
-}
 
 void HistDataTerr1d::SetOvalTerrPlusElm(long ibin,
                                         double oval_terr_plus)
 {
-    IsOvalNotNull();    
+    IsOvalArrNotNull();
     GetOvalArrNonConst()->SetValTerrPlusElm(ibin, oval_terr_plus);
 }
 
 void HistDataTerr1d::SetOvalTerrMinusElm(long ibin,
                                          double oval_terr_minus)
 {
-    IsOvalNotNull();        
+    IsOvalArrNotNull();
     GetOvalArrNonConst()->SetValTerrMinusElm(ibin, oval_terr_minus);
 }
 
@@ -85,7 +54,7 @@ void HistDataTerr1d::FillByMax(double xval,
                                double oval_terr_plus,
                                double oval_terr_minus)
 {
-    IsOvalNotNull();
+    IsOvalArrNotNull();
     long ibin = GetIbin(xval);
     GetOvalArrNonConst()->FillByMax(ibin,
                                     oval,
@@ -98,7 +67,7 @@ void HistDataTerr1d::FillByMin(double xval,
                                double oval_terr_plus,
                                double oval_terr_minus)
 {
-    IsOvalNotNull();
+    IsOvalArrNotNull();
     long ibin = GetIbin(xval);
     GetOvalArrNonConst()->FillByMin(ibin,
                                     oval,
@@ -121,7 +90,7 @@ HistDataTerr1d* const HistDataTerr1d::Clone() const
 
 void HistDataTerr1d::Load(string file)
 {
-    Null();
+    NullHistData1d();
     
     long nbin_xval = 0;
     double xval_lo = 0.0;
@@ -145,46 +114,29 @@ void HistDataTerr1d::Load(string file)
         SetOvalTerrMinusElm(ibin, gdata2d->GetOvalTerrMinusElm(idata) );        
     }
     delete gdata2d;
-
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
-
-//
-// const functions
-//
-
-// get
 const DataArrayTerr1d* const HistDataTerr1d::GetOvalArr() const
 {
-    const DataArray1d* oval_arr = HistData1d::GetOvalArr();
-    return dynamic_cast<const DataArrayTerr1d*>(oval_arr);
+    return dynamic_cast<const DataArrayTerr1d*>(GetOvalArrNonConst());
 }
 
-const double* const HistDataTerr1d::GetOvalTerrPlusArrDbl() const
+double HistDataTerr1d::GetOvalSerrElm(long ibin) const
 {
-    IsOvalNotNull();
-    return GetOvalArr()->GetValTerrPlus();
-}
-
-const double* const HistDataTerr1d::GetOvalTerrMinusArrDbl() const
-{
-    IsOvalNotNull();
-    return GetOvalArr()->GetValTerrMinus();
+    IsOvalArrNotNull();    
+    return GetOvalArr()->GetValSerrElm(ibin);
 }
 
 
 double HistDataTerr1d::GetOvalTerrPlusElm(long ibin) const
 {
-    IsOvalNotNull();    
+    IsOvalArrNotNull();    
     return GetOvalArr()->GetValTerrPlusElm(ibin);
 }
 
 double HistDataTerr1d::GetOvalTerrMinusElm(long ibin) const
 {
-    IsOvalNotNull();
+    IsOvalArrNotNull();
     return GetOvalArr()->GetValTerrMinusElm(ibin);
 }
 
@@ -200,26 +152,6 @@ double HistDataTerr1d::GetOvalTerrMinusElmAtX(double xval) const
     return GetOvalTerrMinusElm(ibin);
 }
 
-void HistDataTerr1d::GenOvalTerrArr(double** const oval_terr_plus_arr_ptr,
-                                    double** const oval_terr_minus_arr_ptr,
-                                    long* const nbin_ptr) const
-{
-    long nbin_xval = GetNbinX();
-    double* oval_terr_plus_arr = new double [nbin_xval];
-    double* oval_terr_minus_arr = new double [nbin_xval];
-    for(long ibin = 0; ibin < nbin_xval; ibin++){
-        oval_terr_plus_arr[ibin]  = GetOvalArr()->GetValTerrPlusElm(ibin);
-        oval_terr_minus_arr[ibin] = GetOvalArr()->GetValTerrMinusElm(ibin);
-    }
-    *oval_terr_plus_arr_ptr  = oval_terr_plus_arr;
-    *oval_terr_minus_arr_ptr = oval_terr_minus_arr;
-    *nbin_ptr = nbin_xval;
-}
-
-//
-// output
-//
-
 void HistDataTerr1d::PrintData(FILE* fp, string format,
                                double offset_xval,
                                double offset_oval) const
@@ -228,7 +160,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     if("x,y" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval,
+                    GetBinCenter(ibin) - offset_xval,
                     GetOvalElm(ibin) - offset_oval);
         }
     } else if ("x,y,ye" == format){
@@ -236,7 +168,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
             if(1 == MirMath::IsSame(GetOvalTerrPlusElm(ibin),
                                      -1 * GetOvalTerrMinusElm(ibin)) ){
                 fprintf(fp, "%.15e  %.15e  %.15e\n",
-                        GetBinCenterX(ibin) - offset_xval,
+                        GetBinCenter(ibin) - offset_xval,
                         GetOvalElm(ibin) - offset_oval,
                         GetOvalTerrPlusElm(ibin) );
             } else {
@@ -246,7 +178,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     } else if ("x,y,ye+,ye-" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval,
+                    GetBinCenter(ibin) - offset_xval,
                     GetOvalElm(ibin) - offset_oval,
                     GetOvalTerrPlusElm(ibin),
                     GetOvalTerrMinusElm(ibin) );
@@ -254,7 +186,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     } else if ("x,xe,y" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval, GetBinWidth()/2.,
+                    GetBinCenter(ibin) - offset_xval, GetXvalBinWidth()/2.,
                     GetOvalElm(ibin) - offset_oval);
         }
     } else if ("x,xe,y,ye" == format){
@@ -262,7 +194,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
             if(1 == MirMath::IsSame(GetOvalTerrPlusElm(ibin),
                                      -1 * GetOvalTerrMinusElm(ibin)) ){
                 fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
-                        GetBinCenterX(ibin) - offset_xval, GetBinWidth()/2.,
+                        GetBinCenter(ibin) - offset_xval, GetXvalBinWidth()/2.,
                         GetOvalElm(ibin) - offset_oval,
                         GetOvalTerrPlusElm(ibin) );
             } else {
@@ -272,7 +204,7 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     } else if ("x,xe,y,ye+,ye-" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval, GetBinWidth()/2.,
+                    GetBinCenter(ibin) - offset_xval, GetXvalBinWidth()/2.,
                     GetOvalElm(ibin) - offset_oval,
                     GetOvalTerrPlusElm(ibin),
                     GetOvalTerrMinusElm(ibin) );
@@ -280,8 +212,8 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     } else if ("x,xe+,xe-,y" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval,
-                    GetBinWidth()/2., -1 * GetBinWidth()/2.,
+                    GetBinCenter(ibin) - offset_xval,
+                    GetXvalBinWidth()/2., -1 * GetXvalBinWidth()/2.,
                     GetOvalElm(ibin) - offset_oval);
         }
     } else if ("x,xe+,xe-,y,ye" == format){
@@ -289,8 +221,8 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
             if(1 == MirMath::IsSame(GetOvalTerrPlusElm(ibin),
                                      -1 * GetOvalTerrMinusElm(ibin)) ){
                 fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                        GetBinCenterX(ibin) - offset_xval,
-                        GetBinWidth()/2., -1 * GetBinWidth()/2.,
+                        GetBinCenter(ibin) - offset_xval,
+                        GetXvalBinWidth()/2., -1 * GetXvalBinWidth()/2.,
                         GetOvalElm(ibin) - offset_oval,
                         GetOvalTerrPlusElm(ibin) );
             } else {
@@ -300,8 +232,8 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
     } else if ("x,xe+,xe-,y,ye+,ye-" == format){
         for(long ibin = 0; ibin < nbin_xval; ibin ++){
             fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetBinCenterX(ibin) - offset_xval,
-                    GetBinWidth()/2., -1 * GetBinWidth()/2.,
+                    GetBinCenter(ibin) - offset_xval,
+                    GetXvalBinWidth()/2., -1 * GetXvalBinWidth()/2.,
                     GetOvalElm(ibin) - offset_oval,
                     GetOvalTerrPlusElm(ibin),
                     GetOvalTerrMinusElm(ibin) );
@@ -316,53 +248,88 @@ void HistDataTerr1d::PrintData(FILE* fp, string format,
 
 HistDataTerr1d* const HistDataTerr1d::GenHd1MaxInBin(long nbin_new) const
 {
-    printf("not yet implimented\n");
-    abort();
+    if(nbin_new > GetNbinX()){
+        MPrintErrClass("bad nbin_new");
+        abort();
+    }
+    if(nbin_new < 1){
+        MPrintErrClass("bad nbin_new");
+        abort();
+    }
+    if(0 != GetNbinX() % nbin_new){
+        MPrintErrClass("bad nbin_new");
+        abort();
+    }
+
+    HistDataTerr1d* h1d_new = new HistDataTerr1d;
+    h1d_new->Init(nbin_new, GetXvalLo(), GetXvalUp());
+  
+    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
+        h1d_new->FillByMax(GetBinCenter(ibin),
+                           GetOvalElm(ibin),
+                           GetOvalTerrPlusElm(ibin),
+                           GetOvalTerrMinusElm(ibin));
+    }
+    return h1d_new;
 }
 
 GraphDataTerr2d* const HistDataTerr1d::GenGraph2d() const
 {
-    printf("not yet implimented\n");
-    abort();
+    long nbin_xval = 0;
+    double* xval_arr = NULL;
+    double* xval_serr_arr = NULL;
+    GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
+    GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
+
+    DataArrayTerr1d* da1d_x = new DataArrayTerr1d;
+    da1d_x->Init(nbin_xval);
+    da1d_x->SetVal(nbin_xval, xval_arr);
+    da1d_x->SetValTerr(nbin_xval, xval_serr_arr);
+    DataArrayTerr1d* da1d_o = new DataArrayTerr1d;
+    da1d_o->Init(nbin_xval);
+    da1d_o->SetVal(nbin_xval,
+                   GetOvalArr()->GetVal());
+    da1d_o->SetValTerr(nbin_xval,
+                       GetOvalArr()->GetValTerrPlus(),
+                       GetOvalArr()->GetValTerrMinus());
+
+    GraphDataTerr2d* g2d = new GraphDataTerr2d;
+    g2d->Init();
+    g2d->SetXvalArr(da1d_x);
+    g2d->SetOvalArr(da1d_o);
+    g2d->SetFlagXvalSorted(1);
+
+    delete da1d_x;
+    delete da1d_o;
+    delete [] xval_arr;
+    delete [] xval_serr_arr;
+    return g2d;
 }
 
 TH1D* const HistDataTerr1d::GenTH1D(double offset_xval,
                                     double offset_oval) const
 {
-
-    printf("not yet implimented\n");
-    abort();
-}
+    long nbin_xval = GetNbinX();
+    double xval_lo = GetXvalLo();
+    double xval_up = GetXvalUp();
     
-// qdp range
-void HistDataTerr1d::GetORangeQdp(double* const low_ptr,
-                                  double* const up_ptr) const
-{
-    double low, up;
-    MirMath::GetRangeQdp(GetOvalArr()->GetValAndErrMin(),
-                          GetOvalArr()->GetValAndErrMax(),
-                          &low, &up);
-    *low_ptr = low;
-    *up_ptr  = up;
-    if(0 < g_flag_verbose){
-        MPrintInfo("done.");
-    }
-}
+    string name = GetTitle();
+    TH1D* th1d = new TH1D(name.c_str(), name.c_str(),
+                          nbin_xval,
+                          xval_lo - offset_xval,
+                          xval_up - offset_xval);
+    for(long ibin = 0; ibin < nbin_xval; ibin++){
+        double xval = GetBinCenter(ibin);
+        th1d->Fill(xval - offset_xval,
+                   GetOvalElm(ibin) - offset_oval);
+        th1d->SetBinError(ibin + 1, GetOvalSerrElm(ibin));
+    }	
+    char xtitle[kLineSize];
+    sprintf(xtitle, "offset = %e", offset_xval);
+    th1d->SetXTitle(xtitle);
 
-
-double HistDataTerr1d::GetOffsetOFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValAndErrMin() + GetOvalArr()->GetValAndErrMax() ) / 2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
+    char ytitle[kLineSize];
+    sprintf(ytitle, "offset = %e", offset_oval);
+    th1d->SetYTitle(ytitle);
+    return th1d;
 }

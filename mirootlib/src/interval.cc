@@ -136,6 +136,12 @@ void Interval::Copy(const Interval* const org)
             org->GetTstop());
 }
 
+Interval* const Interval::Clone() const
+{
+    Interval* obj_new = new Interval;
+    obj_new->Copy(this);
+    return obj_new;
+}
 
 double* const Interval::GenTermCenter() const
 {
@@ -214,14 +220,6 @@ double Interval::GetLast() const
     return last;
 }
 
-void Interval::GetRangeQdp(double* const low_ptr, double* const up_ptr) const
-{
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    MirMath::GetRangeQdp(GetFirst(), GetLast(), &xval_lo, &xval_up);
-    *low_ptr = xval_lo;
-    *up_ptr = xval_up;
-}
 
 double Interval::GetTotalInterval() const
 {
@@ -899,6 +897,13 @@ void Interval2dim::Copy(const Interval2dim* const org)
             org->GetIntervalY());
 }
 
+Interval2dim* const Interval2dim::Clone() const
+{
+    Interval2dim* obj_new = new Interval2dim;
+    obj_new->Copy(this);
+    return obj_new;
+}
+
 int Interval2dim::IsIn(double xval, double yval) const
 {
     int flag = 1;
@@ -974,6 +979,13 @@ void IntervalNdim::Copy(const IntervalNdim* const org)
     CopyTitle(org);
     InitSet(org->GetNdim(),
             org->GetIntervalArr());
+}
+
+IntervalNdim* const IntervalNdim::Clone() const
+{
+    IntervalNdim* obj_new = new IntervalNdim;
+    obj_new->Copy(this);
+    return obj_new;
 }
 
 int IntervalNdim::IsIn(const double* const val_arr, long ndim) const

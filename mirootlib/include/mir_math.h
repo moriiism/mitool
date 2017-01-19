@@ -5,7 +5,7 @@
 
 #include "TMath.h"
 //#include "Math/QuantFuncMathMore.h"
-#include "Math/QuantFuncMathCore.h"
+//#include "Math/QuantFuncMathCore.h"
 
 // "Average" and "mean" are ambiguous, then we do not use these names.
 // Instead, we use the followings:
@@ -124,7 +124,6 @@ namespace MirMath
     double GetSqrtOfUnbiasedVariance(vector<double> vec);
     double GetRMS(vector<double> vec);
     double GetMedian(vector<double> vec);
-    double GetMedian(vector<double> vec);
     
     // For N values with gaussian errors
     //   for array
@@ -145,9 +144,6 @@ namespace MirMath
                          const int* const mask_arr,
                          double* const wmean_ptr, double* const wmean_err_ptr,
                          vector<long>* const index_bad_vec_ptr);
-
-
-    // ----------------------------------------
     
     long GetChi2byConst(long narr,
                         const double* const val_arr,
@@ -187,11 +183,8 @@ namespace MirMath
     long GetNbin(double val_lo, double val_up, double delta_val, string mode);
     long GetNbinEven(double val_lo, double val_up, double delta_val);
 
-    void GetRangeQdp(double min, double max,
-                     double* const low_ptr, double* const up_ptr);
 
     int IsSorted(long narr, const double* const val_arr);
-
 
     // inner product
     double GetInProd(double vec0_xval, double vec0_yval,

@@ -57,7 +57,6 @@ public:
     double GetFirst() const;
     double GetLast() const;
 
-    void GetRangeQdp(double* const low_ptr, double* const up_ptr) const;
     
     int IsOrdered() const;
     int IsIn(double val) const;

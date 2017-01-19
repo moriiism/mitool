@@ -32,16 +32,18 @@ public:
     long GetNbin() const {return nbin_;};
     double GetLo() const {return lo_;};
     double GetUp() const {return up_;};
+
     double GetMd() const;
     double GetMdLog() const;
     double GetBinWidth() const;
     double GetBinWidthLog(long ibin) const;
-    double GetFullWidth() const {return up_ - lo_;};
+    double GetFullWidth() const {return GetUp() - GetLo();};
 
     long GetIbin(double val, string scale = "lin") const;
     double GetBinCenter(long ibin, string scale = "lin") const;
     double GetBinLo(long ibin, string scale = "lin") const;
     double GetBinUp(long ibin, string scale = "lin") const;
+    long GetIbin_WithHalfBinShifted(double val) const;
     
     void GenValArr(double** const val_arr_ptr,
                     long* const nbin_ptr,
@@ -54,18 +56,19 @@ public:
                        long* const nbin_ptr,
                        string scale = "lin") const;  
     
-    // qdp range
-    //void GetRangeQdp(double* const low_ptr,
-    //                 double* const up_ptr) const;
-
     // offset_tag = "st", "md", "ed", "no"
     double GetOffsetFromTag(string offset_tag) const;
     
     void Print(FILE* fp) const;
-    
-    static void SetHistInfo(string line, HistInfo1d* const hist_info_out);
 
-    int IsValidForLogScale() const;
+    void IsValidForLogScale() const;    
+    void IsValidIbin(long ibin) const;
+    void IsValidRange(double val) const;
+
+    //
+    // static
+    //
+    static void SetHistInfo(string line, HistInfo1d* const hist_info_out);
     
 private:
     long nbin_;
@@ -99,19 +102,51 @@ public:
     // const func
     HistInfo1d* const GetHistInfoX() const {return hist_info_x_;};
     HistInfo1d* const GetHistInfoY() const {return hist_info_y_;};
-    long GetNbinX() const {return hist_info_x_->GetNbin();};
-    double GetLoX() const {return hist_info_x_->GetLo();};
-    double GetUpX() const {return hist_info_x_->GetUp();};
-    double GetBinWidthX() const {return hist_info_x_->GetBinWidth();};
-    long GetNbinY() const {return hist_info_y_->GetNbin();};
-    double GetLoY() const {return hist_info_y_->GetLo();};
-    double GetUpY() const {return hist_info_y_->GetUp();};
-    double GetBinWidthY() const {return hist_info_y_->GetBinWidth();};
+
+    long GetNbinX() const {return GetHistInfoX()->GetNbin();};
+    double GetLoX() const {return GetHistInfoX()->GetLo();};
+    double GetUpX() const {return GetHistInfoX()->GetUp();};
+    double GetMdX() const {return GetHistInfoX()->GetMd();};
+    double GetBinWidthX() const {return GetHistInfoX()->GetBinWidth();};
+    double GetFullWidthX() const {return GetHistInfoX()->GetFullWidth();};
+    long GetNbinY() const {return GetHistInfoY()->GetNbin();};
+    double GetLoY() const {return GetHistInfoY()->GetLo();};
+    double GetUpY() const {return GetHistInfoY()->GetUp();};
+    double GetMdY() const {return GetHistInfoY()->GetMd();};
+    double GetBinWidthY() const {return GetHistInfoY()->GetBinWidth();};
+    double GetFullWidthY() const {return GetHistInfoY()->GetFullWidth();};
+    long GetNbin()  const {return GetNbinX() * GetNbinY();};
     double GetBinArea() const {return GetBinWidthX() * GetBinWidthY();};
+    double GetFullArea() const {return GetFullWidthX() * GetFullWidthY();};
+
+    long GetIbin(long ibin_xval, long ibin_yval) const;
+    long GetIbinX(long ibin) const;
+    long GetIbinY(long ibin) const;
+    long GetIbinXFromX(double xval) const;
+    long GetIbinYFromY(double yval) const;
+    long GetIbinFromXY(double xval, double yval) const;
+    double GetBinCenterXFromIbinX(long ibin_xval) const;
+    double GetBinCenterYFromIbinY(long ibin_yval) const;
+    double GetBinCenterXFromIbin(long ibin) const;
+    double GetBinCenterYFromIbin(long ibin) const;
+    void GetBinCenterXYFromIbin(long ibin,
+                                double* const xval_ptr,
+                                double* const yval_ptr) const;
+    long GetIbinX_WithHalfBinShifted(double xval) const;
+    long GetIbinY_WithHalfBinShifted(double yval) const;
 
     void Print(FILE* fp) const;
+
+    void IsValidIbinX(long ibin_xval) const;
+    void IsValidIbinY(long ibin_yval) const;
+    void IsValidRangeX(double xval) const;
+    void IsValidRangeY(double yval) const;
     
 private:
+    // ibin_xval_ = 0, 1, ..., nbin_xval_
+    // ibin_yval_ = 0, 1, ..., nbin_yval_
+    // ibin = ibin_xval_ + nbin_xval_ * ibin_yval_
+    
     HistInfo1d* hist_info_x_;
     HistInfo1d* hist_info_y_;
 

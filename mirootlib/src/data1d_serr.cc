@@ -64,6 +64,15 @@ void DataArraySerr1d::Fill(long idata, double weight)
     // poisson error
 }
 
+void DataArraySerr1d::FillByMax(long idata, double val)
+{
+    double val_pre = GetValElm(idata);
+    if(val_pre < val){
+        SetValElm(idata, val);
+        SetValSerrElm(idata, sqrt(val));
+    }
+}
+
 void DataArraySerr1d::FillByMax(long idata,
                                 double val,
                                 double val_serr)
@@ -75,6 +84,14 @@ void DataArraySerr1d::FillByMax(long idata,
     }
 }
 
+void DataArraySerr1d::FillByMin(long idata, double val)
+{
+    double val_pre = GetValElm(idata);
+    if(val_pre > val){
+        SetValElm(idata, val);
+        SetValSerrElm(idata, sqrt(val));
+    }
+}
 
 void DataArraySerr1d::FillByMin(long idata,
                                 double val,
@@ -139,11 +156,71 @@ void DataArraySerr1d::Load(string file)
     SetFlagValSorted(flag_val_sorted);
 }
 
+void DataArraySerr1d::Sort()
+{
+    if(1 == GetFlagValSorted()){
+        MPrintInfoClass("It has been already sorted.");
+        return;
+    }
+    if(NULL == GetVal() || NULL == GetValSerr()){
+        MPrintErrClass("GetVal() == NULL or GetValSerr() == NULL");
+        abort();
+    }
+    long ndata = GetNdata();
+    double* val_org = new double [ndata];
+    double* val_serr_org = new double [ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        val_org[idata] = GetValElm(idata);
+        val_serr_org[idata] = GetValSerrElm(idata);
+    }
+
+    long* index = new long [ndata];  // to store sort result
+    TMath::Sort(ndata, val_org, index, kFALSE);
+
+    for(long idata = 0; idata < ndata; idata++){
+        SetValElm(idata, val_org[index[idata]]);
+        SetValSerrElm(idata, val_serr_org[index[idata]]);
+    }
+
+    delete [] index; index = NULL;
+    delete [] val_org; val_org = NULL;
+    delete [] val_serr_org; val_serr_org = NULL;
+
+    SetFlagValSorted(1);
+}
+
+
 double DataArraySerr1d::GetValSerrElm(long idata) const
 {
     IsValidRange(idata);
     return val_serr_[idata];
 }
+
+
+double DataArraySerr1d::GetValAndErrMin() const
+{
+    long ndata = GetNdata();
+    double* val_tmp = new double [ndata];
+    for(long idata = 0; idata < ndata; idata ++){
+        val_tmp[idata] = GetValElm(idata) - GetValSerrElm(idata);
+    }
+    double min = MirMath::GetMin(ndata, val_tmp);
+    delete [] val_tmp;
+    return min;
+}
+
+double DataArraySerr1d::GetValAndErrMax() const
+{
+    long ndata = GetNdata();
+    double* val_tmp = new double [ndata];
+    for(long idata = 0; idata < ndata; idata ++){
+        val_tmp[idata] = GetValElm(idata) + GetValSerrElm(idata);
+    }
+    double max = MirMath::GetMax(ndata, val_tmp);
+    delete [] val_tmp;
+    return max;
+}
+
 
 // output
 
@@ -223,16 +300,6 @@ void DataArraySerr1d::IsValSerrNotNull() const
 {
     if(NULL == GetValSerr()){
         MPrintErrClass("bad GetValSerr() (=NULL)");
-        abort();
-    }
-}
-
-void DataArraySerr1d::IsValSerrPlus(double val_serr) const
-{
-    if(val_serr < 0.0){
-        char msg[kLineSize];
-        sprintf(msg, "val_serr(=%e) < 0.0", val_serr);
-        MPrintErr(msg);
         abort();
     }
 }

@@ -12,10 +12,9 @@
 #include "mi_base.h"
 #include "mir_plot_conf.h"
 
-class MirRootTool : public MiObject{
+class MirRootTool : private Uncopyable{
 public:
-    explicit MirRootTool(string title = "") :
-        MiObject("MirRootTool", title),
+    MirRootTool() :
         theApp_(NULL),
         tcanvas_(NULL),
         nfile_(0),

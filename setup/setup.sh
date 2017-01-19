@@ -13,6 +13,8 @@
 ##
 
 export MITOOL=/home/morii/work/github/moriiism/mitool
+export LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH}
+
 
 ################################################################
 ################################################################

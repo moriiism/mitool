@@ -1,8 +1,14 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_HIST2D_H_
 #define MORIIISM_MITOOL_MIROOTLIB_HIST2D_H_
 
-#include "mir_hist_info.h"
+#include "TH2D.h"
+
 #include "mir_data1d.h"
+#include "mir_hist_info.h"
+#include "mir_interval.h"
+#include "mir_func.h"
+#include "mir_hist1d.h"
+#include "mir_graph2d_nerr.h"
 
 class HistDataNerr2d;
 class HistDataSerr2d;
@@ -16,60 +22,12 @@ public:
         oval_arr_(NULL) {}
     virtual ~HistData2d() {}
    
-    // Init
     virtual void Init(long nbin_xval, double xval_lo, double xval_up,
                       long nbin_yval, double yval_lo, double yval_up) = 0;
     virtual void Init(const HistInfo2d* const hist_info) = 0;
+    void SetOvalArr(const DataArray1d* const oval_arr);
 
-    // Set
-    virtual void Set(const HistData2d* const org);
-    virtual void Set(long nbin_xval, double xval_lo, double xval_up,
-                     long nbin_yval, double yval_lo, double yval_up,
-                     const DataArray1d* const oval_arr);
-    
-    // SetInfo
-    virtual void SetInfo(long nbin_xval, double xval_lo, double xval_up,
-                         long nbin_yval, double yval_lo, double yval_up);
-    // SetData
-    virtual void SetData(const DataArray1d* const oval_arr);
-
-    // set each
-    virtual void SetData(long nbin_xval, long nbin_yval,
-                         const double* const oval);
-    virtual void SetData(long nbin_xval, long nbin_yval,
-                         const double* const oval,
-                         const double* const oval_serr)
-        {MPrintErrVFunc; abort();};
-    virtual void SetData(long nbin_xval, long nbin_yval,
-                         const double* const oval,
-                         const double* const oval_terr_plus,
-                         const double* const oval_terr_minus)
-        {MPrintErrVFunc; abort();};
-    
-    // InitSet
-    virtual void InitSet(long nbin_xval, double xval_lo, double xval_up,
-                         long nbin_yval, double yval_lo, double yval_up,
-                         const DataArray1d* const oval_arr);
-    virtual void InitSet(long nbin_xval, double xval_lo, double xval_up,
-                         long nbin_yval, double yval_lo, double yval_up,
-                         const double* const oval);
-    virtual void InitSet(long nbin_xval, double xval_lo, double xval_up,
-                         long nbin_yval, double yval_lo, double yval_up,
-                         const double* const oval,
-                         const double* const oval_serr)
-        {MPrintErrVFunc; abort();};
-    virtual void InitSet(long nbin_xval, double xval_lo, double xval_up,
-                         long nbin_yval, double yval_lo, double yval_up,
-                         const double* const oval,
-                         const double* const oval_terr_plus,
-                         const double* const oval_terr_minus)
-        {MPrintErrVFunc; abort();};
-
-    virtual void InitSet(const TH2D* const th2d);
-
-
-    // kinds of Set
-    virtual void SetOvalElm(long ibin_xval, long ibin_yval, double oval);
+    void SetOvalElm(long ibin_xval, long ibin_yval, double oval);
     virtual void SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_serr)
         {MPrintErrVFunc; abort();};
     virtual void SetOvalTerrElm(long ibin_xval, long ibin_yval, double oval_serr)
@@ -79,9 +37,9 @@ public:
     virtual void SetOvalTerrMinusElm(long ibin_xval, long ibin_yval, double oval_terr_minus)
         {MPrintErrVFunc; abort();};
 
-    virtual void Fill(double xval, double yval);
-    virtual void Fill(double xval, double yval, double weight);
-    virtual void FillByMax(double xval, double yval, double oval);
+    void Fill(double xval, double yval);
+    void Fill(double xval, double yval, double weight);
+    void FillByMax(double xval, double yval, double oval);
     virtual void FillByMax(double xval, double yval,
                            double oval,
                            double oval_serr)
@@ -92,7 +50,7 @@ public:
                            double oval_terr_minus)
         {MPrintErrVFunc; abort();};
     
-    virtual void FillByMin(double xval, double yval, double oval);
+    void FillByMin(double xval, double yval, double oval);
     virtual void FillByMin(double xval, double yval,
                            double oval,
                            double oval_serr)
@@ -102,149 +60,42 @@ public:
                            double oval_terr_plus,
                            double oval_terr_minus)
         {MPrintErrVFunc; abort();};
-    
 
-    virtual void SetZero() = 0;
-    virtual void SetOne() = 0;
-    virtual void SetConst(double constant) = 0;
-    virtual void SetOneAtIntervalXY(const Interval* const interval_x,
-                                    const Interval* const interval_y) = 0;
-    virtual void SetOvalErrArrByPoissonErr() = 0;
+    void SetConst(double constant);
+    void SetOneAtIntervalXY(const Interval* const interval_x,
+                            const Interval* const interval_y);
+    virtual void SetOvalErrArrByPoissonErr()
+        {MPrintErrVFunc; abort();};
 
     // Set by Func
-    virtual void SetByFunc(const MiFunc* const func, const double* const par) = 0;
+    void SetByFunc(const MirFunc* const func, const double* const par);
 
     // Init & Set by graph3d, only if xval_arr of graph3d is equally-spaced.
-    virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
+    // virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
 
-    virtual void Copy(const HistData2d* const org);
-    virtual HistData2d* const Clone() const;
-    
-    virtual void Load(string file);
-    static void ReadInfo(string file, 
-                         long* nbin_xval_ptr,
-                         double* xval_lo_ptr,
-                         double* xval_up_ptr,
-                         long* nbin_yval_ptr,
-                         double* yval_lo_ptr,
-                         double* yval_up_ptr,
-                         string* format_ptr);
+    void Copy(const HistData2d* const org);
+    virtual void Load(string file) = 0;
 
-    //
-    // operation
-    //
-    virtual void Not(const HistData2d* const hist_data) = 0;
-    virtual void Scale(const HistData2d* const hist_data,
-                       double scale, double offset) = 0;
+    const HistInfo2d* const GetHi2d() const {return hi2d_;};
+    virtual const DataArray1d* const GetOvalArr() const = 0;
 
-    virtual void Min(const HistData2d* const hist_data1,
-                     const HistData2d* const hist_data2) = 0;
-    virtual void Min(const HistData2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    virtual void Min(const HistDataSerr2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    
-    virtual void Max(const HistData2d* const hist_data1,
-                     const HistData2d* const hist_data2) = 0;
-    virtual void Max(const HistData2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    virtual void Max(const HistDataSerr2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    
-    virtual void Add(const HistData2d* const hist_data1,
-                     const HistData2d* const hist_data2) = 0;
-    virtual void Add(const HistData2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    virtual void Add(const HistDataSerr2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    
-    virtual void Sub(const HistData2d* const hist_data1,
-                     const HistData2d* const hist_data2) = 0;
-    virtual void Mul(const HistData2d* const hist_data1,
-                     const HistData2d* const hist_data2) = 0;
-    virtual int  Div(const HistData2d* const hist_data_num,
-                     const HistData2d* const hist_data_den,
-                     vector<long>* const index_bad_vec_ptr) = 0;
-    virtual void AMean(const HistData2d* const hist_data1,
-                       const HistData2d* const hist_data2) = 0;
-    virtual void AMean(const HistData2d* const* const hist_data_arr,
-                       int nhist) = 0;
-    virtual void AMean(const HistDataSerr2d* const* const hist_data_arr,
-                       int nhist) = 0;
-    virtual int WMean(const HistDataSerr2d* const hist_data1,
-                      const HistDataSerr2d* const hist_data2,
-                      vector<long>* const index_bad_vec_ptr) = 0;
-    virtual int WMean(const HistDataSerr2d* const* const hist_data_arr,
-                      int nhist,
-                      vector<long>* const index_bad_vec_ptr) = 0;
+    long GetNbinX() const {return GetHi2d()->GetNbinX();};
+    long GetNbinY() const {return GetHi2d()->GetNbinY();};
+    long GetNbin()  const {return GetHi2d()->GetNbin();};
+    double GetXvalLo() const {return GetHi2d()->GetLoX();};
+    double GetXvalUp() const {return GetHi2d()->GetUpX();};
+    double GetYvalLo() const {return GetHi2d()->GetLoY();};
+    double GetYvalUp() const {return GetHi2d()->GetUpY();};
+    double GetXvalMd() const {return GetHi2d()->GetMdX();};
+    double GetYvalMd() const {return GetHi2d()->GetMdY();};
+    double GetXvalFullWidth() const {return GetHi2d()->GetFullWidthX();};
+    double GetYvalFullWidth() const {return GetHi2d()->GetFullWidthY();};
+    double GetBinWidthX() const {return GetHi2d()->GetBinWidthX();};
+    double GetBinWidthY() const {return GetHi2d()->GetBinWidthY();};
+    double GetBinArea() const {return GetHi2d()->GetBinArea();};
+    double GetFullArea() const {return GetHi2d()->GetFullArea();};
 
-    // sub_add_ratio = (h1 - h2) / (h1 + h2)
-    virtual void SubAddRatio(const HistData2d* const hist_data1,
-                             const HistData2d* const hist_data2) = 0;
-    virtual void Variance(const HistData2d* const* const hist_data_arr,
-                          int nhist) = 0;
-    virtual void Stddev(const HistData2d* const* const hist_data_arr,
-                        int nhist) = 0;
-    virtual void UnbiasedVariance(const HistData2d* const* const hist_data_arr,
-                                  int nhist) = 0;
-    virtual void SqrtOfUnbiasedVariance(const HistData2d* const* const hist_data_arr,
-                                        int nhist) = 0;
-    virtual void RMS(const HistData2d* const* const hist_data_arr,
-                     int nhist) = 0;
-    virtual void Median(const HistData2d* const* const hist_data_arr,
-                        int nhist) = 0;
-
-    //
-    // const functions
-    //
-
-    // get
-    virtual const DataArray1d* const GetOvalArr() const
-        {return oval_arr_;};
-    virtual long GetNbinX() const {return nbin_xval_;};
-    virtual long GetNbinY() const {return nbin_yval_;};
-    virtual long GetNbin()  const {return nbin_xval_ * nbin_yval_;};
-    virtual double GetXvalLo() const {return xval_lo_;};
-    virtual double GetXvalUp() const {return xval_up_;};
-    double GetYvalLo() const {return yval_lo_;};
-    double GetYvalUp() const {return yval_up_;};
-    double GetXvalMd() const {return (xval_lo_ + xval_up_) / 2.0;};
-    double GetYvalMd() const {return (yval_lo_ + yval_up_) / 2.0;};
-    double GetXvalFullWidth() const {return xval_up_ - xval_lo_;};
-    double GetYvalFullWidth() const {return yval_up_ - yval_lo_;};
-    double GetFullArea() const {return GetXvalFullWidth() * GetYvalFullWidth();};
-    double GetBinWidthX() const {return (xval_up_ - xval_lo_) / nbin_xval_;};
-    double GetBinWidthY() const {return (yval_up_ - yval_lo_) / nbin_yval_;};
-    double GetBinArea() const {return GetBinWidthX() * GetBinWidthY();};
-
-    long GetIbin(long ibin_xval, long ibin_yval) const;
-    long GetIbinX(long ibin) const;
-    long GetIbinY(long ibin) const;
-    long GetIbinXFromX(double xval) const;
-    long GetIbinYFromY(double yval) const;
-    long GetIbinFromXY(double xval, double yval) const;
-    
-    double GetBinCenterXFromIbinX(long ibin_xval) const;
-    double GetBinCenterYFromIbinY(long ibin_yval) const;
-    double GetBinCenterXFromIbin(long ibin) const;
-    double GetBinCenterYFromIbin(long ibin) const;
-    void GetBinCenterXYFromIbin(long ibin,
-                                double* const xval_ptr,
-                                double* const yval_ptr) const;
-
-    long GetIbinX_WithHalfBinShifted(double xval) const;
-    long GetIbinY_WithHalfBinShifted(double yval) const;
-
-    
-    // get internal of oval_arr_
-    const double* const GetOvalArrDbl() const;
-    virtual const double* const GetOvalSerrArrDbl() const
-        {MPrintErrVFunc; abort();};
-    virtual const double* const GetOvalTerrPlusArrDbl() const
-        {MPrintErrVFunc; abort();};
-    virtual const double* const GetOvalTerrMinusArrDbl() const
-        {MPrintErrVFunc; abort();};
-    
+    // get element
     double GetOvalElm(long ibin_xval, long ibin_yval) const;
     virtual double GetOvalSerrElm(long ibin_xval, long ibin_yval) const
         {MPrintErrVFunc; abort();};    
@@ -261,8 +112,6 @@ public:
     virtual double GetOvalTerrMinusElmAtXY(double xval, double yval) const
         {MPrintErrVFunc; abort();};
 
-
-    // stat
     double GetXvalAtOvalMin() const;
     double GetXvalAtOvalMax() const;
     double GetYvalAtOvalMin() const;
@@ -290,13 +139,14 @@ public:
                                 double** const oval_terr_minus_arr_ptr,
                                 long* const nbin_ptr) const
         {MPrintErrVFunc; abort();};
+    
 
-    // calc_mode: "add", "integral", "amean", "min", "max"
-    HistData1d* const GenProjectX(long ibin_ylo, long ibin_yup,
-                                  string calc_mode) const;
-    HistData1d* const GenProjectY(long ibin_xlo, long ibin_xup,
-                                  string calc_mode) const;  
-  
+//    // calc_mode: "add", "integral", "amean", "min", "max"
+//    HistData1d* const GenProjectX(long ibin_ylo, long ibin_yup,
+//                                  string calc_mode) const;
+//    HistData1d* const GenProjectY(long ibin_xlo, long ibin_xup,
+//                                  string calc_mode) const;  
+
     double GetOvalIntPolLin(double xval, double yval) const;
 
 
@@ -313,24 +163,20 @@ public:
                   double offset_oval = 0.0) const;
     void PrintInfo(FILE* fp, string format) const;    
     virtual void PrintData(FILE* fp, string format,
-                           double offset_xval = 0.0,
-                           double offset_yval = 0.0,
-                           double offset_oval = 0.0) const;
+                           double offset_xval,
+                           double offset_yval,
+                           double offset_oval) const;
     void SaveRoot(string outfile,
                   double offset_xval = 0.0,
                   double offset_yval = 0.0,
                   double offset_oval = 0.0) const;
 
 
-    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const;
-    virtual GraphData3d* const GenGraph3d() const;
-    virtual TH2D* const GenTH2D(double offset_xval = 0.0,
-                                double offset_yval = 0.0,
-                                double offset_oval = 0.0,
-                                string title_xaxis = "",
-                                string title_yaxis = "",
-                                string title_oaxis = "",
-                                string style = "def") const;
+//    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
+    // virtual GraphData3d* const GenGraph3d() const = 0;
+    virtual TH2D* const GenTH2D(double offset_xval,
+                                double offset_yval,
+                                double offset_oval) const = 0;
     void MkTH2Fig(string outfig,
                   MirRootTool* const root_tool,
                   double offset_xval = 0.0,
@@ -351,8 +197,7 @@ public:
                         string title_oaxis = "") const;
 
     // generate HistData2d adding margin region in x and y directions
-    HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const;
-
+//    virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
 
     // poisson error
     virtual void FillRandom(const MirFunc* const func,
@@ -374,28 +219,39 @@ public:
         {MPrintErrVFunc; abort();};
     
     // generate events from histogram with poisson statistic
-    GraphData2d* const GenRandomEvt(int rand_seed = 1) const;
+    GraphDataNerr2d* const GenRandomEvt(int rand_seed = 1) const;
 
     
     double GetOffsetXFromTag(string offset_tag) const;
     double GetOffsetYFromTag(string offset_tag) const;
-    virtual double GetOffsetOFromTag(string offset_tag) const;
+    double GetOffsetOFromTag(string offset_tag) const;
 
-    int IsAllOne() const {return GetOvalArr()->IsAllOne();};
+    //
+    // static
+    //
+    static void ReadInfo(string file, 
+                         long* nbin_xval_ptr,
+                         double* xval_lo_ptr,
+                         double* xval_up_ptr,
+                         long* nbin_yval_ptr,
+                         double* yval_lo_ptr,
+                         double* yval_up_ptr,
+                         string* format_ptr);
 
-    int IsValidIbinX(long ibin_xval) const;
-    int IsValidIbinY(long ibin_yval) const;
-    int IsValidRangeX(double xval) const;
-    int IsValidRangeY(double yval) const;
-    
-
-//    virtual void Null() = 0;
-//    void NewOvalArrAsDataArray1d();
-//    void NewOvalArrAsDataArraySerr1d();
-//    void NewOvalArrAsDataArrayTerr1d();
-//    DataArray1d* GetOvalArrNonConst() const {return oval_arr_;};
-//
-//    int IsOvalNotNull() const;
+protected:
+    void NullHistData2d();
+    void NewOvalArrAsDataArrayNerr1d();
+    void NewOvalArrAsDataArraySerr1d();
+    void NewOvalArrAsDataArrayTerr1d();
+    void NewHi2d();
+    HistInfo2d* GetHi2dNonConst() const {return hi2d_;};
+    DataArray1d* GetOvalArrNonConst() const {return oval_arr_;};
+    void IsHi2dNotNull() const;
+    void IsOvalArrNotNull() const;
+    void IsValidIbinX(long ibin_xval) const;
+    void IsValidIbinY(long ibin_yval) const;
+    void IsValidRangeX(double xval) const;
+    void IsValidRangeY(double yval) const;
     
 private:
     // ibin_xval_ = 0, 1, ..., nbin_xval_

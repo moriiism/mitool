@@ -5,10 +5,12 @@
 #include "TGraphErrors.h"
 #include "TGraphAsymmErrors.h"
 
+#include "mir_interval.h"
 #include "mir_data1d_nerr.h"
 #include "mir_data1d_serr.h"
 #include "mir_data1d_terr.h"
 #include "mir_func.h"
+#include "mir_hist_info.h"
 
 class GraphDataNerr2d;
 class GraphDataSerr2d;
@@ -55,9 +57,12 @@ public:
                        string scale);
     void Copy(const GraphData2d* const org);
 
-    virtual void Load(string file);
-    virtual void Load(string file, string format);
+    virtual void Load(string file) = 0;
+    virtual void Load(string file, string format) = 0;
 
+    // operation
+    virtual void Sort() = 0;
+    
     //
     // const functions
     //
@@ -67,17 +72,29 @@ public:
     virtual const DataArray1d* const GetOvalArr() const = 0;
     int GetFlagXvalSorted() const {return flag_xval_sorted_;};
 
+    long GetNdata() const;
+    double GetXvalElm(long idata) const
+        {return GetXvalArr()->GetValElm(idata);};
+    virtual double GetXvalSerrElm(long idata) const
+        {MPrintErrVFunc; abort();};
+    virtual double GetXvalTerrPlusElm(long idata) const
+        {MPrintErrVFunc; abort();};
+    virtual double GetXvalTerrMinusElm(long idata) const
+        {MPrintErrVFunc; abort();};        
+    double GetOvalElm(long idata) const
+        {return GetOvalArr()->GetValElm(idata);};
+    virtual double GetOvalSerrElm(long idata) const
+        {MPrintErrVFunc; abort();};
+    virtual double GetOvalTerrPlusElm(long idata) const
+        {MPrintErrVFunc; abort();};
+    virtual double GetOvalTerrMinusElm(long idata) const
+        {MPrintErrVFunc; abort();};
+    
     // stat
     double GetXvalAtOvalMin() const;
     double GetXvalAtOvalMax() const;
     double GetOvalAtXvalMin() const;
     double GetOvalAtXvalMax() const;
-
-    // get Range Qdp
-    virtual void GetXRangeQdp(double* const low_ptr,
-                              double* const up_ptr) const = 0;
-    virtual void GetORangeQdp(double* const low_ptr,
-                              double* const up_ptr) const = 0;
     
     // output
     void Save(string outfile, string format,
@@ -97,10 +114,6 @@ public:
     double GetOvalIntPolLin(double xval) const;
     // ichiji hokan
 
-    double GetIntegral(double xval_lo, double xval_up) const;
-    // Integral by trapezoid approximation
-
-
     virtual Interval* const GenInterval() const
         {MPrintErrVFunc; abort();};
     virtual Interval* const GenIntervalAboveThreshold(double threshold) const
@@ -109,10 +122,15 @@ public:
         {MPrintErrVFunc; abort();};
 
     // offset_tag = "st", "md", "ed", "no", value
-    virtual double GetOffsetXFromTag(string offset_tag) const = 0;
-    virtual double GetOffsetOFromTag(string offset_tag) const = 0;
+    double GetOffsetXFromTag(string offset_tag) const;
+    double GetOffsetOFromTag(string offset_tag) const;
 
     int IsEqualSpaceX() const;
+
+    //
+    // static
+    //
+    static void ReadInfo(string file, int* flag_xval_sorted_ptr);
   
 protected:
     void NullGraphData2d();
@@ -129,9 +147,6 @@ private:
     DataArray1d* xval_arr_;
     DataArray1d* oval_arr_;
     int flag_xval_sorted_; // -1: not sorted, 0: not checked, 1: sorted
-    
-    double GetIntegralInner(double xval_lo, double xval_up) const;
-    double GetIntegralByTrapezoidApprox() const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_H_

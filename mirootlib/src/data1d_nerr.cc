@@ -77,6 +77,48 @@ void DataArrayNerr1d::Load(string file)
     SetFlagValSorted(flag_val_sorted);
 }
 
+
+void DataArrayNerr1d::Sort()
+{
+    if(1 == GetFlagValSorted()){
+        MPrintInfoClass("It has been already sorted.");
+        return;
+    }
+    if(NULL == GetVal()){
+        MPrintErrClass("GetVal() == NULL");
+        abort();
+    }
+    long ndata = GetNdata();
+    double* val_org = new double [ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        val_org[idata] = GetValElm(idata);
+    }
+
+    long* index = new long [ndata];  // to store sort result
+    TMath::Sort(ndata, val_org, index, kFALSE);
+
+    for(long idata = 0; idata < ndata; idata++){
+        SetValElm(idata, val_org[index[idata]]);
+    }
+
+    delete [] index; index = NULL;
+    delete [] val_org; val_org = NULL;
+
+    SetFlagValSorted(1);
+}
+
+double DataArrayNerr1d::GetValAndErrMin() const
+{
+    double min = MirMath::GetMin(GetNdata(), GetVal());
+    return min;
+}
+
+double DataArrayNerr1d::GetValAndErrMax() const
+{
+    double max = MirMath::GetMax(GetNdata(), GetVal());
+    return max;
+}
+
 void DataArrayNerr1d::PrintData(FILE* fp, int mode,
                                 double offset_val) const
 {

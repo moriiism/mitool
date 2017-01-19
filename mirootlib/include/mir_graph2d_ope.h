@@ -1,17 +1,22 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_OPE_H_
 #define MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_OPE_H_
 
-#include "mir_graph2d.h"
+#include "mir_graph2d_nerr.h"
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
 
 namespace GraphData2dOpe
 {
-
-    void ReadInfo(string file, int* flag_xval_sorted_ptr);
-
     GraphData2d* const GenGd2dByLoad(string file, string format);
 
+    //    double GetIntegral(double xval_lo, double xval_up) const;
+    // Integral by trapezoid approximation
+    //double GetIntegralInner(double xval_lo, double xval_up) const;
+    //double GetIntegralByTrapezoidApprox() const;
+
+
+    
+    
     // select_type: center, varbinwidth, exclusive
     //   center:      select a bin whose center is located in an interval.
     //   varbinwidth: select a bin whose center is located in an interval and

@@ -1,5 +1,4 @@
 #include "mir_data1d_terr.h"
-#include "mir_data1d_ope.h"
 
 //
 // public
@@ -20,9 +19,7 @@ void DataArrayTerr1d::SetValTerr(long ndata,
         MPrintErrClass("GetNdata() != ndata");
         abort();
     }
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     for(long idata = 0; idata < ndata; idata++){
         IsValSerrPlus(val_serr[idata]);
         val_terr_plus_[idata]  = val_serr[idata];
@@ -36,9 +33,7 @@ void DataArrayTerr1d::SetValTerr(vector<double> val_serr)
         MPrintErrClass("GetNdata() != val_serr.size()");
         abort();
     }
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     for(long idata = 0; idata < GetNdata(); idata++){
         IsValSerrPlus(val_serr[idata]);
         val_terr_plus_[idata]  = val_serr[idata];
@@ -54,9 +49,7 @@ void DataArrayTerr1d::SetValTerr(long ndata,
         MPrintErrClass("GetNdata() != ndata");
         abort();
     }
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     for(long idata = 0; idata < ndata; idata++){
         IsValTerrPlusPlus(val_terr_plus[idata]);
         IsValTerrMinusMinus(val_terr_minus[idata]);
@@ -74,9 +67,7 @@ void DataArrayTerr1d::SetValTerr(vector<double> val_terr_plus,
         MPrintErrClass("GetNdata() != val_terr_plus.size()");
         abort();
     }
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     for(long idata = 0; idata < GetNdata(); idata++){
         IsValTerrPlusPlus(val_terr_plus[idata]);
         IsValTerrMinusMinus(val_terr_minus[idata]);
@@ -88,36 +79,27 @@ void DataArrayTerr1d::SetValTerr(vector<double> val_terr_plus,
 
 void DataArrayTerr1d::SetValTerrElm(long idata, double val_serr)
 {
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     IsValSerrPlus(val_serr);
-    if(1 == IsValidRange(idata)){
-        val_terr_plus_[idata]  = val_serr;
-        val_terr_minus_[idata] = -1 * val_serr;
-    }
+    IsValidRange(idata);
+    val_terr_plus_[idata]  = val_serr;
+    val_terr_minus_[idata] = -1 * val_serr;
 }
 
 void DataArrayTerr1d::SetValTerrPlusElm(long idata, double val_terr_plus)
 {
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     IsValTerrPlusPlus(val_terr_plus);
-    if(1 == IsValidRange(idata)){
-        val_terr_plus_[idata] = val_terr_plus;
-    }
+    IsValidRange(idata);
+    val_terr_plus_[idata] = val_terr_plus;
 }
 
 void DataArrayTerr1d::SetValTerrMinusElm(long idata, double val_terr_minus)
 {
-    if(1 != IsValTerrNotNull()){
-        abort();
-    }
+    IsValTerrNotNull();
     IsValTerrMinusMinus(val_terr_minus);
-    if(1 == IsValidRange(idata)){
-        val_terr_minus_[idata] = val_terr_minus;
-    }
+    IsValidRange(idata);
+    val_terr_minus_[idata] = val_terr_minus;
 }
 
 
@@ -156,6 +138,17 @@ void DataArrayTerr1d::FillByMax(long idata, double val)
 
 void DataArrayTerr1d::FillByMax(long idata,
                                 double val,
+                                double val_serr)
+{
+    double val_pre = GetValElm(idata);
+    if(val_pre < val){
+        SetValElm(idata, val);
+        SetValTerrElm(idata, val_serr);
+    }
+}
+
+void DataArrayTerr1d::FillByMax(long idata,
+                                double val,
                                 double val_terr_plus,
                                 double val_terr_minus)
 {
@@ -178,6 +171,17 @@ void DataArrayTerr1d::FillByMin(long idata, double val)
         } else {
             SetValTerrElm(idata, sqrt(val));
         }
+    }
+}
+
+void DataArrayTerr1d::FillByMin(long idata,
+                                double val,
+                                double val_serr)
+{
+    double val_pre = GetValElm(idata);
+    if(val_pre > val){
+        SetValElm(idata, val);
+        SetValTerrElm(idata, val_serr);
     }
 }
 
@@ -245,31 +249,72 @@ void DataArrayTerr1d::Load(string file)
         SetValTerrMinusElm(idata, val_terr_minus_tmp);
     }
     MiIolib::DelReadFile(line_arr);
-
+    
     int flag_val_sorted = 0;
-    DataArray1dOpe::ReadInfo(file, &flag_val_sorted);
+    ReadInfo(file, &flag_val_sorted);
     SetFlagValSorted(flag_val_sorted);
+}
+
+
+void DataArrayTerr1d::Sort()
+{
+    if(1 == GetFlagValSorted()){
+        MPrintInfoClass("It has been already sorted.");
+        return;
+    }
+    if(NULL == GetVal() ||
+       NULL == GetValTerrPlus() ||
+       NULL == GetValTerrMinus() ){
+        MPrintErrClass("GetVal() == NULL or "
+                       "GetValTerrPlus() == NULL or GetValTerrMinus() == NULL");
+        abort();
+    }
+
+    long ndata = GetNdata();
+    double* val_org = new double [ndata];
+    double* val_terr_plus_org  = new double [ndata];
+    double* val_terr_minus_org = new double [ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        val_org[idata]            = GetValElm(idata);
+        val_terr_plus_org[idata]  = GetValTerrPlusElm(idata);
+        val_terr_minus_org[idata] = GetValTerrMinusElm(idata);
+    }
+
+    long* index = new long [ndata];  // to store sort result
+    TMath::Sort(ndata, val_org, index, kFALSE);
+
+    for(long idata = 0; idata < ndata; idata++){
+        SetValElm(idata, val_org[index[idata]]);
+        SetValTerrPlusElm(idata, val_terr_plus_org[index[idata]]);
+        SetValTerrMinusElm(idata, val_terr_minus_org[index[idata]]);
+    }
+
+    delete [] index;               index = NULL;
+    delete [] val_org;             val_org = NULL;
+    delete [] val_terr_plus_org;   val_terr_plus_org = NULL;
+    delete [] val_terr_minus_org;  val_terr_minus_org = NULL;
+
+    SetFlagValSorted(1);    
 }
 
 // get
 
+double DataArrayTerr1d::GetValSerrElm(long idata) const
+{
+    double val_serr = (GetValTerrPlusElm(idata) - GetValTerrMinusElm(idata)) / 2.;
+    return val_serr;
+}
+
 double DataArrayTerr1d::GetValTerrPlusElm(long idata) const
 {
-
-    if(1 == IsValidRange(idata)){
-        return val_terr_plus_[idata];
-    } else {
-        abort();
-    }
+    IsValidRange(idata);
+    return val_terr_plus_[idata];
 }
 
 double DataArrayTerr1d::GetValTerrMinusElm(long idata) const
 {
-    if(1 == IsValidRange(idata)){
-        return val_terr_minus_[idata];
-    } else {
-        abort();
-    }
+    IsValidRange(idata);
+    return val_terr_minus_[idata];
 }
 
 double* const DataArrayTerr1d::GenValSerr() const
@@ -282,13 +327,6 @@ double* const DataArrayTerr1d::GenValSerr() const
     return val_serr;
 }
 
-double DataArrayTerr1d::GetValSerrElm(long idata) const
-{
-    double val_serr = (GetValTerrPlusElm(idata) - GetValTerrMinusElm(idata)) / 2.;
-    return val_serr;
-}
-
-// for qdp
 
 double DataArrayTerr1d::GetValAndErrMin() const
 {
@@ -309,27 +347,17 @@ double DataArrayTerr1d::GetValAndErrMax() const
     for(long idata = 0; idata < ndata; idata ++){
         val_tmp[idata] = GetValElm(idata) + GetValTerrPlusElm(idata);
     }
-    double max = MirMath::GetMin(ndata, val_tmp);
+    double max = MirMath::GetMax(ndata, val_tmp);
     delete [] val_tmp;
     return max;
 }
-
-void DataArrayTerr1d::GetRangeValQdp(double* const lo_ptr,
-                                     double* const up_ptr) const
-{
-    double lo, up;
-    MirMath::GetRangeQdp(GetValAndErrMin(), GetValAndErrMax(), &lo, &up);
-    *lo_ptr = lo;
-    *up_ptr = up;
-}
-
 
 // output
 
 void DataArrayTerr1d::PrintData(FILE* fp, int mode,
                                 double offset_val) const
 {
-    long ndata = GetNdata();    
+    long ndata = GetNdata();
     if(0 == mode){
         for(long idata = 0; idata < ndata; idata ++){
             fprintf(fp, "%.10e  %.10e  %.10e\n",
@@ -402,32 +430,29 @@ void DataArrayTerr1d::InitDataArrayTerr1d(long ndata)
     }
 }
 
-int DataArrayTerr1d::IsValTerrNotNull() const
+void DataArrayTerr1d::IsValTerrNotNull() const
 {
     if(NULL == GetValTerrPlus() || NULL == GetValTerrMinus()){
         MPrintErrClass("bad GetValTerrPlus() (=NULL) or "
                        "GetValTerrMinus() (=NULL)");
         abort();
     }
-    return 1;
 }
 
 
-int DataArrayTerr1d::IsValTerrPlusPlus(double val_terr_plus) const
+void DataArrayTerr1d::IsValTerrPlusPlus(double val_terr_plus) const
 {
     if(val_terr_plus < 0.0){
         MPrintErrClass("val_terr_plus < 0.0");
         abort();
     }
-    return 1;    
 }
 
-int DataArrayTerr1d::IsValTerrMinusMinus(double val_terr_minus) const
+void DataArrayTerr1d::IsValTerrMinusMinus(double val_terr_minus) const
 {
     if(val_terr_minus > 0.0){
         MPrintErrClass("val_terr_minus > 0.0");
         abort();
     }
-    return 1;
 }
 

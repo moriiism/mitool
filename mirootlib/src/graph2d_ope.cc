@@ -1,5 +1,138 @@
 #include "mir_graph2d_ope.h"
 
+GraphData2d* const GraphData2dOpe::GenGd2dByLoad(string file, string format)
+{
+    GraphData2d* gd2d = NULL;
+    if("x,y" == format){
+        gd2d = new GraphDataNerr2d;
+    } else if("x,y,ye" == format){
+        gd2d = new GraphDataSerr2d;
+    } else if("x,y,ye+,ye-" == format){
+        gd2d = new GraphDataTerr2d;        
+    } else if("x,xe,y" == format){
+        gd2d = new GraphDataSerr2d;
+    } else if("x,xe,y,ye" == format){
+        gd2d = new GraphDataSerr2d;
+    } else if("x,xe,y,ye+,ye-" == format){
+        gd2d = new GraphDataTerr2d;
+    } else if("x,xe+,xe-,y" == format){
+        gd2d = new GraphDataTerr2d;
+    } else if("x,xe+,xe-,y,ye" == format){
+        gd2d = new GraphDataTerr2d;        
+    } else if("x,xe+,xe-,y,ye+,ye-" == format){
+        gd2d = new GraphDataTerr2d;
+    } else {
+        MPrintErr("bad format");
+        abort();
+    }
+    gd2d->Load(file, format);
+    return gd2d;
+}
+
+
+//// trapezoid approximation
+//
+//double GraphData2d::GetIntegral(double xval_lo, double xval_up) const
+//{
+//    if(1 != GetFlagXvalSorted()){
+//        MPrintErrClass("1 != GetFlagXvalSorted()");
+//        abort();
+//    }
+//    long ndata = GetNdata();
+//    if(ndata < 2){
+//        MPrintErrClass("ndata < 2");
+//        abort();
+//    }
+//    if(xval_lo < GetXvalElm(0) || GetXvalElm(ndata - 1) < xval_lo ){
+//        MPrintErrClass("xval_lo is not within the graph range.");
+//        abort();
+//    }
+//    if(xval_up < GetXvalElm(0) || GetXvalElm(ndata - 1) < xval_up ){
+//        MPrintErrClass("xval_up is not within the graph range.");
+//        abort();
+//    }
+//    
+//    double ans = 0.0;
+//    if(xval_lo < xval_up){
+//        ans = GetIntegralInner(xval_lo, xval_up);
+//    } else if (xval_lo > xval_up){
+//        ans = -1 * GetIntegralInner(xval_up, xval_lo);
+//    } else {
+//        ans = 0.0;
+//    }
+//    return ans;
+//}
+//
+//
+//double GraphData2d::GetIntegralInner(double xval_lo, double xval_up) const
+//{
+//    if(1 != GetFlagXvalSorted()){
+//        MPrintErrClass("1 != GetFlagXvalSorted()");
+//        abort();
+//    }
+//    if(xval_lo > xval_up){
+//        MPrintErrClass("xval_lo > xval_up");
+//        abort();
+//    }
+//    double oval_lo = GetOvalIntPolLin(xval_lo);
+//    double oval_up = GetOvalIntPolLin(xval_up);
+//
+//    Interval* interval = new Interval;
+//    interval->InitSet(xval_lo, xval_up);
+//    GraphData2d* g2d_sel = new GraphData2d;
+//    GraphData2dOpe::GetSelectG2dByInterval(this,
+//                                           interval,
+//                                           g2d_sel);
+//
+//    // add two points
+//    vector<double> vec_xval;
+//    vector<double> vec_oval;
+//    vec_xval.push_back(xval_lo);
+//    vec_oval.push_back(oval_lo);
+//    for(int idata = 0; idata < g2d_sel->GetNdata(); idata++){
+//        vec_xval.push_back(g2d_sel->GetXvalElm(idata));
+//        vec_oval.push_back(g2d_sel->GetOvalElm(idata));
+//    }
+//    vec_xval.push_back(xval_up);
+//    vec_oval.push_back(oval_up);
+//    GraphData2d* g2d_new = new GraphData2d;
+//    g2d_new->Init();
+//    g2d_new->SetXvalArrDbl(vec_xval);
+//    g2d_new->SetOvalArrDbl(vec_oval);
+//    delete interval;
+//    delete g2d_sel;
+//    g2d_new->Sort();
+//
+//    double ans = g2d_new->GetIntegralByTrapezoidApprox();
+//    delete g2d_new;
+//    return ans;
+//}
+//
+//double GraphData2d::GetIntegralByTrapezoidApprox() const
+//{
+//    if(1 != GetFlagXvalSorted()){
+//        MPrintErrClass("1 != GetFlagXvalSorted()");
+//        abort();
+//    }
+//    long ndata = GetNdata();
+//    if(ndata < 2){
+//        MPrintErrClass("ndata < 2");
+//        abort();
+//    }
+//    double ans = 0.0;
+//    for(int idata = 0; idata < ndata - 1; idata ++){
+//        ans += ( GetOvalElm(idata) + GetOvalElm(idata + 1) ) *
+//            ( GetXvalElm(idata + 1) - GetXvalElm(idata) ) / 2.0;
+//    }
+//    return ans;
+//}
+//
+//
+//
+//
+
+
+
 void GraphData2dOpe::GetSelectG2dByInterval(const GraphData2d* const graph_data,
                                             const Interval* const interval,
                                             GraphData2d* const graph_out)
