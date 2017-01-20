@@ -652,15 +652,15 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
     vector<long> index_bad_vec;
     double num = 0.0;
     double den = 0.0;
-  
     for(long index = 0; index < narr; index++){
-        if(fabs(mask_arr[index]) < DBL_EPSILON ||
-           pow(val_err_arr[index], 2) < DBL_EPSILON ){
+        if(pow(val_err_arr[index], 2) < DBL_EPSILON ){
             index_bad_vec.push_back(index);
-            num_bad ++;            
+            num_bad ++;
         } else {
-            num += val_arr[index] / pow(val_err_arr[index], 2);
-            den += 1. / pow(val_err_arr[index], 2);
+            if(fabs(mask_arr[index] - 1.0) < DBL_EPSILON){
+                num += val_arr[index] / pow(val_err_arr[index], 2);
+                den += 1. / pow(val_err_arr[index], 2);
+            }
         }
     }
 
@@ -669,13 +669,18 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
     if(num_bad == narr){
         wmean = 0.0;
         wmean_err = 0.0;
-        printf("Warning: %s: %u: %s(): num_bad == narr (= %ld)\n",
-               __FILE__, __LINE__, __func__, num_bad);
-    } else if( fabs(den) < DBL_EPSILON ){
+        char msg[kLineSize];
+        sprintf(msg, "num_bad (%ld) == narr (%ld)", num_bad, narr);
+        MPrintErr(msg);
+        abort();
+    }
+    if( fabs(den) < DBL_EPSILON ){
         wmean = 0.0;
         wmean_err = 0.0;
-        printf("Warning: %s: %u: %s(): den < epsilon\n",
-               __FILE__, __LINE__, __func__);
+        char msg[kLineSize];
+        sprintf(msg, "fabs(den) < epsilon");
+        MPrintErr(msg);
+        abort();
     } else {
         wmean     = num / den;
         wmean_err = sqrt( 1. / den);
@@ -685,6 +690,56 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
     *wmean_err_ptr = wmean_err;
     *index_bad_vec_ptr = index_bad_vec;
     return num_bad;
+}
+
+long MirMath::GetChi2byConst(long narr,
+                             const double* const val_arr,
+                             const double* const val_err_arr,
+                             double* const chi2_ptr,
+                             long* const dof_ptr,
+                             double* const chi2_red_ptr,
+                             double* const prob_ptr)
+{
+    double wmean = 0.0;
+    double wmean_err = 0.0;
+    vector<long> index_bad_vec;
+    long num_bad_getwmean = GetWMean(narr, val_arr, val_err_arr,
+                                     &wmean, &wmean_err, &index_bad_vec);
+    long num_bad_chi2 = 0;
+    double chi2 = 0.0;
+    for(long index = 0; index < narr; index++){
+        if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
+            chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
+        } else {
+            num_bad_chi2 ++;
+        }
+    }
+    if(num_bad_getwmean != num_bad_chi2){
+        char msg[kLineSize];
+        sprintf(msg, "num_bad_getwmean (%ld) != num_bad_chi2 (%ld), then something is wrong.",
+                num_bad_getwmean, num_bad_chi2);
+        MPrintErr(msg);
+        abort();
+    }
+    long dof = narr - num_bad_chi2 - 1;
+    double chi2_red = chi2 / dof;
+
+    // the probability that an observed Chi-squared exceeds
+    // the value chi2 by chance, even for a correct model.
+    double prob = TMath::Prob(chi2, dof);
+
+    // See Numerical Recipes, Section 6.2
+    // prob = Q(chi2, dof) = gammq(dof/2, chi2/2) = 1 - gammp(dof/2, chi2/2)
+    //                     = 1 - TMath::Gamma(dof/2, chi2/2)
+    // double prob = 1. - TMath::Gamma(dof/2., chi2/2.));
+    //
+
+    *chi2_ptr = chi2;
+    *dof_ptr = dof;
+    *chi2_red_ptr = chi2_red;
+    *prob_ptr = prob;
+  
+    return num_bad_chi2;
 }
 
 // ichiji-hokan
@@ -753,6 +808,30 @@ double MirMath::ProbGausAsym(double xval, double mu,
     } else {
         ans = sigma_plus  / sigma_mean * ProbGaus(xval, mu, sigma_plus);
     }
+    return ans;
+}
+
+double MirMath::Sigma2CL(double sigma){
+    double cl = TMath::Erf(sigma/sqrt(2));
+    return cl;
+}
+
+double MirMath::CL2Sigma(double cl){
+    double sigma = sqrt(2) * TMath::ErfInverse(cl);
+    return sigma;
+}
+
+int MirMath::GetPermutation(int n, int r)
+{
+    // Permutation(n, r) = _nP_r = n! / (n - r)!
+    int ans = (int) (TMath::Factorial(n) / TMath::Factorial(n - r));
+    return ans;
+}
+
+int MirMath::GetCombination(int n, int r)
+{
+    // Combination(n, r) = _nC_r = _nP_r / r! =  n! / [r! (n - r)!]
+    int ans = (int) (TMath::Factorial(n) / TMath::Factorial(r) / TMath::Factorial(n - r));
     return ans;
 }
 

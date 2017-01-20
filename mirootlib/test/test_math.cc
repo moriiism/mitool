@@ -823,11 +823,125 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
    
-////    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
-////                 double* const wmean_ptr, double* const wmean_err_ptr,
-////                 vector<long>* const index_bad_vec_ptr);
+//    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
+//                 double* const wmean_ptr, double* const wmean_err_ptr,
+//                 vector<long>* const index_bad_vec_ptr);
+    {
+        printf("--- test GetWMean\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        double ans = 0.0;
+        double ans_err = 0.0;
+        vector<long> index_bad_vec;
+        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err, &index_bad_vec);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+
+        // num = 10.0/(1.0**2) + 11.0/(2.0**2) + 12.0/(3.0**2) + 13.0/(4.0**2) + 14.0/(5.0**2)
+        //     = 15.4558333333333
+        // den = 1.0/(1.0**2) + 1.0/(2.0**2) + 1.0/(3.0**2) + 1.0/(4.0**2) + 1.0/(5.0**2)
+        //     = 1.46361111111111
+        // wmean = num / den = 10.5600683241602
+        // wmean_err = sqrt(1./den) = 0.826584298073692
+        printf("=== \n");
+    }
+
+    
+//    void GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+//                        const int* const mask_arr,
+//                        double* const val_add_ptr, double* const val_add_err_ptr);
+    {
+        printf("--- test GetAddWithMask\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        int    mask_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        mask_arr[0] = 0;
+        mask_arr[1] = 1;
+        mask_arr[2] = 0;
+        mask_arr[3] = 1;
+        mask_arr[4] = 0;
+        
+        double ans = 0.0;
+        double ans_err = 0.0;
+        MirMath::GetAddWithMask(narr, val_arr, val_err_arr,
+                                mask_arr, &ans, &ans_err);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+
+        // ans = 11.0 + 13.0 = 24.0
+        // ans_err = sqrt(2.0**2 + 4.0**2) = 4.47213595499958
+        printf("=== \n");
+    }
+    
+//    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+//                         const int* const mask_arr,
+//                         double* const wmean_ptr, double* const wmean_err_ptr,
+//                         vector<long>* const index_bad_vec_ptr);
+    {
+        printf("--- test GetWMeanWithMask\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        int    mask_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        mask_arr[0] = 0;
+        mask_arr[1] = 1;
+        mask_arr[2] = 0;
+        mask_arr[3] = 1;
+        mask_arr[4] = 0;
+        
+        double ans = 0.0;
+        double ans_err = 0.0;
+        vector<long> index_bad_vec;
+        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
+                                  mask_arr, &ans, &ans_err, &index_bad_vec);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+
+        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
+        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
+        // wmean = num / den = 3.5625 / 0.3125 = 11.4
+        // sqrt(1./ den) = 1.78885438199983
+        printf("=== \n");
+    }
+   
+////    long GetChi2byConst(long narr,
+////                        const double* const val_arr,
+////                        const double* const val_err_arr,
+////                        double* const chi2_ptr,
+////                        long* const dof_ptr,
+////                        double* const chi2_red_ptr,
+////                        double* const prob_ptr);
 //    {
-//        printf("--- test GetWMean\n");
+//        printf("--- test GetChi2byConst\n");
 //        long narr = 5;
 //        double val_arr[5];
 //        double val_err_arr[5];
@@ -841,55 +955,191 @@ int main(int argc, char* argv[])
 //        val_err_arr[2] = 3.0;
 //        val_err_arr[3] = 4.0;
 //        val_err_arr[4] = 5.0;
-//        double ans = 0.0;
-//        double ans_err = 0.0;
-//        vector<long> index_bad_vec;
-//        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err, &index_bad_vec);
-//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+//        double chi2 = 0.0;
+//        long dof = 0;
+//        double chi2_red = 0.0;
+//        double prob = 0.0;
+//        MirMath::GetChi2byConst(narr, val_arr, val_err_arr,
+//                                &chi2, &dof, &chi2_red, &prob);
+//        printf("chi2 = %e\n", chi2);
+//        printf("dof = %ld\n", dof);
+//        printf("chi2_red = %e\n", chi2_red);
+//        printf("prob = %e\n", prob);
+//
+//        printf("=== \n");
+//    }
+
+   
+//    double IntPolLin(double xval,
+//                     double xval_lo, double xval_up,
+//                     double yval_lo, double yval_up);
+    {
+        printf("--- test IntPolLin\n");
+
+        double xval = 5.0;
+        double xval_lo = 0.0;
+        double xval_up = 1.0;
+        double yval_lo = 0.0;
+        double yval_up = 1.0;        
+        double ans = MirMath::IntPolLin(xval, xval_lo, xval_up, yval_lo, yval_up);
+        printf("ans = %e\n", ans);
+
+        printf("=== \n");
+    }
+    
+////    double IntPolLin(double xval, double yval,
+////                     double xval0, double xval1,
+////                     double yval0, double yval1,
+////                     double oval_x0y0, double oval_x1y0,
+////                     double oval_x1y1, double oval_x0y1);
+//    {
+//        printf("--- test IntPolLin\n");
+//
+//        double xval = 5.0;
+//        double yval = 5.0;
+//        double xval0 = 0.0;
+//        double xval1 = 1.0;
+//        double yval0 = 0.0;
+//        double yval1 = 1.0;
+//        double oval_x0y0 = 0.0;
+//        double oval_x1y0 = 1.0;
+//        double oval_x1y1 = 0.0;
+//        double oval_x0y1 = 1.0;
+//        double ans = MirMath::IntPolLin(xval, yval,
+//                                        xval0, xval1, yval0, yval1,
+//                                        oval_x0y0, oval_x1y0,
+//                                        oval_x1y1, oval_x0y1);
+//        printf("ans = %e\n", ans);
+//
+//        printf("=== \n");
+//    }
+
+
+////    double ProbGaus(double xval, double mu, double sigma);
+//    {
+//        printf("--- test ProbGaus\n");
+//        double xval = 5.0;
+//        double mu = 1.0;
+//        double sigma = 2.0;
+//        double ans = MirMath::ProbGaus(xval, mu, sigma);
+//        printf("ans = %e\n", ans);
+//
 //        printf("=== \n");
 //    }
 
     
+////    double ProbGausAsym(double xval, double mu,
+////                        double sigma_plus, double sigma_minus);
+//    {
+//        printf("--- test ProbGausAsym\n");
+//        double xval = 5.0;
+//        double mu = 1.0;
+//        double sigma_plus = 2.0;
+//        double sigma_minus = 4.0;
+//        double ans = MirMath::ProbGausAsym(xval, mu, sigma_plus, sigma_minus);
+//        printf("ans = %e\n", ans);
 //
-//    void GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-//                        const int* const mask_arr,
-//                        double* const val_add_ptr, double* const val_add_err_ptr);
-//    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-//                         const int* const mask_arr,
-//                         double* const wmean_ptr, double* const wmean_err_ptr,
-//                         vector<long>* const index_bad_vec_ptr);
-//
-//    long GetChi2byConst(long narr,
-//                        const double* const val_arr,
-//                        const double* const val_err_arr,
-//                        double* const chi2_ptr,
-//                        long* const dof_ptr,
-//                        double* const chi2_red_ptr,
-//                        double* const prob_ptr);
-//    double IntPolLin(double xval,
-//                     double xval_lo, double xval_up,
-//                     double yval_lo, double yval_up);
-//    double IntPolLin(double xval, double yval,
-//                     double xval0, double xval1,
-//                     double yval0, double yval1,
-//                     double oval_x0y0, double oval_x1y0,
-//                     double oval_x1y1, double oval_x0y1);
-//
-//    double ProbGaus(double xval, double mu, double sigma);
-//    double ProbGausAsym(double xval, double mu,
-//                        double sigma_plus, double sigma_minus);
+//        printf("=== \n");
+//    }
+
+   
 //    double Sigma2CL(double sigma);
+    {
+        printf("--- test Sigma2CL(double sigma)\n");
+        double sigma = 1.0;
+        double ans = MirMath::Sigma2CL(sigma);
+        printf("ans = %e\n", ans);
+
+        printf("=== \n");
+    }
+   
 //    double CL2Sigma(double cl);
-//    double GetUpMinfcn(double value, string mode, int as_npar);
+    {
+        printf("--- test CL2Sigma(double cl)\n");
+        double cl = 0.90;
+        double ans = MirMath::CL2Sigma(cl);
+        printf("ans = %e\n", ans);
+
+        printf("=== \n");
+    }
+    
 //    int GetPermutation(int n, int r);
+    {
+        printf("--- test GetPermutation(int n, int r)\n");
+        int num = 10;
+        int sel = 2;
+        double ans = MirMath::GetPermutation(num, sel);
+        printf("ans = %e\n", ans);
+
+        printf("=== \n");
+    }
+   
 //    int GetCombination(int n, int r);
+    {
+        printf("--- test GetCombination(int n, int r)\n");
+        int num = 10;
+        int sel = 2;
+        double ans = MirMath::GetCombination(num, sel);
+        printf("ans = %e\n", ans);
+
+        printf("=== \n");
+    }
+    
 //    long GetNbin(double val_lo, double val_up, double delta_val, string mode);
+    {
+        printf("--- test GetNbin\n");
+        double val_lo = 0.0;
+        double val_up = 10.0;
+        double delta_val = 2.0;
+        long ans = MirMath::GetNbin(val_lo, val_up, delta_val, "floor");
+        printf("ans = %ld\n", ans);
+
+        printf("=== \n");
+    }
+   
 //    long GetNbinEven(double val_lo, double val_up, double delta_val);
+    {
+        printf("--- test GetNbinEven\n");
+        double val_lo = 0.0;
+        double val_up = 10.0;
+        double delta_val = 2.0;
+        long ans = MirMath::GetNbinEven(val_lo, val_up, delta_val);
+        printf("ans = %ld\n", ans);
+
+        printf("=== \n");
+    }
+    
 //    int IsSorted(long narr, const double* const val_arr);
-//    double* const GenArray(vector<double> vec);
+    {
+        printf("--- test IsSorted\n");
+        long narr = 5;
+        double val_arr[5];
+        val_arr[0] = 0.0;
+        val_arr[1] = 4.0;
+        val_arr[2] = 3.0;
+        val_arr[3] = 2.0;
+        val_arr[4] = 5.0;
+        int ans = MirMath::IsSorted(narr, val_arr);
+        printf("ans = %d\n", ans);
+
+        printf("=== \n");
+    }
+
 //    double GetInProd(double vec0_xval, double vec0_yval,
 //                     double vec1_xval, double vec1_yval);
-    
+    {
+        printf("--- test GetInProd\n");
+        double vec0_xval = 0.0;
+        double vec0_yval = 1.0;
+        double vec1_xval = 3.0;
+        double vec1_yval = 5.0;
+
+        int ans = MirMath::GetInProd(vec0_xval, vec0_yval,
+                                     vec1_xval, vec1_yval);
+        printf("ans = %d\n", ans);
+
+        printf("=== \n");
+    }
 
 
 

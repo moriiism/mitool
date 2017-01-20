@@ -1,11 +1,8 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_MATH_H_
 #define MORIIISM_MITOOL_MIROOTLIB_MATH_H_
 
-#include "mi_base.h"
-
 #include "TMath.h"
-//#include "Math/QuantFuncMathMore.h"
-//#include "Math/QuantFuncMathCore.h"
+#include "mi_base.h"
 
 // "Average" and "mean" are ambiguous, then we do not use these names.
 // Instead, we use the followings:
@@ -171,7 +168,6 @@ namespace MirMath
                         double sigma_plus, double sigma_minus);
     double Sigma2CL(double sigma);
     double CL2Sigma(double cl);
-    double GetUpMinfcn(double value, string mode, int as_npar);
 
     int GetPermutation(int n, int r);
     // Permutation(n, r) = _nP_r = n! / (n - r)!
