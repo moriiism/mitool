@@ -68,18 +68,18 @@ public:
     // poisson error
     void FillRandom(const MirFunc* const func,
                     const MirFuncPar* const func_par,
-                    int rand_seed = 1);
+                    int rand_seed);
 
     // gaussian error
     void FillRandom(const MirFunc* const func,
                     const MirFuncPar* const func_par,
                     const MirFunc* const func_sigma,
                     const MirFuncPar* const func_par_sigma,
-                    int rand_seed = 1);
+                    int rand_seed);
 
     // poisson error
     void FillRandom(const HistData2d* const hist_data,
-                    int rand_seed = 1);
+                    int rand_seed);
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_SERR_H_

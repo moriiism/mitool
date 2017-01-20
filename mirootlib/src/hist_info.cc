@@ -152,6 +152,8 @@ double HistInfo1d::GetBinWidthLog(long ibin) const
 
 long HistInfo1d::GetIbin(double val, string scale) const
 {
+    IsValidRange(val);
+    
     long ibin = 0;
     if("lin" == scale){
         double bin_width = GetBinWidth();
@@ -180,6 +182,8 @@ long HistInfo1d::GetIbin(double val, string scale) const
 
 double HistInfo1d::GetBinCenter(long ibin, string scale) const
 {
+    IsValidIbin(ibin);
+    
     double bin_center = 0.0;
     if("lin" == scale){
         double bin_width = GetBinWidth();
@@ -204,6 +208,7 @@ double HistInfo1d::GetBinCenter(long ibin, string scale) const
 
 double HistInfo1d::GetBinLo(long ibin, string scale) const
 {
+    IsValidIbin(ibin);
     double bin_lo = 0.0;
     if("lin" == scale){
         double bin_width = GetBinWidth();
@@ -228,6 +233,7 @@ double HistInfo1d::GetBinLo(long ibin, string scale) const
 
 double HistInfo1d::GetBinUp(long ibin, string scale) const
 {
+    IsValidIbin(ibin);
     double bin_up = 0.0;
     if("lin" == scale){
         double bin_width = GetBinWidth();
@@ -486,8 +492,8 @@ HistInfo2d* const HistInfo2d::Clone() const
 
 long HistInfo2d::GetIbin(long ibin_xval, long ibin_yval) const
 {
-    GetHistInfoX()->IsValidIbin(ibin_xval);
-    GetHistInfoY()->IsValidIbin(ibin_yval);
+    IsValidIbinX(ibin_xval);
+    IsValidIbinY(ibin_yval);
     long ibin = ibin_xval + GetNbinX() * ibin_yval;
     return ibin;
 }
@@ -495,53 +501,51 @@ long HistInfo2d::GetIbin(long ibin_xval, long ibin_yval) const
 long HistInfo2d::GetIbinX(long ibin) const
 {
     long ibin_xval = ibin % GetNbinX();
-    GetHistInfoX()->IsValidIbin(ibin_xval);
+    IsValidIbinX(ibin_xval);
     return ibin_xval;
 }
 
 long HistInfo2d::GetIbinY(long ibin) const
 {
     long ibin_yval = ibin / GetNbinX();
-    GetHistInfoY()->IsValidIbin(ibin_yval);
+    IsValidIbinY(ibin_yval);
     return ibin_yval;
 }
 
 long HistInfo2d::GetIbinXFromX(double xval) const
 {
-    GetHistInfoX()->IsValidRange(xval);
+    IsValidRangeX(xval);
     long ibin_xval = static_cast<long>( floor((xval - GetLoX()) / GetBinWidthX()) );
     return ibin_xval;
 }
 
 long HistInfo2d::GetIbinYFromY(double yval) const
 {
-    GetHistInfoY()->IsValidRange(yval);
+    IsValidRangeY(yval);
     long ibin_yval = static_cast<long>( floor((yval - GetLoY()) / GetBinWidthY()) );
     return ibin_yval;
 }
    
 long HistInfo2d::GetIbinFromXY(double xval, double yval) const
 {
-    GetHistInfoX()->IsValidRange(xval);
-    GetHistInfoY()->IsValidRange(yval);
+    IsValidRangeX(xval);
+    IsValidRangeY(yval);
     long ibin_xval = GetIbinXFromX(xval);
-    GetHistInfoX()->IsValidIbin(ibin_xval);
     long ibin_yval = GetIbinYFromY(yval);
-    GetHistInfoY()->IsValidIbin(ibin_yval);
     long ibin = GetIbin(ibin_xval, ibin_yval);
     return ibin;
 }
     
 double HistInfo2d::GetBinCenterXFromIbinX(long ibin_xval) const
 {
-    GetHistInfoX()->IsValidIbin(ibin_xval);
+    IsValidIbinX(ibin_xval);
     double bin_center = GetLoX() + (ibin_xval + 0.5) * GetBinWidthX();
     return bin_center;
 }
 
 double HistInfo2d::GetBinCenterYFromIbinY(long ibin_yval) const
 {
-    GetHistInfoY()->IsValidIbin(ibin_yval);
+    IsValidIbinY(ibin_yval);
     double bin_center = GetLoY() + (ibin_yval + 0.5) * GetBinWidthY();
     return bin_center;
 }
@@ -549,7 +553,7 @@ double HistInfo2d::GetBinCenterYFromIbinY(long ibin_yval) const
 double HistInfo2d::GetBinCenterXFromIbin(long ibin) const
 {
     long ibin_xval = GetIbinX(ibin);
-    GetHistInfoX()->IsValidIbin(ibin_xval);
+    IsValidIbinX(ibin_xval);
     double bin_center = GetBinCenterXFromIbinX(ibin_xval);
     return bin_center;
 }
@@ -557,7 +561,7 @@ double HistInfo2d::GetBinCenterXFromIbin(long ibin) const
 double HistInfo2d::GetBinCenterYFromIbin(long ibin) const
 {
     long ibin_yval = GetIbinY(ibin);
-    GetHistInfoY()->IsValidIbin(ibin_yval);
+    IsValidIbinY(ibin_yval);
     double bin_center = GetBinCenterYFromIbinY(ibin_yval);
     return bin_center;
 }
@@ -574,7 +578,7 @@ void HistInfo2d::GetBinCenterXYFromIbin(long ibin,
     
 long HistInfo2d::GetIbinX_WithHalfBinShifted(double xval) const
 {
-    GetHistInfoX()->IsValidRange(xval);
+    IsValidRangeX(xval);
     double xval_lo_half_bin_shifted = GetLoX() + 0.5 * GetBinWidthX();
     long ibin_xval = static_cast<long>( floor((xval - xval_lo_half_bin_shifted) / GetBinWidthX()) );
     return ibin_xval;
@@ -582,7 +586,7 @@ long HistInfo2d::GetIbinX_WithHalfBinShifted(double xval) const
     
 long HistInfo2d::GetIbinY_WithHalfBinShifted(double yval) const
 {
-    GetHistInfoY()->IsValidRange(yval);
+    IsValidRangeY(yval);
     double yval_lo_half_bin_shifted = GetLoY() + 0.5 * GetBinWidthY();
     long ibin_yval = static_cast<long>( floor((yval - yval_lo_half_bin_shifted) / GetBinWidthY()) );
     return ibin_yval;
@@ -591,9 +595,9 @@ long HistInfo2d::GetIbinY_WithHalfBinShifted(double yval) const
 void HistInfo2d::Print(FILE* fp) const
 {
     fprintf(fp, "hist_info_x_:\n");
-    hist_info_x_->Print(fp);
+    GetHistInfoX()->Print(fp);
     fprintf(fp, "hist_info_y_:\n");
-    hist_info_y_->Print(fp);    
+    GetHistInfoY()->Print(fp);
 }
 
 void HistInfo2d::IsValidIbinX(long ibin_xval) const

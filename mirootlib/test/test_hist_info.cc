@@ -188,29 +188,259 @@ int main(int argc, char* argv[])
 //        printf("=== \n");
 //    }
     
-
     
 //    double GetBinCenter(long ibin, string scale = "lin") const;
+    {
+        printf("--- test GetBinCenter(long ibin, string scale)\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        printf("%e \n", hi1d_1->GetBinCenter(1));
+        delete hi1d_1;
+
+        // 7.500000e+00 
+        printf("=== \n");
+    }
+
+//    {
+//        printf("--- test GetBinCenter(long ibin, string scale)\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+//        printf("%e \n", hi1d_1->GetBinCenter(1, "log"));
+//        delete hi1d_1;
+//
+//
+//        printf("=== \n");
+//    }
+
+    
 //    double GetBinLo(long ibin, string scale = "lin") const;
+    {
+        printf("--- test GetBinLo(long ibin, string scale)\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        printf("%e \n", hi1d_1->GetBinLo(1));
+        delete hi1d_1;
+
+        // 5.0
+        printf("=== \n");
+    }
+
+//    {
+//        printf("--- test GetBinLo(long ibin, string scale)\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+//        printf("%e \n", hi1d_1->GetBinLo(1, "log"));
+//        delete hi1d_1;
+//
+//
+//        printf("=== \n");
+//    }
+   
+   
 //    double GetBinUp(long ibin, string scale = "lin") const;
-//    long GetIbin_WithHalfBinShifted(double val) const;
-//    
+    {
+        printf("--- test GetBinUp(long ibin, string scale)\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        printf("%e \n", hi1d_1->GetBinUp(1));
+        delete hi1d_1;
+
+        // 10.0
+        printf("=== \n");
+    }
+
+//    {
+//        printf("--- test GetBinUp(long ibin, string scale)\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+//        printf("%e \n", hi1d_1->GetBinUp(1, "log"));
+//        delete hi1d_1;
+//
+//        printf("=== \n");
+//    }
+
+    
+////    long GetIbin_WithHalfBinShifted(double val) const;
+//    {
+//        printf("--- test GetIbin_WithHalfBinShifted(double val)\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+//        printf("%ld \n", hi1d_1->GetIbin_WithHalfBinShifted(3.0));
+//        delete hi1d_1;
+//
+//        printf("=== \n");
+//    }
+    
+    
 //    void GenValArr(double** const val_arr_ptr,
 //                    long* const nbin_ptr,
 //                    string scale = "lin") const;
+    {
+        printf("--- test GenValArr\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        double* val_arr = NULL;
+        long nbin = 0;
+        hi1d_1->GenValArr(&val_arr, &nbin);
+        printf("nbin = %ld\n", nbin);
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            printf("val_arr[%ld] = %e\n", ibin, val_arr[ibin]);
+        }
+        delete [] val_arr;
+        delete hi1d_1;
+
+        // nbin = 2
+        // val_arr[0] = 2.500000e+00
+        // val_arr[1] = 7.500000e+00
+        printf("=== \n");
+    }
+    
+//    {
+//        printf("--- test GenValArr\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(1.0, 10.0, 2);
+//        double* val_arr = NULL;
+//        long nbin = 0;
+//        hi1d_1->GenValArr(&val_arr, &nbin, "log");
+//        printf("nbin = %ld\n", nbin);
+//        for(long ibin = 0; ibin < nbin; ibin ++){
+//            printf("val_arr[%ld] = %e\n", ibin, val_arr[ibin]);
+//        }
+//        delete [] val_arr;
+//        delete hi1d_1;
+//
+//        printf("=== \n");
+//    }
+
+
+    
 //    void GenValSerrArr(double** const val_serr_arr_ptr,
 //                       long* const nbin_ptr,
 //                       string scale = "lin") const;
+    {
+        printf("--- test GenValSerrArr\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        double* val_serr_arr = NULL;
+        long nbin = 0;
+        hi1d_1->GenValSerrArr(&val_serr_arr, &nbin);
+        printf("nbin = %ld\n", nbin);
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            printf("val_serr_arr[%ld] = %e\n", ibin, val_serr_arr[ibin]);
+        }
+        delete [] val_serr_arr;
+        delete hi1d_1;
+
+        // nbin = 2
+        // val_arr[0] = 2.5
+        // val_arr[1] = 2.5
+        printf("=== \n");
+    }
+
+//    {
+//        printf("--- test GenValSerrArr\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(1.0, 10.0, 2);
+//        double* val_serr_arr = NULL;
+//        long nbin = 0;
+//        hi1d_1->GenValSerrArr(&val_serr_arr, &nbin, "log");
+//        printf("nbin = %ld\n", nbin);
+//        for(long ibin = 0; ibin < nbin; ibin ++){
+//            printf("val_serr_arr[%ld] = %e\n", ibin, val_serr_arr[ibin]);
+//        }
+//        delete [] val_serr_arr;
+//        delete hi1d_1;
+//
+//        printf("=== \n");
+//    }
+//    
+
+    
 //    void GenValTerrArr(double** const val_terr_plus_arr_ptr,
 //                       double** const val_terr_minus_arr_ptr,
 //                       long* const nbin_ptr,
 //                       string scale = "lin") const;  
-//    
+
+    {
+        printf("--- test GenValTerrArr\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        double* val_terr_plus_arr = NULL;
+        double* val_terr_minus_arr = NULL;
+        long nbin = 0;
+        hi1d_1->GenValTerrArr(&val_terr_plus_arr, &val_terr_minus_arr, &nbin);
+        printf("nbin = %ld\n", nbin);
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            printf("val_terr_plus_arr[%ld] = %e , val_terr_minus_arr[%ld] = %e\n",
+                   ibin, val_terr_plus_arr[ibin], ibin, val_terr_minus_arr[ibin]);
+        }
+        delete [] val_terr_plus_arr;
+        delete [] val_terr_minus_arr;
+        delete hi1d_1;
+
+        // nbin = 2
+        // val_terr_plus_arr[0] = 2.500000e+00 , val_terr_minus_arr[0] = -2.500000e+00
+        // val_terr_plus_arr[1] = 2.500000e+00 , val_terr_minus_arr[1] = -2.500000e+00
+
+        printf("=== \n");
+    }
+
+//    {
+//        printf("--- test GenValTerrArr\n");
+//        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+//        hi1d_1->InitSetByNbin(1.0, 10.0, 2);
+//        double* val_terr_plus_arr = NULL;
+//        double* val_terr_minus_arr = NULL;
+//        long nbin = 0;
+//        hi1d_1->GenValTerrArr(&val_terr_plus_arr, &val_terr_minus_arr, &nbin, "log");
+//        printf("nbin = %ld\n", nbin);
+//        for(long ibin = 0; ibin < nbin; ibin ++){
+//            printf("val_terr_plus_arr[%ld] = %e , val_terr_minus_arr[%ld] = %e\n",
+//                   ibin, val_terr_plus_arr[ibin], ibin, val_terr_minus_arr[ibin]);
+//        }
+//        delete [] val_terr_plus_arr;
+//        delete [] val_terr_minus_arr;
+//        delete hi1d_1;
+//
+//        printf("=== \n");
+//    }
+
 //    // offset_tag = "st", "md", "ed", "no"
 //    double GetOffsetFromTag(string offset_tag) const;
-//    
+    {
+        printf("--- test GetOffsetFromTag(string offset_tag)\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        
+        printf("st = %e\n", hi1d_1->GetOffsetFromTag("st"));
+        printf("md = %e\n", hi1d_1->GetOffsetFromTag("md"));
+        printf("ed = %e\n", hi1d_1->GetOffsetFromTag("ed"));
+        printf("no = %e\n", hi1d_1->GetOffsetFromTag("no"));
+        printf("val = %e\n", hi1d_1->GetOffsetFromTag("7.77"));        
+
+        delete hi1d_1;
+
+        // st = 0.000000e+00
+        // md = 5.000000e+00
+        // ed = 1.000000e+01
+        // no = 0.000000e+00
+        // val = 7.770000e+00
+        printf("=== \n");
+    }
+
 //    void Print(FILE* fp) const;
-//
+    {
+        printf("--- test GetOffsetFromTag(string offset_tag)\n");
+        HistInfo1d* hi1d_1 = new HistInfo1d("hi1d_1");
+        hi1d_1->InitSetByNbin(0.0, 10.0, 2);
+        hi1d_1->Print(stdout);
+
+        delete hi1d_1;
+
+        printf("=== \n");
+    }
+    
+
 //    void IsValidForLogScale() const;    
 //    void IsValidIbin(long ibin) const;
 //    void IsValidRange(double val) const;

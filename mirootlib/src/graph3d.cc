@@ -4,93 +4,21 @@
 // public
 //
 
-// Init
-
-void GraphData3d::Init()
-{
-    Null();
-    NewXvalArrAsDataArray1d();
-    NewYvalArrAsDataArray1d();
-    NewOvalArrAsDataArray1d();
-}
-
-void GraphData3d::Set(const GraphData3d* const org)
-{
-    CopyMirObject(org);
-    Set(org->GetXvalArr(),
-        org->GetYvalArr(),
-        org->GetOvalArr());
-}
-
-
-void GraphData3d::Set(const DataArray1d* const xval_arr,
-                      const DataArray1d* const yval_arr,
-                      const DataArray1d* const oval_arr)
-{
-    GetXvalArrNonConst()->Copy(xval_arr);
-    GetYvalArrNonConst()->Copy(yval_arr);
-    GetOvalArrNonConst()->Copy(oval_arr);
-}
-
-// Init & Set
-void GraphData3d::InitSet(const DataArray1d* const xval_arr,
-                          const DataArray1d* const yval_arr,
-                          const DataArray1d* const oval_arr)
-{
-    Init();
-    Set(xval_arr, yval_arr, oval_arr); 
-}
-
-
-// Set xval_arr
 void GraphData3d::SetXvalArr(const DataArray1d* const val_arr)
 {
     GetXvalArrNonConst()->Copy(val_arr);
 }
 
-void GraphData3d::SetXvalArrDbl(long ndata, const double* const val)
-{
-    GetXvalArrNonConst()->InitSetVal(ndata, val);
-}
-
-void GraphData3d::SetXvalArrDbl(vector<double> val)
-{
-    GetXvalArrNonConst()->InitSetVal(val);
-}
-
-// Set yval_arr
 void GraphData3d::SetYvalArr(const DataArray1d* const val_arr)
 {
     GetYvalArrNonConst()->Copy(val_arr);
 }
 
-void GraphData3d::SetYvalArrDbl(long ndata, const double* const val)
-{
-    GetYvalArrNonConst()->InitSetVal(ndata, val);
-}
-
-void GraphData3d::SetYvalArrDbl(vector<double> val)
-{
-    GetYvalArrNonConst()->InitSetVal(val);
-}
-
-// Set oval_arr
 void GraphData3d::SetOvalArr(const DataArray1d* const val_arr)
 {
     GetOvalArrNonConst()->Copy(val_arr);
 }
 
-void GraphData3d::SetOvalArrDbl(long ndata, const double* const val)
-{
-    GetOvalArrNonConst()->InitSetVal(ndata, val);
-}
-
-void GraphData3d::SetOvalArrDbl(vector<double> val)
-{
-    GetOvalArrNonConst()->InitSetVal(val);
-}
-
-// Set point
 void GraphData3d::SetPoint(long idata, double xval, double yval, double oval)
 {
     GetXvalArrNonConst()->SetValElm(idata, xval);
@@ -98,7 +26,6 @@ void GraphData3d::SetPoint(long idata, double xval, double yval, double oval)
     GetOvalArrNonConst()->SetValElm(idata, oval);
 }
 
-// Init & Set by Func
 void GraphData3d::InitSetByFunc(const MirFunc* const func, const double* const par,
                                 long nbin_xval, double xval_lo, double xval_up,
                                 long nbin_yval, double yval_lo, double yval_up,
@@ -127,89 +54,36 @@ void GraphData3d::InitSetByFunc(const MirFunc* const func, const double* const p
     delete hi1d_xval;
     delete hi1d_yval;
     Init();
-    SetXvalArrDbl(xval_vec);
-    SetYvalArrDbl(yval_vec);
-    SetOvalArrDbl(oval_vec);
+
+    DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
+    da1d_x->Init(nbin_xval);
+    da1d_x->SetVal(xval_vec);
+    DataArrayNerr1d* da1d_y = new DataArrayNerr1d;
+    da1d_y->Init(nbin_yval);
+    da1d_y->SetVal(yval_vec);    
+    DataArrayNerr1d* da1d_o = new DataArrayNerr1d;
+    da1d_o->Init(nbin_xval);
+    da1d_o->SetVal(oval_vec);
+    SetXvalArr(da1d_x);
+    SetYvalArr(da1d_y);
+    SetOvalArr(da1d_o);
+    delete da1d_x;
+    delete da1d_y;
+    delete da1d_o;
+
 }
 
 void GraphData3d::Copy(const GraphData3d* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
-    CopyMirObject(org);
+    CopyTitle(org);
     Init();
-    Set(org);
+    SetXvalArr(org->GetXvalArr());
+    SetYvalArr(org->GetYvalArr());
+    SetOvalArr(org->GetOvalArr());
 }
-
-GraphData3d* const GraphData3d::Clone() const
-{
-    GraphData3d* obj_new = new GraphData3d;
-    obj_new->Copy(this);
-    return obj_new;
-}
-
-// Load
-void GraphData3d::Load(string file)
-{
-    Null();
-    
-    string* line_arr = NULL;
-    long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
-    double xval, yval, oval;
-    for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
-        if(3 != ncolumn){
-            MPrintWarnClass("ncolumn != 3");
-        }
-        istringstream iss(line_arr[idata]);
-        iss >> xval >> yval >> oval;
-        SetPoint(idata, xval, yval, oval);
-    }
-    MirIolib::DelReadFile(line_arr);
-}
-
-
-void GraphData3d::Load(string file, string format)
-{
-    Null();
-    
-    string* line_arr = NULL;
-    long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);    
-    double xval, yval, oval;
-    if("x,y,z" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
-            if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
-            }
-            istringstream iss(line_arr[idata]);
-            iss >> xval >> yval >> oval;
-            SetPoint(idata, xval, yval, oval);
-        }
-    } else {
-        MPrintErrClass("bad format");
-        abort();
-    }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
-}
-
-//
-// stat
-//
 
 double GraphData3d::GetYvalAtXvalMin() const
 {
@@ -377,45 +251,19 @@ void GraphData3d::PrintData(FILE* fp, string format,
         MPrintErrClass(msg);
         abort();
     }
-
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
-
-TGraph2D* const GraphData3d::GenTGraph2D(double offset_xval,
-                                         double offset_yval,
-                                         double offset_oval) const
-{
-    long ndata = GetNdata();
-    double* xval_arr = new double [ndata];
-    double* yval_arr = new double [ndata];
-    double* oval_arr = new double [ndata];
-    for(long idata = 0; idata < ndata; idata ++){
-        xval_arr[idata] = GetXvalElm(idata) - offset_xval;
-        yval_arr[idata] = GetYvalElm(idata) - offset_yval;
-        oval_arr[idata] = GetOvalElm(idata) - offset_oval;
-    }
-    TGraph2D* tgraph = new TGraph2D(ndata, xval_arr, yval_arr, oval_arr);
-    delete [] xval_arr;
-    delete [] yval_arr;
-    delete [] oval_arr;
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
-    return tgraph;
-}
 
 double GraphData3d::GetOffsetXFromTag(string offset_tag) const
 {
     double offset = 0.0;
     if("st" == offset_tag){
-        offset = GetXvalArr()->GetValMin();
+        offset = GetXvalArr()->GetValAndErrMin();
     } else if ("ed" == offset_tag){
-        offset = GetXvalArr()->GetValMax();
+        offset = GetXvalArr()->GetValAndErrMax();
     } else if ("md" == offset_tag){
-        offset = ( GetXvalArr()->GetValMin() + GetXvalArr()->GetValMax() )/2.;
+        offset = ( GetXvalArr()->GetValAndErrMin() +
+                   GetXvalArr()->GetValAndErrMax() )/2.;
     } else if ("no" == offset_tag){
         offset = 0.0;
     } else {
@@ -429,11 +277,12 @@ double GraphData3d::GetOffsetYFromTag(string offset_tag) const
 {
     double offset = 0.0;
     if("st" == offset_tag){
-        offset = GetYvalArr()->GetValMin();
+        offset = GetYvalArr()->GetValAndErrMin();
     } else if ("ed" == offset_tag){
-        offset = GetYvalArr()->GetValMax();
+        offset = GetYvalArr()->GetValAndErrMax();
     } else if ("md" == offset_tag){
-        offset = ( GetYvalArr()->GetValMin() + GetYvalArr()->GetValMax() )/2.;
+        offset = ( GetYvalArr()->GetValAndErrMin() +
+                   GetYvalArr()->GetValAndErrMax() )/2.;
     } else if ("no" == offset_tag){
         offset = 0.0;        
     } else {
@@ -446,11 +295,12 @@ double GraphData3d::GetOffsetOFromTag(string offset_tag) const
 {
     double offset = 0.0;
     if("st" == offset_tag){
-        offset = GetOvalArr()->GetValMin();
+        offset = GetOvalArr()->GetValAndErrMin();
     } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValMax();
+        offset = GetOvalArr()->GetValAndErrMax();
     } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValMin() + GetOvalArr()->GetValMax() )/2.;
+        offset = ( GetOvalArr()->GetValAndErrMin() +
+                   GetOvalArr()->GetValAndErrMax() )/2.;
     } else if ("no" == offset_tag){
         offset = 0.0;        
     } else {
@@ -467,16 +317,16 @@ double GraphData3d::GetOffsetOFromTag(string offset_tag) const
 
 // Null
 
-void GraphData3d::Null()
+void GraphData3d::NullGraphData3d()
 {
     if(NULL != xval_arr_) {delete xval_arr_; xval_arr_ = NULL;}
     if(NULL != yval_arr_) {delete yval_arr_; yval_arr_ = NULL;}
     if(NULL != oval_arr_) {delete oval_arr_; oval_arr_ = NULL;}
 }
 
-void GraphData3d::NewXvalArrAsDataArray1d()
+void GraphData3d::NewXvalArrAsDataArrayNerr1d()
 {
-    xval_arr_ = new DataArray1d;
+    xval_arr_ = new DataArrayNerr1d;
 }
 
 void GraphData3d::NewXvalArrAsDataArraySerr1d()
@@ -490,9 +340,9 @@ void GraphData3d::NewXvalArrAsDataArrayTerr1d()
 }
 
 
-void GraphData3d::NewYvalArrAsDataArray1d()
+void GraphData3d::NewYvalArrAsDataArrayNerr1d()
 {
-    yval_arr_ = new DataArray1d;
+    yval_arr_ = new DataArrayNerr1d;
 }
 
 void GraphData3d::NewYvalArrAsDataArraySerr1d()
@@ -506,9 +356,9 @@ void GraphData3d::NewYvalArrAsDataArrayTerr1d()
 }
 
 
-void GraphData3d::NewOvalArrAsDataArray1d()
+void GraphData3d::NewOvalArrAsDataArrayNerr1d()
 {
-    oval_arr_ = new DataArray1d;
+    oval_arr_ = new DataArrayNerr1d;
 }
 
 void GraphData3d::NewOvalArrAsDataArraySerr1d()

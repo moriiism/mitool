@@ -165,7 +165,7 @@ public:
     virtual void PrintData(FILE* fp, string format,
                            double offset_xval,
                            double offset_yval,
-                           double offset_oval) const;
+                           double offset_oval) const = 0;
     void SaveRoot(string outfile,
                   double offset_xval = 0.0,
                   double offset_yval = 0.0,

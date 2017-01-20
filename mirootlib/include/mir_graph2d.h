@@ -38,7 +38,7 @@ public:
     virtual void SetPoint(long idata,
                           double xval, double xval_serr,
                           double oval, double oval_serr)
-        {MPrintErrVFunc; abort();};    
+        {MPrintErrVFunc; abort();};
     virtual void SetPoint(long idata,
                           double xval,
                           double xval_terr_plus,

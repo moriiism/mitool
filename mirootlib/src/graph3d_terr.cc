@@ -8,110 +8,10 @@
 
 void GraphDataTerr3d::Init()
 {
-    Null();
+    NullGraphData3d();
     NewXvalArrAsDataArrayTerr1d();
     NewYvalArrAsDataArrayTerr1d();
     NewOvalArrAsDataArrayTerr1d();
-}
-
-// set xval
-void GraphDataTerr3d::SetXvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(ndata, val, val_serr);
-}
-
-void GraphDataTerr3d::SetXvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(val, val_serr);
-}
-
-void GraphDataTerr3d::SetXvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_terr_plus,
-                                           const double* const val_terr_minus)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(ndata,
-                                            val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-void GraphDataTerr3d::SetXvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_terr_plus,
-                                           vector<double> val_terr_minus)
-{
-    GetXvalArrNonConst()->InitSetValAndTerr(val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-
-// Set yval_arr
-void GraphDataTerr3d::SetYvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetYvalArrNonConst()->InitSetValAndTerr(ndata, val, val_serr);
-}
-
-void GraphDataTerr3d::SetYvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetYvalArrNonConst()->InitSetValAndTerr(val, val_serr);
-}
-
-void GraphDataTerr3d::SetYvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_terr_plus,
-                                           const double* const val_terr_minus)
-{
-    GetYvalArrNonConst()->InitSetValAndTerr(ndata,
-                                            val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-void GraphDataTerr3d::SetYvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_terr_plus,
-                                           vector<double> val_terr_minus)
-{
-    GetYvalArrNonConst()->InitSetValAndTerr(val, val_terr_plus, val_terr_minus);
-}
-
-
-// Set oval_arr
-void GraphDataTerr3d::SetOvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(ndata, val, val_serr);
-}
-
-void GraphDataTerr3d::SetOvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(val, val_serr);
-}
-
-void GraphDataTerr3d::SetOvalAndTerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_terr_plus,
-                                           const double* const val_terr_minus)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(ndata,
-                                            val,
-                                            val_terr_plus,
-                                            val_terr_minus);
-}
-
-void GraphDataTerr3d::SetOvalAndTerrArrDbl(vector<double> val,
-                                           vector<double> val_terr_plus,
-                                           vector<double> val_terr_minus)
-{
-    GetOvalArrNonConst()->InitSetValAndTerr(val, val_terr_plus, val_terr_minus);
 }
 
 void GraphDataTerr3d::SetPoint(long idata,
@@ -153,11 +53,11 @@ GraphDataTerr3d* const GraphDataTerr3d::Clone() const
 
 void GraphDataTerr3d::Load(string file)
 {
-    Null();
+    NullGraphData3d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetYvalArrNonConst()->Init(ndata);
@@ -166,7 +66,7 @@ void GraphDataTerr3d::Load(string file)
     double yval, yval_terr_plus, yval_terr_minus;
     double oval, oval_terr_plus, oval_terr_minus;
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(9 != ncolumn){
             MPrintWarnClass("ncolumn != 9");
         }
@@ -179,19 +79,16 @@ void GraphDataTerr3d::Load(string file)
                  yval, yval_terr_plus, yval_terr_minus,
                  oval, oval_terr_plus, oval_terr_minus);
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 void GraphDataTerr3d::Load(string file, string format)
 {
-    Null();
+    NullGraphData3d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetYvalArrNonConst()->Init(ndata);
@@ -201,7 +98,7 @@ void GraphDataTerr3d::Load(string file, string format)
     double oval, oval_terr_plus, oval_terr_minus;
     if("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(9 != ncolumn){
                 MPrintWarnClass("ncolumn != 9");
             }
@@ -220,7 +117,7 @@ void GraphDataTerr3d::Load(string file, string format)
         yval_terr_plus  = 0.0;
         yval_terr_minus = 0.0;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
                 MPrintWarnClass("ncolumn != 5");
             }
@@ -237,38 +134,27 @@ void GraphDataTerr3d::Load(string file, string format)
         MPrintErrClass("bad format");
         abort();
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 //
 // const functions
 //
 
-// get
-
 const DataArrayTerr1d* const GraphDataTerr3d::GetXvalArr() const
 {
-    const DataArray1d* xval_arr = GraphData3d::GetXvalArr();
-    return dynamic_cast<const DataArrayTerr1d*>(xval_arr);
+    return dynamic_cast<const DataArrayTerr1d*>(GetXvalArrNonConst());
 }
 
 const DataArrayTerr1d* const GraphDataTerr3d::GetYvalArr() const
 {
-    const DataArray1d* yval_arr = GraphData3d::GetYvalArr();    
-    return dynamic_cast<const DataArrayTerr1d*>(yval_arr);
+    return dynamic_cast<const DataArrayTerr1d*>(GetYvalArrNonConst());
 }
 
 const DataArrayTerr1d* const GraphDataTerr3d::GetOvalArr() const
 {
-    const DataArray1d* oval_arr = GraphData3d::GetOvalArr();        
-    return dynamic_cast<const DataArrayTerr1d*>(oval_arr);
+    return dynamic_cast<const DataArrayTerr1d*>(GetOvalArrNonConst());
 }
-
-
-// output
 
 void GraphDataTerr3d::PrintData(FILE* fp, string format,
                                 double offset_xval,
@@ -299,63 +185,5 @@ void GraphDataTerr3d::PrintData(FILE* fp, string format,
         MPrintErrClass(msg);
         abort();
     }
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
-
-double GraphDataTerr3d::GetOffsetXFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetXvalArr()->GetValAndErrMin() + GetXvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-
-double GraphDataTerr3d::GetOffsetYFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetYvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetYvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetYvalArr()->GetValAndErrMin() + GetYvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;        
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-
-double GraphDataTerr3d::GetOffsetOFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValAndErrMin() + GetOvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;        
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-
 

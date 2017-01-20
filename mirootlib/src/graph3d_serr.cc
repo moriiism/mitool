@@ -8,56 +8,10 @@
 
 void GraphDataSerr3d::Init()
 {
-    Null();
+    NullGraphData3d();
     NewXvalArrAsDataArraySerr1d();
     NewYvalArrAsDataArraySerr1d();
     NewOvalArrAsDataArraySerr1d();
-}
-
-// set xval_arr
-void GraphDataSerr3d::SetXvalAndSerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndSerr(ndata, val, val_serr);
-}
-
-
-void GraphDataSerr3d::SetXvalAndSerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetXvalArrNonConst()->InitSetValAndSerr(val, val_serr);
-}
-
-
-// set yval_arr
-void GraphDataSerr3d::SetYvalAndSerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetYvalArrNonConst()->InitSetValAndSerr(ndata, val, val_serr);
-}
-
-
-void GraphDataSerr3d::SetYvalAndSerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetYvalArrNonConst()->InitSetValAndSerr(val, val_serr);
-}
-
-
-// set oval_arr
-void GraphDataSerr3d::SetOvalAndSerrArrDbl(long ndata,
-                                           const double* const val,
-                                           const double* const val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndSerr(ndata, val, val_serr);
-}
-
-void GraphDataSerr3d::SetOvalAndSerrArrDbl(vector<double> val,
-                                           vector<double> val_serr)
-{
-    GetOvalArrNonConst()->InitSetValAndSerr(val, val_serr);
 }
 
 void GraphDataSerr3d::SetPoint(long idata,
@@ -89,18 +43,18 @@ GraphDataSerr3d* const GraphDataSerr3d::Clone() const
 
 void GraphDataSerr3d::Load(string file)
 {
-    Null();
+    NullGraphData3d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetYvalArrNonConst()->Init(ndata);
     GetOvalArrNonConst()->Init(ndata);
     double xval, xval_serr, yval, yval_serr, oval, oval_serr;
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(6 != ncolumn){
             MPrintWarnClass("ncolumn != 6");
         }
@@ -113,20 +67,17 @@ void GraphDataSerr3d::Load(string file)
                  yval, yval_serr,
                  oval, oval_serr);
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 
 void GraphDataSerr3d::Load(string file, string format)
 {
-    Null();
+    NullGraphData3d();
     
     string* line_arr = NULL;
     long ndata = 0;
-    MirIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init();
     GetXvalArrNonConst()->Init(ndata);
     GetYvalArrNonConst()->Init(ndata);
@@ -134,7 +85,7 @@ void GraphDataSerr3d::Load(string file, string format)
     double xval, xval_serr, yval, yval_serr, oval, oval_serr;
     if("x,xe,y,ye,z,ze" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(6 != ncolumn){
                 MPrintWarnClass("ncolumn != 6");
             }
@@ -151,7 +102,7 @@ void GraphDataSerr3d::Load(string file, string format)
         xval_serr = 0.0;
         yval_serr = 0.0;
         for(long idata = 0; idata < ndata; idata ++){
-            int ncolumn = MirStr::GetNcolumn(line_arr[idata]);
+            int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
                 MPrintWarnClass("ncolumn != 4");
             }
@@ -168,10 +119,7 @@ void GraphDataSerr3d::Load(string file, string format)
         MPrintErrClass("bad format");
         abort();
     }
-    MirIolib::DelReadFile(line_arr);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 
@@ -179,26 +127,35 @@ void GraphDataSerr3d::Load(string file, string format)
 // const functions
 //
 
-// get
-
 const DataArraySerr1d* const GraphDataSerr3d::GetXvalArr() const
 {
-    const DataArray1d* xval_arr = GraphData3d::GetXvalArr();    
-    return dynamic_cast<const DataArraySerr1d*>(xval_arr);
+    return dynamic_cast<const DataArraySerr1d*>(GetXvalArrNonConst());
 }
 
 const DataArraySerr1d* const GraphDataSerr3d::GetYvalArr() const
 {
-    const DataArray1d* yval_arr = GraphData3d::GetYvalArr();        
-    return dynamic_cast<const DataArraySerr1d*>(yval_arr);
+    return dynamic_cast<const DataArraySerr1d*>(GetYvalArrNonConst());
 }
 
 const DataArraySerr1d* const GraphDataSerr3d::GetOvalArr() const
 {
-    const DataArray1d* oval_arr = GraphData3d::GetOvalArr();    
-    return dynamic_cast<const DataArraySerr1d*>(oval_arr);
+    return dynamic_cast<const DataArraySerr1d*>(GetOvalArrNonConst());
 }
 
+double GraphDataSerr3d::GetXvalSerrElm(long idata) const
+{
+    return GetXvalArr()->GetValSerrElm(idata);
+}
+
+double GraphDataSerr3d::GetYvalSerrElm(long idata) const
+{
+    return GetYvalArr()->GetValSerrElm(idata);
+}
+
+double GraphDataSerr3d::GetOvalSerrElm(long idata) const
+{
+    return GetOvalArr()->GetValSerrElm(idata);
+}
 
 // output
 
@@ -224,14 +181,11 @@ void GraphDataSerr3d::PrintData(FILE* fp, string format,
         MPrintErrClass(msg);
         abort();
     }
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
-TGraph2DErrors* const GraphDataSerr3d::GenTGraph2DErrors(double offset_xval,
-                                                         double offset_yval,
-                                                         double offset_oval) const
+TGraph2DErrors* const GraphDataSerr3d::GenTGraph2D(double offset_xval,
+                                                   double offset_yval,
+                                                   double offset_oval) const
 {
     long ndata = GetNdata();
     double* xval_arr = new double [ndata];
@@ -263,57 +217,3 @@ TGraph2DErrors* const GraphDataSerr3d::GenTGraph2DErrors(double offset_xval,
     delete [] oval_serr_arr;
     return tgraph;
 }
-
-double GraphDataSerr3d::GetOffsetXFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetXvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetXvalArr()->GetValAndErrMin() + GetXvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-
-double GraphDataSerr3d::GetOffsetYFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetYvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetYvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetYvalArr()->GetValAndErrMin() + GetYvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;        
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-
-
-double GraphDataSerr3d::GetOffsetOFromTag(string offset_tag) const
-{
-    double offset = 0.0;
-    if("st" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMin();
-    } else if ("ed" == offset_tag){
-        offset = GetOvalArr()->GetValAndErrMax();
-    } else if ("md" == offset_tag){
-        offset = ( GetOvalArr()->GetValAndErrMin() + GetOvalArr()->GetValAndErrMax() )/2.;
-    } else if ("no" == offset_tag){
-        offset = 0.0;        
-    } else {
-        offset = atof(offset_tag.c_str());
-    }
-    return offset;
-}
-

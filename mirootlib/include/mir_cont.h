@@ -7,10 +7,10 @@
 // to hold contour
 //
 
-class MirCont : public MirObject{
+class MirCont : public MiObject{
 public:
     explicit MirCont(string title = "") :
-        MirObject("MirCont", title),
+        MiObject("MirCont", title),
         ngraph_(0),
         gd2d_arr_(NULL) {}
     ~MirCont() {
@@ -42,10 +42,10 @@ private:
 };
 
 
-class MirContWithBest : public MirObject{
+class MirContWithBest : public MiObject{
 public:
     explicit MirContWithBest(string title = "") :
-        MirObject("MirContWithBest", title),
+        MiObject("MirContWithBest", title),
         xval_best_(0.0),
         yval_best_(0.0),
         cont_(NULL) {}
