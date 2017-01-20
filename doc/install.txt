@@ -23,3 +23,48 @@ tail -f make.log
 
 # Check make.log and remove compile errors and warnings
 # If you find bugs, please contact with Mikio Morii.
+
+
+
+#
+# cern/root 
+#
+
+memo for CentOS 7
+
+cd  /etc/yum.repos.d/
+wget http://people.centos.org/tru/devtools-2/devtools-2.repo
+yum install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
+
+# echo 'source /opt/rh/devtoolset-2/enable' >> /etc/profile.d/devtools.sh
+
+
+cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
+-Dgnuinstall=ON \
+-DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
+-DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
+-DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
+-DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
+-DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
+
+
+-DGCC_INSTALL_PREFIX=/opt/rh/devtoolset-2/root/usr
+
+make
+make install
+scl enable devtoolset-2 bash
+
+[ 80%] Linking CXX shared library ../../lib/libHbook.so
+/opt/rh/devtoolset-2/root/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/ld: ../../lib/libminicern.a(hbook.f.o): unrecognized relocation (0x2a) in section `.text'
+/opt/rh/devtoolset-2/root/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/ld: final link failed: Bad value
+collect2: error: ld returned 1 exit status
+make[2]: *** [lib/libHbook.so] Error 1
+make[2]: Target `hist/hbook/CMakeFiles/Hbook.dir/build' not remade because of errors.
+make[1]: *** [hist/hbook/CMakeFiles/Hbook.dir/all] Error 2
+Scanning dependencies of target Gui
+
+
+ Installing: /usr/local/include/TMVA/efficiencies.h
+-- Installing: /usr/local/lib/libPyMVA_rdict.pcm
+-- Installing: /usr/local/lib/libPyMVA.rootmap
+
