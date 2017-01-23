@@ -4,12 +4,14 @@
 // public
 //
 
-void GraphDataNerr2d::Init()
+void GraphDataNerr2d::Init(long ndata)
 {
     NullGraphData2d();
     NewXvalArrAsDataArrayNerr1d();
     NewOvalArrAsDataArrayNerr1d();
     SetFlagXvalSorted(0);
+    GetXvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);
 }
 
 GraphDataNerr2d* const GraphDataNerr2d::Clone() const
@@ -27,9 +29,7 @@ void GraphDataNerr2d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(2 != ncolumn){
@@ -54,9 +54,7 @@ void GraphDataNerr2d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     double xval, oval;
     if("x,y" == format){
         for(long idata = 0; idata < ndata; idata ++){

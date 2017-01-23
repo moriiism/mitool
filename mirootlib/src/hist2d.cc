@@ -600,17 +600,9 @@ GraphDataNerr2d* const HistData2d::GenRandomEvt(int rand_seed) const
     }
 
     GraphDataNerr2d* gdata2d = new GraphDataNerr2d;
-    gdata2d->Init();
-    DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
-    da1d_x->Init(xval_vec.size());
-    da1d_x->SetVal(xval_vec);
-    DataArrayNerr1d* da1d_y = new DataArrayNerr1d;
-    da1d_y->Init(yval_vec.size());
-    da1d_y->SetVal(yval_vec);
-    gdata2d->SetXvalArr(da1d_x);
-    gdata2d->SetOvalArr(da1d_y);
-    delete da1d_x;
-    delete da1d_y;
+    gdata2d->Init(xval_vec.size());
+    gdata2d->SetXvalArr(xval_vec);
+    gdata2d->SetOvalArr(yval_vec);
     delete trand;
     return gdata2d;
 }

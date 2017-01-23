@@ -168,22 +168,11 @@ GraphDataNerr2d* const HistDataNerr1d::GenGraph2d() const
     long nbin_xval = 0;
     double* xval_arr = NULL;
     GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
-
-    DataArraySerr1d* da1d_x = new DataArraySerr1d;
-    da1d_x->Init(nbin_xval);
-    da1d_x->SetVal(nbin_xval, xval_arr);
-    DataArraySerr1d* da1d_o = new DataArraySerr1d;
-    da1d_o->Init(nbin_xval);
-    da1d_o->SetVal(nbin_xval, GetOvalArr()->GetVal());
-
     GraphDataNerr2d* g2d = new GraphDataNerr2d;
-    g2d->Init();
-    g2d->SetXvalArr(da1d_x);
-    g2d->SetOvalArr(da1d_o);
+    g2d->Init(nbin_xval);
+    g2d->SetXvalArr(nbin_xval, xval_arr);
+    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
     g2d->SetFlagXvalSorted(1);
-
-    delete da1d_x;
-    delete da1d_o;
     delete [] xval_arr;
     return g2d;
 }

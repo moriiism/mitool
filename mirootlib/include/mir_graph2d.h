@@ -26,12 +26,50 @@ public:
     virtual ~GraphData2d() {}
 
     // Init
-    virtual void Init() = 0;
+    virtual void Init(long ndata) = 0;
 
     // Set
     void SetXvalArr(const DataArray1d* const val_arr);
     void SetOvalArr(const DataArray1d* const val_arr);
     void SetFlagXvalSorted(int flag) {flag_xval_sorted_ = flag;};
+
+    void SetXvalArr(long ndata, const double* const val);
+    void SetXvalArr(vector<double> val);
+    void SetOvalArr(long ndata, const double* const val);
+    void SetOvalArr(vector<double> val);    
+
+    void SetXvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetXvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+
+    void SetXvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetXvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    void SetXvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    void SetXvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
+
+    void SetOvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    void SetOvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    void SetOvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
 
     // Set point
     void SetPoint(long idata, double xval, double oval);

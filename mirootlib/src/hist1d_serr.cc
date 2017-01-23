@@ -226,24 +226,13 @@ GraphDataSerr2d* const HistDataSerr1d::GenGraph2d() const
     double* xval_serr_arr = NULL;
     GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
     GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
-
-    DataArraySerr1d* da1d_x = new DataArraySerr1d;
-    da1d_x->Init(nbin_xval);
-    da1d_x->SetVal(nbin_xval, xval_arr);
-    da1d_x->SetValSerr(nbin_xval, xval_serr_arr);
-    DataArraySerr1d* da1d_o = new DataArraySerr1d;
-    da1d_o->Init(nbin_xval);
-    da1d_o->SetVal(nbin_xval, GetOvalArr()->GetVal());
-    da1d_o->SetValSerr(nbin_xval, GetOvalArr()->GetValSerr());
-
     GraphDataSerr2d* g2d = new GraphDataSerr2d;
-    g2d->Init();
-    g2d->SetXvalArr(da1d_x);
-    g2d->SetOvalArr(da1d_o);
+    g2d->Init(nbin_xval);
+    g2d->SetXvalArr(nbin_xval, xval_arr);
+    g2d->SetXvalSerrArr(nbin_xval, xval_serr_arr);
+    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
+    g2d->SetOvalSerrArr(nbin_xval, GetOvalArr()->GetValSerr());
     g2d->SetFlagXvalSorted(1);
-
-    delete da1d_x;
-    delete da1d_o;
     delete [] xval_arr;
     delete [] xval_serr_arr;
     return g2d;

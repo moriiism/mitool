@@ -688,18 +688,10 @@ void MirQdpTool::MkQdp(const Interval* const interval,
         oval_vec.push_back(0.0);
     }
     GraphDataNerr2d* gd2d = new GraphDataNerr2d;
-    gd2d->Init();
-    DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
-    da1d_x->Init(xval_vec.size());
-    da1d_x->SetVal(xval_vec);
-    DataArrayNerr1d* da1d_o = new DataArrayNerr1d;
-    da1d_o->Init(oval_vec.size());
-    da1d_o->SetVal(oval_vec);
-    gd2d->SetXvalArr(da1d_x);
-    gd2d->SetOvalArr(da1d_o);
+    gd2d->Init(xval_vec.size());
+    gd2d->SetXvalArr(xval_vec);
+    gd2d->SetOvalArr(oval_vec);
     gd2d->SetFlagXvalSorted(0);
-    delete da1d_x;
-    delete da1d_o;
 
     string title_oval = "GTI";
     double offset_oval = 0.0;
@@ -735,19 +727,10 @@ void MirQdpTool::MkQdp(const Interval* const interval,
         oval_vec.push_back(0.0);
     }
     GraphDataNerr2d* gd2d = new GraphDataNerr2d;
-    gd2d->Init();
-    DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
-    da1d_x->Init(xval_vec.size());
-    da1d_x->SetVal(xval_vec);
-    DataArrayNerr1d* da1d_o = new DataArrayNerr1d;
-    da1d_o->Init(oval_vec.size());
-    da1d_o->SetVal(oval_vec);
-    gd2d->SetXvalArr(da1d_x);
-    gd2d->SetOvalArr(da1d_o);
+    gd2d->Init(xval_vec.size());
+    gd2d->SetXvalArr(xval_vec);
+    gd2d->SetOvalArr(oval_vec);
     gd2d->SetFlagXvalSorted(0);
-    delete da1d_x;
-    delete da1d_o;
-
     MkQdp(gd2d, qdpout, "x,y", plot_conf);
     delete gd2d;
 }

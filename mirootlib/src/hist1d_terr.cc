@@ -280,27 +280,15 @@ GraphDataTerr2d* const HistDataTerr1d::GenGraph2d() const
     double* xval_serr_arr = NULL;
     GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
     GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
-
-    DataArrayTerr1d* da1d_x = new DataArrayTerr1d;
-    da1d_x->Init(nbin_xval);
-    da1d_x->SetVal(nbin_xval, xval_arr);
-    da1d_x->SetValTerr(nbin_xval, xval_serr_arr);
-    DataArrayTerr1d* da1d_o = new DataArrayTerr1d;
-    da1d_o->Init(nbin_xval);
-    da1d_o->SetVal(nbin_xval,
-                   GetOvalArr()->GetVal());
-    da1d_o->SetValTerr(nbin_xval,
-                       GetOvalArr()->GetValTerrPlus(),
-                       GetOvalArr()->GetValTerrMinus());
-
     GraphDataTerr2d* g2d = new GraphDataTerr2d;
-    g2d->Init();
-    g2d->SetXvalArr(da1d_x);
-    g2d->SetOvalArr(da1d_o);
+    g2d->Init(nbin_xval);
+    g2d->SetXvalArr(nbin_xval, xval_arr);
+    g2d->SetXvalTerrArr(nbin_xval, xval_serr_arr);
+    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
+    g2d->SetOvalTerrArr(nbin_xval,
+                        GetOvalArr()->GetValTerrPlus(),
+                        GetOvalArr()->GetValTerrMinus());
     g2d->SetFlagXvalSorted(1);
-
-    delete da1d_x;
-    delete da1d_o;
     delete [] xval_arr;
     delete [] xval_serr_arr;
     return g2d;

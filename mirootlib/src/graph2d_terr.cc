@@ -6,12 +6,61 @@
 
 // Init
 
-void GraphDataTerr2d::Init()
+void GraphDataTerr2d::Init(long ndata)
 {
     NullGraphData2d();
     NewXvalArrAsDataArrayTerr1d();
     NewOvalArrAsDataArrayTerr1d();
     SetFlagXvalSorted(0);
+    GetXvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);    
+}
+
+void GraphDataTerr2d::SetXvalTerrArr(long ndata, const double* const val_serr)
+{
+    GetXvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+
+void GraphDataTerr2d::SetXvalTerrArr(vector<double> val_serr)
+{
+    GetXvalArrNonConst()->SetValTerr(val_serr);
+}
+    
+void GraphDataTerr2d::SetXvalTerrArr(long ndata,
+                                     const double* const val_terr_plus,
+                                     const double* const val_terr_minus)
+{
+    GetXvalArrNonConst()->SetValTerr(ndata, val_terr_plus, val_terr_minus);
+}
+
+void GraphDataTerr2d::SetXvalTerrArr(vector<double> val_terr_plus,
+                                     vector<double> val_terr_minus)
+{
+    GetXvalArrNonConst()->SetValTerr(val_terr_plus, val_terr_minus);
+}
+
+
+void GraphDataTerr2d::SetOvalTerrArr(long ndata, const double* const val_serr)
+{
+    GetOvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+
+void GraphDataTerr2d::SetOvalTerrArr(vector<double> val_serr)
+{
+    GetOvalArrNonConst()->SetValTerr(val_serr);
+}
+    
+void GraphDataTerr2d::SetOvalTerrArr(long ndata,
+                                     const double* const val_terr_plus,
+                                     const double* const val_terr_minus)
+{
+    GetOvalArrNonConst()->SetValTerr(ndata, val_terr_plus, val_terr_minus);
+}
+
+void GraphDataTerr2d::SetOvalTerrArr(vector<double> val_terr_plus,
+                                     vector<double> val_terr_minus)
+{
+    GetOvalArrNonConst()->SetValTerr(val_terr_plus, val_terr_minus);
 }
 
 void GraphDataTerr2d::SetPoint(long idata,
@@ -52,9 +101,7 @@ void GraphDataTerr2d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(6 != ncolumn){
@@ -82,9 +129,7 @@ void GraphDataTerr2d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     double xval, xval_terr_plus, xval_terr_minus;
     double oval, oval_terr_plus, oval_terr_minus;
     if("x,y" == format){

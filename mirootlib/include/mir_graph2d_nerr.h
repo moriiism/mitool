@@ -11,7 +11,7 @@ public:
         NullGraphData2d();
     }
 
-    void Init();
+    void Init(long ndata);
     GraphDataNerr2d* const Clone() const;
     void Load(string file);
     void Load(string file, string format);

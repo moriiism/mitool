@@ -14,6 +14,26 @@ void GraphData2d::SetOvalArr(const DataArray1d* const val_arr)
     GetOvalArrNonConst()->Copy(val_arr);
 }
 
+void GraphData2d::SetXvalArr(long ndata, const double* const val)
+{
+    GetXvalArrNonConst()->SetVal(ndata, val);
+}
+
+void GraphData2d::SetXvalArr(vector<double> val)
+{
+    GetXvalArrNonConst()->SetVal(val);
+}
+
+void GraphData2d::SetOvalArr(long ndata, const double* const val)
+{
+    GetOvalArrNonConst()->SetVal(ndata, val);
+}
+
+void GraphData2d::SetOvalArr(vector<double> val)
+{
+    GetOvalArrNonConst()->SetVal(val);
+}
+
 void GraphData2d::SetPoint(long idata, double xval, double oval)
 {
     GetXvalArrNonConst()->SetValElm(idata, xval);
@@ -38,7 +58,7 @@ void GraphData2d::InitSetByFunc(const MirFunc* const func, const double* const p
     }
     delete hi1d;
 
-    Init();
+    Init(nbin_xval);
     DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
     da1d_x->Init(nbin_xval);
     da1d_x->SetVal(xval_vec);
@@ -57,7 +77,7 @@ void GraphData2d::Copy(const GraphData2d* const org)
     if(NULL == org) {abort();}
     
     CopyTitle(org);
-    Init();
+    Init(org->GetNdata());
     SetFlagXvalSorted(org->GetFlagXvalSorted());
     SetXvalArr(org->GetXvalArr());
     SetOvalArr(org->GetOvalArr());

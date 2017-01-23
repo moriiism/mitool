@@ -11,7 +11,7 @@ LDLIBS  := $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(LIB)
 TARGET := test_math  test_data1d  test_data1d_copy  \
 	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
 	test_hist_info \
-	test_graph2d_nerr \
+	test_graph2d  test_graph2d_nerr \
 	test_hist1d_nerr  test_hist1d_serr  \
 	test_hist2d_serr  
 
@@ -33,6 +33,8 @@ test_data1d_terr: test_data1d_terr.o
 test_hist_info: test_hist_info.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_hist_info_ope: test_hist_info_ope.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+test_graph2d: test_graph2d.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_graph2d_nerr: test_graph2d_nerr.o
 	$(CXXN) $@.o ${LDLIBS} -o $@

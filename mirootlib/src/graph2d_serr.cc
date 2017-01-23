@@ -6,13 +6,40 @@
 
 // init
 
-void GraphDataSerr2d::Init()
+void GraphDataSerr2d::Init(long ndata)
 {
     NullGraphData2d();
     NewXvalArrAsDataArraySerr1d();
     NewOvalArrAsDataArraySerr1d();
     SetFlagXvalSorted(0);
+    GetXvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);
 }
+
+void GraphDataSerr2d::SetXvalSerrArr(long ndata, const double* const val_serr)
+{
+    GetXvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+
+void GraphDataSerr2d::SetXvalSerrArr(vector<double> val_serr)
+{
+    GetXvalArrNonConst()->SetValSerr(val_serr);
+}
+
+void GraphDataSerr2d::SetOvalSerrArr(long ndata, const double* const val_serr)
+{
+    GetOvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+
+void GraphDataSerr2d::SetOvalSerrArr(vector<double> val_serr)
+{
+    GetOvalArrNonConst()->SetValSerr(val_serr);
+}
+
+
+
+
+
 
 void GraphDataSerr2d::SetPoint(long idata,
                                double xval, double xval_serr,
@@ -44,9 +71,7 @@ void GraphDataSerr2d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(4 != ncolumn){
@@ -72,9 +97,7 @@ void GraphDataSerr2d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     double xval, xval_serr, oval, oval_serr;
     if("x,xe,y,ye" == format){
         for(long idata = 0; idata < ndata; idata ++){

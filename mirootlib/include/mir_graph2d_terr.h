@@ -11,7 +11,21 @@ public:
         NullGraphData2d();
     }
 
-    void Init();
+    void Init(long ndata);
+    void SetXvalTerrArr(long ndata, const double* const val_serr);
+    void SetXvalTerrArr(vector<double> val_serr);
+    void SetXvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetXvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
+    void SetOvalTerrArr(long ndata, const double* const val_serr);
+    void SetOvalTerrArr(vector<double> val_serr);
+    void SetOvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetOvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
     using GraphData2d::SetPoint;
     void SetPoint(long idata,
                   double xval,
