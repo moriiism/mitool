@@ -14,8 +14,8 @@ class DataArray1d : public MiObject{
 public:
     DataArray1d(string class_name, string title) :
         MiObject(class_name, title),
-	  //	ndata_(0),
-	  //        val_(NULL),
+        ndata_(0),
+        val_(NULL),
         flag_val_sorted_(0) {}
     virtual ~DataArray1d() {}
 
@@ -104,11 +104,8 @@ public:
     //
 
     // get
-    // long GetNdata() const {return ndata_;};
-    long GetNdata() const {return val_.size();};
-    // const double* const GetVal() const {return val_;};
-    const vector<double> GetVal() const {return val_;};
-
+    long GetNdata() const {return ndata_;};
+    const double* const GetVal() const {return val_;};
     double GetValElm(long idata) const;
     int GetFlagValSorted() const {return flag_val_sorted_;};
     
@@ -169,9 +166,8 @@ protected:
     void IsValSerrPlus(double val_serr) const;
     
 private:
-    //long ndata_;
-    //double* val_;
-    vector<double> val_;
+    long ndata_;
+    double* val_;
     int flag_val_sorted_; // -1: not sorted, 0: not checked, 1: sorted
 };
 

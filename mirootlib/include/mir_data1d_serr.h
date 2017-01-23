@@ -7,7 +7,7 @@ class DataArraySerr1d : public DataArray1d{
 public:
     explicit DataArraySerr1d(string title = "") :
         DataArray1d("DataArraySerr1d", title),
-	  val_serr_(NULL) {}
+        val_serr_(NULL) {}
     ~DataArraySerr1d() {
         NullDataArray1d();
         NullDataArraySerr1d();
@@ -55,7 +55,6 @@ private:
     void NullDataArraySerr1d();
     void InitDataArraySerr1d(long ndata);
     void IsValSerrNotNull() const;
-
 };
 
 

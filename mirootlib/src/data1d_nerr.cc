@@ -84,7 +84,7 @@ void DataArrayNerr1d::Sort()
         MPrintInfoClass("It has been already sorted.");
         return;
     }
-    if(0 == GetVal().size()){
+    if(NULL == GetVal()){
         MPrintErrClass("GetVal() == NULL");
         abort();
     }

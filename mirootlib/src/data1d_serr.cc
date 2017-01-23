@@ -282,7 +282,6 @@ void DataArraySerr1d::NullDataArraySerr1d()
     if(NULL != val_serr_) {delete [] val_serr_; val_serr_ = NULL;}
 }
 
-
 void DataArraySerr1d::InitDataArraySerr1d(long ndata)
 {
     NullDataArraySerr1d();
