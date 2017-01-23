@@ -44,7 +44,8 @@ void HistInfo1dOpe::GenSelectHi1dArrByInterval(const HistInfo1d* const hist_info
                 xval_up_vec[ihi1d],
                 nbin_vec[ihi1d]);
         }
-        interval_sel->InitSet(xval_lo_vec, xval_up_vec);
+        interval_sel->Init(xval_lo_vec.size());
+        interval_sel->Set(xval_lo_vec, xval_up_vec);
     } else if ("inclusive" == select_type){
         vector<double> xval_lo_vec;
         vector<double> xval_up_vec;
@@ -79,7 +80,8 @@ void HistInfo1dOpe::GenSelectHi1dArrByInterval(const HistInfo1d* const hist_info
                 xval_up_vec[ihi1d],
                 nbin_vec[ihi1d]);
         }
-        interval_sel->InitSet(xval_lo_vec, xval_up_vec);
+        interval_sel->Init(xval_lo_vec.size());
+        interval_sel->Set(xval_lo_vec, xval_up_vec);
     } else if ("center" == select_type){
         vector<double> xval_lo_vec;
         vector<double> xval_up_vec;
@@ -115,7 +117,8 @@ void HistInfo1dOpe::GenSelectHi1dArrByInterval(const HistInfo1d* const hist_info
                 xval_up_vec[ihi1d],
                 nbin_vec[ihi1d]);
         }
-        interval_sel->InitSet(xval_lo_vec, xval_up_vec);
+        interval_sel->Init(xval_lo_vec.size());
+        interval_sel->Set(xval_lo_vec, xval_up_vec);
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad select_type(=%s)", select_type.c_str());

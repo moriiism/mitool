@@ -30,9 +30,9 @@ public:
 
     void FillRandom(const MirFunc* const func,
                     const MirFuncPar* const func_par,
-                    int rand_seed = 1);
+                    int rand_seed);
     void FillRandom(const HistData2d* const hist_data,
-                    int rand_seed = 1);
+                    int rand_seed);
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_NERR_H_

@@ -25,10 +25,64 @@ public:
     virtual ~GraphData3d() {}
 
     // Init
-    virtual void Init() = 0;
+    virtual void Init(long ndata) = 0;
     void SetXvalArr(const DataArray1d* const val_arr);
     void SetYvalArr(const DataArray1d* const val_arr);
     void SetOvalArr(const DataArray1d* const val_arr);
+
+    void SetXvalArr(long ndata, const double* const val);
+    void SetXvalArr(vector<double> val);
+    void SetYvalArr(long ndata, const double* const val);
+    void SetYvalArr(vector<double> val);
+    void SetOvalArr(long ndata, const double* const val);
+    void SetOvalArr(vector<double> val);
+
+    void SetXvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetXvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetYvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetYvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+
+    void SetXvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetXvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    void SetXvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    void SetXvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
+    void SetYvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetYvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    void SetYvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    void SetYvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
+    void SetOvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    void SetOvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    void SetOvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    void SetOvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
 
     void SetPoint(long idata, double xval, double yval, double oval);
     virtual void SetPoint(long idata,

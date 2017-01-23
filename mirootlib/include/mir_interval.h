@@ -26,13 +26,6 @@ public:
     void Set(vector<double> tstart,
              vector<double> tstop);
 
-    // Init & Set
-    void InitSet(long nterm,
-                 const double* const tstart,
-                 const double* const tstop);
-    void InitSet(vector<double> tstart,
-                 vector<double> tstop);
-
     // one interval
     void InitSet(double tstart, double tstop);
 
@@ -124,10 +117,6 @@ public:
     void Set(const Interval* const interval_x,
              const Interval* const interval_y);
 
-    // Init & Set
-    void InitSet(const Interval* const interval_x,
-                 const Interval* const interval_y);
-
     void Copy(const Interval2dim* const org);
     Interval2dim* const Clone() const;    
 
@@ -168,10 +157,6 @@ public:
     // set
     void Set(long ndim,
              const Interval* const* const interval_arr);
-
-    // Init & Set
-    void InitSet(long ndim,
-                 const Interval* const* const interval_arr);
 
     void Copy(const IntervalNdim* const org);
     IntervalNdim* const Clone() const;

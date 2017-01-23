@@ -9,9 +9,13 @@
 
 namespace HistData2dOpe
 {
-    void GetResValHd2(const HistData2d* const hist_data,
+    void FillGd2d(const HistDataNerr2d* const hd2d,
+                  const GraphDataNerr2d* const gd2d,
+                  HistDataNerr2d* const hist_res_out);
+    
+    void GetResValHd2(const HistDataNerr2d* const hist_data,
                       const MirFunc* const func, const double* const par,
-                      HistData2d* const hist_res_out);
+                      HistDataNerr2d* const hist_res_out);
     void GetResValHd2(const HistDataSerr2d* const hist_data,
                       const MirFunc* const func, const double* const par,
                       HistDataSerr2d* const hist_res_out);
@@ -19,9 +23,9 @@ namespace HistData2dOpe
                       const MirFunc* const func, const double* const par,
                       HistDataTerr2d* const hist_res_out);
     
-    void GetResRatioHd2(const HistData2d* const hist_data,
+    void GetResRatioHd2(const HistDataNerr2d* const hist_data,
                         const MirFunc* const func, const double* const par,
-                        HistData2d* const hist_res_out);
+                        HistDataNerr2d* const hist_res_out);
     void GetResRatioHd2(const HistDataSerr2d* const hist_data,
                         const MirFunc* const func, const double* const par,
                         HistDataSerr2d* const hist_res_out);
@@ -38,14 +42,14 @@ namespace HistData2dOpe
     
     int IsFormatSame(const HistData2d* const hist_data1,
                      const HistData2d* const hist_data2);
-    int IsFormatSame(const HistData2d* const* const hist_data_arr,
+    int IsFormatSame(const HistDataNerr2d* const* const hist_data_arr,
                      int nhist);
     int IsFormatSame(const HistDataSerr2d* const* const hist_data_arr,
                      int nhist);
     int IsFormatSame(const HistDataTerr2d* const* const hist_data_arr,
                      int nhist);
 
-    void GenContMinFcn(const HistData2d* const hd2d,
+    void GenContMinFcn(const HistDataNerr2d* const hd2d,
                        double zval_min,
                        int nlevel,
                        const double* const delta_minfcn_arr,
@@ -54,7 +58,7 @@ namespace HistData2dOpe
                        double offset_xval = 0.0,
                        double offset_yval = 0.0);
 
-    void GenContWithBestMinFcn(const HistData2d* const hd2d,
+    void GenContWithBestMinFcn(const HistDataNerr2d* const hd2d,
                                double zval_min, double xval_best, double yval_best,
                                int nlevel, const double* const delta_minfcn_arr,
                                MirContWithBest*** const cont_with_best_arr_ptr,
@@ -64,7 +68,7 @@ namespace HistData2dOpe
 
 
     // hd2d_mask: 1 or 0
-    void GetHd2dMaskWithMargin(const HistData2d* const hd2d_mask,
+    void GetHd2dMaskWithMargin(const HistDataNerr2d* const hd2d_mask,
                                double xval_margin, double yval_margin,
                                HistData2d* const hd2d_with_margin_out);
     

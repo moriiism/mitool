@@ -176,7 +176,9 @@ public:
     // virtual GraphData3d* const GenGraph3d() const = 0;
     virtual TH2D* const GenTH2D(double offset_xval,
                                 double offset_yval,
-                                double offset_oval) const = 0;
+                                double offset_oval) const
+        {MPrintErrVFunc; abort();};
+        
     void MkTH2Fig(string outfig,
                   MirRootTool* const root_tool,
                   double offset_xval = 0.0,
@@ -202,7 +204,7 @@ public:
     // poisson error
     virtual void FillRandom(const MirFunc* const func,
                             const MirFuncPar* const func_par,
-                            int rand_seed = 1)
+                            int rand_seed)
         {MPrintErrVFunc; abort();};
 
     // gaussian error
@@ -210,12 +212,12 @@ public:
                             const MirFuncPar* const func_par,
                             const MirFunc* const func_sigma,
                             const MirFuncPar* const func_par_sigma,
-                            int rand_seed = 1)
+                            int rand_seed)
         {MPrintErrVFunc; abort();};    
 
     // poisson error
     virtual void FillRandom(const HistData2d* const hist_data,
-                            int rand_seed = 1)
+                            int rand_seed)
         {MPrintErrVFunc; abort();};
     
     // generate events from histogram with poisson statistic

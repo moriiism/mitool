@@ -49,12 +49,6 @@ public:
                    double offset_yval,
                    double offset_oval) const;
 
-    TH2D* const GenTH2D(double offset_xval,
-                        double offset_yval,
-                        double offset_oval) const
-        {abort();}
-    
-
     //virtual GraphDataTerr3d* const GenGraph3d() const;
 };
 

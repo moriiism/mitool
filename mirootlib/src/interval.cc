@@ -65,22 +65,6 @@ void Interval::Set(vector<double> tstart,
     }
 }
 
-
-void Interval::InitSet(long nterm,
-                       const double* const tstart,
-                       const double* const tstop)
-{
-    Init(nterm);
-    Set(nterm, tstart, tstop);
-}
-
-void Interval::InitSet(vector<double> tstart,
-                       vector<double> tstop)
-{
-    Init(tstart.size());
-    Set(tstart, tstop);
-}
-
 void Interval::InitSet(double tstart, double tstop)
 {
     Init(1);
@@ -131,9 +115,10 @@ void Interval::Copy(const Interval* const org)
     if(NULL == org) {abort();}
     
     CopyTitle(org);
-    InitSet(org->GetNterm(),
-            org->GetTstart(),
-            org->GetTstop());
+    Init(org->GetNterm());
+    Set(org->GetNterm(),
+        org->GetTstart(),
+        org->GetTstop());
 }
 
 Interval* const Interval::Clone() const
@@ -879,22 +864,15 @@ void Interval2dim::Set(const Interval* const interval_x,
     interval_y_->Copy(interval_y);
 }
 
-
-void Interval2dim::InitSet(const Interval* const interval_x,
-                           const Interval* const interval_y)
-{
-    Init();
-    Set(interval_x, interval_y);
-}
-
 void Interval2dim::Copy(const Interval2dim* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
     
     CopyTitle(org);
-    InitSet(org->GetIntervalX(),
-            org->GetIntervalY());
+    Init();
+    Set(org->GetIntervalX(),
+        org->GetIntervalY());
 }
 
 Interval2dim* const Interval2dim::Clone() const
@@ -963,22 +941,15 @@ void IntervalNdim::Set(long ndim,
     }
 }
 
-
-void IntervalNdim::InitSet(long ndim,
-                           const Interval* const* const interval_arr)
-{
-    Init(ndim);
-    Set(ndim, interval_arr);
-}
-
 void IntervalNdim::Copy(const IntervalNdim* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
 
     CopyTitle(org);
-    InitSet(org->GetNdim(),
-            org->GetIntervalArr());
+    Init(org->GetNdim());
+    Set(org->GetNdim(),
+        org->GetIntervalArr());
 }
 
 IntervalNdim* const IntervalNdim::Clone() const

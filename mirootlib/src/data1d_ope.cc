@@ -218,9 +218,9 @@ void DataArray1dOpe::GetMax(const DataArrayTerr1d* const data_array1,
     }
 }
 
-void DataArray1dOpe::GetAdd(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArray1d* data_array_out)
+void DataArray1dOpe::GetAdd(const DataArrayNerr1d* const data_array1,
+                            const DataArrayNerr1d* const data_array2,
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
@@ -251,9 +251,9 @@ void DataArray1dOpe::GetAdd(const DataArraySerr1d* const data_array1,
     }
 }
 
-void DataArray1dOpe::GetSub(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArray1d* data_array_out)
+void DataArray1dOpe::GetSub(const DataArrayNerr1d* const data_array1,
+                            const DataArrayNerr1d* const data_array2,
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
@@ -285,9 +285,9 @@ void DataArray1dOpe::GetSub(const DataArraySerr1d* const data_array1,
     }
 }
 
-void DataArray1dOpe::GetMul(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArray1d* data_array_out)
+void DataArray1dOpe::GetMul(const DataArrayNerr1d* const data_array1,
+                            const DataArrayNerr1d* const data_array2,
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
@@ -319,10 +319,10 @@ void DataArray1dOpe::GetMul(const DataArraySerr1d* const data_array1,
 }
 
 
-long DataArray1dOpe::GetDiv(const DataArray1d* const data_array_num,
-                            const DataArray1d* const data_array_den,
+long DataArray1dOpe::GetDiv(const DataArrayNerr1d* const data_array_num,
+                            const DataArrayNerr1d* const data_array_den,
                             vector<long>* const index_bad_vec_ptr,
-                            DataArray1d* data_array_out)
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_num, data_array_den);
     long ndata = data_array_num->GetNdata();
@@ -373,9 +373,9 @@ long DataArray1dOpe::GetDiv(const DataArraySerr1d* const data_array_num,
     return index_bad_vec.size();
 }
 
-void DataArray1dOpe::GetAMean(const DataArray1d* const data_array1,
-                              const DataArray1d* const data_array2,
-                              DataArray1d* data_array_out)
+void DataArray1dOpe::GetAMean(const DataArrayNerr1d* const data_array1,
+                              const DataArrayNerr1d* const data_array2,
+                              DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
@@ -439,10 +439,10 @@ long DataArray1dOpe::GetWMean(const DataArraySerr1d* const data_array1,
     return index_bad_vec.size();
 }
 
-long DataArray1dOpe::GetSubAddRatio(const DataArray1d* const data_array1,
-                                    const DataArray1d* const data_array2,
+long DataArray1dOpe::GetSubAddRatio(const DataArrayNerr1d* const data_array1,
+                                    const DataArrayNerr1d* const data_array2,
                                     vector<long>* const index_bad_vec_ptr,
-                                    DataArray1d* data_array_out)
+                                    DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array1, data_array2);
     long ndata = data_array1->GetNdata();
@@ -498,9 +498,9 @@ long DataArray1dOpe::GetSubAddRatio(const DataArraySerr1d* const data_array1,
 
 // For N DataArray1d
 
-void DataArray1dOpe::GetMin(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetMin(const DataArrayNerr1d* const* const data_array_arr,
                             int ndata_array,
-                            DataArray1d* data_array_out)
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -565,9 +565,9 @@ void DataArray1dOpe::GetMin(const DataArrayTerr1d* const* const data_array_arr,
     }
 }
 
-void DataArray1dOpe::GetMax(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetMax(const DataArrayNerr1d* const* const data_array_arr,
                             int ndata_array,
-                            DataArray1d* data_array_out)
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -634,9 +634,9 @@ void DataArray1dOpe::GetMax(const DataArrayTerr1d* const* const data_array_arr,
 }
 
 
-void DataArray1dOpe::GetAdd(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetAdd(const DataArrayNerr1d* const* const data_array_arr,
                             int ndata_array,
-                            DataArray1d* data_array_out)
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -683,9 +683,9 @@ void DataArray1dOpe::GetAdd(const DataArraySerr1d* const* const data_array_arr,
     }
 }
 
-void DataArray1dOpe::GetAMean(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetAMean(const DataArrayNerr1d* const* const data_array_arr,
                               int ndata_array,
-                              DataArray1d* data_array_out)
+                              DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -771,9 +771,9 @@ long DataArray1dOpe::GetWMean(const DataArraySerr1d* const* const data_array_arr
 }
 
 
-void DataArray1dOpe::GetVariance(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetVariance(const DataArrayNerr1d* const* const data_array_arr,
                                  int ndata_array,
-                                 DataArray1d* data_array_out)
+                                 DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -791,9 +791,9 @@ void DataArray1dOpe::GetVariance(const DataArray1d* const* const data_array_arr,
 }
 
 
-void DataArray1dOpe::GetStddev(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetStddev(const DataArrayNerr1d* const* const data_array_arr,
                                int ndata_array,
-                               DataArray1d* data_array_out)
+                               DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -811,9 +811,9 @@ void DataArray1dOpe::GetStddev(const DataArray1d* const* const data_array_arr,
 }
 
 
-void DataArray1dOpe::GetUnbiasedVariance(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetUnbiasedVariance(const DataArrayNerr1d* const* const data_array_arr,
                                          int ndata_array,
-                                         DataArray1d* data_array_out)
+                                         DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -830,9 +830,9 @@ void DataArray1dOpe::GetUnbiasedVariance(const DataArray1d* const* const data_ar
     }
 }
 
-void DataArray1dOpe::GetSqrtOfUnbiasedVariance(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetSqrtOfUnbiasedVariance(const DataArrayNerr1d* const* const data_array_arr,
                                                int ndata_array,
-                                               DataArray1d* data_array_out)
+                                               DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -850,9 +850,9 @@ void DataArray1dOpe::GetSqrtOfUnbiasedVariance(const DataArray1d* const* const d
 }
 
 
-void DataArray1dOpe::GetRMS(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetRMS(const DataArrayNerr1d* const* const data_array_arr,
                             int ndata_array,
-                            DataArray1d* data_array_out)
+                            DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -869,9 +869,9 @@ void DataArray1dOpe::GetRMS(const DataArray1d* const* const data_array_arr,
     }
 }
 
-void DataArray1dOpe::GetMedian(const DataArray1d* const* const data_array_arr,
+void DataArray1dOpe::GetMedian(const DataArrayNerr1d* const* const data_array_arr,
                                int ndata_array,
-                               DataArray1d* data_array_out)
+                               DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     long ndata = data_array_arr[0]->GetNdata();
@@ -889,10 +889,10 @@ void DataArray1dOpe::GetMedian(const DataArray1d* const* const data_array_arr,
 }
 
 
-void DataArray1dOpe::GetAddWithMask(const DataArray1d* const* const data_array_arr,
-                                    const DataArray1d* const* const mask_array_arr,
+void DataArray1dOpe::GetAddWithMask(const DataArrayNerr1d* const* const data_array_arr,
+                                    const DataArrayNerr1d* const* const mask_array_arr,
                                     int ndata_array,
-                                    DataArray1d* data_array_out)
+                                    DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     IsFormatSame(mask_array_arr, ndata_array);
@@ -911,7 +911,7 @@ void DataArray1dOpe::GetAddWithMask(const DataArray1d* const* const data_array_a
 }
 
 void DataArray1dOpe::GetAddWithMask(const DataArraySerr1d* const* const data_array_arr,
-                                    const DataArray1d* const* const mask_array_arr,
+                                    const DataArrayNerr1d* const* const mask_array_arr,
                                     int ndata_array,
                                     DataArraySerr1d* data_array_out)
 {
@@ -948,11 +948,11 @@ void DataArray1dOpe::GetAddWithMask(const DataArraySerr1d* const* const data_arr
 }
 
 
-void DataArray1dOpe::GetAMeanWithMask(const DataArray1d* const* const data_array_arr,
-                                      const DataArray1d* const* const mask_array_arr,
+void DataArray1dOpe::GetAMeanWithMask(const DataArrayNerr1d* const* const data_array_arr,
+                                      const DataArrayNerr1d* const* const mask_array_arr,
                                       int ndata_array,
-                                      DataArray1d* const nvalid_array_out,
-                                      DataArray1d* data_array_out)
+                                      DataArrayNerr1d* const nvalid_array_out,
+                                      DataArrayNerr1d* data_array_out)
 {
     IsFormatSame(data_array_arr, ndata_array);
     IsFormatSame(mask_array_arr, ndata_array);
@@ -981,7 +981,7 @@ void DataArray1dOpe::GetAMeanWithMask(const DataArray1d* const* const data_array
 
 
 long DataArray1dOpe::GetWMeanWithMask(const DataArraySerr1d* const* const data_array_arr,
-                                      const DataArray1d* const* const mask_array_arr,
+                                      const DataArrayNerr1d* const* const mask_array_arr,
                                       int ndata_array, vector<long>* const index_bad_vec_ptr,
                                       DataArraySerr1d* const nvalid_array_out,
                                       DataArraySerr1d* data_array_out)
@@ -1097,7 +1097,8 @@ void DataArray1dOpe::GetSelectDa1dByInterval(const DataArrayNerr1d* const data_a
             }
         }
     }
-    data_array_out->InitSetVal(val_vec);
+    data_array_out->Init(val_vec.size());
+    data_array_out->SetVal(val_vec);
 }
 
 void DataArray1dOpe::GetSelectDa1dByInterval(const DataArraySerr1d* const data_array,
@@ -1119,7 +1120,9 @@ void DataArray1dOpe::GetSelectDa1dByInterval(const DataArraySerr1d* const data_a
             }
         }
     }
-    data_array_out->InitSetValAndSerr(val_vec, val_serr_vec);
+    data_array_out->Init(val_vec.size());
+    data_array_out->SetVal(val_vec);
+    data_array_out->SetValSerr(val_serr_vec);
 }
 
 void DataArray1dOpe::GetSelectDa1dByInterval(const DataArrayTerr1d* const data_array,
@@ -1144,9 +1147,9 @@ void DataArray1dOpe::GetSelectDa1dByInterval(const DataArrayTerr1d* const data_a
             }
         }
     }
-    data_array_out->InitSetValAndTerr(val_vec,
-                                      val_terr_plus_vec,
-                                      val_terr_minus_vec);
+    data_array_out->Init(val_vec.size());
+    data_array_out->SetVal(val_vec);
+    data_array_out->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
 }
 
 
@@ -1155,9 +1158,9 @@ void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArrayNerr1d* const dat
                                                 DataArrayNerr1d*** data_array_arr_ptr)
 {
     int nterm = interval->GetNterm();
-    DataArray1d** data_array_arr = new DataArray1d* [nterm];
+    DataArrayNerr1d** data_array_arr = new DataArrayNerr1d* [nterm];
     for(long iterm = 0; iterm < nterm; iterm ++){
-        data_array_arr[iterm] = new DataArray1d;
+        data_array_arr[iterm] = new DataArrayNerr1d;
         vector<double> val_vec;
         long ndata = data_array->GetNdata();
         for(long idata = 0; idata < ndata; idata ++){
@@ -1167,7 +1170,8 @@ void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArrayNerr1d* const dat
                 val_vec.push_back(val);
             }
         }
-        data_array_arr[iterm]->InitSetVal(val_vec);
+        data_array_arr[iterm]->Init(val_vec.size());
+        data_array_arr[iterm]->SetVal(val_vec);
     }
     *data_array_arr_ptr = data_array_arr;
 }
@@ -1193,7 +1197,9 @@ void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArraySerr1d* const dat
                 val_serr_vec.push_back(val_serr);
             }
         }
-        data_array_arr[iterm]->InitSetValAndSerr(val_vec, val_serr_vec);
+        data_array_arr[iterm]->Init(val_vec.size());
+        data_array_arr[iterm]->SetVal(val_vec);
+        data_array_arr[iterm]->SetValSerr(val_serr_vec);
     }
     *data_array_arr_ptr = data_array_arr;
 }
@@ -1221,9 +1227,10 @@ void DataArray1dOpe::GenSelectDa1dArrByInterval(const DataArrayTerr1d* const dat
                 val_terr_minus_vec.push_back(val_terr_minus);
             }
         }
-        data_array_arr[iterm]->InitSetValAndTerr(val_vec,
-                                                 val_terr_plus_vec,
-                                                 val_terr_minus_vec);
+        data_array_arr[iterm]->Init(val_vec.size());
+        data_array_arr[iterm]->SetVal(val_vec);
+        data_array_arr[iterm]->SetValTerr(val_terr_plus_vec,
+                                          val_terr_minus_vec);
     }
     *data_array_arr_ptr = data_array_arr;
 }

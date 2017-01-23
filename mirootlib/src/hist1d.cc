@@ -97,22 +97,31 @@ void HistData1d::SetByFunc(const MirFunc* const func, const double* const par)
     }
 }
 
-
-
 //void HistData1d::SetByGraphData2d(const GraphData2d* const g2d)
 //{
-//    HistData1d* h1d_sum = new HistData1d;
+//    HistDataNerr1d* h1d_sum = new HistDataNerr1d;
 //    h1d_sum->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
-//    HistData1d* h1d_num = new HistData1d;
+//    HistDataNerr1d* h1d_num = new HistDataNerr1d;
 //    h1d_num->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
 //    for(long idata = 0; idata < g2d->GetNdata(); idata ++){
 //        h1d_sum->Fill(g2d->GetXvalElm(idata), g2d->GetOvalElm(idata));
 //        h1d_num->Fill(g2d->GetXvalElm(idata));
 //    }
+//    
+//    
+//
+//
+//    
 //    HistData1d* h1d_amean = new HistData1d;
 //    h1d_amean->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
 //    vector<long> index_bad_vec;
 //    h1d_amean->Div(h1d_sum, h1d_num, &index_bad_vec);
+//
+//
+//    h1d_amean->GetOvalArr()
+//    SetOvalArr()
+//    
+//
 //    Set(h1d_amean);
 //
 //    delete h1d_sum;
@@ -414,7 +423,8 @@ Interval* const HistData1d::GenIntervalAboveThreshold(double threshold) const
     }
 
     Interval* interval = new Interval;
-    interval->InitSet(tstart_vec, tstop_vec);
+    interval->Init(tstart_vec.size());
+    interval->Set(tstart_vec, tstop_vec);
 
     // tdiff must be less than bin-width
     double tdiff = GetXvalBinWidth() / 10.; 
@@ -434,7 +444,8 @@ Interval* const HistData1d::GenIntervalBelowThreshold(double threshold) const
     }
 
     Interval* interval = new Interval;
-    interval->InitSet(tstart_vec, tstop_vec);
+    interval->Init(tstart_vec.size());
+    interval->Set(tstart_vec, tstop_vec);
 
     // tdiff must be less than bin-width
     double tdiff = GetXvalBinWidth() / 10.; 

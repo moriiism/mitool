@@ -11,7 +11,7 @@ public:
         NullGraphData3d();
     }
 
-    void Init();
+    void Init(long ndata);
     GraphDataNerr3d* const Clone() const;
     void Load(string file);
     void Load(string file, string format);

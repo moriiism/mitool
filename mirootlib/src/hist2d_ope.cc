@@ -1,8 +1,16 @@
 #include "mir_hist2d_ope.h"
 
-void HistData2dOpe::GetResValHd2(const HistData2d* const hist_data,
+void HistData2dOpe::FillGd2d(const HistDataNerr2d* const hd2d,
+                             const GraphDataNerr2d* const gd2d,
+                             HistDataNerr2d* const hist_res_out)
+{
+
+
+}
+
+void HistData2dOpe::GetResValHd2(const HistDataNerr2d* const hist_data,
                                  const MirFunc* const func, const double* const par,
-                                 HistData2d* const hist_res_out)
+                                 HistDataNerr2d* const hist_res_out)
 {
     long nbinx = hist_data->GetNbinX();
     long nbiny = hist_data->GetNbinY();

@@ -295,7 +295,8 @@ Interval* const GraphDataSerr2d::GenInterval() const
     }
 
     Interval* interval = new Interval;
-    interval->InitSet(tstart_vec, tstop_vec);
+    interval->Init(tstart_vec.size());
+    interval->Set(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
     double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
                                                  term_half_width_arr);
@@ -319,7 +320,8 @@ Interval* const GraphDataSerr2d::GenIntervalAboveThreshold(double threshold) con
     }
 
     Interval* interval = new Interval;
-    interval->InitSet(tstart_vec, tstop_vec);
+    interval->Init(tstart_vec.size());
+    interval->Set(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
     double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
                                                  term_half_width_arr);
@@ -343,7 +345,8 @@ Interval* const GraphDataSerr2d::GenIntervalBelowThreshold(double threshold) con
     }
 
     Interval* interval = new Interval;
-    interval->InitSet(tstart_vec, tstop_vec);
+    interval->Init(tstart_vec.size());
+    interval->Set(tstart_vec, tstop_vec);
     double* term_half_width_arr = interval->GenTermHalfWidth();
     double term_half_width_min = MirMath::GetMin(interval->GetNterm(),
                                                  term_half_width_arr);

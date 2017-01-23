@@ -70,8 +70,9 @@ public:
     // Set by Func
     void SetByFunc(const MirFunc* const func, const double* const par);
 
-    // set by amean of graph data
-    // void SetByGraphData2d(const GraphData2d* const g2d);
+    //// set by amean of graph data
+    //void SetByGraphData2d(const GraphData2d* const g2d);
+    
     // Init & Set by graph2d, only if xval_arr of graph2d is equally-spaced.
     //void InitSetByGraphData2d(const GraphDataNerr2d* const g2d)
     //    {MPrintErrVFunc; abort();};

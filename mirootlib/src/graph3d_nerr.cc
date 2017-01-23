@@ -4,12 +4,15 @@
 // public
 //
 
-void GraphDataNerr3d::Init()
+void GraphDataNerr3d::Init(long ndata)
 {
     NullGraphData3d();
     NewXvalArrAsDataArrayNerr1d();
     NewYvalArrAsDataArrayNerr1d();
     NewOvalArrAsDataArrayNerr1d();
+    GetXvalArrNonConst()->Init(ndata);
+    GetYvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);
 }
 
 GraphDataNerr3d* const GraphDataNerr3d::Clone() const
@@ -26,10 +29,7 @@ void GraphDataNerr3d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     double xval, yval, oval;
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
@@ -51,10 +51,7 @@ void GraphDataNerr3d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);    
+    Init(ndata);
     double xval, yval, oval;
     if("x,y,z" == format){
         for(long idata = 0; idata < ndata; idata ++){

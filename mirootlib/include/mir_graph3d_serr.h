@@ -11,7 +11,14 @@ public:
         NullGraphData3d();
     }
 
-    void Init();
+    void Init(long ndata);
+    void SetXvalSerrArr(long ndata, const double* const val_serr);
+    void SetXvalSerrArr(vector<double> val_serr);
+    void SetYvalSerrArr(long ndata, const double* const val_serr);
+    void SetYvalSerrArr(vector<double> val_serr);
+    void SetOvalSerrArr(long ndata, const double* const val_serr);
+    void SetOvalSerrArr(vector<double> val_serr);
+    
     using GraphData3d::SetPoint;
     void SetPoint(long idata,
                   double xval, double xval_serr,

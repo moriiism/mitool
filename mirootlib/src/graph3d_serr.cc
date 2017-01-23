@@ -6,12 +6,45 @@
 
 // Init
 
-void GraphDataSerr3d::Init()
+void GraphDataSerr3d::Init(long ndata)
 {
     NullGraphData3d();
     NewXvalArrAsDataArraySerr1d();
     NewYvalArrAsDataArraySerr1d();
     NewOvalArrAsDataArraySerr1d();
+    GetXvalArrNonConst()->Init(ndata);
+    GetYvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);    
+}
+
+void GraphDataSerr3d::SetXvalSerrArr(long ndata, const double* const val_serr)
+{
+    GetXvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+
+void GraphDataSerr3d::SetXvalSerrArr(vector<double> val_serr)
+{
+    GetXvalArrNonConst()->SetValSerr(val_serr);
+}
+
+void GraphDataSerr3d::SetYvalSerrArr(long ndata, const double* const val_serr)
+{
+    GetYvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+
+void GraphDataSerr3d::SetYvalSerrArr(vector<double> val_serr)
+{
+    GetYvalArrNonConst()->SetValSerr(val_serr);
+}
+
+void GraphDataSerr3d::SetOvalSerrArr(long ndata, const double* const val_serr)
+{
+    GetOvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+
+void GraphDataSerr3d::SetOvalSerrArr(vector<double> val_serr)
+{
+    GetOvalArrNonConst()->SetValSerr(val_serr);
 }
 
 void GraphDataSerr3d::SetPoint(long idata,
@@ -48,10 +81,7 @@ void GraphDataSerr3d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);
+    Init(ndata);
     double xval, xval_serr, yval, yval_serr, oval, oval_serr;
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
@@ -78,10 +108,7 @@ void GraphDataSerr3d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);    
+    Init(ndata);
     double xval, xval_serr, yval, yval_serr, oval, oval_serr;
     if("x,xe,y,ye,z,ze" == format){
         for(long idata = 0; idata < ndata; idata ++){

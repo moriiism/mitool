@@ -233,7 +233,7 @@ void HistDataNerr2d::PrintData(FILE* fp, string format,
 //}
 
 
-TH2D* const HistData2d::GenTH2D(double offset_xval,
+TH2D* const HistDataNerr2d::GenTH2D(double offset_xval,
                                 double offset_yval,
                                 double offset_oval) const
 {
@@ -294,4 +294,43 @@ TH2D* const HistData2d::GenTH2D(double offset_xval,
 //    return hd2_new;
 //}
 
+void HistDataNerr2d::FillRandom(const MirFunc* const func,
+                                const MirFuncPar* const func_par,
+                                int rand_seed)
+{
+    TRandom3* trand = new TRandom3(rand_seed);
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        double xval = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
+        double yval = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
+
+        double xval_arr[2];
+        xval_arr[0] = xval;
+        xval_arr[1] = yval;
+        double oval = func->Eval(xval_arr, func_par->GetPar());
+
+        double oval_rand = trand->PoissonD(oval);
+        SetOvalElm(ibin_x, ibin_y, oval_rand);
+    }
+    delete trand;
+}
+
+void HistDataNerr2d::FillRandom(const HistData2d* const hist_data,
+                                int rand_seed)
+{
+    Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+         hist_data->GetNbinY(), hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    
+    TRandom3* trand = new TRandom3(rand_seed);
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        
+        // poisson error
+        double oval_rand = trand->PoissonD(hist_data->GetOvalElm(ibin_x, ibin_y));
+        SetOvalElm(ibin_x, ibin_y, oval_rand);
+    }
+    delete trand;
+}
 

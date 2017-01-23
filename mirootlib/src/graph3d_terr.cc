@@ -6,12 +6,93 @@
 
 // Init
 
-void GraphDataTerr3d::Init()
+void GraphDataTerr3d::Init(long ndata)
 {
     NullGraphData3d();
     NewXvalArrAsDataArrayTerr1d();
     NewYvalArrAsDataArrayTerr1d();
     NewOvalArrAsDataArrayTerr1d();
+    GetXvalArrNonConst()->Init(ndata);
+    GetYvalArrNonConst()->Init(ndata);
+    GetOvalArrNonConst()->Init(ndata);
+}
+
+void GraphDataTerr3d::SetXvalTerrArr(long ndata, const double* const val_serr)
+{
+    GetXvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+
+void GraphDataTerr3d::SetXvalTerrArr(vector<double> val_serr)
+{
+    GetXvalArrNonConst()->SetValTerr(val_serr);
+}
+
+void GraphDataTerr3d::SetXvalTerrArr(long ndata,
+                                     const double* const val_terr_plus,
+                                     const double* const val_terr_minus)
+{
+    GetXvalArrNonConst()->SetValTerr(ndata,
+                                     val_terr_plus,
+                                     val_terr_minus);
+}
+    
+void GraphDataTerr3d::SetXvalTerrArr(vector<double> val_terr_plus,
+                                     vector<double> val_terr_minus)
+{
+   GetXvalArrNonConst()->SetValTerr(val_terr_plus,
+                                    val_terr_minus);
+}
+    
+void GraphDataTerr3d::SetYvalTerrArr(long ndata, const double* const val_serr)
+{
+    GetYvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+    
+void GraphDataTerr3d::SetYvalTerrArr(vector<double> val_serr)
+{
+    GetYvalArrNonConst()->SetValTerr(val_serr);
+}
+
+void GraphDataTerr3d::SetYvalTerrArr(long ndata,
+                                     const double* const val_terr_plus,
+                                     const double* const val_terr_minus)
+{
+    GetYvalArrNonConst()->SetValTerr(ndata,
+                                     val_terr_plus,
+                                     val_terr_minus);
+}
+
+void GraphDataTerr3d::SetYvalTerrArr(vector<double> val_terr_plus,
+                                     vector<double> val_terr_minus)
+{
+   GetYvalArrNonConst()->SetValTerr(val_terr_plus,
+                                    val_terr_minus);
+}
+    
+void GraphDataTerr3d::SetOvalTerrArr(long ndata, const double* const val_serr)
+{
+    GetOvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+
+void GraphDataTerr3d::SetOvalTerrArr(vector<double> val_serr)
+{
+    GetOvalArrNonConst()->SetValTerr(val_serr);
+}
+
+void GraphDataTerr3d::SetOvalTerrArr(long ndata,
+                                     const double* const val_terr_plus,
+                                     const double* const val_terr_minus)
+{
+    GetOvalArrNonConst()->SetValTerr(ndata,
+                                     val_terr_plus,
+                                     val_terr_minus);
+}
+
+void GraphDataTerr3d::SetOvalTerrArr(vector<double> val_terr_plus,
+                                     vector<double> val_terr_minus)
+{
+    GetOvalArrNonConst()->SetValTerr(val_terr_plus,
+                                     val_terr_minus);
 }
 
 void GraphDataTerr3d::SetPoint(long idata,
@@ -58,10 +139,7 @@ void GraphDataTerr3d::Load(string file)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);    
+    Init(ndata);
     double xval, xval_terr_plus, xval_terr_minus;
     double yval, yval_terr_plus, yval_terr_minus;
     double oval, oval_terr_plus, oval_terr_minus;
@@ -89,10 +167,7 @@ void GraphDataTerr3d::Load(string file, string format)
     string* line_arr = NULL;
     long ndata = 0;
     MiIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
-    Init();
-    GetXvalArrNonConst()->Init(ndata);
-    GetYvalArrNonConst()->Init(ndata);
-    GetOvalArrNonConst()->Init(ndata);    
+    Init(ndata);
     double xval, xval_terr_plus, xval_terr_minus;
     double yval, yval_terr_plus, yval_terr_minus;
     double oval, oval_terr_plus, oval_terr_minus;

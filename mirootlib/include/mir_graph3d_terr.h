@@ -11,7 +11,29 @@ public:
         NullGraphData3d();
     }
 
-    void Init();
+    void Init(long ndata);
+    void SetXvalTerrArr(long ndata, const double* const val_serr);
+    void SetXvalTerrArr(vector<double> val_serr);
+    void SetXvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetXvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
+    void SetYvalTerrArr(long ndata, const double* const val_serr);
+    void SetYvalTerrArr(vector<double> val_serr);
+    void SetYvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetYvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
+    void SetOvalTerrArr(long ndata, const double* const val_serr);
+    void SetOvalTerrArr(vector<double> val_serr);
+    void SetOvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetOvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
+    
     using GraphData3d::SetPoint;
     void SetPoint(long idata,
                   double xval, double xval_terr_plus, double xval_terr_minus,

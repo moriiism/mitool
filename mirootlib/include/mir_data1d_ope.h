@@ -1,6 +1,7 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_DATA1D_OPE_H_
 #define MORIIISM_MITOOL_MIROOTLIB_DATA1D_OPE_H_
 
+#include "mir_interval.h"
 #include "mir_data1d_nerr.h"
 #include "mir_data1d_serr.h"
 #include "mir_data1d_terr.h"

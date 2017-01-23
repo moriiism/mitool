@@ -19,6 +19,36 @@ void GraphData3d::SetOvalArr(const DataArray1d* const val_arr)
     GetOvalArrNonConst()->Copy(val_arr);
 }
 
+void GraphData3d::SetXvalArr(long ndata, const double* const val)
+{
+    GetXvalArrNonConst()->SetVal(ndata, val);
+}
+
+void GraphData3d::SetXvalArr(vector<double> val)
+{
+    GetXvalArrNonConst()->SetVal(val);
+}
+
+void GraphData3d::SetYvalArr(long ndata, const double* const val)
+{
+    GetYvalArrNonConst()->SetVal(ndata, val);
+}
+
+void GraphData3d::SetYvalArr(vector<double> val)
+{
+    GetYvalArrNonConst()->SetVal(val);
+}
+    
+void GraphData3d::SetOvalArr(long ndata, const double* const val)
+{
+    GetOvalArrNonConst()->SetVal(ndata, val);
+}
+
+void GraphData3d::SetOvalArr(vector<double> val)
+{
+    GetOvalArrNonConst()->SetVal(val);
+}
+
 void GraphData3d::SetPoint(long idata, double xval, double yval, double oval)
 {
     GetXvalArrNonConst()->SetValElm(idata, xval);
@@ -53,24 +83,10 @@ void GraphData3d::InitSetByFunc(const MirFunc* const func, const double* const p
     }
     delete hi1d_xval;
     delete hi1d_yval;
-    Init();
-
-    DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
-    da1d_x->Init(nbin_xval);
-    da1d_x->SetVal(xval_vec);
-    DataArrayNerr1d* da1d_y = new DataArrayNerr1d;
-    da1d_y->Init(nbin_yval);
-    da1d_y->SetVal(yval_vec);    
-    DataArrayNerr1d* da1d_o = new DataArrayNerr1d;
-    da1d_o->Init(nbin_xval);
-    da1d_o->SetVal(oval_vec);
-    SetXvalArr(da1d_x);
-    SetYvalArr(da1d_y);
-    SetOvalArr(da1d_o);
-    delete da1d_x;
-    delete da1d_y;
-    delete da1d_o;
-
+    Init(nbin_xval);
+    SetXvalArr(xval_vec);
+    SetYvalArr(yval_vec);
+    SetOvalArr(oval_vec);
 }
 
 void GraphData3d::Copy(const GraphData3d* const org)
@@ -79,7 +95,7 @@ void GraphData3d::Copy(const GraphData3d* const org)
     if(NULL == org) {abort();}
     
     CopyTitle(org);
-    Init();
+    Init(org->GetNdata());
     SetXvalArr(org->GetXvalArr());
     SetYvalArr(org->GetYvalArr());
     SetOvalArr(org->GetOvalArr());
