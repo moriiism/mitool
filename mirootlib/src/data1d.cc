@@ -45,29 +45,36 @@ void DataArray1d::Copy(const DataArray1d* const org)
     Init(org->GetNdata());
     SetFlagValSorted(org->GetFlagValSorted());
     if("DataArrayNerr1d" == GetClassName()){
-        SetVal(org->GetNdata(), org->GetVal());
+      //SetVal(org->GetNdata(), org->GetVal());
+        SetVal(org->GetVal());
     } else if("DataArraySerr1d" == GetClassName()){
         if("DataArrayNerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal(org->GetVal());
             SetValErrByPoissonErr();
         } else if("DataArraySerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal(org->GetVal());
             SetValSerr(org->GetNdata(), org->GetValSerr());
         } else if("DataArrayTerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal(org->GetVal());
             double* val_serr = org->GenValSerr();
             SetValSerr(org->GetNdata(), val_serr);
             delete [] val_serr;
         }
     } else if("DataArrayTerr1d" == GetClassName()){
         if("DataArrayNerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal(org->GetVal());
             SetValErrByPoissonErr();
         } else if("DataArraySerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal(org->GetVal());
             SetValTerr(org->GetNdata(), org->GetValSerr());
         } else if("DataArrayTerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
+	  //SetVal(org->GetNdata(), org->GetVal());
+            SetVal( org->GetVal());
             SetValTerr(org->GetNdata(),
                        org->GetValTerrPlus(),
                        org->GetValTerrMinus());
@@ -86,25 +93,29 @@ double DataArray1d::GetValElm(long idata) const
 
 double DataArray1d::GetValMin() const
 {
-    double ans = MirMath::GetMin(GetNdata(), GetVal());
+    // double ans = MirMath::GetMin(GetNdata(), GetVal());
+    double ans = MirMath::GetMin(GetVal());
     return ans;
 }
 
 double DataArray1d::GetValMax() const
 {
-    double ans = MirMath::GetMax(GetNdata(), GetVal());
+    //double ans = MirMath::GetMax(GetNdata(), GetVal());
+    double ans = MirMath::GetMax(GetVal());
     return ans;
 }
 
 long DataArray1d::GetLocValMin() const
 {
-    long ans = MirMath::GetLocMin(GetNdata(), GetVal());
+  //long ans = MirMath::GetLocMin(GetNdata(), GetVal());
+    long ans = MirMath::GetLocMin(GetVal());
     return ans;
 }
 
 long DataArray1d::GetLocValMax() const
 {
-    long ans = MirMath::GetLocMax(GetNdata(), GetVal());
+  //long ans = MirMath::GetLocMax(GetNdata(), GetVal());
+    long ans = MirMath::GetLocMax(GetVal());
     return ans;
 }
 
@@ -126,7 +137,8 @@ void DataArray1d::SaveData(string outfile, int mode, double offset_val) const
 void DataArray1d::PrintInfo(FILE* fp) const
 {
     fprintf(fp, "#\n");
-    fprintf(fp, "# ndata_           = %ld\n", ndata_);
+    //    fprintf(fp, "# ndata_           = %ld\n", ndata_);
+    fprintf(fp, "# val_.size()      = %ld\n", val_.size());
     fprintf(fp, "# flag_val_sorted_ = %d\n", flag_val_sorted_);
     fprintf(fp, "#\n");
     fprintf(fp, "\n");
@@ -196,17 +208,20 @@ void DataArray1d::ReadInfo(string file, int* flag_val_sorted_ptr)
 
 void DataArray1d::NullDataArray1d()
 {
-    ndata_ = 0;
-    if(NULL != val_) {delete [] val_; val_ = NULL;}
+    //ndata_ = 0;
+    // if(NULL != val_) {delete [] val_; val_ = NULL;}
+    val_.clear();
+    val_.shrink_to_fit();
     flag_val_sorted_ = 0;
 }
 
 void DataArray1d::InitDataArray1d(long ndata)
 {
     NullDataArray1d();
-    ndata_ = ndata;
-    val_ = new double [ndata_];
-    for(long idata = 0; idata < ndata_; idata++){
+    //ndata_ = ndata;
+    //val_ = new double [ndata_];
+    val_.resize(ndata);
+    for(long idata = 0; idata < ndata; idata++){
         val_[idata] = 0.0;
     }
     flag_val_sorted_ = 0;
@@ -214,7 +229,8 @@ void DataArray1d::InitDataArray1d(long ndata)
 
 void DataArray1d::IsValNotNull() const
 {
-    if(NULL == GetVal()){
+  //    if(NULL == GetVal()){
+    if(0 == GetVal().size()){
         char msg[kLineSize];
         sprintf(msg, "GetVal() = NULL");
         MPrintErr(msg);

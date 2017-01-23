@@ -84,7 +84,7 @@ void DataArrayNerr1d::Sort()
         MPrintInfoClass("It has been already sorted.");
         return;
     }
-    if(NULL == GetVal()){
+    if(0 == GetVal().size()){
         MPrintErrClass("GetVal() == NULL");
         abort();
     }
@@ -123,6 +123,8 @@ void DataArrayNerr1d::PrintData(FILE* fp, int mode,
                                 double offset_val) const
 {
     long ndata = GetNdata();    
+    printf("ndata = %ld\n", ndata);
+
     if(0 == mode){
         for(long idata = 0; idata < ndata; idata ++){
             fprintf(fp, "%.10e\n",

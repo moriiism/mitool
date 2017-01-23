@@ -12,7 +12,7 @@ class DataArrayTerr1d : public DataArray1d{
 public:
     explicit DataArrayTerr1d(string title = "") :
         DataArray1d("DataArrayTerr1d", title),
-        val_terr_plus_(NULL),
+	val_terr_plus_(NULL),
         val_terr_minus_(NULL) {}
     ~DataArrayTerr1d() {
         NullDataArray1d();

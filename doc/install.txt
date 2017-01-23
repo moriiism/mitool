@@ -39,6 +39,7 @@ yum install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ devtools
 # echo 'source /opt/rh/devtoolset-2/enable' >> /etc/profile.d/devtools.sh
 
 
+
 cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
 -Dgnuinstall=ON \
 -DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
@@ -67,4 +68,126 @@ Scanning dependencies of target Gui
  Installing: /usr/local/include/TMVA/efficiencies.h
 -- Installing: /usr/local/lib/libPyMVA_rdict.pcm
 -- Installing: /usr/local/lib/libPyMVA.rootmap
+
+
+
+#####################
+
+/home/morii/admin/root/root-6.08.02/README/INSTALL 
+
+### install cmake
+
+CMake Error at CMakeLists.txt:2 (cmake_minimum_required):
+  CMake 3.4.3 or higher is required.  You are running version 2.8.12.2
+-- Configuring incomplete, errors occurred!
+
+
+% cd /home/morii/admin/cmake/cmake-3.7.2
+% ./configure --prefix=/soft/cmake/3.7.2
+% make
+% make install
+
+---> .bashrc , alias 
+
+yum install libX11-devel
+yum install libXpm-devel
+yum install libXft-devel
+yum install libXext-devel
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 2) Type the build commands:
+        mkdir <builddir>
+        cd <builddir>
+        cmake ../root
+        cmake --build . [ -- -j<N> ] [ or simply "make -j<N>" on Unix systems ] 
+
+   3) Add bin/ to PATH and lib/ to LD_LIBRARY_PATH. For the sh shell family do:
+        . bin/thisroot.sh
+
+      and for the csh shell family do:
+        source bin/thisroot.csh
+
+   4) try running root:
+        root
+
+3.2. Fixed location build:
+
+
+
+
+
+ http://root.cern.ch/building-root#options
+cmake -DCMAKE_INSTALL_PREFIX=$LOCAL  -Dgnuinstall=ON -Dfftw3=ON 
+
+-D<option>=ON
+ http://root.cern.ch/building-root#options
+
+
+cmake --build .
+
+
+
+
+export PATH=/home/morii/admin/root/builddir/bin:$PATH
+export LD_LIBRARY_PATH=/home/morii/admin/root/builddir/lib:$LD_LIBRARY_PATH
+
+
+
+
+-Dgnuinstall=ON 
+
+
+
+
+
+-DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
+-DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
+-DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
+-DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
+-DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
+
+
+
+
+
+### gsl
+
+./configure --prefix=/soft/gsl/2.3
+make
+make install
+
+
+### root
+
+cd /home/morii/admin/root/builddir
+
+cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
+-Dgsl_shared=ON -Dmathmore=ON -DGSL_DIR=/soft/gsl/2.3 -Dminuit2=ON 
+
+cmake --build . 
+cmake --build . --target install
+
+
+
+[morii@localhost builddir]$ source bin/thisroot.sh 
+[morii@localhost builddir]$ 
+[morii@localhost builddir]$ echo $LD_LIBRARY_PATH 
+/home/morii/admin/root/builddir/lib
+[morii@localhost builddir]$ echo $PATH 
+/home/morii/admin/root/builddir/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/morii/.local/bin:/home/morii/bin
+[morii@localhost builddir]$ 
+
+
+
 
