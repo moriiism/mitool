@@ -9,6 +9,18 @@ void HistData2d::SetOvalArr(const DataArray1d* const oval_arr)
     GetOvalArrNonConst()->Copy(oval_arr);
 }
 
+void HistData2d::SetOvalArr(long ndata, const double* const val)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetVal(ndata, val);
+}
+
+void HistData2d::SetOvalArr(vector<double> val)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetVal(val);
+}
+
 void HistData2d::SetOvalElm(long ibin_xval, long ibin_yval, double oval)
 {
     IsOvalArrNotNull();

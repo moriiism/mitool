@@ -16,6 +16,14 @@ public:
               double xval_lo,
               double xval_up);
     void Init(const HistInfo1d* const hist_info);
+    void SetOvalTerrArr(long ndata, const double* const val_serr);
+    void SetOvalTerrArr(vector<double> val_serr);
+    void SetOvalTerrArr(long ndata,
+                        const double* const val_terr_plus,
+                        const double* const val_terr_minus);
+    void SetOvalTerrArr(vector<double> val_terr_plus,
+                        vector<double> val_terr_minus);
+    
     void SetOvalTerrElm(long ibin, double oval_serr);
     void SetOvalTerrPlusElm(long ibin, double oval_terr_plus);
     void SetOvalTerrMinusElm(long ibin, double oval_terr_minus);

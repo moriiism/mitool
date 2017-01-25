@@ -11,13 +11,13 @@ void MirCont::Init(int ngraph)
     Null();
 
     ngraph_ = ngraph;
-    gd2d_arr_ = new GraphData2d* [ngraph_];
+    gd2d_arr_ = new GraphDataNerr2d* [ngraph_];
     for(int igraph = 0; igraph < ngraph_; igraph ++){
-        gd2d_arr_[igraph] = new GraphData2d;
+        gd2d_arr_[igraph] = new GraphDataNerr2d;
     }
 }
 
-void MirCont::SetGd2dArr(int ngraph, const GraphData2d* const* const gd2d_arr)
+void MirCont::SetGd2dArr(int ngraph, const GraphDataNerr2d* const* const gd2d_arr)
 {
     if(ngraph != GetNgraph()){
         char msg[kLineSize];
@@ -35,18 +35,18 @@ void MirCont::AddPolygon(int npoint,
                           const double* const xval_arr,
                           const double* const yval_arr)
 {
-    GraphData2d* gd2d_this = new GraphData2d;
-    gd2d_this->Init();
-    gd2d_this->SetXvalArrDbl(npoint, xval_arr);
-    gd2d_this->SetOvalArrDbl(npoint, yval_arr);
+    GraphDataNerr2d* gd2d_this = new GraphDataNerr2d;
+    gd2d_this->Init(npoint);
+    gd2d_this->SetXvalArr(npoint, xval_arr);
+    gd2d_this->SetOvalArr(npoint, yval_arr);
     
     if(0 != GetNgraph()){
 
         // make temporary graph_array to save original contour
         int ngraph_org = GetNgraph();
-        GraphData2d** gd2d_arr_tmp = new GraphData2d* [ngraph_org];
+        GraphDataNerr2d** gd2d_arr_tmp = new GraphDataNerr2d* [ngraph_org];
         for(int igraph = 0; igraph < ngraph_org; igraph ++){
-            gd2d_arr_tmp[igraph] = new GraphData2d;
+            gd2d_arr_tmp[igraph] = new GraphDataNerr2d;
             gd2d_arr_tmp[igraph]->Copy(  GetGd2dArrElm(igraph) );
         }
 
@@ -73,14 +73,21 @@ void MirCont::AddPolygon(int npoint,
 
 void MirCont::Copy(const MirCont* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
-    CopyMirObject(org);
+    CopyTitle(org);
 
     int ngraph_org = org->GetNgraph();
     Init(ngraph_org);
     SetGd2dArr(ngraph_org, org->GetGd2dArr());
+}
+
+MirCont* const MirCont::Clone() const
+{
+    MirCont* obj_new = new MirCont;
+    obj_new->Copy(this);
+    return obj_new;
 }
 
 string MirCont::GetPolygonStr(int igraph) const
@@ -107,9 +114,9 @@ string MirCont::GetPolygonStr(int igraph) const
 MirCont* const MirCont::GenShift(double delta_xval, double delta_yval) const
 {
     int ngraph = GetNgraph();
-    GraphData2d** gd2d_arr_shifted = new GraphData2d* [ngraph];
+    GraphDataNerr2d** gd2d_arr_shifted = new GraphDataNerr2d* [ngraph];
     for(int igraph = 0; igraph < ngraph; igraph++){
-        gd2d_arr_shifted[igraph] = new GraphData2d;
+        gd2d_arr_shifted[igraph] = new GraphDataNerr2d;
 
         int npoint = GetGd2dArrElm(igraph)->GetNdata();
         double* xval_arr_shift = new double [npoint];
@@ -120,9 +127,9 @@ MirCont* const MirCont::GenShift(double delta_xval, double delta_yval) const
         }
         int flag_xval_sorted = GetGd2dArrElm(igraph)->GetFlagXvalSorted();
 
-        gd2d_arr_shifted[igraph]->Init();
-        gd2d_arr_shifted[igraph]->SetXvalArrDbl(npoint, xval_arr_shift);
-        gd2d_arr_shifted[igraph]->SetOvalArrDbl(npoint, yval_arr_shift);
+        gd2d_arr_shifted[igraph]->Init(npoint);
+        gd2d_arr_shifted[igraph]->SetXvalArr(npoint, xval_arr_shift);
+        gd2d_arr_shifted[igraph]->SetOvalArr(npoint, yval_arr_shift);
         gd2d_arr_shifted[igraph]->SetFlagXvalSorted(flag_xval_sorted);
         delete [] xval_arr_shift;
         delete [] yval_arr_shift;
@@ -181,15 +188,22 @@ void MirContWithBest::SetCont(const MirCont* const cont)
 
 void MirContWithBest::Copy(const MirContWithBest* const org)
 {
-    if(this == org) {return;}
-    if(NULL == org) {return;}
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
-    CopyMirObject(org);
+    CopyTitle(org);
 
     Init();
     SetBest(org->GetXvalBest(),
             org->GetYvalBest());
     SetCont(org->GetCont());
+}
+
+MirContWithBest* const MirContWithBest::Clone() const
+{
+    MirContWithBest* obj_new = new MirContWithBest;
+    obj_new->Copy(this);
+    return obj_new;
 }
 
 MirContWithBest* const MirContWithBest::GenShift(double delta_xval, double delta_yval) const

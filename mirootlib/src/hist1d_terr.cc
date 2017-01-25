@@ -26,6 +26,33 @@ void HistDataTerr1d::Init(const HistInfo1d* const hist_info)
     GetOvalArrNonConst()->Init(hist_info->GetNbin());
 }
 
+void HistDataTerr1d::SetOvalTerrArr(long ndata, const double* const val_serr)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValTerr(ndata, val_serr);
+}
+
+void HistDataTerr1d::SetOvalTerrArr(vector<double> val_serr)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValTerr(val_serr);
+}
+
+void HistDataTerr1d::SetOvalTerrArr(long ndata,
+                                    const double* const val_terr_plus,
+                                    const double* const val_terr_minus)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValTerr(ndata, val_terr_plus, val_terr_minus);
+}
+
+void HistDataTerr1d::SetOvalTerrArr(vector<double> val_terr_plus,
+                                    vector<double> val_terr_minus)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValTerr(val_terr_plus, val_terr_minus);
+}
+
 void HistDataTerr1d::SetOvalTerrElm(long ibin,
                                     double oval_serr)
 {

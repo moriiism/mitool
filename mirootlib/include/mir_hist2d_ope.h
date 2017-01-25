@@ -6,12 +6,16 @@
 #include "mir_hist2d_serr.h"
 #include "mir_hist2d_terr.h"
 #include "mir_cont.h"
+#include "mir_qdp_tool.h"
 
 namespace HistData2dOpe
 {
     void FillGd2d(const HistDataNerr2d* const hd2d,
                   const GraphDataNerr2d* const gd2d,
                   HistDataNerr2d* const hist_res_out);
+
+    double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
+    double FindMdYbyEdge(const HistDataNerr2d* const hd2d);
     
     void GetResValHd2(const HistDataNerr2d* const hist_data,
                       const MirFunc* const func, const double* const par,

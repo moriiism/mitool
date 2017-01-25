@@ -26,6 +26,23 @@ public:
                       double xval_up) = 0;
     virtual void Init(const HistInfo1d* const hist_info) = 0;
     void SetOvalArr(const DataArray1d* const oval_arr);
+    void SetOvalArr(long ndata, const double* const val);
+    void SetOvalArr(vector<double> val);    
+    virtual void SetOvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    virtual void SetOvalTerrArr(long ndata,
+                                const double* const val_terr_plus,
+                                const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(vector<double> val_terr_plus,
+                                vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
     
     void SetOvalElm(long ibin, double oval);
     virtual void SetOvalSerrElm(long ibin, double oval_serr)
@@ -104,17 +121,17 @@ public:
     // get element
     double GetOvalElm(long ibin) const;
     double GetOvalElmAtX(double xval) const;
-    double GetOvalSerrElm(long ibin) const
+    virtual double GetOvalSerrElm(long ibin) const
         {MPrintErrVFunc; abort();};
-    double GetOvalSerrElmAtX(double xval) const
+    virtual double GetOvalSerrElmAtX(double xval) const
         {MPrintErrVFunc; abort();};
-    double GetOvalTerrPlusElm(long ibin) const
+    virtual double GetOvalTerrPlusElm(long ibin) const
         {MPrintErrVFunc; abort();};
-    double GetOvalTerrMinusElm(long ibin) const
+    virtual double GetOvalTerrMinusElm(long ibin) const
         {MPrintErrVFunc; abort();};
-    double GetOvalTerrPlusElmAtX(double xval) const
+    virtual double GetOvalTerrPlusElmAtX(double xval) const
         {MPrintErrVFunc; abort();};
-    double GetOvalTerrMinusElmAtX(double xval) const
+    virtual double GetOvalTerrMinusElmAtX(double xval) const
         {MPrintErrVFunc; abort();};
     
     double GetXvalAtOvalMin() const;

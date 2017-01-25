@@ -1,12 +1,82 @@
+#include "mir_vect.h"
 #include "mir_hist2d_ope.h"
 
 void HistData2dOpe::FillGd2d(const HistDataNerr2d* const hd2d,
                              const GraphDataNerr2d* const gd2d,
                              HistDataNerr2d* const hist_res_out)
 {
-
-
+    vector<double> xval_vec;
+    vector<double> yval_vec;
+    hist_res_out->Copy(hd2d);
+    hist_res_out->SetConst(0.0);
+    int nfine = 10;
+    for(long idata = 0; idata < gd2d->GetNdata() - 1; idata++){
+        double bin_width_x_fine = hd2d->GetBinWidthX() / nfine;
+        double bin_width_y_fine = hd2d->GetBinWidthY() / nfine;
+        int nbin_x = (int) ceil( fabs(gd2d->GetXvalElm(idata + 1) - gd2d->GetXvalElm(idata) ) / bin_width_x_fine );
+        int nbin_y = (int) ceil( fabs(gd2d->GetOvalElm(idata + 1) - gd2d->GetOvalElm(idata) ) / bin_width_y_fine );
+        int nbin = TMath::Max(nbin_x, nbin_y);
+        Vect2d* vect = new Vect2d;
+        vect->Init(gd2d->GetXvalElm(idata + 1) - gd2d->GetXvalElm(idata), 
+                   gd2d->GetOvalElm(idata + 1) - gd2d->GetOvalElm(idata));
+        double step_length = vect->GetLength() / nbin;
+        Vect2d* vect_step = vect->GenVectWithLength(step_length);
+        
+        for(long ibin = 0; ibin <= nbin; ibin ++){
+            double xval = gd2d->GetXvalElm(idata) + vect_step->GetPosX() * ibin;
+            double yval = gd2d->GetOvalElm(idata) + vect_step->GetPosY() * ibin;
+            hist_res_out->FillByMax(xval, yval, 1.0);
+        }
+        delete vect;
+        delete vect_step;
+    }
 }
+
+double HistData2dOpe::FindMdXbyEdge(const HistDataNerr2d* const hd2d)
+{
+    vector<double> md_vec;
+    for(long ibiny = 0; ibiny < hd2d->GetNbinY(); ibiny ++){
+        vector<double> on_vec;
+        for(long ibinx = 0; ibinx < hd2d->GetNbinX(); ibinx ++){
+            if( fabs(hd2d->GetOvalElm(ibinx, ibiny) - 1.0) < DBL_EPSILON){
+                on_vec.push_back(ibinx);
+            }
+        }
+        if(0 < on_vec.size()){
+            double index_min = MirMath::GetMin(on_vec);
+            double index_max = MirMath::GetMax(on_vec);
+            double index_md = (index_min + index_max)/2.;
+            md_vec.push_back(index_md);
+        }
+    }
+    double md_index_amean = MirMath::GetAMean(md_vec);
+    double xval_md = hd2d->GetXvalLo() + hd2d->GetBinWidthX() * md_index_amean;
+    return xval_md;
+}
+
+double HistData2dOpe::FindMdYbyEdge(const HistDataNerr2d* const hd2d)
+{
+    vector<double> md_vec;
+    for(long ibinx = 0; ibinx < hd2d->GetNbinX(); ibinx ++){    
+        vector<double> on_vec;
+        for(long ibiny = 0; ibiny < hd2d->GetNbinY(); ibiny ++){
+            if( fabs(hd2d->GetOvalElm(ibinx, ibiny) - 1.0) < DBL_EPSILON){
+                on_vec.push_back(ibiny);
+            }
+        }
+        if(0 < on_vec.size()){
+            double index_min = MirMath::GetMin(on_vec);
+            double index_max = MirMath::GetMax(on_vec);
+            double index_md = (index_min + index_max)/2.;
+            md_vec.push_back(index_md);
+        }
+    }
+    double md_index_amean = MirMath::GetAMean(md_vec);
+    double yval_md = hd2d->GetYvalLo() + hd2d->GetBinWidthY() * md_index_amean;
+    return yval_md;
+}
+
+
 
 void HistData2dOpe::GetResValHd2(const HistDataNerr2d* const hist_data,
                                  const MirFunc* const func, const double* const par,
@@ -18,19 +88,19 @@ void HistData2dOpe::GetResValHd2(const HistDataNerr2d* const hist_data,
   
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         oval_res[ibin] = hist_data->GetOvalElm(ibin_x, ibin_y) - func->Eval(xval_arg, par);
     }
-
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    
     delete [] oval_res;
 }
 
@@ -45,20 +115,21 @@ void HistData2dOpe::GetResValHd2(const HistDataSerr2d* const hist_data,
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         oval_res[ibin] = hist_data->GetOvalElm(ibin_x, ibin_y) - func->Eval(xval_arg, par);
         oval_res_serr[ibin] = hist_data->GetOvalSerrElm(ibin_x, ibin_y);
     }
-
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalSerrArr(nbinx * nbiny, oval_res_serr);    
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
@@ -74,11 +145,11 @@ void HistData2dOpe::GetResValHd2(const HistDataTerr2d* const hist_data,
     double* oval_res_terr_plus  = new double[nbin];
     double* oval_res_terr_minus = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         double func_val = func->Eval(xval_arg, par);
@@ -86,9 +157,12 @@ void HistData2dOpe::GetResValHd2(const HistDataTerr2d* const hist_data,
         oval_res_terr_plus[ibin]  = hist_data->GetOvalTerrPlusElm(ibin_x, ibin_y);
         oval_res_terr_minus[ibin] = hist_data->GetOvalTerrMinusElm(ibin_x, ibin_y);
     }
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_terr_plus, oval_res_terr_minus);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalTerrArr(nbinx * nbiny,
+                                 oval_res_terr_plus, oval_res_terr_minus);
+    
     delete [] oval_res;
     delete [] oval_res_terr_plus;
     delete [] oval_res_terr_minus;    
@@ -97,29 +171,30 @@ void HistData2dOpe::GetResValHd2(const HistDataTerr2d* const hist_data,
 
 
 
-void HistData2dOpe::GetResRatioHd2(const HistData2d* const hist_data,
-                                const MirFunc* const func, const double* const par,
-                                HistData2d* const hist_res_out)
+void HistData2dOpe::GetResRatioHd2(const HistDataNerr2d* const hist_data,
+                                   const MirFunc* const func, const double* const par,
+                                   HistDataNerr2d* const hist_res_out)
 {
     long nbinx = hist_data->GetNbinX();
     long nbiny = hist_data->GetNbinY();
     long nbin = nbinx * nbiny;
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);        
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         oval_res[ibin] = (hist_data->GetOvalElm(ibin_x, ibin_y) - func->Eval(xval_arg, par)) /
             func->Eval(xval_arg, par);
     }
 
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    
     delete [] oval_res;
 }
 
@@ -133,11 +208,11 @@ void HistData2dOpe::GetResRatioHd2(const HistDataSerr2d* const hist_data,
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         oval_res[ibin] = (hist_data->GetOvalElm(ibin_x, ibin_y) - func->Eval(xval_arg, par)) /
@@ -146,9 +221,11 @@ void HistData2dOpe::GetResRatioHd2(const HistDataSerr2d* const hist_data,
                                     / func->Eval(xval_arg, par) );
     }
 
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalSerrArr(nbinx * nbiny, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
@@ -165,11 +242,11 @@ void HistData2dOpe::GetResRatioHd2(const HistDataTerr2d* const hist_data,
     double* oval_res_terr_plus  = new double[nbin];
     double* oval_res_terr_minus = new double[nbin];    
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);        
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);        
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         double func_val = func->Eval(xval_arg, par);
@@ -180,9 +257,12 @@ void HistData2dOpe::GetResRatioHd2(const HistDataTerr2d* const hist_data,
         oval_res_terr_minus[ibin] = -1 * fabs(hist_data->GetOvalTerrMinusElm(ibin_x, ibin_y) / func_val);
     }
 
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_terr_plus, oval_res_terr_minus);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalTerrArr(nbinx * nbiny,
+                                 oval_res_terr_plus, oval_res_terr_minus);
+    
     delete [] oval_res;
     delete [] oval_res_terr_plus;
     delete [] oval_res_terr_minus;
@@ -199,11 +279,11 @@ void HistData2dOpe::GetResChiHd2(const HistDataSerr2d* const hist_data,
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);        
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);        
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         oval_res[ibin] = (hist_data->GetOvalElm(ibin_x, ibin_y) - func->Eval(xval_arg, par)) /
@@ -211,9 +291,11 @@ void HistData2dOpe::GetResChiHd2(const HistDataSerr2d* const hist_data,
         oval_res_serr[ibin] = 1.0;
     }
 
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalSerrArr(nbinx * nbiny, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
@@ -230,11 +312,11 @@ void HistData2dOpe::GetResChiHd2(const HistDataTerr2d* const hist_data,
     double* oval_res_terr_plus  = new double[nbin];
     double* oval_res_terr_minus = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = hist_data->GetIbinX(ibin);
-        long ibin_y = hist_data->GetIbinY(ibin);        
+        long ibin_x = hist_data->GetHi2d()->GetIbinX(ibin);
+        long ibin_y = hist_data->GetHi2d()->GetIbinY(ibin);        
         double xval_arg[2];
         double xval_tmp, yval_tmp;
-        hist_data->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
+        hist_data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
         xval_arg[0] = xval_tmp;
         xval_arg[1] = yval_tmp;
         double func_val = func->Eval(xval_arg, par);
@@ -249,9 +331,12 @@ void HistData2dOpe::GetResChiHd2(const HistDataTerr2d* const hist_data,
         oval_res_terr_minus[ibin] = 1.0;
     }
 
-    hist_res_out->InitSet(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp(),
-                          oval_res, oval_res_terr_plus, oval_res_terr_minus);
+    hist_res_out->Init(nbinx, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+                       nbiny, hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    hist_res_out->SetOvalArr(nbinx * nbiny, oval_res);
+    hist_res_out->SetOvalTerrArr(nbinx * nbiny,
+                                 oval_res_terr_plus, oval_res_terr_minus);
+    
     delete [] oval_res;
     delete [] oval_res_terr_plus;
     delete [] oval_res_terr_minus;
@@ -296,7 +381,7 @@ int HistData2dOpe::IsFormatSame(const HistData2d* const hist_data1,
 }
 
 
-int HistData2dOpe::IsFormatSame(const HistData2d* const* const hist_data_arr,
+int HistData2dOpe::IsFormatSame(const HistDataNerr2d* const* const hist_data_arr,
                              int nhist)
 {
     if(nhist < 2){
@@ -349,9 +434,9 @@ int HistData2dOpe::IsFormatSame(const HistData2d* const* const hist_data_arr,
 int HistData2dOpe::IsFormatSame(const HistDataSerr2d* const* const hist_data_arr,
                                 int nhist)
 {
-    HistData2d** h2d_arr = new HistData2d* [nhist];
+    HistDataNerr2d** h2d_arr = new HistDataNerr2d* [nhist];
     for(int ihist = 1; ihist < nhist; ihist++){
-        h2d_arr[ihist] = new HistData2d;
+        h2d_arr[ihist] = new HistDataNerr2d;
         h2d_arr[ihist]->Copy(hist_data_arr[ihist]);
     }
     IsFormatSame(h2d_arr, nhist);
@@ -364,7 +449,7 @@ int HistData2dOpe::IsFormatSame(const HistDataSerr2d* const* const hist_data_arr
 }
 
 
-void HistData2dOpe::GenContMinFcn(const HistData2d* const hd2d,
+void HistData2dOpe::GenContMinFcn(const HistDataNerr2d* const hd2d,
                                   double zval_min,
                                   int nlevel,
                                   const double* const delta_minfcn_arr,
@@ -373,7 +458,7 @@ void HistData2dOpe::GenContMinFcn(const HistData2d* const hd2d,
                                   double offset_xval,
                                   double offset_yval)
 {
-    TH2D* th2d = hd2d->GenTH2D(offset_xval, offset_yval);
+    TH2D* th2d = hd2d->GenTH2D(offset_xval, offset_yval, 0.0);
     double* cont_level = new double [nlevel];
     for(int ilevel = 0; ilevel < nlevel; ilevel++){
         cont_level[ilevel] = zval_min + delta_minfcn_arr[ilevel];
@@ -408,10 +493,9 @@ void HistData2dOpe::GenContMinFcn(const HistData2d* const hd2d,
         TList* list_graph = (TList*) cont_tobj_arr->At(icont);
 
         int ngraph = list_graph->GetSize();
-        GraphData2d** g2d_arr = new GraphData2d* [ngraph];
+        GraphDataNerr2d** g2d_arr = new GraphDataNerr2d* [ngraph];
         for(int igraph = 0; igraph < ngraph; igraph++){
-            g2d_arr[igraph] = new GraphData2d;
-            g2d_arr[igraph]->Init();
+            g2d_arr[igraph] = new GraphDataNerr2d;
         }
 
         for(int igraph = 0; igraph < ngraph; igraph++){
@@ -424,8 +508,9 @@ void HistData2dOpe::GenContMinFcn(const HistData2d* const hd2d,
                 xval.push_back(point_x);
                 oval.push_back(point_y);
             }
-            g2d_arr[igraph]->SetXvalArrDbl(xval);
-            g2d_arr[igraph]->SetOvalArrDbl(oval);
+            g2d_arr[igraph]->Init(xval.size()); 
+            g2d_arr[igraph]->SetXvalArr(xval);
+            g2d_arr[igraph]->SetOvalArr(oval);
         }
         cont_arr[icont]->Init(ngraph);
         cont_arr[icont]->SetGd2dArr(ngraph, g2d_arr);
@@ -442,7 +527,7 @@ void HistData2dOpe::GenContMinFcn(const HistData2d* const hd2d,
 }
 
 
-void HistData2dOpe::GenContWithBestMinFcn(const HistData2d* const hd2d,
+void HistData2dOpe::GenContWithBestMinFcn(const HistDataNerr2d* const hd2d,
                                           double zval_min, double xval_best, double yval_best,
                                           int nlevel, const double* const delta_minfcn_arr,
                                           MirContWithBest*** const cont_with_best_arr_ptr,
@@ -468,7 +553,7 @@ void HistData2dOpe::GenContWithBestMinFcn(const HistData2d* const hd2d,
     *cont_with_best_arr_ptr = cont_with_best_arr;
 }
 
-void HistData2dOpe::GetHd2dMaskWithMargin(const HistData2d* const hd2d_mask,
+void HistData2dOpe::GetHd2dMaskWithMargin(const HistDataNerr2d* const hd2d_mask,
                                           double xval_margin, double yval_margin,
                                           HistData2d* const hd2d_with_margin_out)
 {
@@ -480,16 +565,16 @@ void HistData2dOpe::GetHd2dMaskWithMargin(const HistData2d* const hd2d_mask,
     for(long ibin_x = 0; ibin_x < nbin_x; ibin_x ++){
         for(long ibin_y = 0; ibin_y < nbin_y; ibin_y ++){
             if(0 < hd2d_mask->GetOvalElm(ibin_x, ibin_y)){
-                double xval = hd2d_mask->GetBinCenterXFromIbinX(ibin_x);
-                double yval = hd2d_mask->GetBinCenterYFromIbinY(ibin_y);
+                double xval = hd2d_mask->GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
+                double yval = hd2d_mask->GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
 
-                long ibin_x_lo = hd2d_with_margin_out->GetIbinXFromX(
+                long ibin_x_lo = hd2d_with_margin_out->GetHi2d()->GetIbinXFromX(
                     MirMath::GetMax(xval - xval_margin, hd2d_with_margin_out->GetXvalLo()) );
-                long ibin_x_up = hd2d_with_margin_out->GetIbinXFromX(
+                long ibin_x_up = hd2d_with_margin_out->GetHi2d()->GetIbinXFromX(
                     MirMath::GetMin(xval + xval_margin, hd2d_with_margin_out->GetXvalUp()) );
-                long ibin_y_lo = hd2d_with_margin_out->GetIbinYFromY(
+                long ibin_y_lo = hd2d_with_margin_out->GetHi2d()->GetIbinYFromY(
                     MirMath::GetMax(yval - yval_margin, hd2d_with_margin_out->GetYvalLo()) );
-                long ibin_y_up = hd2d_with_margin_out->GetIbinYFromY(
+                long ibin_y_up = hd2d_with_margin_out->GetHi2d()->GetIbinYFromY(
                     MirMath::GetMin(yval + yval_margin, hd2d_with_margin_out->GetYvalUp()) );
 
                 for(long ifill_x = ibin_x_lo; ifill_x <= ibin_x_up; ifill_x ++){

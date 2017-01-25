@@ -1,12 +1,17 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_OPE_H_
 #define MORIIISM_MITOOL_MIROOTLIB_GRAPH2D_OPE_H_
 
+#include "mir_geom.h"
 #include "mir_graph2d_nerr.h"
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
 
 namespace GraphData2dOpe
 {
+    void GetMotion(const GraphDataNerr2d* const gd2d,
+                   double shiftx, double shifty, double angle, int flag,
+                   GraphDataNerr2d* const gd2d_out);
+    
     GraphData2d* const GenGd2dByLoad(string file, string format);
 
     //    double GetIntegral(double xval_lo, double xval_up) const;
@@ -36,9 +41,9 @@ namespace GraphData2dOpe
                                 string select_type = "exclusive");
     
     
-    void GenSelectG2dArrByInterval(const GraphData2d* const graph_data,
+    void GenSelectG2dArrByInterval(const GraphDataNerr2d* const graph_data,
                                    const Interval* const interval,
-                                   GraphData2d*** g2d_arr_ptr);
+                                   GraphDataNerr2d*** g2d_arr_ptr);
     void GenSelectG2dArrByInterval(const GraphDataSerr2d* const graph_data,
                                    const Interval* const interval,
                                    GraphDataSerr2d*** g2d_arr_ptr,
@@ -64,10 +69,10 @@ namespace GraphData2dOpe
                       const double* const par,
                       GraphDataTerr2d* const graph_res_out);
   
-    void GetResRatioGd2(const GraphData2d* const graph_data,
+    void GetResRatioGd2(const GraphDataNerr2d* const graph_data,
                         const MirFunc* const func,
                         const double* const par,
-                        GraphData2d* const graph_res_out);
+                        GraphDataNerr2d* const graph_res_out);
     void GetResRatioGd2(const GraphDataSerr2d* const graph_data,
                         const MirFunc* const func,
                         const double* const par,
@@ -86,21 +91,21 @@ namespace GraphData2dOpe
                       const double* const par,
                       GraphDataTerr2d* const graph_res_out);
 
-    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
-                                              double pval_threshold);
-
-    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphDataSerr2d* const gd2d,
-                                              double pval_threshold);
-
-
-    void GetValBinned(vector<double> xval_vec,
-                      vector<double> xval_serr_vec,
-                      vector<double> oval_vec,
-                      vector<double> oval_serr_vec,
-                      double* xval_bin_center_ptr,
-                      double* xval_bin_half_width_ptr,
-                      double* wmean_ptr,
-                      double* wmean_err_ptr);
+//    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
+//                                              double pval_threshold);
+//
+//    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphDataSerr2d* const gd2d,
+//                                              double pval_threshold);
+//
+//
+//    void GetValBinned(vector<double> xval_vec,
+//                      vector<double> xval_serr_vec,
+//                      vector<double> oval_vec,
+//                      vector<double> oval_serr_vec,
+//                      double* xval_bin_center_ptr,
+//                      double* xval_bin_half_width_ptr,
+//                      double* wmean_ptr,
+//                      double* wmean_err_ptr);
     
 }  // namespace GraphData2dOpe
 

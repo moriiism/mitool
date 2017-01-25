@@ -59,6 +59,36 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+//    void RmStSpace(string* const buf_ptr);
+    {
+        printf("--- RmStSpace(string* const buf_ptr)\n");
+        string buf = " kk ";
+        printf("|%s|\n", buf.c_str());
+        MiStr::RmStSpace(&buf);
+        printf("|%s|\n", buf.c_str());
+        printf("=== \n");
+    }
+    
+//    void RmEdSpace(string* const buf_ptr);
+    {
+        printf("--- RmEdSpace(string* const buf_ptr)\n");
+        string buf = " ssss";
+        printf("|%s|\n", buf.c_str());
+        MiStr::RmEdSpace(&buf);
+        printf("|%s|\n", buf.c_str());
+        printf("=== \n");
+    }
+    
+//    void RmStEdSpace(string* const buf_ptr);
+    {
+        printf("--- RmStEdSpace(string* const buf_ptr)\n");
+        string buf = "  ";
+        printf("|%s|\n", buf.c_str());
+        MiStr::RmStEdSpace(&buf);
+        printf("|%s|\n", buf.c_str());
+        printf("=== \n");
+    }
+    
 //    void GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
 //                  const char* const delim = " \t");
 //    void DelSplit(string* split_arr);

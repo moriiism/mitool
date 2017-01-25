@@ -1,7 +1,7 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_CONT_H_
 #define MORIIISM_MITOOL_MIROOTLIB_CONT_H_
 
-#include "mir_graph2d.h"
+#include "mir_graph2d_nerr.h"
 
 //
 // to hold contour
@@ -18,16 +18,17 @@ public:
     }
     void Init(int ngraph);
     void SetGd2dArr(int ngraph,
-                    const GraphData2d* const* const gd2d_arr);
+                    const GraphDataNerr2d* const* const gd2d_arr);
     void AddPolygon(int npoint,
                     const double* const xval_arr,
                     const double* const yval_arr);
 
     void Copy(const MirCont* const org);
+    MirCont* const Clone() const;
     
     int GetNgraph() const {return ngraph_;};
-    const GraphData2d* const* const GetGd2dArr() const {return gd2d_arr_;};
-    const GraphData2d* const GetGd2dArrElm(int igraph) const {return gd2d_arr_[igraph];};
+    const GraphDataNerr2d* const* const GetGd2dArr() const {return gd2d_arr_;};
+    const GraphDataNerr2d* const GetGd2dArrElm(int igraph) const {return gd2d_arr_[igraph];};
 
     string GetPolygonStr(int igraph) const;
     MirCont* const GenShift(double delta_xval, double delta_yval) const;
@@ -36,7 +37,7 @@ private:
     // fill in counter-clockwise
     // each graph is closed polygon.
     int ngraph_;
-    GraphData2d** gd2d_arr_;
+    GraphDataNerr2d** gd2d_arr_;
 
     void Null();
 };
@@ -57,6 +58,7 @@ public:
     void SetCont(const MirCont* const cont);
 
     void Copy(const MirContWithBest* const org);
+    MirContWithBest* const Clone() const;
     
     double GetXvalBest() const {return xval_best_;};
     double GetYvalBest() const {return yval_best_;};

@@ -8,21 +8,31 @@ INCLUDE := $(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC)
 LDLIBS  := $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(LIB)
 
 
-TARGET := test_math  \
-	test_interval \
-        test_data1d  test_data1d_copy  \
-	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
-	test_hist_info  test_hist_info_ope \
-	test_graph2d  test_graph2d_nerr  test_graph2d_serr  test_graph2d_terr \
-	test_graph3d  test_graph3d_nerr  test_graph3d_serr  test_graph3d_terr \
-	test_hist1d  test_hist1d_nerr  test_hist1d_serr  test_hist1d_terr \
-	test_hist2d  test_hist2d_nerr  test_hist2d_serr  test_hist2d_terr \
-	test_data1d_ope  test_graph2d_ope  test_graph3d_ope  test_hist1d_ope  test_hist2d_ope \
-	test_func  test_func_par \
-	test_qdp_tool  test_plot_conf  test_stat1d  test_cont
+TARGET := test_math  test_vect  test_stat1d  test_plot_conf 
+
+
+#	test_interval \
+#        test_data1d  test_data1d_copy  \
+#	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
+#	test_hist_info  test_hist_info_ope \
+#	test_graph2d  test_graph2d_nerr  test_graph2d_serr  test_graph2d_terr \
+#	test_graph3d  test_graph3d_nerr  test_graph3d_serr  test_graph3d_terr \
+#	test_hist1d  test_hist1d_nerr  test_hist1d_serr  test_hist1d_terr \
+#	test_hist2d  test_hist2d_nerr  test_hist2d_serr  test_hist2d_terr \
+#	test_data1d_ope  test_graph2d_ope  test_graph3d_ope  test_hist1d_ope  test_hist2d_ope \
+#	test_func  test_func_par \
+#	test_qdp_tool  test_cont
 
 
 all: $(TARGET) 
+
+test_vect: test_vect.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+test_stat1d: test_stat1d.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+test_plot_conf: test_plot_conf.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+
 
 test_math: test_math.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
@@ -89,10 +99,6 @@ test_func: test_func.o
 test_func_par: test_func_par.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_qdp_tool: test_qdp_tool.o
-	$(CXXN) $@.o ${LDLIBS} -o $@
-test_plot_conf: test_plot_conf.o
-	$(CXXN) $@.o ${LDLIBS} -o $@
-test_stat1d: test_stat1d.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_cont: test_cont.o
 	$(CXXN) $@.o ${LDLIBS} -o $@

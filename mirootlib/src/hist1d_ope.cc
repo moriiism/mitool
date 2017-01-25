@@ -1,17 +1,17 @@
-#include "mir_data_ope.h"
+#include "mir_data1d_ope.h"
 #include "mir_hist1d_ope.h"
 
-HistData1d* const HistData1d::GenHd1dByLoad(string file)
+HistData1d* const HistData1dOpe::GenHd1dByLoad(string file)
 {
     HistData1d* hd1d = NULL;
     long nbin_xval = 0;
     double xval_lo = 0.0;
     double xval_up = 0.0;
     string format = "";
-    ReadInfo(file, &nbin_xval, &xval_lo, &xval_up, &format);
+    HistData1d::ReadInfo(file, &nbin_xval, &xval_lo, &xval_up, &format);
     
     if("x,y" == format){
-        hd1d = new HistData1d;
+        hd1d = new HistDataNerr1d;
     } else if("x,y,ye" == format){
         hd1d = new HistDataSerr1d;
     } else if("x,y,ye+,ye-" == format){
@@ -24,161 +24,161 @@ HistData1d* const HistData1d::GenHd1dByLoad(string file)
     return hd1d;
 }
 
-// For a HistData1d
+// For a HistDataNerr1d
 
-void HistData1dOpe::GetPowSpec(const HistData1d* const hist_data,
-                               HistData1d* hist_data_out)
-{
-    long ntime = hist_data->GetNbinX();
-    double tbinfwidth = hist_data->GetBinWidth();
-    if(0 != ntime % 2){
-        printf("powspec error.\n");
-        abort();
-    }
-
-    fftw_complex* in = NULL;
-    fftw_complex* out = NULL;
-    fftw_plan plan = NULL;
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
-
-    plan = fftw_plan_dft_1d(ntime, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-  
-    for(long idata = 0; idata < ntime; idata ++){
-        in[idata][0] = 0.0;
-        in[idata][1] = 0.0;
-        out[idata][0] = 0.0;
-        out[idata][1] = 0.0;
-    }
-
-    for(long idata = 0; idata < ntime; idata ++){
-        in[idata][0] = hist_data->GetOvalElm(idata);
-        in[idata][1] = 0.0;
-    }
-  
-    fftw_execute(plan);
-
-    long ntime_half = ntime / 2 ;
-    double* output    = new double [2 * (ntime_half + 1)];
-    double* out_real  = new double [ntime_half + 1];
-    double* out_image = new double [ntime_half + 1];
-  
-    for(long itime = 0; itime < ntime_half + 1; itime++ ){
-        //out_real[itime]  = out[2 * itime];
-        //out_image[itime] = out[2 * itime + 1];
-        out_real[itime]  = out[itime][0];
-        out_image[itime] = out[itime][1];
-    }
-
-    fftw_destroy_plan(plan);
-    fftw_free(in);
-    fftw_free(out);
-
-    // calculate Power Spectrum
-    double* freq  = new double [ntime_half + 1];
-    double* power = new double [ntime_half + 1];
-    double ntime_pow2 = pow(ntime, 2);
-    freq[0] = 0.0;
-    power[0] = (pow(out_real[0], 2) + pow(out_image[0], 2)) / ntime_pow2;
-    for(long itime = 1; itime < ntime_half; itime++){
-        freq[itime] = itime / (ntime * tbinfwidth);
-        power[itime] = 2.0 * (pow(out_real[itime], 2) + pow(out_image[itime], 2)) / ntime_pow2;
-    }
-    freq[ntime_half] = 1.0 / (2.0 * tbinfwidth);
-    power[ntime_half] = (pow(out_real[ntime_half], 2) + pow(out_image[ntime_half], 2)) / ntime_pow2;
-
-    hist_data_out->InitSet(ntime_half + 1, -0.5 / (ntime * tbinfwidth),
-                           (ntime_half + 0.5) / (ntime * tbinfwidth),
-                           power);
-
-    delete [] output;
-    delete [] out_real;
-    delete [] out_image;
-    delete [] freq;
-    delete [] power;
-}
-
-
+//void HistData1dOpe::GetPowSpec(const HistDataNerr1d* const hist_data,
+//                               HistDataNerr1d* hist_data_out)
+//{
+//    long ntime = hist_data->GetNbinX();
+//    double tbinfwidth = hist_data->GetXvalBinWidth();
+//    if(0 != ntime % 2){
+//        printf("powspec error.\n");
+//        abort();
+//    }
 //
-// Leahy normalized Power spectrum for counts (Poisson statistics)
+//    fftw_complex* in = NULL;
+//    fftw_complex* out = NULL;
+//    fftw_plan plan = NULL;
+//    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
+//    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
 //
+//    plan = fftw_plan_dft_1d(ntime, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+//  
+//    for(long idata = 0; idata < ntime; idata ++){
+//        in[idata][0] = 0.0;
+//        in[idata][1] = 0.0;
+//        out[idata][0] = 0.0;
+//        out[idata][1] = 0.0;
+//    }
+//
+//    for(long idata = 0; idata < ntime; idata ++){
+//        in[idata][0] = hist_data->GetOvalElm(idata);
+//        in[idata][1] = 0.0;
+//    }
+//  
+//    fftw_execute(plan);
+//
+//    long ntime_half = ntime / 2 ;
+//    double* output    = new double [2 * (ntime_half + 1)];
+//    double* out_real  = new double [ntime_half + 1];
+//    double* out_image = new double [ntime_half + 1];
+//  
+//    for(long itime = 0; itime < ntime_half + 1; itime++ ){
+//        //out_real[itime]  = out[2 * itime];
+//        //out_image[itime] = out[2 * itime + 1];
+//        out_real[itime]  = out[itime][0];
+//        out_image[itime] = out[itime][1];
+//    }
+//
+//    fftw_destroy_plan(plan);
+//    fftw_free(in);
+//    fftw_free(out);
+//
+//    // calculate Power Spectrum
+//    double* freq  = new double [ntime_half + 1];
+//    double* power = new double [ntime_half + 1];
+//    double ntime_pow2 = pow(ntime, 2);
+//    freq[0] = 0.0;
+//    power[0] = (pow(out_real[0], 2) + pow(out_image[0], 2)) / ntime_pow2;
+//    for(long itime = 1; itime < ntime_half; itime++){
+//        freq[itime] = itime / (ntime * tbinfwidth);
+//        power[itime] = 2.0 * (pow(out_real[itime], 2) + pow(out_image[itime], 2)) / ntime_pow2;
+//    }
+//    freq[ntime_half] = 1.0 / (2.0 * tbinfwidth);
+//    power[ntime_half] = (pow(out_real[ntime_half], 2) + pow(out_image[ntime_half], 2)) / ntime_pow2;
+//
+//    hist_data_out->InitSet(ntime_half + 1, -0.5 / (ntime * tbinfwidth),
+//                           (ntime_half + 0.5) / (ntime * tbinfwidth),
+//                           power);
+//
+//    delete [] output;
+//    delete [] out_real;
+//    delete [] out_image;
+//    delete [] freq;
+//    delete [] power;
+//}
+//
+//
+////
+//// Leahy normalized Power spectrum for counts (Poisson statistics)
+////
+//
+//void HistData1dOpe::GetPowSpecLeahyNorm(const HistDataNerr1d* const hist_data,
+//                                        HistDataNerr1d* hist_data_out)
+//{
+//    long ntime = hist_data->GetNbinX();
+//    double tbinfwidth = hist_data->GetBinWidth();
+//    if(0 != ntime % 2){
+//        printf("powspec error.\n");
+//        abort();
+//    }
+//    long n_total = (long) hist_data->GetOvalArr()->GetSum();
+//      
+//    fftw_complex *in = NULL;
+//    fftw_complex *out = NULL;
+//    fftw_plan plan = NULL;
+//    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
+//    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
+//
+//    plan = fftw_plan_dft_1d(ntime, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+//  
+//    for(long idata = 0; idata < ntime; idata ++){
+//        in[idata][0] = 0.0;
+//        in[idata][1] = 0.0;
+//        out[idata][0] = 0.0;
+//        out[idata][1] = 0.0;
+//    }
+//
+//    for(long idata = 0; idata < ntime; idata ++){
+//        in[idata][0] = hist_data->GetOvalElm(idata);
+//        in[idata][1] = 0.0;
+//    }
+//  
+//    fftw_execute(plan);
+//  
+//    long ntime_half = ntime / 2 ;
+//    double* output    = new double [2 * (ntime_half + 1)];
+//    double* out_real  = new double [ntime_half + 1];
+//    double* out_image = new double [ntime_half + 1];
+//  
+//    for(long itime = 0; itime < ntime_half + 1; itime++ ){
+//        out_real[itime]  = out[itime][0];
+//        out_image[itime] = out[itime][1];
+//    }
+//
+//    fftw_destroy_plan(plan);
+//    fftw_free(in);
+//    fftw_free(out);
+//
+//    // calculate Leahy normalized Power Spectrum
+//    double* freq  = new double [ntime_half + 1];
+//    double* power_leahy = new double [ntime_half + 1];
+//    // double ntime_pow2 = pow(ntime, 2);
+//    freq[0] = 0.0;
+//    power_leahy[0] = 2 * (pow(out_real[0], 2) + pow(out_image[0], 2)) / n_total;
+//    for(long itime = 1; itime < ntime_half; itime++){
+//        freq[itime] = itime / (ntime * tbinfwidth);
+//        power_leahy[itime] = 2.0 * (pow(out_real[itime], 2) + pow(out_image[itime], 2)) / n_total;
+//    }
+//    freq[ntime_half] = 1.0 / (2.0 * tbinfwidth);
+//    power_leahy[ntime_half] = (pow(out_real[ntime_half], 2) + pow(out_image[ntime_half], 2)) / n_total;
+//
+//    hist_data_out->InitSet(ntime_half + 1, -0.5 / (ntime * tbinfwidth),
+//                           (ntime_half + 0.5) / (ntime * tbinfwidth),
+//                           power_leahy);
+//
+//    delete [] output;
+//    delete [] out_real;
+//    delete [] out_image;
+//    delete [] freq;
+//    delete [] power_leahy;
+//}
 
-void HistData1dOpe::GetPowSpecLeahyNorm(const HistData1d* const hist_data,
-                                        HistData1d* hist_data_out)
-{
-    long ntime = hist_data->GetNbinX();
-    double tbinfwidth = hist_data->GetBinWidth();
-    if(0 != ntime % 2){
-        printf("powspec error.\n");
-        abort();
-    }
-    long n_total = (long) hist_data->GetOvalArr()->GetSum();
-      
-    fftw_complex *in = NULL;
-    fftw_complex *out = NULL;
-    fftw_plan plan = NULL;
-    in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
-    out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * ntime);
-
-    plan = fftw_plan_dft_1d(ntime, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-  
-    for(long idata = 0; idata < ntime; idata ++){
-        in[idata][0] = 0.0;
-        in[idata][1] = 0.0;
-        out[idata][0] = 0.0;
-        out[idata][1] = 0.0;
-    }
-
-    for(long idata = 0; idata < ntime; idata ++){
-        in[idata][0] = hist_data->GetOvalElm(idata);
-        in[idata][1] = 0.0;
-    }
-  
-    fftw_execute(plan);
-  
-    long ntime_half = ntime / 2 ;
-    double* output    = new double [2 * (ntime_half + 1)];
-    double* out_real  = new double [ntime_half + 1];
-    double* out_image = new double [ntime_half + 1];
-  
-    for(long itime = 0; itime < ntime_half + 1; itime++ ){
-        out_real[itime]  = out[itime][0];
-        out_image[itime] = out[itime][1];
-    }
-
-    fftw_destroy_plan(plan);
-    fftw_free(in);
-    fftw_free(out);
-
-    // calculate Leahy normalized Power Spectrum
-    double* freq  = new double [ntime_half + 1];
-    double* power_leahy = new double [ntime_half + 1];
-    // double ntime_pow2 = pow(ntime, 2);
-    freq[0] = 0.0;
-    power_leahy[0] = 2 * (pow(out_real[0], 2) + pow(out_image[0], 2)) / n_total;
-    for(long itime = 1; itime < ntime_half; itime++){
-        freq[itime] = itime / (ntime * tbinfwidth);
-        power_leahy[itime] = 2.0 * (pow(out_real[itime], 2) + pow(out_image[itime], 2)) / n_total;
-    }
-    freq[ntime_half] = 1.0 / (2.0 * tbinfwidth);
-    power_leahy[ntime_half] = (pow(out_real[ntime_half], 2) + pow(out_image[ntime_half], 2)) / n_total;
-
-    hist_data_out->InitSet(ntime_half + 1, -0.5 / (ntime * tbinfwidth),
-                           (ntime_half + 0.5) / (ntime * tbinfwidth),
-                           power_leahy);
-
-    delete [] output;
-    delete [] out_real;
-    delete [] out_image;
-    delete [] freq;
-    delete [] power_leahy;
-}
-
-void HistData1dOpe::GetPowSpecNonfft(const HistData1d* const hist_data,
-                                     HistData1d* hist_data_out)
+void HistData1dOpe::GetPowSpecNonfft(const HistDataNerr1d* const hist_data,
+                                     HistDataNerr1d* hist_data_out)
 {
     long nbin = hist_data->GetNbinX();
-    double tbinfwidth = hist_data->GetBinWidth();
+    double tbinfwidth = hist_data->GetXvalBinWidth();
   
     double* out_real = new double [nbin];
     double* out_imag = new double [nbin];
@@ -208,7 +208,8 @@ void HistData1dOpe::GetPowSpecNonfft(const HistData1d* const hist_data,
 
     double xval_lo = -0.5 / (nbin * tbinfwidth);
     double xval_up = (nbin + 0.5) / (nbin * tbinfwidth);
-    hist_data_out->InitSet(nbin + 1, xval_lo, xval_up, power);
+    hist_data_out->Init(nbin + 1, xval_lo, xval_up);
+    hist_data_out->SetOvalArr(nbin + 1, power);
 
     delete [] out_real;
     delete [] out_imag;
@@ -217,19 +218,19 @@ void HistData1dOpe::GetPowSpecNonfft(const HistData1d* const hist_data,
 }
 
 
-void HistData1dOpe::GetResValHd1(const HistData1d* const hist_data,
+void HistData1dOpe::GetResValHd1(const HistDataNerr1d* const hist_data,
                                  const MirFunc* const func, const double* const par,
-                                 HistData1d* const hist_res_out)
+                                 HistDataNerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
+        xval[0] = hist_data->GetBinCenter(ibin);
         oval_res[ibin] = hist_data->GetOvalElm(ibin) - func->Eval(xval, par);
     }
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
     delete [] oval_res;
 }
 
@@ -243,70 +244,70 @@ void HistData1dOpe::GetResValHd1(const HistDataSerr1d* const hist_data,
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
+        xval[0] = hist_data->GetBinCenter(ibin);
         oval_res[ibin] = hist_data->GetOvalElm(ibin) - func->Eval(xval, par);
         oval_res_serr[ibin] = hist_data->GetOvalSerrElm(ibin);
     }
-
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
     delete [] oval_res;
     delete [] oval_res_serr;
 }
 
 
-void HistData1dOpe::GetResValHd1(const HistData1d* const hist_data,
-                                 const HistData1d* const hist_func,
-                                 HistData1d* const hist_res_out)
+void HistData1dOpe::GetResValHd1(const HistDataNerr1d* const hist_data,
+                                 const HistDataNerr1d* const hist_func,
+                                 HistDataNerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
         oval_res[ibin] = hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin);
     }
 
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    
     delete [] oval_res;
 }
 
 
 void HistData1dOpe::GetResValHd1(const HistDataSerr1d* const hist_data,
-                                 const HistData1d* const hist_func,
+                                 const HistDataNerr1d* const hist_func,
                                  HistDataSerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenterX(ibin);
+        double xval = hist_data->GetBinCenter(ibin);
         long ibin_func = hist_func->GetIbin(xval);
         oval_res[ibin] = hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func);
         oval_res_serr[ibin] = hist_data->GetOvalSerrElm(ibin);
     }
-
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
 
 
-void HistData1dOpe::GetResRatioHd1(const HistData1d* const hist_data,
+void HistData1dOpe::GetResRatioHd1(const HistDataNerr1d* const hist_data,
                                    const MirFunc* const func, const double* const par,
-                                   HistData1d* const hist_res_out)
+                                   HistDataNerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
+        xval[0] = hist_data->GetBinCenter(ibin);
         oval_res[ibin] = (hist_data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
     }
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
     delete [] oval_res;
 }
 
@@ -320,7 +321,7 @@ void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
+        xval[0] = hist_data->GetBinCenter(ibin);
         if( func->Eval(xval, par) > DBL_EPSILON){
             oval_res[ibin] = (hist_data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
             oval_res_serr[ibin] = fabs(hist_data->GetOvalSerrElm(ibin) / func->Eval(xval, par));
@@ -330,40 +331,41 @@ void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
         }
     }
 
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
 
-void HistData1dOpe::GetResRatioHd1(const HistData1d* const hist_data,
-                                   const HistData1d* const hist_func,
-                                   HistData1d* const hist_res_out)
+void HistData1dOpe::GetResRatioHd1(const HistDataNerr1d* const hist_data,
+                                   const HistDataNerr1d* const hist_func,
+                                   HistDataNerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
         oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin)) /
             hist_func->GetOvalElm(ibin);
     }
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    
     delete [] oval_res;
 }
 
 
 
 void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
-                                   const HistData1d* const hist_func,
+                                   const HistDataNerr1d* const hist_func,
                                    HistDataSerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenterX(ibin);
+        double xval = hist_data->GetBinCenter(ibin);
         long ibin_func = hist_func->GetIbin(xval);
         if( hist_func->GetOvalElm(ibin_func) > DBL_EPSILON){
             oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func)) /
@@ -374,9 +376,10 @@ void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
             oval_res_serr[ibin] = 0.0;
         }
     }
-
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
@@ -391,36 +394,40 @@ void HistData1dOpe::GetResChiHd1(const HistDataSerr1d* const hist_data,
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
-        xval[0] = hist_data->GetBinCenterX(ibin);
+        xval[0] = hist_data->GetBinCenter(ibin);
         oval_res[ibin] = ( hist_data->GetOvalElm(ibin) - func->Eval(xval, par) ) / 
             hist_data->GetOvalSerrElm(ibin);
         oval_res_serr[ibin] = 1.0;
     }
 
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
 
 
 void HistData1dOpe::GetResChiHd1(const HistDataSerr1d* const hist_data,
-                                 const HistData1d* const hist_func,
+                                 const HistDataNerr1d* const hist_func,
                                  HistDataSerr1d* const hist_res_out)
 {
     long nbin = hist_data->GetNbinX();
     double* oval_res = new double[nbin];
     double* oval_res_serr = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenterX(ibin);
+        double xval = hist_data->GetBinCenter(ibin);
         long ibin_func = hist_func->GetIbin(xval);
         oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func)) /
             hist_data->GetOvalSerrElm(ibin);
         oval_res_serr[ibin] = 1.0;
     }
 
-    hist_res_out->InitSet(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-                          oval_res, oval_res_serr);
+    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    hist_res_out->SetOvalArr(nbin, oval_res);
+    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
+    
     delete [] oval_res;
     delete [] oval_res_serr;
 }
@@ -450,7 +457,7 @@ int HistData1dOpe::IsFormatSame(const HistData1d* const hist_data1,
     return 1;
 }
 
-int HistData1dOpe::IsFormatSame(const HistData1d* const* const hist_data_arr,
+int HistData1dOpe::IsFormatSame(const HistDataNerr1d* const* const hist_data_arr,
                                 int nhist)
 {
     if(nhist < 2){
@@ -495,9 +502,9 @@ int HistData1dOpe::IsFormatSame(const HistData1d* const* const hist_data_arr,
 int HistData1dOpe::IsFormatSame(const HistDataSerr1d* const* const hist_data_arr,
                                 int nhist)
 {
-    HistData1d** h1d_arr = new HistData1d* [nhist];
+    HistDataNerr1d** h1d_arr = new HistDataNerr1d* [nhist];
     for(int ihist = 1; ihist < nhist; ihist++){
-        h1d_arr[ihist] = new HistData1d;
+        h1d_arr[ihist] = new HistDataNerr1d;
         h1d_arr[ihist]->Copy(hist_data_arr[ihist]);
     }
     IsFormatSame(h1d_arr, nhist);
@@ -516,8 +523,8 @@ HistData1d* const HistData1dOpe::GenHd1dByHistInfoAndGraphData2d(const HistInfo1
                                                                  const GraphData2d* const gd2d)
 {
     HistData1d* hd1d = NULL;
-    if("GraphData2d" == gd2d->GetClassName()){
-        hd1d = new HistData1d;
+    if("GraphDataNerr2d" == gd2d->GetClassName()){
+        hd1d = new HistDataNerr1d;
         hd1d->Init(hist_info);
         IsValidForSetByGd2d(hd1d, gd2d);
         for(long ibin = 0; ibin < hd1d->GetNbinX(); ibin ++){
@@ -550,19 +557,18 @@ HistData1d* const HistData1dOpe::GenHd1dByHistInfoAndGraphData2d(const HistInfo1
 }
 
 
-int HistData1dOpe::IsValidForSetByGd2d(const HistData1d* const hd1d,
-                                       const GraphData2d* const gd2d)
+void HistData1dOpe::IsValidForSetByGd2d(const HistData1d* const hd1d,
+                                        const GraphData2d* const gd2d)
 {
     if(hd1d->GetNbinX() != gd2d->GetNdata()){
         MPrintErr("different nbin");
         abort();
     }
     for(long ibin = 0; ibin < hd1d->GetNbinX(); ibin ++){
-        if(1 != MirMath::IsSame(hd1d->GetBinCenterX(ibin),
-                                 gd2d->GetXvalElm(ibin)) ){
+        if(1 != MirMath::IsSame(hd1d->GetBinCenter(ibin),
+                                gd2d->GetXvalElm(ibin)) ){
             MPrintErr("different xval");
             abort();
         }
     }
-    return 1;
 }

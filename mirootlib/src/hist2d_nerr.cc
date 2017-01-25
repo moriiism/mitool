@@ -234,8 +234,8 @@ void HistDataNerr2d::PrintData(FILE* fp, string format,
 
 
 TH2D* const HistDataNerr2d::GenTH2D(double offset_xval,
-                                double offset_yval,
-                                double offset_oval) const
+                                    double offset_yval,
+                                    double offset_oval) const
 {
     string name = GetTitle();
     TH2D* th2d = new TH2D(name.c_str(), name.c_str(),

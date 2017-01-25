@@ -1,0 +1,6 @@
+# lo_str  up_str   offset_tag   scale  !  label
+0.0   10.0    0.0   lin  !  xval
+0.0   100.0   0.0   lin  !  yval
+-10.0   10.0   0.0   lin  !  diff_val
+-5.0   5.0   0.0   lin  !  diff_chi
+-5.0   5.0   0.0   lin  !  diff_ratio

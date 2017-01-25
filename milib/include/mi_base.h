@@ -102,6 +102,7 @@ namespace MiBase
     void GenArray(vector<double> vec,
                   long* narr_ptr,
                   double** val_arr_ptr);
+    double* GenArray(vector<double> vec);
     void DelArray(double* val_arr);
 }
 

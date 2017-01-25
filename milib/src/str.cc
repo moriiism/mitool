@@ -43,6 +43,52 @@ int MiStr::Chomp(string* const buf_ptr)
     return ret;
 }
 
+void MiStr::RmStSpace(string* const buf_ptr)
+{
+    if(1 == IsSpace(*buf_ptr)){
+        buf_ptr->erase(0);
+    } else {
+        // remove st spase
+        int nchar = buf_ptr->size();
+        int index = 0;
+        for(int ichar = 0; ichar < nchar; ichar++){
+            if(0 == isspace(buf_ptr->at(ichar))){
+                index = ichar;
+                break;
+            }
+        }
+        if(index > 0){
+            buf_ptr->erase(0, index);
+        }
+    }
+}
+
+
+void MiStr::RmEdSpace(string* const buf_ptr)
+{
+    if(1 == IsSpace(*buf_ptr)){
+        buf_ptr->erase(0);
+    } else {
+        // remove ed spase
+        int nchar = buf_ptr->size();
+        int index = nchar;
+        for(int ichar = nchar - 1; ichar >= 0; ichar--){
+            if(0 == isspace(buf_ptr->at(ichar))){
+                index = ichar;
+                break;
+            }
+        }
+        if(index < nchar - 1){
+            buf_ptr->erase(index + 1);
+        }
+    }
+}
+
+void MiStr::RmStEdSpace(string* const buf_ptr)
+{
+    RmStSpace(buf_ptr);
+    RmEdSpace(buf_ptr);
+}
 
 void MiStr::GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
                        const char* const delim)

@@ -17,6 +17,13 @@ namespace MiStr
     // this remove the '\n'.
     // The function name is the same as such a function in perl.
 
+    void RmStSpace(string* const buf_ptr);
+    // This removes successive spaces at the head of buf.
+    void RmEdSpace(string* const buf_ptr);
+    // This removes successive spaces at the tail of buf.
+    void RmStEdSpace(string* const buf_ptr);
+    // This removes successive spaces at the head and tails of buf.
+    
     void GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
                   const char* const delim = " \t");
     void DelSplit(string* split_arr);

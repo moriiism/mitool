@@ -26,6 +26,18 @@ void HistDataSerr1d::Init(const HistInfo1d* const hist_info)
     GetOvalArrNonConst()->Init(hist_info->GetNbin());
 }
 
+void HistDataSerr1d::SetOvalSerrArr(long ndata, const double* const val_serr)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValSerr(ndata, val_serr);
+}
+    
+void HistDataSerr1d::SetOvalSerrArr(vector<double> val_serr)
+{
+    IsOvalArrNotNull();
+    GetOvalArrNonConst()->SetValSerr(val_serr);
+}
+
 void HistDataSerr1d::SetOvalSerrElm(long ibin, double oval_serr)
 {
     IsOvalArrNotNull();

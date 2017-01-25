@@ -40,9 +40,10 @@ public:
 
     void Init(int ndim);
     void Load(string file);
-    MirPlotConf* const Clone() const;
     void SetIdimElm(int idim, string lo_str, string up_str,
                     string offset_tag, string scale, string label);
+    void Copy(const MirPlotConf* const org);
+    MirPlotConf* const Clone() const;
 
     // const func
     void Print(FILE* fp) const;
@@ -59,11 +60,21 @@ public:
     string GetScaleElm(int idim) const {return scale_[idim];};
     string GetLabelElm(int idim) const {return label_[idim];};
 
+    //
+    // static
+    //
+
+    //              lo_str  up_str   offset_tag   scale  !  label
+    // xval
+    // yval
+    // diff_val
+    // diff_chi
+    // diff_ratio
+    
     static void GenPlotConf3(const MirPlotConf* const plot_conf,
                              MirPlotConf** const plot_conf_val_ptr,
                              MirPlotConf** const plot_conf_chi_ptr,
                              MirPlotConf** const plot_conf_ratio_ptr);
-
     static void CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1);
     
 private:

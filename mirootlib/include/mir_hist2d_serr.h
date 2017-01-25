@@ -16,6 +16,8 @@ public:
     void Init(long nbin_xval, double xval_lo, double xval_up,
               long nbin_yval, double yval_lo, double yval_up);
     void Init(const HistInfo2d* const hist_info);
+    void SetOvalSerrArr(long ndata, const double* const val_serr);
+    void SetOvalSerrArr(vector<double> val_serr);
     void SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_serr);
 
     void FillByMax(double xval, double yval,

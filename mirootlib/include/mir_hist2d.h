@@ -26,6 +26,23 @@ public:
                       long nbin_yval, double yval_lo, double yval_up) = 0;
     virtual void Init(const HistInfo2d* const hist_info) = 0;
     void SetOvalArr(const DataArray1d* const oval_arr);
+    void SetOvalArr(long ndata, const double* const val);
+    void SetOvalArr(vector<double> val);    
+    virtual void SetOvalSerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalSerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(long ndata, const double* const val_serr)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(vector<double> val_serr)
+        {MPrintErrVFunc; abort();};    
+    virtual void SetOvalTerrArr(long ndata,
+                                const double* const val_terr_plus,
+                                const double* const val_terr_minus)
+        {MPrintErrVFunc; abort();};
+    virtual void SetOvalTerrArr(vector<double> val_terr_plus,
+                                vector<double> val_terr_minus)
+        {MPrintErrVFunc; abort();};    
 
     void SetOvalElm(long ibin_xval, long ibin_yval, double oval);
     virtual void SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_serr)

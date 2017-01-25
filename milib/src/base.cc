@@ -71,6 +71,16 @@ void MiBase::GenArray(vector<double> vec,
     *val_arr_ptr = val_arr;
 }
 
+double* MiBase::GenArray(vector<double> vec)
+{
+    long narr = vec.size();
+    double* val_arr = new double [narr];
+    for(long idata = 0; idata < narr; idata ++){
+        val_arr[idata] = vec[idata];
+    }
+    return val_arr;
+}
+
 void MiBase::DelArray(double* val_arr)
 {
     delete [] val_arr; val_arr = NULL;

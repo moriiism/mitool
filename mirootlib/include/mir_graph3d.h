@@ -37,51 +37,51 @@ public:
     void SetOvalArr(long ndata, const double* const val);
     void SetOvalArr(vector<double> val);
 
-    void SetXvalSerrArr(long ndata, const double* const val_serr)
+    virtual void SetXvalSerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetXvalSerrArr(vector<double> val_serr)
+    virtual void SetXvalSerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};
-    void SetYvalSerrArr(long ndata, const double* const val_serr)
+    virtual void SetYvalSerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetYvalSerrArr(vector<double> val_serr)
+    virtual void SetYvalSerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};
-    void SetOvalSerrArr(long ndata, const double* const val_serr)
+    virtual void SetOvalSerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetOvalSerrArr(vector<double> val_serr)
+    virtual void SetOvalSerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};
 
-    void SetXvalTerrArr(long ndata, const double* const val_serr)
+    virtual void SetXvalTerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetXvalTerrArr(vector<double> val_serr)
+    virtual void SetXvalTerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};    
-    void SetXvalTerrArr(long ndata,
-                        const double* const val_terr_plus,
-                        const double* const val_terr_minus)
+    virtual void SetXvalTerrArr(long ndata,
+                                const double* const val_terr_plus,
+                                const double* const val_terr_minus)
         {MPrintErrVFunc; abort();};
-    void SetXvalTerrArr(vector<double> val_terr_plus,
-                        vector<double> val_terr_minus)
+    virtual void SetXvalTerrArr(vector<double> val_terr_plus,
+                                vector<double> val_terr_minus)
         {MPrintErrVFunc; abort();};    
-    void SetYvalTerrArr(long ndata, const double* const val_serr)
+    virtual void SetYvalTerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetYvalTerrArr(vector<double> val_serr)
+    virtual void SetYvalTerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};    
-    void SetYvalTerrArr(long ndata,
-                        const double* const val_terr_plus,
-                        const double* const val_terr_minus)
+    virtual void SetYvalTerrArr(long ndata,
+                                const double* const val_terr_plus,
+                                const double* const val_terr_minus)
         {MPrintErrVFunc; abort();};
-    void SetYvalTerrArr(vector<double> val_terr_plus,
-                        vector<double> val_terr_minus)
+    virtual void SetYvalTerrArr(vector<double> val_terr_plus,
+                                vector<double> val_terr_minus)
         {MPrintErrVFunc; abort();};    
-    void SetOvalTerrArr(long ndata, const double* const val_serr)
+    virtual void SetOvalTerrArr(long ndata, const double* const val_serr)
         {MPrintErrVFunc; abort();};
-    void SetOvalTerrArr(vector<double> val_serr)
+    virtual void SetOvalTerrArr(vector<double> val_serr)
         {MPrintErrVFunc; abort();};    
-    void SetOvalTerrArr(long ndata,
-                        const double* const val_terr_plus,
-                        const double* const val_terr_minus)
+    virtual void SetOvalTerrArr(long ndata,
+                                const double* const val_terr_plus,
+                                const double* const val_terr_minus)
         {MPrintErrVFunc; abort();};
-    void SetOvalTerrArr(vector<double> val_terr_plus,
-                        vector<double> val_terr_minus)
+    virtual void SetOvalTerrArr(vector<double> val_terr_plus,
+                                vector<double> val_terr_minus)
         {MPrintErrVFunc; abort();};    
 
     void SetPoint(long idata, double xval, double yval, double oval);

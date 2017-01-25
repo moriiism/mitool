@@ -47,6 +47,7 @@ void MirPlotConf::Load(string file)
         string line_str = line_arr[idim];
         int ipos_delim = line_str.find("!");
         string label_str = line_str.substr(ipos_delim + 1);
+        MiStr::RmStEdSpace(&label_str);
         SetIdimElm(idim, lo_char, up_char,
                    offset_tag_char, scale_char, label_str);
     }
@@ -55,7 +56,7 @@ void MirPlotConf::Load(string file)
 
 
 void MirPlotConf::SetIdimElm(int idim, string lo_str, string up_str,
-                              string offset_tag, string scale, string label)
+                             string offset_tag, string scale, string label)
 {
     if(idim >= GetNdim()){
         char msg[kLineSize];
@@ -71,7 +72,28 @@ void MirPlotConf::SetIdimElm(int idim, string lo_str, string up_str,
     label_[idim] = label;
 }
 
-// const func
+void MirPlotConf::Copy(const MirPlotConf* const org)
+{
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
+    
+    CopyTitle(org);
+    Init(org->GetNdim());
+    for(int idim = 0; idim < org->GetNdim(); idim++){
+        lo_str_[idim] = org->lo_str_[idim];
+        up_str_[idim] = org->up_str_[idim];
+        offset_tag_[idim] = org->offset_tag_[idim];
+        scale_[idim] = org->scale_[idim];
+        label_[idim] = org->label_[idim];
+    }
+}
+
+MirPlotConf* const MirPlotConf::Clone() const
+{
+    MirPlotConf* obj_new = new MirPlotConf;
+    obj_new->Copy(this);
+    return obj_new;
+}
 
 void MirPlotConf::Print(FILE* fp) const
 {
@@ -90,10 +112,14 @@ void MirPlotConf::Print(FILE* fp) const
     }
 }
 
+//
+// static
+//
+
 void MirPlotConf::GenPlotConf3(const MirPlotConf* const plot_conf,
-                                MirPlotConf** const plot_conf_val_ptr,
-                                MirPlotConf** const plot_conf_chi_ptr,
-                                MirPlotConf** const plot_conf_ratio_ptr)
+                               MirPlotConf** const plot_conf_val_ptr,
+                               MirPlotConf** const plot_conf_chi_ptr,
+                               MirPlotConf** const plot_conf_ratio_ptr)
 {
     if(5 != plot_conf->GetNdim()){
         MPrintErr("bad plot_conf (ndim of plot_conf is not 5)");
@@ -171,8 +197,6 @@ void MirPlotConf::GenPlotConf3(const MirPlotConf* const plot_conf,
     *plot_conf_chi_ptr = plot_conf_chi;
     *plot_conf_ratio_ptr = plot_conf_ratio;    
 }
-
-
 
 void MirPlotConf::CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1)
 {
