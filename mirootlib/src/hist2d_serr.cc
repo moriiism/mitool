@@ -50,7 +50,7 @@ void HistDataSerr2d::SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_
     GetOvalArrNonConst()->SetValSerrElm(ibin, oval_serr);
 }
 
-void HistDataSerr2d::FillByMax(double xval, double yval,
+void HistDataSerr2d::FillByLarger(double xval, double yval,
                                double oval,
                                double oval_serr)
 {
@@ -58,10 +58,10 @@ void HistDataSerr2d::FillByMax(double xval, double yval,
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMax(ibin, oval, oval_serr);
+    GetOvalArrNonConst()->FillByLarger(ibin, oval, oval_serr);
 }
 
-void HistDataSerr2d::FillByMin(double xval, double yval,
+void HistDataSerr2d::FillBySmaller(double xval, double yval,
                                double oval,
                                double oval_serr)
 {
@@ -69,7 +69,7 @@ void HistDataSerr2d::FillByMin(double xval, double yval,
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMin(ibin, oval, oval_serr);
+    GetOvalArrNonConst()->FillBySmaller(ibin, oval, oval_serr);
 }
 
 void HistDataSerr2d::SetOvalErrArrByPoissonErr()

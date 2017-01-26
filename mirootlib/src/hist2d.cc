@@ -48,22 +48,22 @@ void HistData2d::Fill(double xval, double yval, double weight)
     GetOvalArrNonConst()->Fill(ibin, weight);
 }
 
-void HistData2d::FillByMax(double xval, double yval, double oval)
+void HistData2d::FillByLarger(double xval, double yval, double oval)
 {
     IsOvalArrNotNull();
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMax(ibin, oval);
+    GetOvalArrNonConst()->FillByLarger(ibin, oval);
 }
 
-void HistData2d::FillByMin(double xval, double yval, double oval)
+void HistData2d::FillBySmaller(double xval, double yval, double oval)
 {
     IsOvalArrNotNull();
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMin(ibin, oval);
+    GetOvalArrNonConst()->FillBySmaller(ibin, oval);
 }
 
 void HistData2d::SetConst(double constant)
@@ -368,7 +368,9 @@ void HistData2d::Save(string outfile, string format,
                       double offset_oval) const
 {
     FILE* fp = fopen(outfile.c_str(), "w");
-    PrintInfo(fp, format);
+    PrintInfo(fp);
+    fprintf(fp, "# format      = %s\n", format.c_str());
+    fprintf(fp, "\n");
     PrintData(fp, format, offset_xval, offset_yval, offset_oval);
     fclose(fp);
 }
@@ -383,18 +385,14 @@ void HistData2d::SaveData(string outfile, string format,
     fclose(fp);
 }
 
-void HistData2d::PrintInfo(FILE* fp, string format) const
+void HistData2d::PrintInfo(FILE* fp) const
 {
-    fprintf(fp, "#\n");
     fprintf(fp, "# nbin_xval_  = %ld\n", GetNbinX());
     fprintf(fp, "# xval_lo_    = %e\n", GetXvalLo());
     fprintf(fp, "# xval_up_    = %e\n", GetXvalUp());
     fprintf(fp, "# nbin_yval_  = %ld\n", GetNbinY());
     fprintf(fp, "# yval_lo_    = %e\n", GetYvalLo());
     fprintf(fp, "# yval_up_    = %e\n", GetYvalUp());
-    fprintf(fp, "# format      = %s\n", format.c_str());
-    fprintf(fp, "#\n");
-    fprintf(fp, "\n");
 }
 
 void HistData2d::PrintData(FILE* fp, string format,

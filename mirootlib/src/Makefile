@@ -2,8 +2,7 @@
 include ../../Makefile.in
 include ../Makefile.in
 
-# INCLUDE := $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-INCLUDE := $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC)
+INCLUDE := $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
 
 TARGET := libmirootlib.a
 

@@ -192,91 +192,91 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    void FillByMax(long idata, double val);
+//    void FillByLarger(long idata, double val);
     {
-        printf("--- test FillByMax\n");
+        printf("--- test FillByLarger\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
-        da1d_1->FillByMax(1, 9.0);
+        da1d_1->FillByLarger(1, 9.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
 
-//  void FillByMax(long idata,
+//  void FillByLarger(long idata,
 //                   double val,
 //                   double val_serr);
     {
-        printf("--- test FillByMax\n");
+        printf("--- test FillByLarger\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
-        da1d_1->FillByMax(1, 9.0, 7.0);
+        da1d_1->FillByLarger(1, 9.0, 7.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
     
-//  void FillByMax(long idata,
+//  void FillByLarger(long idata,
 //                   double val,
 //                   double val_terr_plus,
 //                   double val_terr_minus);
     {
-        printf("--- test FillByMax\n");
+        printf("--- test FillByLarger\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
-        da1d_1->FillByMax(1, 9.0, 7.0, -4.0);
+        da1d_1->FillByLarger(1, 9.0, 7.0, -4.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
     
-//    void FillByMin(long idata, double val);
+//    void FillBySmaller(long idata, double val);
     {
-        printf("--- test FillByMin\n");
+        printf("--- test FillBySmaller\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
         da1d_1->SetConst(3);
-        da1d_1->FillByMin(1, 2.0);
+        da1d_1->FillBySmaller(1, 2.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
     
-//   void FillByMin(long idata,
+//   void FillBySmaller(long idata,
 //                   double val,
 //                   double val_serr);
     {
-        printf("--- test FillByMin\n");
+        printf("--- test FillBySmaller\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
         da1d_1->SetConst(3);
-        da1d_1->FillByMin(1, 2.0, 0.8);
+        da1d_1->FillBySmaller(1, 2.0, 0.8);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
 
-//    void FillByMin(long idata,
+//    void FillBySmaller(long idata,
 //                   double val,
 //                   double val_terr_plus,
 //                   double val_terr_minus);
     {
-        printf("--- test FillByMin\n");
+        printf("--- test FillBySmaller\n");
         DataArrayTerr1d* da1d_1 = new DataArrayTerr1d("da1d_1");
         long ndata = 4;
         da1d_1->Init(ndata);
         da1d_1->SetConst(3);
-        da1d_1->FillByMin(1, 2.0, 0.8, -0.5);
+        da1d_1->FillBySmaller(1, 2.0, 0.8, -0.5);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;

@@ -21,7 +21,7 @@ void DataArrayNerr1d::Fill(long idata, double weight)
     SetValElm(idata, val_pre + weight);
 }
 
-void DataArrayNerr1d::FillByMax(long idata, double oval)
+void DataArrayNerr1d::FillByLarger(long idata, double oval)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < oval){
@@ -29,7 +29,7 @@ void DataArrayNerr1d::FillByMax(long idata, double oval)
     }
 }
 
-void DataArrayNerr1d::FillByMin(long idata, double oval)
+void DataArrayNerr1d::FillBySmaller(long idata, double oval)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > oval){

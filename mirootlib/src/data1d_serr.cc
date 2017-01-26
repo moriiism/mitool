@@ -64,7 +64,7 @@ void DataArraySerr1d::Fill(long idata, double weight)
     // poisson error
 }
 
-void DataArraySerr1d::FillByMax(long idata, double val)
+void DataArraySerr1d::FillByLarger(long idata, double val)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < val){
@@ -73,9 +73,9 @@ void DataArraySerr1d::FillByMax(long idata, double val)
     }
 }
 
-void DataArraySerr1d::FillByMax(long idata,
-                                double val,
-                                double val_serr)
+void DataArraySerr1d::FillByLarger(long idata,
+                                   double val,
+                                   double val_serr)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < val){
@@ -84,7 +84,7 @@ void DataArraySerr1d::FillByMax(long idata,
     }
 }
 
-void DataArraySerr1d::FillByMin(long idata, double val)
+void DataArraySerr1d::FillBySmaller(long idata, double val)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > val){
@@ -93,9 +93,9 @@ void DataArraySerr1d::FillByMin(long idata, double val)
     }
 }
 
-void DataArraySerr1d::FillByMin(long idata,
-                                double val,
-                                double val_serr)
+void DataArraySerr1d::FillBySmaller(long idata,
+                                    double val,
+                                    double val_serr)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > val){

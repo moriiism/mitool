@@ -123,7 +123,7 @@ void DataArrayTerr1d::Fill(long idata, double weight)
     // poisson error    
 }
 
-void DataArrayTerr1d::FillByMax(long idata, double val)
+void DataArrayTerr1d::FillByLarger(long idata, double val)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < val){
@@ -136,9 +136,9 @@ void DataArrayTerr1d::FillByMax(long idata, double val)
     }
 }
 
-void DataArrayTerr1d::FillByMax(long idata,
-                                double val,
-                                double val_serr)
+void DataArrayTerr1d::FillByLarger(long idata,
+                                   double val,
+                                   double val_serr)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < val){
@@ -147,10 +147,10 @@ void DataArrayTerr1d::FillByMax(long idata,
     }
 }
 
-void DataArrayTerr1d::FillByMax(long idata,
-                                double val,
-                                double val_terr_plus,
-                                double val_terr_minus)
+void DataArrayTerr1d::FillByLarger(long idata,
+                                   double val,
+                                   double val_terr_plus,
+                                   double val_terr_minus)
 {
     double val_pre = GetValElm(idata);
     if(val_pre < val){
@@ -161,7 +161,7 @@ void DataArrayTerr1d::FillByMax(long idata,
 }
 
 
-void DataArrayTerr1d::FillByMin(long idata, double val)
+void DataArrayTerr1d::FillBySmaller(long idata, double val)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > val){
@@ -174,9 +174,9 @@ void DataArrayTerr1d::FillByMin(long idata, double val)
     }
 }
 
-void DataArrayTerr1d::FillByMin(long idata,
-                                double val,
-                                double val_serr)
+void DataArrayTerr1d::FillBySmaller(long idata,
+                                    double val,
+                                    double val_serr)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > val){
@@ -185,10 +185,10 @@ void DataArrayTerr1d::FillByMin(long idata,
     }
 }
 
-void DataArrayTerr1d::FillByMin(long idata,
-                                double val,
-                                double val_terr_plus,
-                                double val_terr_minus)
+void DataArrayTerr1d::FillBySmaller(long idata,
+                                    double val,
+                                    double val_terr_plus,
+                                    double val_terr_minus)
 {
     double val_pre = GetValElm(idata);
     if(val_pre > val){

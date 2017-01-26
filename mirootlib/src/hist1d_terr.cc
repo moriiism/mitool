@@ -76,30 +76,30 @@ void HistDataTerr1d::SetOvalTerrMinusElm(long ibin,
 }
 
 
-void HistDataTerr1d::FillByMax(double xval,
-                               double oval,
-                               double oval_terr_plus,
-                               double oval_terr_minus)
+void HistDataTerr1d::FillByLarger(double xval,
+                                  double oval,
+                                  double oval_terr_plus,
+                                  double oval_terr_minus)
 {
     IsOvalArrNotNull();
     long ibin = GetIbin(xval);
-    GetOvalArrNonConst()->FillByMax(ibin,
-                                    oval,
-                                    oval_terr_plus,
-                                    oval_terr_minus);
+    GetOvalArrNonConst()->FillByLarger(ibin,
+                                       oval,
+                                       oval_terr_plus,
+                                       oval_terr_minus);
 }
 
-void HistDataTerr1d::FillByMin(double xval,
+void HistDataTerr1d::FillBySmaller(double xval,
                                double oval,
                                double oval_terr_plus,
                                double oval_terr_minus)
 {
     IsOvalArrNotNull();
     long ibin = GetIbin(xval);
-    GetOvalArrNonConst()->FillByMin(ibin,
-                                    oval,
-                                    oval_terr_plus,
-                                    oval_terr_minus);
+    GetOvalArrNonConst()->FillBySmaller(ibin,
+                                        oval,
+                                        oval_terr_plus,
+                                        oval_terr_minus);
 }
 
 void HistDataTerr1d::SetOvalErrArrByPoissonErr()
@@ -292,10 +292,10 @@ HistDataTerr1d* const HistDataTerr1d::GenHd1MaxInBin(long nbin_new) const
     h1d_new->Init(nbin_new, GetXvalLo(), GetXvalUp());
   
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-        h1d_new->FillByMax(GetBinCenter(ibin),
-                           GetOvalElm(ibin),
-                           GetOvalTerrPlusElm(ibin),
-                           GetOvalTerrMinusElm(ibin));
+        h1d_new->FillByLarger(GetBinCenter(ibin),
+                              GetOvalElm(ibin),
+                              GetOvalTerrPlusElm(ibin),
+                              GetOvalTerrMinusElm(ibin));
     }
     return h1d_new;
 }

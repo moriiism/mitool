@@ -157,7 +157,7 @@ HistDataNerr1d* const HistDataNerr1d::GenHd1MaxInBin(long nbin_new) const
     h1d_new->Init(nbin_new, GetXvalLo(), GetXvalUp());
   
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-        h1d_new->FillByMax( GetBinCenter(ibin), GetOvalElm(ibin) );
+        h1d_new->FillByLarger( GetBinCenter(ibin), GetOvalElm(ibin) );
     }
 
     return h1d_new;

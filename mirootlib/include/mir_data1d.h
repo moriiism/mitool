@@ -66,26 +66,26 @@ public:
     // add weight events on the idata-bin of the data
 
     // poisson error
-    virtual void FillByMax(long idata, double val) = 0;
-    virtual void FillByMax(long idata,
-                           double val,
-                           double val_serr)
+    virtual void FillByLarger(long idata, double val) = 0;
+    virtual void FillByLarger(long idata,
+                              double val,
+                              double val_serr)
         {MPrintErrVFunc; abort();};
-    virtual void FillByMax(long idata,
-                           double val,
-                           double val_terr_plus,
-                           double val_terr_minus)
+    virtual void FillByLarger(long idata,
+                              double val,
+                              double val_terr_plus,
+                              double val_terr_minus)
         {MPrintErrVFunc; abort();};
 
-    virtual void FillByMin(long idata, double val) = 0;
-    virtual void FillByMin(long idata,
-                           double val,
-                           double val_serr)
+    virtual void FillBySmaller(long idata, double val) = 0;
+    virtual void FillBySmaller(long idata,
+                               double val,
+                               double val_serr)
         {MPrintErrVFunc; abort();};
-    virtual void FillByMin(long idata,
-                           double val,
-                           double val_terr_plus,
-                           double val_terr_minus)
+    virtual void FillBySmaller(long idata,
+                               double val,
+                               double val_terr_plus,
+                               double val_terr_minus)
         {MPrintErrVFunc; abort();};
     
     virtual void SetConst(double constant) = 0;

@@ -28,14 +28,14 @@ public:
     void SetOvalTerrElm(long ibin_xval, long ibin_yval,
                         double oval_terr_plus,
                         double oval_terr_minus);
-    void FillByMax(double xval, double yval,
-                   double oval,
-                   double oval_terr_plus,
-                   double oval_terr_minus);
-    void FillByMin(double xval, double yval,
-                   double oval,
-                   double oval_terr_plus,
-                   double oval_terr_minus);
+    void FillByLarger(double xval, double yval,
+                      double oval,
+                      double oval_terr_plus,
+                      double oval_terr_minus);
+    void FillBySmaller(double xval, double yval,
+                       double oval,
+                       double oval_terr_plus,
+                       double oval_terr_minus);
     void SetOvalErrArrByPoissonErr();
     HistDataTerr2d* const Clone() const;
     void Load(string file);

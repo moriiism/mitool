@@ -79,34 +79,34 @@ void HistDataTerr2d::SetOvalTerrElm(long ibin_xval, long ibin_yval,
 }
 
 
-void HistDataTerr2d::FillByMax(double xval, double yval,
-                               double oval,
-                               double oval_terr_plus,
-                               double oval_terr_minus)
+void HistDataTerr2d::FillByLarger(double xval, double yval,
+                                  double oval,
+                                  double oval_terr_plus,
+                                  double oval_terr_minus)
 {
     IsOvalArrNotNull();
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMax(ibin,
-                                    oval,
-                                    oval_terr_plus,
-                                    oval_terr_minus);
+    GetOvalArrNonConst()->FillByLarger(ibin,
+                                       oval,
+                                       oval_terr_plus,
+                                       oval_terr_minus);
 }
 
-void HistDataTerr2d::FillByMin(double xval, double yval,
-                               double oval,
-                               double oval_terr_plus,
-                               double oval_terr_minus)
+void HistDataTerr2d::FillBySmaller(double xval, double yval,
+                                   double oval,
+                                   double oval_terr_plus,
+                                   double oval_terr_minus)
 {
     IsOvalArrNotNull();
     IsValidRangeX(xval);
     IsValidRangeY(yval);
     long ibin = GetHi2d()->GetIbinFromXY(xval, yval);
-    GetOvalArrNonConst()->FillByMin(ibin,
-                                    oval,
-                                    oval_terr_plus,
-                                    oval_terr_minus);
+    GetOvalArrNonConst()->FillBySmaller(ibin,
+                                        oval,
+                                        oval_terr_plus,
+                                        oval_terr_minus);
 }
 
 void HistDataTerr2d::SetOvalErrArrByPoissonErr()

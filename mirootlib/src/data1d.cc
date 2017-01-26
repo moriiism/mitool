@@ -112,6 +112,7 @@ void DataArray1d::Save(string outfile, int mode, double offset_val) const
 {
     FILE* fp = fopen(outfile.c_str(), "w");
     PrintInfo(fp);
+    fprintf(fp, "\n");
     PrintData(fp, mode, offset_val);
     fclose(fp);
 }
@@ -125,11 +126,8 @@ void DataArray1d::SaveData(string outfile, int mode, double offset_val) const
 
 void DataArray1d::PrintInfo(FILE* fp) const
 {
-    fprintf(fp, "#\n");
     fprintf(fp, "# ndata_           = %ld\n", ndata_);
     fprintf(fp, "# flag_val_sorted_ = %d\n", flag_val_sorted_);
-    fprintf(fp, "#\n");
-    fprintf(fp, "\n");
 }
 
 int DataArray1d::IsAllOne() const

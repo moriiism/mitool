@@ -42,20 +42,20 @@ void HistData1d::Fill(double xval, double weight)
     GetOvalArrNonConst()->Fill(ibin, weight);
 }
 
-void HistData1d::FillByMax(double xval, double oval)
+void HistData1d::FillByLarger(double xval, double oval)
 {
     IsOvalArrNotNull();
     IsValidRange(xval);
     long ibin = GetIbin(xval);
-    GetOvalArrNonConst()->FillByMax(ibin, oval);
+    GetOvalArrNonConst()->FillByLarger(ibin, oval);
 }
 
-void HistData1d::FillByMin(double xval, double oval)
+void HistData1d::FillBySmaller(double xval, double oval)
 {
     IsOvalArrNotNull();
     IsValidRange(xval);
     long ibin = GetIbin(xval);    
-    GetOvalArrNonConst()->FillByMin(ibin, oval);
+    GetOvalArrNonConst()->FillBySmaller(ibin, oval);
 }
 
 void HistData1d::SetConst(double constant)
@@ -207,6 +207,43 @@ double HistData1d::GetXvalAtOvalMax() const
     return GetBinCenter(GetOvalArr()->GetLocValMax());
 }
 
+void HistData1d::GenXvalArr(double** const xval_arr_ptr,
+                            long* const nbin_ptr) const
+{
+    long nbin = GetNbinX();
+    double* xval_arr = new double [nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        xval_arr[ibin] = GetBinCenter(ibin);
+    }
+    *xval_arr_ptr = xval_arr;
+    *nbin_ptr = nbin;
+}
+
+void HistData1d::GenXvalSerrArr(double** const xval_serr_arr_ptr,
+                                long* const nbin_ptr) const
+{
+    long nbin = GetNbinX();
+    double* xval_serr_arr = new double [nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        xval_serr_arr[ibin] = GetXvalBinWidth() / 2.0;
+    }
+    *xval_serr_arr_ptr = xval_serr_arr;
+    *nbin_ptr = nbin;
+}
+
+void HistData1d::GenOvalArr(double** const oval_arr_ptr,
+                            long* const nbin_ptr) const
+{
+    long nbin = GetNbinX();    
+    double* oval_arr = new double [nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        oval_arr[ibin] = GetOvalArr()->GetValElm(ibin);
+    }
+    *oval_arr_ptr = oval_arr;
+    *nbin_ptr = nbin;
+}
+
+
 long HistData1d::GetIbin(double xval) const
 {
     long ibin = GetHi1d()->GetIbin(xval, "lin");
@@ -275,7 +312,9 @@ void HistData1d::Save(string outfile, string format,
                       double offset_oval) const
 {
     FILE* fp = fopen(outfile.c_str(), "w");
-    PrintInfo(fp, format);
+    PrintInfo(fp);
+    fprintf(fp, "# format      = %s\n", format.c_str());
+    fprintf(fp, "\n");
     PrintData(fp, format, offset_xval, offset_oval);
     fclose(fp);
 }
@@ -289,15 +328,11 @@ void HistData1d::SaveData(string outfile, string format,
     fclose(fp);
 }
 
-void HistData1d::PrintInfo(FILE* fp, string format) const
+void HistData1d::PrintInfo(FILE* fp) const
 {
-    fprintf(fp, "#\n");
     fprintf(fp, "# nbin_xval_  = %ld\n", GetNbinX());
     fprintf(fp, "# xval_lo_    = %e\n", GetXvalLo());
     fprintf(fp, "# xval_up_    = %e\n", GetXvalUp());
-    fprintf(fp, "# format      = %s\n", format.c_str());
-    fprintf(fp, "#\n");
-    fprintf(fp, "\n");
 }
 
 

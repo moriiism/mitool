@@ -20,12 +20,12 @@ public:
     void SetOvalSerrArr(vector<double> val_serr);
     void SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_serr);
 
-    void FillByMax(double xval, double yval,
-                   double oval,
-                   double oval_serr);
-    void FillByMin(double xval, double yval,
-                   double oval,
-                   double oval_serr);
+    void FillByLarger(double xval, double yval,
+                      double oval,
+                      double oval_serr);
+    void FillBySmaller(double xval, double yval,
+                       double oval,
+                       double oval_serr);
     void SetOvalErrArrByPoissonErr();
     HistDataSerr2d* const Clone() const;
     void Load(string file);

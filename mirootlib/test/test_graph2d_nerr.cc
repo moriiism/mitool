@@ -12,11 +12,16 @@ int main(int argc, char* argv[])
 {
     int status_prog = kRetNormal;
 
-//    void Init();
+//    void Init(long ndata);    
     {
         printf("--- test Init;\n");
 	GraphDataNerr2d* gd2d = new GraphDataNerr2d;
-	gd2d->Init();
+	gd2d->Init(4);
+        gd2d->SetPoint(0, 0.0, 0.1);
+        gd2d->SetPoint(1, 1.0, 1.1);
+        gd2d->SetPoint(2, 2.0, 2.1);
+        gd2d->SetPoint(3, 3.0, 3.1);
+        gd2d->Save("temp.dat", "x,y");
 	gd2d->PrintData(stdout, "x,y", 0.0, 0.0);
 	delete gd2d;
 
@@ -27,7 +32,11 @@ int main(int argc, char* argv[])
     {
         printf("--- test Clone;\n");
 	GraphDataNerr2d* gd2d_1 = new GraphDataNerr2d;
-	gd2d_1->Init();
+	gd2d_1->Init(4);
+        gd2d_1->SetPoint(0, 0.0, 0.1);
+        gd2d_1->SetPoint(1, 1.0, 1.1);
+        gd2d_1->SetPoint(2, 2.0, 2.1);
+        gd2d_1->SetPoint(3, 3.0, 3.1);
 	gd2d_1->PrintData(stdout, "x,y", 0.0, 0.0);
 
 	GraphDataNerr2d* gd2d_2 = gd2d_1->Clone();
@@ -43,7 +52,8 @@ int main(int argc, char* argv[])
     {
         printf("--- test Load\n");
 	GraphDataNerr2d* gd2d_1 = new GraphDataNerr2d;
-	gd2d_1->Load("");
+	gd2d_1->Load("data/test_graph2d_nerr.dat");
+        gd2d_1->PrintInfo(stdout);
 	gd2d_1->PrintData(stdout, "x,y", 0.0, 0.0);
 	delete gd2d_1;
 
@@ -55,64 +65,86 @@ int main(int argc, char* argv[])
     {
         printf("--- test Load\n");
 	GraphDataNerr2d* gd2d_1 = new GraphDataNerr2d;
-	gd2d_1->Load("");
+	gd2d_1->Load("data/test_graph2d_nerr.dat", "x,y");
+        gd2d_1->PrintInfo(stdout);
 	gd2d_1->PrintData(stdout, "x,y", 0.0, 0.0);
 	delete gd2d_1;
 
         printf("=== \n");
     }
-
+   
 //    void Sort();
     {
-        printf("--- test Sort\n");
-	
-	long ndata = 5;
-	vector<double> xval_vec(ndata);
-	vector<double> oval_vec(ndata);
-	xval_vec[0] = -1.0;
-	xval_vec[1] =  0.0;
-	xval_vec[2] =  1.0;
-	xval_vec[3] =  2.0;
-	xval_vec[4] =  3.0;
-	oval_vec[0] = -10.0;
-	oval_vec[1] =  0.0;
-	oval_vec[2] =  10.0;
-	oval_vec[3] =  20.0;
-	oval_vec[4] =  30.0;
+        printf("--- test Init;\n");
+	GraphDataNerr2d* gd2d = new GraphDataNerr2d;
+	gd2d->Init(4);
+        gd2d->SetPoint(0, 0.0, 0.1);
+        gd2d->SetPoint(1, 3.0, 1.1);
+        gd2d->SetPoint(2, 2.0, 2.1);
+        gd2d->SetPoint(3, 1.0, 3.1);
+        gd2d->PrintInfo(stdout);        
+	gd2d->PrintData(stdout, "x,y", 0.0, 0.0);
+        gd2d->Sort();
+        printf("--- \n");
+        gd2d->PrintInfo(stdout);        
+        gd2d->PrintData(stdout, "x,y", 0.0, 0.0);
+        
+	delete gd2d;
 
-        DataArrayNerr1d* da1d_x = new DataArrayNerr1d;
-	da1d_x->Init(5);
-	da1d_x->SetVal(xval_vec);
-        DataArrayNerr1d* da1d_o = new DataArrayNerr1d;
-	da1d_o->Init(5);
-	da1d_o->SetVal(oval_vec);
-
-	GraphDataNerr2d* gd2d_1 = new GraphDataNerr2d;
-	gd2d_1->Init();
-	gd2d_1->SetXvalArr(da1d_x);
-	gd2d_1->SetOvalArr(da1d_o);
-
-	delete da1d_x;
-	delete da1d_o;
-	gd2d_1->PrintData(stdout, "x,y", 0.0, 0.0);
-	gd2d_1->Sort();
-
-	gd2d_1->PrintData(stdout, "x,y", 0.0, 0.0);
-	delete gd2d_1;
+        printf("=== \n");
+    }
+  
+//    const DataArrayNerr1d* const GetXvalArr() const;
+//    const DataArrayNerr1d* const GetOvalArr() const;
+    {
+        printf("--- test GetXvalArr()\n");
+        printf("--- test GetOvalArr()\n");        
+	GraphDataNerr2d* gd2d = new GraphDataNerr2d;
+	gd2d->Init(4);
+        gd2d->SetPoint(0, 0.0, 0.1);
+        gd2d->SetPoint(1, 3.0, 1.1);
+        gd2d->SetPoint(2, 2.0, 2.1);
+        gd2d->SetPoint(3, 1.0, 3.1);
+        for(long idata = 0; idata < gd2d->GetNdata(); idata ++){
+            printf("GetXvalArr()->GetValElm(%ld) = %e\n",
+                   idata, gd2d->GetXvalArr()->GetValElm(idata));
+        }
+        for(long idata = 0; idata < gd2d->GetNdata(); idata ++){
+            printf("GetOvalArr()->GetValElm(%ld) = %e\n",
+                   idata, gd2d->GetOvalArr()->GetValElm(idata));
+        }
+        
+	delete gd2d;
 
         printf("=== \n");
     }
 
 
-
-//    
-//    const DataArrayNerr1d* const GetXvalArr() const;
-//    const DataArrayNerr1d* const GetOvalArr() const;
-//    void PrintData(FILE* fp, string format,
-//                   double offset_xval,
-//                   double offset_oval) const;
 //    TGraph* const GenTGraph(double offset_xval,
 //                            double offset_oval) const;
+    {
+        printf("--- test GenTGraph\n");
+	GraphDataNerr2d* gd2d = new GraphDataNerr2d;
+	gd2d->Init(4);
+        gd2d->SetPoint(0, 0.0, 0.1);
+        gd2d->SetPoint(1, 3.0, 1.1);
+        gd2d->SetPoint(2, 2.0, 2.1);
+        gd2d->SetPoint(3, 1.0, 5.1);
+
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("def");
+        
+        TGraph* tg = gd2d->GenTGraph(-0.1, -10.0);
+        tg->Draw();
+        root_tool->GetTCanvas()->Print("aaaaa.png");
+
+	delete gd2d;
+        delete tg;
+        delete root_tool;
+
+        printf("=== \n");
+    }
+
 
 
 

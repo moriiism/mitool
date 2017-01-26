@@ -132,6 +132,7 @@ void GraphData2d::Save(string outfile, string format,
 {
     FILE* fp = fopen(outfile.c_str(), "w");
     PrintInfo(fp);
+    fprintf(fp, "\n");
     PrintData(fp, format, offset_xval, offset_oval);
     fclose(fp);
 }
@@ -146,11 +147,8 @@ void GraphData2d::SaveData(string outfile, string format,
 
 void GraphData2d::PrintInfo(FILE* fp) const
 {
-    fprintf(fp, "#\n");
     fprintf(fp, "# ndata = %ld\n", GetNdata());
     fprintf(fp, "# flag_xval_sorted_ = %d\n", flag_xval_sorted_);
-    fprintf(fp, "#\n");
-    fprintf(fp, "\n");
 }
 
 // ichiji hokan

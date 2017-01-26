@@ -14,8 +14,8 @@ public:
     void Init(long ndata);
     void Fill(long idata);
     void Fill(long idata, double weight);
-    void FillByMax(long idata, double val);
-    void FillByMin(long idata, double val);
+    void FillByLarger(long idata, double val);
+    void FillBySmaller(long idata, double val);
     void SetConst(double constant);
     DataArrayNerr1d* const Clone() const;
     void Load(string file);

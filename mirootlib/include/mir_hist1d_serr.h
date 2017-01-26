@@ -19,12 +19,12 @@ public:
     void SetOvalSerrArr(long ndata, const double* const val_serr);
     void SetOvalSerrArr(vector<double> val_serr);
     void SetOvalSerrElm(long ibin, double oval_serr);
-    void FillByMax(double xval,
-                   double oval,
-                   double oval_serr);
-    void FillByMin(double xval,
-                   double oval,
-                   double oval_serr);
+    void FillByLarger(double xval,
+                      double oval,
+                      double oval_serr);
+    void FillBySmaller(double xval,
+                       double oval,
+                       double oval_serr);
     void SetOvalErrArrByPoissonErr();
     // void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
     HistDataSerr1d* const Clone() const;

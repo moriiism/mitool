@@ -45,22 +45,22 @@ void HistDataSerr1d::SetOvalSerrElm(long ibin, double oval_serr)
 
 }
 
-void HistDataSerr1d::FillByMax(double xval,
+void HistDataSerr1d::FillByLarger(double xval,
                                double oval,
                                double oval_serr)
 {
     IsOvalArrNotNull();
     long ibin = GetIbin(xval);
-    GetOvalArrNonConst()->FillByMax(ibin, oval, oval_serr);
+    GetOvalArrNonConst()->FillByLarger(ibin, oval, oval_serr);
 }
 
-void HistDataSerr1d::FillByMin(double xval,
+void HistDataSerr1d::FillBySmaller(double xval,
                                double oval,
                                double oval_serr)
 {
     IsOvalArrNotNull();    
     long ibin = GetIbin(xval);
-    GetOvalArrNonConst()->FillByMin(ibin, oval, oval_serr);
+    GetOvalArrNonConst()->FillBySmaller(ibin, oval, oval_serr);
 }
 
 
@@ -223,9 +223,9 @@ HistDataSerr1d* const HistDataSerr1d::GenHd1MaxInBin(long nbin_new) const
     h1d_new->Init(nbin_new, GetXvalLo(), GetXvalUp());
   
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-        h1d_new->FillByMax(GetBinCenter(ibin),
-                           GetOvalElm(ibin),
-                           GetOvalSerrElm(ibin));
+        h1d_new->FillByLarger(GetBinCenter(ibin),
+                              GetOvalElm(ibin),
+                              GetOvalSerrElm(ibin));
     }
 
     return h1d_new;

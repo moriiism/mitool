@@ -11,9 +11,7 @@ public:
     MirFunc(string class_name, string title) :
         MiObject(class_name, title),
         npar_(0), ndim_(0) {}
-    virtual ~MirFunc(){
-        NullMirFunc();
-    }
+    virtual ~MirFunc(){}
     void SetNpar(int npar) {npar_ = npar;};
     void SetNdim(int ndim) {ndim_ = ndim;};
    
@@ -35,10 +33,11 @@ public:
     double Eval2d(double xval, double yval,
                   const double* const par) const;
 
+protected:
+    void NullMirFunc();    
 private:
     int npar_;
     int ndim_;
-    void NullMirFunc();
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_FUNC_H_

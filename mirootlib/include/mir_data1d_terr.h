@@ -34,22 +34,22 @@ public:
     
     void Fill(long idata);
     void Fill(long idata, double weight);
-    void FillByMax(long idata, double val);
-    void FillByMax(long idata,
-                   double val,
-                   double val_serr);
-    void FillByMax(long idata,
-                   double val,
-                   double val_terr_plus,
-                   double val_terr_minus);
-    void FillByMin(long idata, double val);
-    void FillByMin(long idata,
-                   double val,
-                   double val_serr);
-    void FillByMin(long idata,
-                   double val,
-                   double val_terr_plus,
-                   double val_terr_minus);
+    void FillByLarger(long idata, double val);
+    void FillByLarger(long idata,
+                      double val,
+                      double val_serr);
+    void FillByLarger(long idata,
+                      double val,
+                      double val_terr_plus,
+                      double val_terr_minus);
+    void FillBySmaller(long idata, double val);
+    void FillBySmaller(long idata,
+                       double val,
+                       double val_serr);
+    void FillBySmaller(long idata,
+                       double val,
+                       double val_terr_plus,
+                       double val_terr_minus);
     void SetConst(double constant);
     void SetValErrByPoissonErr();
     DataArrayTerr1d* const Clone() const;

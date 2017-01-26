@@ -27,14 +27,14 @@ public:
     void SetOvalTerrElm(long ibin, double oval_serr);
     void SetOvalTerrPlusElm(long ibin, double oval_terr_plus);
     void SetOvalTerrMinusElm(long ibin, double oval_terr_minus);
-    void FillByMax(double xval,
-                   double oval,
-                   double oval_terr_plus,
-                   double oval_terr_minus);
-    void FillByMin(double xval,
-                   double oval,
-                   double oval_terr_plus,
-                   double oval_terr_minus);
+    void FillByLarger(double xval,
+                      double oval,
+                      double oval_terr_plus,
+                      double oval_terr_minus);
+    void FillBySmaller(double xval,
+                       double oval,
+                       double oval_terr_plus,
+                       double oval_terr_minus);
     void SetOvalErrArrByPoissonErr();
     HistDataTerr1d* const Clone() const;
     void Load(string file);

@@ -6,7 +6,6 @@
 #include "mir_hist2d_serr.h"
 #include "mir_hist2d_terr.h"
 #include "mir_cont.h"
-#include "mir_qdp_tool.h"
 
 namespace HistData2dOpe
 {

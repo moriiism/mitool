@@ -56,26 +56,26 @@ public:
 
     void Fill(double xval, double yval);
     void Fill(double xval, double yval, double weight);
-    void FillByMax(double xval, double yval, double oval);
-    virtual void FillByMax(double xval, double yval,
-                           double oval,
-                           double oval_serr)
+    void FillByLarger(double xval, double yval, double oval);
+    virtual void FillByLarger(double xval, double yval,
+                              double oval,
+                              double oval_serr)
         {MPrintErrVFunc; abort();};
-    virtual void FillByMax(double xval, double yval,
-                           double oval,
-                           double oval_terr_plus,
-                           double oval_terr_minus)
+    virtual void FillByLarger(double xval, double yval,
+                              double oval,
+                              double oval_terr_plus,
+                              double oval_terr_minus)
         {MPrintErrVFunc; abort();};
     
-    void FillByMin(double xval, double yval, double oval);
-    virtual void FillByMin(double xval, double yval,
-                           double oval,
-                           double oval_serr)
+    void FillBySmaller(double xval, double yval, double oval);
+    virtual void FillBySmaller(double xval, double yval,
+                               double oval,
+                               double oval_serr)
         {MPrintErrVFunc; abort();};
-    virtual void FillByMin(double xval, double yval,
-                           double oval,
-                           double oval_terr_plus,
-                           double oval_terr_minus)
+    virtual void FillBySmaller(double xval, double yval,
+                               double oval,
+                               double oval_terr_plus,
+                               double oval_terr_minus)
         {MPrintErrVFunc; abort();};
 
     void SetConst(double constant);
@@ -178,7 +178,7 @@ public:
                   double offset_xval = 0.0,
                   double offset_yval = 0.0,
                   double offset_oval = 0.0) const;
-    void PrintInfo(FILE* fp, string format) const;    
+    void PrintInfo(FILE* fp) const;    
     virtual void PrintData(FILE* fp, string format,
                            double offset_xval,
                            double offset_yval,

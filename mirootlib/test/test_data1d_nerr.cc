@@ -44,23 +44,23 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    void FillByMax(long idata, double val);
+//    void FillByLarger(long idata, double val);
     {
-        printf("--- test FillByMax(long idata, double val)\n");
+        printf("--- test FillByLarger(long idata, double val)\n");
         DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
         da1d_1->Init(4);
-        da1d_1->FillByMax(1, 3.0);
+        da1d_1->FillByLarger(1, 3.0);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");
     }
    
-//    void FillByMin(long idata, double val);
+//    void FillBySmaller(long idata, double val);
     {
-        printf("--- test FillByMin(long idata, double val)\n");
+        printf("--- test FillBySmaller(long idata, double val)\n");
         DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
         da1d_1->Init(4);
-        da1d_1->FillByMin(1, 3.0);
+        da1d_1->FillBySmaller(1, 3.0);
         da1d_1->PrintData(stdout, 1, 0.0);
         delete da1d_1;
         printf("=== \n");

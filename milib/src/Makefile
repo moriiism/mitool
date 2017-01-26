@@ -6,9 +6,8 @@ INCLUDE := $(MILIB_INC) $(MT_INC)
 TARGET := libmilib.a
 # libmilib.so
 
-OBJ := base.o  str.o  iolib.o  time.o
-# rand.o 
-
+OBJ := base.o  str.o  iolib.o  time.o  rand.o
+ 
 all: $(TARGET)
 
 LIB_DEST := ../lib

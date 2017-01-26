@@ -188,9 +188,6 @@ void GraphData3d::Save(string outfile, string format,
     FILE* fp = fopen(outfile.c_str(), "w");
     PrintData(fp, format, offset_xval, offset_yval, offset_oval);
     fclose(fp);
-    if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
-    }
 }
 
 void GraphData3d::PrintData(FILE* fp, string format,

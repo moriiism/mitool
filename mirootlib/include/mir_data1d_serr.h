@@ -23,14 +23,14 @@ public:
     void Fill(long idata, double weight);
 
     // poisson error
-    void FillByMax(long idata, double val);
-    void FillByMax(long idata,
-                   double val,
-                   double val_serr);
-    void FillByMin(long idata, double val);
-    void FillByMin(long idata,
-                   double val,
-                   double val_serr);
+    void FillByLarger(long idata, double val);
+    void FillByLarger(long idata,
+                      double val,
+                      double val_serr);
+    void FillBySmaller(long idata, double val);
+    void FillBySmaller(long idata,
+                       double val,
+                       double val_serr);
 
     void SetConst(double constant);
     void SetValErrByPoissonErr();

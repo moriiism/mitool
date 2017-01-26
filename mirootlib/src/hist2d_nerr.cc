@@ -208,7 +208,7 @@ void HistDataNerr2d::PrintData(FILE* fp, string format,
 //        double yval = GetBinCenterYFromIbin(ibin);
 //        long ibin_x = GetIbinX(ibin);
 //        long ibin_y = GetIbinY(ibin);
-//        h2d_new->FillByMax(xval, yval, GetOvalElm(ibin_x, ibin_y) );
+//        h2d_new->FillByLarger(xval, yval, GetOvalElm(ibin_x, ibin_y) );
 //    }
 //    return h2d_new;
 //}

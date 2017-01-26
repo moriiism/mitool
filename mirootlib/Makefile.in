@@ -8,7 +8,8 @@ ROOT_CFLAGS := $(shell root-config --cflags)
 ROOT_LDFLAGS := $(shell root-config --ldflags)
 ROOT_LIBS := $(shell root-config --libs)
 ROOT_GLIBS := $(shell root-config --glibs)
-ROOT_ALLLIBS := $(ROOT_LIBS) $(ROOT_GLIBS)
+ROOT_ALLLIBS := -L/soft/gsl/2.3/lib -lgsl -lgslcblas \
+$(ROOT_LIBS) $(ROOT_GLIBS) -lMathMore -lMinuit2
 
 CFLAGS   := -Wall -g -O2 -fPIC $(ROOT_CFLAGS)
 CXXFLAGS := -Wall -g -O3 -fPIC $(ROOT_CFLAGS)

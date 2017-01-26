@@ -25,7 +25,7 @@ void HistData2dOpe::FillGd2d(const HistDataNerr2d* const hd2d,
         for(long ibin = 0; ibin <= nbin; ibin ++){
             double xval = gd2d->GetXvalElm(idata) + vect_step->GetPosX() * ibin;
             double yval = gd2d->GetOvalElm(idata) + vect_step->GetPosY() * ibin;
-            hist_res_out->FillByMax(xval, yval, 1.0);
+            hist_res_out->FillByLarger(xval, yval, 1.0);
         }
         delete vect;
         delete vect_step;

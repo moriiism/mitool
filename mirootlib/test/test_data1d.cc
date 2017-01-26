@@ -221,9 +221,9 @@ int main(int argc, char* argv[])
     }
 
     
-//    virtual void FillByMax(long idata, double val) = 0;
+//    virtual void FillByLarger(long idata, double val) = 0;
     {
-        printf("--- test FillByMax(long idata, double val)\n");
+        printf("--- test FillByLarger(long idata, double val)\n");
         DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
         int ndata = 2;
         da1d_1->Init(ndata);
@@ -234,11 +234,11 @@ int main(int argc, char* argv[])
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
 
-        da1d_1->FillByMax(0, 2.0);
+        da1d_1->FillByLarger(0, 2.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
 
-        da1d_1->FillByMax(0, 7.0);
+        da1d_1->FillByLarger(0, 7.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         
@@ -248,9 +248,9 @@ int main(int argc, char* argv[])
     }
 
 
-//    virtual void FillByMin(long idata, double val) = 0;
+//    virtual void FillBySmaller(long idata, double val) = 0;
     {
-        printf("--- test FillByMin(long idata, double val)\n");
+        printf("--- test FillBySmaller(long idata, double val)\n");
         DataArrayNerr1d* da1d_1 = new DataArrayNerr1d("da1d_1");
         int ndata = 2;
         da1d_1->Init(ndata);
@@ -261,11 +261,11 @@ int main(int argc, char* argv[])
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
 
-        da1d_1->FillByMin(0, 7.0);
+        da1d_1->FillBySmaller(0, 7.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         
-        da1d_1->FillByMin(0, 2.0);
+        da1d_1->FillBySmaller(0, 2.0);
         da1d_1->PrintInfo(stdout);
         da1d_1->PrintData(stdout, 1, 0.0);
         
