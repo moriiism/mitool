@@ -419,17 +419,6 @@ void HistData1d::SaveRoot(string outfile,
     delete tfile;
 }
 
-void HistData1d::MkTH1Fig(string outfig,
-                          MirRootTool* const root_tool,
-                          double offset_xval,
-                          double offset_oval) const
-{
-    TH1D* th1d = GenTH1D(offset_xval, offset_oval);
-    th1d->Draw();
-    root_tool->GetTCanvas()->Print(outfig.c_str());
-    delete th1d;
-}
-
 // generate events from histogram with poisson statistic
 DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
 {

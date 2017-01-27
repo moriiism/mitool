@@ -35,8 +35,7 @@ MIROOTLIB_INC := -I$(MIROOTLIB_DIR)/include
 MIROOTLIB_LIB := -L$(MIROOTLIB_DIR)/lib -lmirootlib
 
 ### library
-LIB := -lm 
-# -lrt
+LIB := -lm -lrt
 
 # compiler
 FC := f77

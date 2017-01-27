@@ -26,7 +26,7 @@ public:
                        double oval,
                        double oval_serr);
     void SetOvalErrArrByPoissonErr();
-    // void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
+    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
     HistDataSerr1d* const Clone() const;
     void Load(string file);
 
@@ -46,16 +46,15 @@ public:
                   MirRootTool* const root_tool,
                   double offset_xval,
                   double offset_oval) const;
-    
 
     // poisson error
     void FillRandom(const MirFunc* const func,
-                    const MirFuncPar* const func_par,
+                    const double* const func_par,
                     int rand_seed);
     void FillRandom(const MirFunc* const func,
-                    const MirFuncPar* const func_par,
+                    const double* const func_par,
                     const MirFunc* const func_sigma,
-                    const MirFuncPar* const func_par_sigma,
+                    const double* const func_par_sigma,
                     int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
                     int rand_seed);

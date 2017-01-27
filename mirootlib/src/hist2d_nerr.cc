@@ -295,7 +295,7 @@ TH2D* const HistDataNerr2d::GenTH2D(double offset_xval,
 //}
 
 void HistDataNerr2d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
@@ -308,7 +308,7 @@ void HistDataNerr2d::FillRandom(const MirFunc* const func,
         double xval_arr[2];
         xval_arr[0] = xval;
         xval_arr[1] = yval;
-        double oval = func->Eval(xval_arr, func_par->GetPar());
+        double oval = func->Eval(xval_arr, func_par);
 
         double oval_rand = trand->PoissonD(oval);
         SetOvalElm(ibin_x, ibin_y, oval_rand);

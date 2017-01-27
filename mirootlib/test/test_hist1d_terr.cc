@@ -1,6 +1,6 @@
 #include "mi_str.h"
 #include "mi_iolib.h"
-#include "mir_hist1d_serr.h"
+#include "mir_hist1d_terr.h"
 #include "mir_root_tool.h"
 #include "mir_qdp_tool.h"
 

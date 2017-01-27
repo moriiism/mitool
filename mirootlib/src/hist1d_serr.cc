@@ -278,14 +278,25 @@ TH1D* const HistDataSerr1d::GenTH1D(double offset_xval,
     return th1d;
 }
 
+void HistDataSerr1d::MkTH1Fig(string outfig,
+                              MirRootTool* const root_tool,
+                              double offset_xval,
+                              double offset_oval) const
+{
+    TH1D* th1d = GenTH1D(offset_xval, offset_oval);
+    th1d->Draw("E");
+    root_tool->GetTCanvas()->Print(outfig.c_str());
+    delete th1d;
+}
+
 void HistDataSerr1d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
-        double oval = func->Eval1d(xval, func_par->GetPar());
+        double oval = func->Eval1d(xval, func_par);
 
         // poisson error
         double oval_rand = trand->PoissonD(oval);
@@ -297,18 +308,18 @@ void HistDataSerr1d::FillRandom(const MirFunc* const func,
 }
 
 void HistDataSerr1d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 const MirFunc* const func_sigma,
-                                const MirFuncPar* const func_par_sigma,
+                                const double* const func_par_sigma,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
-        double oval = func->Eval1d(xval, func_par->GetPar());
+        double oval = func->Eval1d(xval, func_par);
         
         // gaussian error
-        double sigma = func_sigma->Eval1d(xval, func_par_sigma->GetPar());
+        double sigma = func_sigma->Eval1d(xval, func_par_sigma);
         double oval_rand = trand->Gaus(oval, sigma);
         double oval_err = sigma;
         SetOvalElm(ibin, oval_rand);

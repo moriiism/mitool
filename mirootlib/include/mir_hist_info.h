@@ -43,6 +43,9 @@ public:
     double GetBinCenter(long ibin, string scale = "lin") const;
     double GetBinLo(long ibin, string scale = "lin") const;
     double GetBinUp(long ibin, string scale = "lin") const;
+
+
+    
     long GetIbin_WithHalfBinShifted(double val) const;
     
     void GenValArr(double** const val_arr_ptr,

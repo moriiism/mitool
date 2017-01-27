@@ -177,6 +177,7 @@ public:
                            double offset_xval,
                            double offset_yval,
                            double offset_oval) const = 0;
+
     virtual TGraph2D* const GenTGraph2D(double offset_xval,
                                         double offset_yval,
                                         double offset_oval) const

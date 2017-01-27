@@ -205,15 +205,25 @@ TH1D* const HistDataNerr1d::GenTH1D(double offset_xval,
     return th1d;
 }
 
+void HistDataNerr1d::MkTH1Fig(string outfig,
+                              MirRootTool* const root_tool,
+                              double offset_xval,
+                              double offset_oval) const
+{
+    TH1D* th1d = GenTH1D(offset_xval, offset_oval);
+    th1d->Draw("HIST");
+    root_tool->GetTCanvas()->Print(outfig.c_str());
+    delete th1d;
+}
 
 void HistDataNerr1d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
-        double oval = func->Eval1d(xval, func_par->GetPar());
+        double oval = func->Eval1d(xval, func_par);
         double oval_rand = trand->PoissonD(oval);
         SetOvalElm(ibin, oval_rand);
     }

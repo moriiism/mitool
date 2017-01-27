@@ -54,6 +54,10 @@ public:
     GraphDataTerr2d* const GenGraph2d() const;
     TH1D* const GenTH1D(double offset_xval,
                         double offset_oval) const;
+    void MkTH1Fig(string outfig,
+                  MirRootTool* const root_tool,
+                  double offset_xval,
+                  double offset_oval) const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST1D_TERR_H_

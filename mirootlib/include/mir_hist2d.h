@@ -9,6 +9,7 @@
 #include "mir_func.h"
 #include "mir_hist1d.h"
 #include "mir_graph2d_nerr.h"
+#include "mir_graph3d.h"
 
 class HistDataNerr2d;
 class HistDataSerr2d;
@@ -88,7 +89,7 @@ public:
     void SetByFunc(const MirFunc* const func, const double* const par);
 
     // Init & Set by graph3d, only if xval_arr of graph3d is equally-spaced.
-    // virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
+    virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
 
     void Copy(const HistData2d* const org);
     virtual void Load(string file) = 0;
@@ -157,16 +158,6 @@ public:
                                 long* const nbin_ptr) const
         {MPrintErrVFunc; abort();};
     
-
-//    // calc_mode: "add", "integral", "amean", "min", "max"
-//    HistData1d* const GenProjectX(long ibin_ylo, long ibin_yup,
-//                                  string calc_mode) const;
-//    HistData1d* const GenProjectY(long ibin_xlo, long ibin_xup,
-//                                  string calc_mode) const;  
-
-    double GetOvalIntPolLin(double xval, double yval) const;
-
-
     //
     // output
     //
@@ -189,8 +180,8 @@ public:
                   double offset_oval = 0.0) const;
 
 
-//    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
-    // virtual GraphData3d* const GenGraph3d() const = 0;
+    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
+    virtual GraphData3d* const GenGraph3d() const = 0;
     virtual TH2D* const GenTH2D(double offset_xval,
                                 double offset_yval,
                                 double offset_oval) const
@@ -216,19 +207,19 @@ public:
                         string title_oaxis = "") const;
 
     // generate HistData2d adding margin region in x and y directions
-//    virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
+    virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
 
     // poisson error
     virtual void FillRandom(const MirFunc* const func,
-                            const MirFuncPar* const func_par,
+                            const double* const func_par,
                             int rand_seed)
         {MPrintErrVFunc; abort();};
 
     // gaussian error
     virtual void FillRandom(const MirFunc* const func,
-                            const MirFuncPar* const func_par,
+                            const double* const func_par,
                             const MirFunc* const func_sigma,
-                            const MirFuncPar* const func_par_sigma,
+                            const double* const func_par_sigma,
                             int rand_seed)
         {MPrintErrVFunc; abort();};    
 

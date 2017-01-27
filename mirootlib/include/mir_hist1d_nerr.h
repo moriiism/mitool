@@ -26,9 +26,12 @@ public:
     GraphDataNerr2d* const GenGraph2d() const;
     TH1D* const GenTH1D(double offset_xval,
                         double offset_oval) const;
-
-     void FillRandom(const MirFunc* const func,
-                     const MirFuncPar* const func_par,
+    void MkTH1Fig(string outfig,
+                  MirRootTool* const root_tool,
+                  double offset_xval,
+                  double offset_oval) const;
+    void FillRandom(const MirFunc* const func,
+                     const double* const func_par,
                      int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
                     int rand_seed);

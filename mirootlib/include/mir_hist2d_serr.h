@@ -33,7 +33,7 @@ public:
     // Init & Set by graph3d_serr,
     // only if xval_arr of graph3d_serr is equally-spaced and
     // appropriate errors
-    // void InitSetByGraphData3dSerr(const GraphDataSerr3d* const g3d);
+    void InitSetByGraphData3dSerr(const GraphDataSerr3d* const g3d);
     
 
     const DataArraySerr1d* const GetOvalArr() const;
@@ -41,15 +41,6 @@ public:
     double GetOvalSerrElmAtXY(double xval, double yval) const;
     void GenOvalSerrArr(double** const oval_serr_arr_ptr,
                         long* const nbin_ptr) const;
-
-//    // calc_mode  : "add", "integral", "amean"
-//    // error_mode: gauss, poisson, zero
-//    using HistData2d::GenProjectX;
-//    using HistData2d::GenProjectY;
-//    HistDataSerr1d* const GenProjectX(long ibin_ylo, long ibin_yup,
-//                                      string calc_mode, string error_mode) const;
-//    HistDataSerr1d* const GenProjectY(long ibin_xlo, long ibin_xup,
-//                                      string calc_mode, string error_mode) const;  
 
     //
     // output
@@ -59,24 +50,23 @@ public:
                    double offset_yval,
                    double offset_oval) const;
 
-//    HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const;
-    // virtual GraphDataSerr3d* const GenGraph3d() const;
+    HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const;
+    virtual GraphDataSerr3d* const GenGraph3d() const;
     TH2D* const GenTH2D(double offset_xval,
                         double offset_yval,
                         double offset_oval) const;
-
-//    HistDataSerr2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const;
+    HistDataSerr2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const;
     
     // poisson error
     void FillRandom(const MirFunc* const func,
-                    const MirFuncPar* const func_par,
+                    const double* const func_par,
                     int rand_seed);
 
     // gaussian error
     void FillRandom(const MirFunc* const func,
-                    const MirFuncPar* const func_par,
+                    const double* const func_par,
                     const MirFunc* const func_sigma,
-                    const MirFuncPar* const func_par_sigma,
+                    const double* const func_par_sigma,
                     int rand_seed);
 
     // poisson error

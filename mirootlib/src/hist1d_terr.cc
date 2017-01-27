@@ -348,3 +348,14 @@ TH1D* const HistDataTerr1d::GenTH1D(double offset_xval,
     th1d->SetYTitle(ytitle);
     return th1d;
 }
+
+void HistDataTerr1d::MkTH1Fig(string outfig,
+                              MirRootTool* const root_tool,
+                              double offset_xval,
+                              double offset_oval) const
+{
+    TH1D* th1d = GenTH1D(offset_xval, offset_oval);
+    th1d->Draw("E");
+    root_tool->GetTCanvas()->Print(outfig.c_str());
+    delete th1d;
+}

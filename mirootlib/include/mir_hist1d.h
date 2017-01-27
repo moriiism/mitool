@@ -84,21 +84,18 @@ public:
     virtual void SetOvalErrArrByPoissonErr()
         {MPrintErrVFunc; abort();};
     
-    // Set by Func
     void SetByFunc(const MirFunc* const func, const double* const par);
 
-    //// set by amean of graph data
-    //void SetByGraphData2d(const GraphData2d* const g2d);
+    // set by amean of graph data
+    void SetByGraphData2d(const GraphData2d* const g2d);
     
     // Init & Set by graph2d, only if xval_arr of graph2d is equally-spaced.
-    //void InitSetByGraphData2d(const GraphDataNerr2d* const g2d)
-    //    {MPrintErrVFunc; abort();};
-
+    void InitSetByGraphData2d(const GraphData2d* const g2d);
+    
     // Init & Set by graph2d_serr,
     // only if xval_arr of graph2d_serr is equally-spaced and
     // appropriate errors.
-    //void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d)
-    //    {MPrintErrVFunc; abort();};
+    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
 
     void Copy(const HistData1d* const org);
     virtual void Load(string file) = 0;
@@ -157,7 +154,7 @@ public:
     double GetBinUp(long ibin) const;
     long GetIbin_WithHalfBinShifted(double val) const;
     double GetOvalIntPolLin(double xval) const;
-    // double GetIntegral(double xval_lo, double xval_up) const;
+    double GetIntegral(double xval_lo, double xval_up) const;
 
     
     //
@@ -181,33 +178,33 @@ public:
     virtual GraphData2d* const GenGraph2d() const = 0;
     virtual TH1D* const GenTH1D(double offset_xval,
                                 double offset_oval) const = 0;
-    void MkTH1Fig(string outfig,
-                  MirRootTool* const root_tool,
-                  double offset_xval = 0,
-                  double offset_oval = 0) const;
+    virtual void MkTH1Fig(string outfig,
+                          MirRootTool* const root_tool,
+                          double offset_xval,
+                          double offset_oval) const = 0;
 
     // poisson error
     virtual void FillRandom(const MirFunc* const func,
-                            const MirFuncPar* const func_par,
-                            int rand_seed = 1)
+                            const double* const func_par,
+                            int rand_seed)
         {MPrintErrVFunc; abort();};
 
     // gaussian error
     virtual void FillRandom(const MirFunc* const func,
-                            const MirFuncPar* const func_par,
+                            const double* const func_par,
                             const MirFunc* const func_sigma,
-                            const MirFuncPar* const func_par_sigma,
-                            int rand_seed = 1)
+                            const double* const func_par_sigma,
+                            int rand_seed)
         {MPrintErrVFunc; abort();};    
 
     // poisson error
     virtual void FillRandom(const HistData1d* const hist_data,
-                            int rand_seed = 1)
+                            int rand_seed)
         {MPrintErrVFunc; abort();};
     
 
     // generate events from histogram with poisson statistic
-    DataArrayNerr1d* const GenRandomEvt(int rand_seed = 1) const;
+    DataArrayNerr1d* const GenRandomEvt(int rand_seed) const;
     
     Interval* const GenIntervalAboveThreshold(double threshold) const;
     Interval* const GenIntervalBelowThreshold(double threshold) const;

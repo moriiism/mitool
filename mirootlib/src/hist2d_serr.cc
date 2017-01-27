@@ -291,7 +291,7 @@ TH2D* const HistDataSerr2d::GenTH2D(double offset_xval,
 
 // poisson error
 void HistDataSerr2d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
@@ -304,7 +304,7 @@ void HistDataSerr2d::FillRandom(const MirFunc* const func,
         double xval_arr[2];
         xval_arr[0] = xval;
         xval_arr[1] = yval;
-        double oval = func->Eval(xval_arr, func_par->GetPar());
+        double oval = func->Eval(xval_arr, func_par);
 
         // poisson error
         double oval_rand = trand->PoissonD(oval);
@@ -317,9 +317,9 @@ void HistDataSerr2d::FillRandom(const MirFunc* const func,
 
 // gaussian error
 void HistDataSerr2d::FillRandom(const MirFunc* const func,
-                                const MirFuncPar* const func_par,
+                                const double* const func_par,
                                 const MirFunc* const func_sigma,
-                                const MirFuncPar* const func_par_sigma,
+                                const double* const func_par_sigma,
                                 int rand_seed)
 {
     TRandom3* trand = new TRandom3(rand_seed);
@@ -332,10 +332,10 @@ void HistDataSerr2d::FillRandom(const MirFunc* const func,
         double xval_arr[2];
         xval_arr[0] = xval;
         xval_arr[1] = yval;
-        double oval = func->Eval(xval_arr, func_par->GetPar());
+        double oval = func->Eval(xval_arr, func_par);
         
         // gaussian error
-        double sigma = func_sigma->Eval(xval_arr, func_par_sigma->GetPar());
+        double sigma = func_sigma->Eval(xval_arr, func_par_sigma);
         double oval_rand = trand->Gaus(oval, sigma);
         double oval_err = sigma;
         SetOvalElm(ibin_x, ibin_y, oval_rand);

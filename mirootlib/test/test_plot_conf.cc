@@ -1,5 +1,6 @@
 #include "mi_iolib.h"
 #include "mir_plot_conf.h"
+#include "mir_root_tool.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -188,7 +189,33 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-//    static void CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1);
+////    static void CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1);
+//    {
+//        printf("--- test CopyPar\n");
+//        MirPlotConf* plot_conf = new MirPlotConf;
+//        plot_conf->Init(2);
+//        plot_conf->SetIdimElm(0, "0", "10", "no", "lin", "ttttt");
+//        plot_conf->SetIdimElm(1, "-100", "10000", "no", "lin", "yyyy");
+//        plot_conf->Print(stdout);
+//
+//        MirRootTool* root_tool = new MirRootTool;
+//        root_tool->InitTCanvas("pub");
+//        
+//        TF1 *tf1 = new TF1("func", "gaus+pol2(3)");
+//        tf1->SetParameter( 0, 4500 );
+//        tf1->SetParameter( 1, 1650 );
+//        tf1->SetParameter( 2,  100 );
+//        MirPlotConf::CopyPar(plot_conf, tf1);
+//
+//        tf1->Draw();
+//        root_tool->GetTCanvas()->Print("temp.png");
+//
+//        delete plot_conf;
+//        delete tf1;
+//        delete root_tool;
+//        
+//        printf("=== \n");
+//    }
     
     return status_prog;
 }

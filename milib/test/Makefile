@@ -1,11 +1,11 @@
 
 include ../../Makefile.in
 
-# INCLUDE = $(MILIB_INC) $(MT_INC)
-# LDLIBS  = $(MILIB_LIB) $(MT_LIB) $(LIB)
+INCLUDE = $(MILIB_INC) $(MT_INC)
+LDLIBS  = $(MILIB_LIB) $(MT_LIB) $(LIB)
 
-INCLUDE = $(MILIB_INC) 
-LDLIBS  = $(MILIB_LIB) $(LIB)
+#INCLUDE = $(MILIB_INC) 
+#LDLIBS  = $(MILIB_LIB) $(LIB)
 
 TARGET = test_base  test_iolib  \
 	test_sort  test_str  test_time

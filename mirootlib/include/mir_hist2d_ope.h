@@ -15,6 +15,27 @@ namespace HistData2dOpe
 
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
     double FindMdYbyEdge(const HistDataNerr2d* const hd2d);
+
+    double GetIntegral(const HistDataNerr2d* const hd2d,
+                       double xval_lo, double xval_up);
+
+    // calc_mode: "add", "integral", "amean", "min", "max"
+    HistData1d* const GenProjectX(const HistData2d* const hist_data,
+                                  long ibin_ylo, long ibin_yup,
+                                  string calc_mode);
+    HistData1d* const GenProjectY(const HistData2d* const hist_data,
+                                  long ibin_xlo, long ibin_xup,
+                                  string calc_mode);
+
+//    // calc_mode  : "add", "integral", "amean"
+//    // error_mode: gauss, poisson, zero
+//    HistDataSerr1d* const GenProjectX(long ibin_ylo, long ibin_yup,
+//                                      string calc_mode, string error_mode) const;
+//    HistDataSerr1d* const GenProjectY(long ibin_xlo, long ibin_xup,
+//                                      string calc_mode, string error_mode) const;  
+
+    
+    
     
     void GetResValHd2(const HistDataNerr2d* const hist_data,
                       const MirFunc* const func, const double* const par,

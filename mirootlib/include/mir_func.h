@@ -1,10 +1,7 @@
 #ifndef MORIIISM_MITOOL_MIROOTLIB_FUNC_H_
 #define MORIIISM_MITOOL_MIROOTLIB_FUNC_H_
 
-#include "TRandom3.h"
-#include "TF1.h"
-#include "TF2.h"
-#include "mir_func_par.h"
+#include "mi_base.h"
 
 class MirFunc : public MiObject{
 public:

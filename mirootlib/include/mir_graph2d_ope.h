@@ -14,13 +14,12 @@ namespace GraphData2dOpe
     
     GraphData2d* const GenGd2dByLoad(string file, string format);
 
-    //    double GetIntegral(double xval_lo, double xval_up) const;
+    double GetIntegral(const GraphDataNerr2d* const gd2d,
+                       double xval_lo, double xval_up);
     // Integral by trapezoid approximation
-    //double GetIntegralInner(double xval_lo, double xval_up) const;
-    //double GetIntegralByTrapezoidApprox() const;
-
-
-    
+    double GetIntegralInner(const GraphDataNerr2d* const gd2d,
+                            double xval_lo, double xval_up);
+    double GetIntegralByTrapezoidApprox(const GraphDataNerr2d* const gd2d);
     
     // select_type: center, varbinwidth, exclusive
     //   center:      select a bin whose center is located in an interval.
@@ -91,21 +90,20 @@ namespace GraphData2dOpe
                       const double* const par,
                       GraphDataTerr2d* const graph_res_out);
 
-//    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
-//                                              double pval_threshold);
-//
-//    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphDataSerr2d* const gd2d,
-//                                              double pval_threshold);
-//
-//
-//    void GetValBinned(vector<double> xval_vec,
-//                      vector<double> xval_serr_vec,
-//                      vector<double> oval_vec,
-//                      vector<double> oval_serr_vec,
-//                      double* xval_bin_center_ptr,
-//                      double* xval_bin_half_width_ptr,
-//                      double* wmean_ptr,
-//                      double* wmean_err_ptr);
+    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
+                                              double pval_threshold);
+
+    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphDataSerr2d* const gd2d,
+                                              double pval_threshold);
+
+    void GetValBinned(vector<double> xval_vec,
+                      vector<double> xval_serr_vec,
+                      vector<double> oval_vec,
+                      vector<double> oval_serr_vec,
+                      double* xval_bin_center_ptr,
+                      double* xval_bin_half_width_ptr,
+                      double* wmean_ptr,
+                      double* wmean_err_ptr);
     
 }  // namespace GraphData2dOpe
 

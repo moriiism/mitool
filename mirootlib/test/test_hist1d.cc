@@ -468,109 +468,290 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-////    long GetIbin(double xval) const;
-////    double GetBinCenter(long ibin) const;
-////    double GetBinLo(long ibin) const;
-////    double GetBinUp(long ibin) const;
-////    long GetIbin_WithHalfBinShifted(double val) const;
-////    double GetOvalIntPolLin(double xval) const;
-//    {
-//        printf("--- test GetIbin(double xval)\n");
-//        printf("--- test GetBinCenter(long ibin)\n");
-//        printf("--- test GetBinLo(long ibin)\n");
-//        printf("--- test GetBinUp(long ibin)\n");
-//        printf("--- test GetIbin_WithHalfBinShifted(double val)\n");
-//        printf("--- test GetOvalIntPolLin(double xval)\n");
-//
-//        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
-//        hd1d->Init(4, 0.0, 4.0);
-//        hd1d->SetOvalElm(0, 0.1);
-//        hd1d->SetOvalElm(1, 0.2);
-//        hd1d->SetOvalElm(2, 0.3);
-//        hd1d->SetOvalElm(3, 0.4);
-//
-//        printf("hd1d->GetIbin(1.3) = %ld\n", hd1d->GetIbin(1.3));
-//        printf("hd1d->GetBinCenter(2) = %e\n", hd1d->GetBinCenter(2));
-//        printf("hd1d->GetBinLo(1) = %e\n", hd1d->GetBinLo(1));
-//        printf("hd1d->GetBinUp(1) = %e\n", hd1d->GetBinUp(1));
-//        printf("hd1d->GetIbin_WithHalfBinShifted(2.4) = %ld\n",
-//               hd1d->GetIbin_WithHalfBinShifted(2.4));
-//        printf("hd1d->GetOvalIntPolLin(1.3) = %e\n",
-//               hd1d->GetOvalIntPolLin(1.3));
-//
-//        delete hd1d;
-//
-//        printf("=== \n");
-//    }
+//    long GetIbin(double xval) const;
+//    double GetBinCenter(long ibin) const;
+//    double GetBinLo(long ibin) const;
+//    double GetBinUp(long ibin) const;
+//    long GetIbin_WithHalfBinShifted(double val) const;
+//    double GetOvalIntPolLin(double xval) const;
+    {
+        printf("--- test GetIbin(double xval)\n");
+        printf("--- test GetBinCenter(long ibin)\n");
+        printf("--- test GetBinLo(long ibin)\n");
+        printf("--- test GetBinUp(long ibin)\n");
+        printf("--- test GetIbin_WithHalfBinShifted(double val)\n");
+        printf("--- test GetOvalIntPolLin(double xval)\n");
 
-    
-//
-//    
-//    //
-//    // output
-//    //
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        printf("hd1d->GetIbin(1.3) = %ld\n", hd1d->GetIbin(1.3));
+        printf("hd1d->GetBinCenter(2) = %e\n", hd1d->GetBinCenter(2));
+        printf("hd1d->GetBinLo(1) = %e\n", hd1d->GetBinLo(1));
+        printf("hd1d->GetBinUp(1) = %e\n", hd1d->GetBinUp(1));
+        printf("hd1d->GetIbin_WithHalfBinShifted(2.4) = %ld\n",
+               hd1d->GetIbin_WithHalfBinShifted(2.4));
+        // 2.4 --> 1
+        printf("hd1d->GetIbin_WithHalfBinShifted(0.3) = %ld\n",
+               hd1d->GetIbin_WithHalfBinShifted(0.3));
+        // 0.3 --> -1
+        
+        printf("hd1d->GetOvalIntPolLin(1.0) = %e\n",
+               hd1d->GetOvalIntPolLin(1.0));
+        // 1.0 --> 0.15
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+
 //    void Save(string outfile, string format,
 //              double offset_xval = 0.0,
 //              double offset_oval = 0.0) const;
+    {
+        printf("--- test Save\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        hd1d->Save("temp.txt", "x,y");
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+    
 //    void SaveData(string outfile, string format,
 //                  double offset_xval = 0.0,
 //                  double offset_oval = 0.0) const;
-//    void PrintInfo(FILE* fp, string format) const;
+    {
+        printf("--- test SaveData\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        hd1d->SaveData("temp.txt", "x,y");
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+    
+//    void PrintInfo(FILE* fp) const;
+    {
+        printf("--- test PrintInfo\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        hd1d->PrintInfo(stdout);
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+   
 //    virtual void PrintData(FILE* fp, string format,
 //                           double offset_xval,
 //                           double offset_oval) const = 0;
+    {
+        printf("--- test PrintData\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        hd1d->PrintData(stdout, "x,y", 0.0, 0.0);
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+
+    
 //    void SaveRoot(string outfile,
 //                  double offset_xval = 0.0,
 //                  double offset_oval = 0.0) const;
-//
-//    virtual HistData1d* const GenHd1MaxInBin(long nbin_new) const = 0;
-//    virtual GraphData2d* const GenGraph2d() const = 0;
-//    virtual TH1D* const GenTH1D(double offset_xval,
-//                                double offset_oval) const = 0;
-//    void MkTH1Fig(string outfig,
-//                  MirRootTool* const root_tool,
-//                  double offset_xval = 0,
-//                  double offset_oval = 0) const;
-//
-//    // poisson error
-//    virtual void FillRandom(const MirFunc* const func,
-//                            const MirFuncPar* const func_par,
-//                            int rand_seed = 1)
-//        {MPrintErrVFunc; abort();};
-//
-//    // gaussian error
-//    virtual void FillRandom(const MirFunc* const func,
-//                            const MirFuncPar* const func_par,
-//                            const MirFunc* const func_sigma,
-//                            const MirFuncPar* const func_par_sigma,
-//                            int rand_seed = 1)
-//        {MPrintErrVFunc; abort();};    
-//
-//    // poisson error
-//    virtual void FillRandom(const HistData1d* const hist_data,
-//                            int rand_seed = 1)
-//        {MPrintErrVFunc; abort();};
-//    
-//
-//    // generate events from histogram with poisson statistic
+    {
+        printf("--- test SaveRoot\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        hd1d->SaveRoot("temp.root");
+
+        delete hd1d;
+
+        printf("=== \n");
+    }
+    
 //    DataArrayNerr1d* const GenRandomEvt(int rand_seed = 1) const;
-//    
+    {
+        printf("--- test GenRandomEvt(int rand_seed = 1)\n");
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("pub");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 10);
+        hd1d->SetOvalElm(1, 20);
+        hd1d->SetOvalElm(2, 30);
+        hd1d->SetOvalElm(3, 40);
+
+        hd1d->MkTH1Fig("temp.png", root_tool, 0.0, 0.0);
+        
+        DataArrayNerr1d* da1d = hd1d->GenRandomEvt(1);
+        // da1d->PrintData(stdout, 1, 0.0);
+
+        HistDataNerr1d* hd1d_rand = new HistDataNerr1d;
+        hd1d_rand->Init(4, 0.0, 4.0);
+        for(long idata = 0; idata < da1d->GetNdata(); idata ++){
+            hd1d_rand->Fill(da1d->GetValElm(idata));
+        }
+        hd1d_rand->MkTH1Fig("temp_rand.png", root_tool, 0.0, 0.0);
+        
+        
+        delete hd1d;
+        delete da1d;
+        delete root_tool;
+        delete hd1d_rand;
+
+        printf("=== \n");
+    }
+
 //    Interval* const GenIntervalAboveThreshold(double threshold) const;
+    {
+        printf("--- test GenIntervalAboveThreshold(double threshold)\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        Interval* interval = hd1d->GenIntervalAboveThreshold(0.25);
+        interval->Print(stdout);
+
+        delete hd1d;
+        delete interval;
+
+        printf("=== \n");
+    }
+    
 //    Interval* const GenIntervalBelowThreshold(double threshold) const;
-//
+    {
+        printf("--- test GenIntervalBelowThreshold(double threshold)\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        Interval* interval = hd1d->GenIntervalBelowThreshold(0.25);
+        interval->Print(stdout);
+
+        delete hd1d;
+        delete interval;
+
+        printf("=== \n");
+    }
+
 //    // offset_tag = "st", "md", "ed", "no"
 //    double GetOffsetXFromTag(string offset_tag) const;
+    {
+        printf("--- test GetOffsetXFromTag(string offset_tag)\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        printf("st = %e\n", hd1d->GetOffsetXFromTag("st"));
+        printf("md = %e\n", hd1d->GetOffsetXFromTag("md"));
+        printf("ed = %e\n", hd1d->GetOffsetXFromTag("ed"));
+        printf("no = %e\n", hd1d->GetOffsetXFromTag("no"));
+        printf("val = %e\n", hd1d->GetOffsetXFromTag("7.77"));        
+
+        delete hd1d;
+
+
+        printf("=== \n");
+    }
+
+
 //    double GetOffsetOFromTag(string offset_tag) const;
-//
-//    //
-//    // static 
-//    //
+    {
+        printf("--- test GetOffsetOFromTag(string offset_tag)\n");
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 0.1);
+        hd1d->SetOvalElm(1, 0.2);
+        hd1d->SetOvalElm(2, 0.3);
+        hd1d->SetOvalElm(3, 0.4);
+
+        printf("st = %e\n", hd1d->GetOffsetOFromTag("st"));
+        printf("md = %e\n", hd1d->GetOffsetOFromTag("md"));
+        printf("ed = %e\n", hd1d->GetOffsetOFromTag("ed"));
+        printf("no = %e\n", hd1d->GetOffsetOFromTag("no"));
+        printf("val = %e\n", hd1d->GetOffsetOFromTag("7.77"));        
+
+        delete hd1d;
+
+
+        printf("=== \n");
+    }
+    
 //    static void ReadInfo(string file, 
 //                         long* nbin_xval_ptr,
 //                         double* xval_lo_ptr,
 //                         double* xval_up_ptr,
 //                         string* format_ptr);
+    {
+        printf("--- test ReadInfo\n");
+        
+        long nbin_xval = 0;
+        double xval_lo = 0.0;
+        double xval_up = 0.0;
+        string format = "";
+        
+        HistData1d::ReadInfo("data/test_hist1d.dat",
+                             &nbin_xval, &xval_lo, &xval_up, &format);
+        printf("nbin_xval = %ld\n", nbin_xval);
+        printf("xval_lo = %e\n", xval_lo);
+        printf("xval_up = %e\n", xval_up);        
+        printf("format = %s\n", format.c_str());                                     
 
+        printf("=== \n");
+    }
 
     return status_prog;
 }
