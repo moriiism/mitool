@@ -6,8 +6,8 @@ MITOOL_DIR := /home/morii/work/github/moriiism/mitool
 
 ### MersenneTwister
 MT_DIR := /soft/MersenneTwister/mt19937-64
-MT_INC := -I$(MT_DIR)
-MT_LIB := -L$(MT_DIR) -lmt19937-64
+MT_INC := -I$(MT_DIR)/include
+MT_LIB := -L$(MT_DIR)/lib -lmt19937-64
 
 ### cfitsio
 CFITSIO_DIR := /soft/cfitsio/3380

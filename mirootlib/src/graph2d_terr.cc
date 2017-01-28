@@ -105,7 +105,8 @@ void GraphDataTerr2d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(6 != ncolumn){
-            MPrintWarnClass("ncolumn != 6");
+            MPrintErrClass("ncolumn != 6");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         double xval, xval_terr_plus, xval_terr_minus;
@@ -136,7 +137,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(2 != ncolumn){
-                MPrintWarnClass("ncolumn != 2");
+                MPrintErrClass("ncolumn != 2");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> oval;
@@ -153,7 +155,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
+                MPrintErrClass("ncolumn != 3");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> oval >> oval_serr;
@@ -169,7 +172,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
-                MPrintWarnClass("ncolumn != 4");
+                MPrintErrClass("ncolumn != 4");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval
@@ -185,7 +189,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
+                MPrintErrClass("ncolumn != 3");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr >> oval;
@@ -202,7 +207,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
-                MPrintWarnClass("ncolumn != 4");
+                MPrintErrClass("ncolumn != 4");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr >> oval >> oval_serr;
@@ -219,7 +225,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
-                MPrintWarnClass("ncolumn != 5");
+                MPrintErrClass("ncolumn != 5");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr
@@ -234,7 +241,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
-                MPrintWarnClass("ncolumn != 4");
+                MPrintErrClass("ncolumn != 4");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_terr_plus >> xval_terr_minus
@@ -250,7 +258,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
-                MPrintWarnClass("ncolumn != 5");
+                MPrintErrClass("ncolumn != 5");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_terr_plus >> xval_terr_minus
@@ -265,7 +274,8 @@ void GraphDataTerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(6 != ncolumn){
-                MPrintWarnClass("ncolumn != 6");
+                MPrintErrClass("ncolumn != 6");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_terr_plus >> xval_terr_minus

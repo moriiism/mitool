@@ -68,6 +68,7 @@ void GraphData3d::InitSetByFunc(const MirFunc* const func, const double* const p
     hi1d_xval->InitSetByNbin(xval_lo, xval_up, nbin_xval);
     HistInfo1d* hi1d_yval = new HistInfo1d;
     hi1d_yval->InitSetByNbin(yval_lo, yval_up, nbin_yval);
+    
     for(long ibin_x = 0; ibin_x < nbin_xval; ibin_x ++){
         for(long ibin_y = 0; ibin_y < nbin_yval; ibin_y ++){
             double xval = hi1d_xval->GetBinCenter(ibin_x, scale_xval);
@@ -83,7 +84,7 @@ void GraphData3d::InitSetByFunc(const MirFunc* const func, const double* const p
     }
     delete hi1d_xval;
     delete hi1d_yval;
-    Init(nbin_xval);
+    Init(nbin_xval * nbin_yval);
     SetXvalArr(xval_vec);
     SetYvalArr(yval_vec);
     SetOvalArr(oval_vec);
@@ -100,6 +101,23 @@ void GraphData3d::Copy(const GraphData3d* const org)
     SetYvalArr(org->GetYvalArr());
     SetOvalArr(org->GetOvalArr());
 }
+
+long GraphData3d::GetNdata() const
+{
+    long ndata = 0;
+    if(GetXvalArr()->GetNdata() == GetOvalArr()->GetNdata() &&
+       GetYvalArr()->GetNdata() == GetOvalArr()->GetNdata() ){
+        ndata = GetXvalArr()->GetNdata();
+    } else {
+        char msg[kLineSize];
+        sprintf(msg, "GetXvalArr()->GetNdata() != GetOvalArr()->GetNdata() or "
+                "GetYvalArr()->GetNdata() != GetOvalArr()->GetNdata()");
+        MPrintErrClass(msg);
+        abort();
+    }
+    return ndata;
+}
+
 
 double GraphData3d::GetYvalAtXvalMin() const
 {
@@ -186,86 +204,26 @@ void GraphData3d::Save(string outfile, string format,
                        double offset_oval) const
 {
     FILE* fp = fopen(outfile.c_str(), "w");
+    PrintInfo(fp);
+    fprintf(fp, "\n");
     PrintData(fp, format, offset_xval, offset_yval, offset_oval);
     fclose(fp);
 }
 
-void GraphData3d::PrintData(FILE* fp, string format,
-                            double offset_xval,
-                            double offset_yval,
-                            double offset_oval) const
+void GraphData3d::SaveData(string outfile, string format,
+                           double offset_xval,
+                           double offset_yval,
+                           double offset_oval) const
 {
-    long ndata = GetXvalArr()->GetNdata();
-    if("x,y,z" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    GetYvalElm(idata) - offset_yval,
-                    GetOvalElm(idata) - offset_oval);
-        }
-    } else if ("x,y,z,ze" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    GetYvalElm(idata) - offset_yval,
-                    GetOvalElm(idata) - offset_oval,
-                    0.0);
-        }
-    } else if ("x,xe,y,ye,z,ze" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    0.0,
-                    GetYvalElm(idata) - offset_yval,
-                    0.0,                    
-                    GetOvalElm(idata) - offset_oval,
-                    0.0);
-        }
-    } else if ("x,xe,y,ye,z" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    0.0,
-                    GetYvalElm(idata) - offset_yval,
-                    0.0,                    
-                    GetOvalElm(idata) - offset_oval);
-        }
-    } else if ("x,y,z,ze+,ze-" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    GetYvalElm(idata) - offset_yval,
-                    GetOvalElm(idata) - offset_oval,
-                    0.0, 0.0);
-        }
-    } else if ("x,xe,y,ye,z,ze+,ze-" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    0.0,
-                    GetYvalElm(idata) - offset_yval,
-                    0.0,
-                    GetOvalElm(idata) - offset_oval,
-                    0.0, 0.0);
-        }
-    } else if ("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
-        for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    GetXvalElm(idata) - offset_xval,
-                    0.0, 0.0,
-                    GetYvalElm(idata) - offset_yval,
-                    0.0, 0.0,
-                    GetOvalElm(idata) - offset_oval,
-                    0.0, 0.0);
-        }
-    } else {
-        char msg[kLineSize];
-        sprintf(msg, "format(=%s)", format.c_str());
-        MPrintErrClass(msg);
-        abort();
-    }
+    FILE* fp = fopen(outfile.c_str(), "w");
+    PrintData(fp, format, offset_xval, offset_yval, offset_oval);
+    fclose(fp);
 }
 
+void GraphData3d::PrintInfo(FILE* fp) const
+{
+    fprintf(fp, "# ndata = %ld\n", GetNdata());
+}
 
 double GraphData3d::GetOffsetXFromTag(string offset_tag) const
 {

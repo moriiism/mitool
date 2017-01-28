@@ -51,7 +51,7 @@ public:
                    double offset_oval) const;
 
     HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const;
-    virtual GraphDataSerr3d* const GenGraph3d() const;
+    // virtual GraphDataSerr3d* const GenGraph3d() const;
     TH2D* const GenTH2D(double offset_xval,
                         double offset_yval,
                         double offset_oval) const;

@@ -56,7 +56,7 @@ public:
                    double offset_yval,
                    double offset_oval) const;
 
-    GraphDataTerr3d* const GenGraph3d() const;
+    // GraphDataTerr3d* const GenGraph3d() const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_TERR_H_

@@ -173,11 +173,15 @@ public:
               double offset_xval = 0.0,
               double offset_yval = 0.0,
               double offset_oval = 0.0) const;
+    void SaveData(string outfile, string format,
+                  double offset_xval = 0.0,
+                  double offset_yval = 0.0,
+                  double offset_oval = 0.0) const;
+    void PrintInfo(FILE* fp) const;
     virtual void PrintData(FILE* fp, string format,
                            double offset_xval,
                            double offset_yval,
                            double offset_oval) const = 0;
-
     virtual TGraph2D* const GenTGraph2D(double offset_xval,
                                         double offset_yval,
                                         double offset_oval) const

@@ -102,10 +102,10 @@ void HistData2d::SetOneAtIntervalXY(const Interval* const interval_x,
             double ylo = interval_y_and->GetTstartElm(iterm_y);
             double yup = interval_y_and->GetTstopElm(iterm_y);
 
-            printf("GetIbinX(xlo) = %ld\n", GetHi2d()->GetIbinXFromX(xlo));
-            printf("GetIbinX(xup) = %ld\n", GetHi2d()->GetIbinXFromX(xup));
-            printf("GetIbinY(ylo) = %ld\n", GetHi2d()->GetIbinYFromY(ylo));
-            printf("GetIbinY(yup) = %ld\n", GetHi2d()->GetIbinYFromY(yup));
+            //printf("GetIbinX(xlo) = %ld\n", GetHi2d()->GetIbinXFromX(xlo));
+            //printf("GetIbinX(xup) = %ld\n", GetHi2d()->GetIbinXFromX(xup));
+            //printf("GetIbinY(ylo) = %ld\n", GetHi2d()->GetIbinYFromY(ylo));
+            //printf("GetIbinY(yup) = %ld\n", GetHi2d()->GetIbinYFromY(yup));
 
             long ibin_x_lo = (long) MirMath::GetMax((double) GetHi2d()->GetIbinXFromX(xlo), 0.0);
             long ibin_x_up = (long) MirMath::GetMin((double) GetHi2d()->GetIbinXFromX(xup),
@@ -320,43 +320,43 @@ void HistData2d::GenOvalArr(double** const oval_arr_ptr,
 //}
 //
 
-double HistData2d::GetOvalIntPolLin(double xval, double yval) const
-{
-    IsValidRangeX(xval);
-    IsValidRangeY(yval);
-    double ans = 0.0;
-    long index_xval = GetHi2d()->GetIbinX_WithHalfBinShifted(xval);
-    long index_yval = GetHi2d()->GetIbinY_WithHalfBinShifted(yval);
-    
-    if (-1 < index_xval && index_xval < GetNbinX() - 1 &&
-        -1 < index_yval && index_yval < GetNbinY() - 1   ){
-        long index_xval0 = index_xval;
-        long index_xval1 = index_xval0 + 1;
-        long index_yval0 = index_yval;
-        long index_yval1 = index_yval0 + 1;
-
-        long index0 = index_xval0 + index_yval0 * GetNbinX();
-        long index1 = index0 + 1;
-        long index2 = index0 + GetNbinX() + 1;
-        long index3 = index0 + GetNbinX();
-        
-        ans = MirMath::IntPolLin(xval, yval,
-                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval0),
-                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval1),
-                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval0),
-                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval1),
-                                 GetOvalArr()->GetValElm(index0),
-                                 GetOvalArr()->GetValElm(index1),
-                                 GetOvalArr()->GetValElm(index2),
-                                 GetOvalArr()->GetValElm(index3));
-    } else {
-        if(0 < g_flag_verbose){
-            MPrintWarnClass("bad xval and/or yval, then just return 0.0");
-        }
-        ans = 0.0;
-    }
-    return ans;
-}
+//double HistData2d::GetOvalIntPolLin(double xval, double yval) const
+//{
+//    IsValidRangeX(xval);
+//    IsValidRangeY(yval);
+//    double ans = 0.0;
+//    long index_xval = GetHi2d()->GetIbinX_WithHalfBinShifted(xval);
+//    long index_yval = GetHi2d()->GetIbinY_WithHalfBinShifted(yval);
+//    
+//    if (-1 < index_xval && index_xval < GetNbinX() - 1 &&
+//        -1 < index_yval && index_yval < GetNbinY() - 1   ){
+//        long index_xval0 = index_xval;
+//        long index_xval1 = index_xval0 + 1;
+//        long index_yval0 = index_yval;
+//        long index_yval1 = index_yval0 + 1;
+//
+//        long index0 = index_xval0 + index_yval0 * GetNbinX();
+//        long index1 = index0 + 1;
+//        long index2 = index0 + GetNbinX() + 1;
+//        long index3 = index0 + GetNbinX();
+//        
+//        ans = MirMath::IntPolLin(xval, yval,
+//                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval0),
+//                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval1),
+//                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval0),
+//                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval1),
+//                                 GetOvalArr()->GetValElm(index0),
+//                                 GetOvalArr()->GetValElm(index1),
+//                                 GetOvalArr()->GetValElm(index2),
+//                                 GetOvalArr()->GetValElm(index3));
+//    } else {
+//        if(0 < g_flag_verbose){
+//            MPrintWarnClass("bad xval and/or yval, then just return 0.0");
+//        }
+//        ans = 0.0;
+//    }
+//    return ans;
+//}
 
 //
 // output

@@ -63,7 +63,8 @@ void DataArrayNerr1d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(1 != ncolumn){
-            MPrintWarnClass("ncolumn != 1");
+            MPrintErrClass("ncolumn != 1");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         double val_tmp;

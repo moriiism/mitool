@@ -34,7 +34,8 @@ void GraphDataNerr3d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(3 != ncolumn){
-            MPrintWarnClass("ncolumn != 3");
+            MPrintErrClass("ncolumn != 3");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         iss >> xval >> yval >> oval;
@@ -57,7 +58,8 @@ void GraphDataNerr3d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
+                MPrintErrClass("ncolumn != 3");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> yval >> oval;
@@ -85,10 +87,10 @@ const DataArrayNerr1d* const GraphDataNerr3d::GetOvalArr() const
     return dynamic_cast<const DataArrayNerr1d*>(GetOvalArrNonConst());
 }
 
-void GraphData3d::PrintData(FILE* fp, string format,
-                            double offset_xval,
-                            double offset_yval,
-                            double offset_oval) const
+void GraphDataNerr3d::PrintData(FILE* fp, string format,
+                                double offset_xval,
+                                double offset_yval,
+                                double offset_oval) const
 {
     long ndata = GetNdata();
     if("x,y,z" == format){

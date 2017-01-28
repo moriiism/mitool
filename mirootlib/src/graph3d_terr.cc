@@ -146,7 +146,8 @@ void GraphDataTerr3d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(9 != ncolumn){
-            MPrintWarnClass("ncolumn != 9");
+            MPrintErrClass("ncolumn != 9");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         iss >> xval >> xval_terr_plus >> xval_terr_minus
@@ -175,7 +176,8 @@ void GraphDataTerr3d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(9 != ncolumn){
-                MPrintWarnClass("ncolumn != 9");
+                MPrintErrClass("ncolumn != 9");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_terr_plus >> xval_terr_minus
@@ -194,7 +196,8 @@ void GraphDataTerr3d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(5 != ncolumn){
-                MPrintWarnClass("ncolumn != 5");
+                MPrintErrClass("ncolumn != 5");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval

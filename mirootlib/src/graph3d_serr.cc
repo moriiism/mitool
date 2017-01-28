@@ -86,7 +86,8 @@ void GraphDataSerr3d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(6 != ncolumn){
-            MPrintWarnClass("ncolumn != 6");
+            MPrintErrClass("ncolumn != 6");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         iss >> xval >> xval_serr
@@ -114,7 +115,8 @@ void GraphDataSerr3d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(6 != ncolumn){
-                MPrintWarnClass("ncolumn != 6");
+                MPrintErrClass("ncolumn != 6");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr
@@ -131,7 +133,8 @@ void GraphDataSerr3d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
-                MPrintWarnClass("ncolumn != 4");
+                MPrintErrClass("ncolumn != 4");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval

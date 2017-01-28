@@ -140,7 +140,8 @@ void DataArraySerr1d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(2 != ncolumn){
-            MPrintWarnClass("ncolumn != 2");
+            MPrintErrClass("ncolumn != 2");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         double val_tmp;

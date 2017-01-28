@@ -75,7 +75,8 @@ void GraphDataSerr2d::Load(string file)
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
         if(4 != ncolumn){
-            MPrintWarnClass("ncolumn != 4");
+            MPrintErrClass("ncolumn != 4");
+            abort();
         }
         istringstream iss(line_arr[idata]);
         double xval, xval_serr, oval, oval_serr;
@@ -103,7 +104,8 @@ void GraphDataSerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(4 != ncolumn){
-                MPrintWarnClass("ncolumn != 4");
+                MPrintErrClass("ncolumn != 4");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr >> oval >> oval_serr;
@@ -114,7 +116,8 @@ void GraphDataSerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
+                MPrintErrClass("ncolumn != 3");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> oval >> oval_serr;
@@ -125,7 +128,8 @@ void GraphDataSerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(3 != ncolumn){
-                MPrintWarnClass("ncolumn != 3");
+                MPrintErrClass("ncolumn != 3");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> xval_serr >> oval;
@@ -137,7 +141,8 @@ void GraphDataSerr2d::Load(string file, string format)
         for(long idata = 0; idata < ndata; idata ++){
             int ncolumn = MiStr::GetNcolumn(line_arr[idata]);
             if(2 != ncolumn){
-                MPrintWarnClass("ncolumn != 2");
+                MPrintErrClass("ncolumn != 2");
+                abort();
             }
             istringstream iss(line_arr[idata]);
             iss >> xval >> oval;

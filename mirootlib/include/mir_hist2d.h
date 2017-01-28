@@ -89,7 +89,7 @@ public:
     void SetByFunc(const MirFunc* const func, const double* const par);
 
     // Init & Set by graph3d, only if xval_arr of graph3d is equally-spaced.
-    virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
+    // virtual void InitSetByGraphData3d(const GraphData3d* const g3d);
 
     void Copy(const HistData2d* const org);
     virtual void Load(string file) = 0;
@@ -180,8 +180,8 @@ public:
                   double offset_oval = 0.0) const;
 
 
-    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
-    virtual GraphData3d* const GenGraph3d() const = 0;
+    // virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
+    // virtual GraphData3d* const GenGraph3d() const = 0;
     virtual TH2D* const GenTH2D(double offset_xval,
                                 double offset_yval,
                                 double offset_oval) const
@@ -207,7 +207,7 @@ public:
                         string title_oaxis = "") const;
 
     // generate HistData2d adding margin region in x and y directions
-    virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
+    // virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
 
     // poisson error
     virtual void FillRandom(const MirFunc* const func,
