@@ -12,8 +12,8 @@ TARGET := test_vect  test_stat1d \
 	test_data1d   test_data1d_copy \
 	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
 	test_graph2d  test_graph2d_nerr  test_graph2d_serr  test_graph2d_terr \
-	test_hist1d  test_hist1d_nerr  test_hist1d_serr \
-	test_graph3d  test_graph3d_nerr  test_graph3d_serr \
+	test_graph3d  test_graph3d_nerr  test_graph3d_serr  test_graph3d_terr \
+	test_hist1d  test_hist1d_nerr  test_hist1d_serr  test_hist1d_terr \
 \
 \
 test_plot_conf  test_math  \
@@ -23,13 +23,12 @@ test_hist_info \
 \
 \
 test_interval  \
-test_graph3d_terr
 
 
 
 # test_hist2d
 
-# test_hist1d_terr
+# 
 #	  test_hist_info_ope \
 #	      
 #	     \

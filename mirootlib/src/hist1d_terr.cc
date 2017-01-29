@@ -167,6 +167,14 @@ double HistDataTerr1d::GetOvalTerrMinusElm(long ibin) const
     return GetOvalArr()->GetValTerrMinusElm(ibin);
 }
 
+double HistDataTerr1d::GetOvalSerrElmAtX(double xval) const
+{
+    long ibin = GetIbin(xval);
+    return GetOvalSerrElm(ibin);
+}
+
+
+
 double HistDataTerr1d::GetOvalTerrPlusElmAtX(double xval) const
 {
     long ibin = GetIbin(xval);

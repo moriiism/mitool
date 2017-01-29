@@ -43,6 +43,7 @@ public:
     double GetOvalSerrElm(long ibin) const;
     double GetOvalTerrPlusElm(long ibin) const;
     double GetOvalTerrMinusElm(long ibin) const;
+    double GetOvalSerrElmAtX(double xval) const;
     double GetOvalTerrPlusElmAtX(double xval) const;    
     double GetOvalTerrMinusElmAtX(double xval) const;
 
