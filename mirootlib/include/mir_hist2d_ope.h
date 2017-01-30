@@ -9,8 +9,7 @@
 
 namespace HistData2dOpe
 {
-    void FillGd2d(const HistDataNerr2d* const hd2d,
-                  const GraphDataNerr2d* const gd2d,
+    void FillGd2d(const GraphDataNerr2d* const gd2d,
                   HistDataNerr2d* const hist_res_out);
 
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
