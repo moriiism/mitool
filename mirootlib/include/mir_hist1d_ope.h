@@ -5,9 +5,6 @@
 #include "TText.h"
 #include "TPaveLabel.h"
 #include "TPaletteAxis.h"
-//#include "TFFTRealComplex.h"
-//#include "TFFTComplex.h"
-//#include <fftw3.h>
 
 #include "mir_data1d_ope.h"
 #include "mir_hist1d_nerr.h"

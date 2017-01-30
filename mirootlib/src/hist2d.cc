@@ -101,12 +101,6 @@ void HistData2d::SetOneAtIntervalXY(const Interval* const interval_x,
             double xup = interval_x_and->GetTstopElm(iterm_x);
             double ylo = interval_y_and->GetTstartElm(iterm_y);
             double yup = interval_y_and->GetTstopElm(iterm_y);
-
-            //printf("GetIbinX(xlo) = %ld\n", GetHi2d()->GetIbinXFromX(xlo));
-            //printf("GetIbinX(xup) = %ld\n", GetHi2d()->GetIbinXFromX(xup));
-            //printf("GetIbinY(ylo) = %ld\n", GetHi2d()->GetIbinYFromY(ylo));
-            //printf("GetIbinY(yup) = %ld\n", GetHi2d()->GetIbinYFromY(yup));
-
             long ibin_x_lo = (long) MirMath::GetMax((double) GetHi2d()->GetIbinXFromX(xlo), 0.0);
             long ibin_x_up = (long) MirMath::GetMin((double) GetHi2d()->GetIbinXFromX(xup),
                                                     (double) (GetNbinX() - 1) );
@@ -259,109 +253,6 @@ void HistData2d::GenOvalArr(double** const oval_arr_ptr,
 }
 
 
-//
-//// calc_mode : "add", "integral", "amean", "min", "max"
-//HistData1d* const HistData2d::GenProjectX(long ibin_ylo, long ibin_yup,
-//                                          string calc_mode) const
-//{
-//    IsValidIbinY(ibin_ylo);
-//    IsValidIbinY(ibin_yup);
-//    HistData1d* h1d = new HistData1d;
-//    h1d->Init(nbin_xval_, xval_lo_, xval_up_);
-//    for(long ibin_xval = 0; ibin_xval < nbin_xval_; ibin_xval++){
-//        long nbin_tmp = ibin_yup - ibin_ylo + 1;
-//        double* tmp_arr = new double [nbin_tmp];
-//        long ibin_tmp = 0;
-//        for(long ibin_yval = ibin_ylo; ibin_yval <= ibin_yup; ibin_yval++){
-//            tmp_arr[ibin_tmp] = GetOvalElm(ibin_xval, ibin_yval);
-//            ibin_tmp ++;
-//        }
-//        double val_proj = 0.0;
-//        GetProject(nbin_tmp, tmp_arr,
-//                   calc_mode, GetBinWidthY(),
-//                   &val_proj);
-//        delete [] tmp_arr;
-//        h1d->SetOvalElm(ibin_xval, val_proj);
-//    }
-//    return h1d;
-//}
-//
-//// calc_mode : "add", "integral", "amean", "min", "max"
-//HistData1d* const HistData2d::GenProjectY(long ibin_xlo, long ibin_xup,
-//                                          string calc_mode) const
-//{
-//    int ret = IsValidIbinX(ibin_xlo) * IsValidIbinX(ibin_xup);
-//    if(1 != ret){
-//        char msg[kLineSize];
-//        sprintf(msg, "bad ibin_xlo(=%ld) or ibin_xup(=%ld)\n",
-//                ibin_xlo, ibin_xup);
-//        MPrintErrClass(msg);
-//        abort();
-//    }
-//
-//    HistData1d* h1d = new HistData1d;
-//    h1d->Init(nbin_yval_, yval_lo_, yval_up_);
-//    for(long ibin_yval = 0; ibin_yval < nbin_yval_; ibin_yval++){
-//        long nbin_tmp = ibin_xup - ibin_xlo + 1;
-//        double* tmp_arr = new double [nbin_tmp];
-//        long ibin_tmp = 0;
-//        for(long ibin_xval = ibin_xlo; ibin_xval <= ibin_xup; ibin_xval++){
-//            tmp_arr[ibin_tmp] = GetOvalElm(ibin_xval, ibin_yval);
-//            ibin_tmp ++;
-//        }
-//        double val_proj = 0.0;
-//        GetProject(nbin_tmp, tmp_arr,
-//                   calc_mode, GetBinWidthX(),
-//                   &val_proj);
-//        delete [] tmp_arr;
-//        h1d->SetOvalElm(ibin_yval, val_proj);
-//    }
-//    return h1d;
-//}
-//
-
-//double HistData2d::GetOvalIntPolLin(double xval, double yval) const
-//{
-//    IsValidRangeX(xval);
-//    IsValidRangeY(yval);
-//    double ans = 0.0;
-//    long index_xval = GetHi2d()->GetIbinX_WithHalfBinShifted(xval);
-//    long index_yval = GetHi2d()->GetIbinY_WithHalfBinShifted(yval);
-//    
-//    if (-1 < index_xval && index_xval < GetNbinX() - 1 &&
-//        -1 < index_yval && index_yval < GetNbinY() - 1   ){
-//        long index_xval0 = index_xval;
-//        long index_xval1 = index_xval0 + 1;
-//        long index_yval0 = index_yval;
-//        long index_yval1 = index_yval0 + 1;
-//
-//        long index0 = index_xval0 + index_yval0 * GetNbinX();
-//        long index1 = index0 + 1;
-//        long index2 = index0 + GetNbinX() + 1;
-//        long index3 = index0 + GetNbinX();
-//        
-//        ans = MirMath::IntPolLin(xval, yval,
-//                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval0),
-//                                 GetHi2d()->GetBinCenterXFromIbinX(index_xval1),
-//                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval0),
-//                                 GetHi2d()->GetBinCenterYFromIbinY(index_yval1),
-//                                 GetOvalArr()->GetValElm(index0),
-//                                 GetOvalArr()->GetValElm(index1),
-//                                 GetOvalArr()->GetValElm(index2),
-//                                 GetOvalArr()->GetValElm(index3));
-//    } else {
-//        if(0 < g_flag_verbose){
-//            MPrintWarnClass("bad xval and/or yval, then just return 0.0");
-//        }
-//        ans = 0.0;
-//    }
-//    return ans;
-//}
-
-//
-// output
-//
-
 void HistData2d::Save(string outfile, string format,
                       double offset_xval,
                       double offset_yval,
@@ -395,97 +286,6 @@ void HistData2d::PrintInfo(FILE* fp) const
     fprintf(fp, "# yval_up_    = %e\n", GetYvalUp());
 }
 
-void HistData2d::PrintData(FILE* fp, string format,
-                           double offset_xval,
-                           double offset_yval,
-                           double offset_oval) const
-{
-    long nbin = GetNbinX() * GetNbinY();
-    if("x,y,z" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);
-            fprintf(fp, "%.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval,
-                    yval_bin_center - offset_yval,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
-        }
-    } else if ("x,y,z,ze" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval,
-                    yval_bin_center - offset_yval,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval, 0.0);
-        }
-    } else if ("x,xe,y,ye,z,ze" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);            
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
-                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval, 0.0);
-        }
-    } else if ("x,xe,y,ye,z" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);            
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
-                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
-        }
-    } else if ("x,y,z,ze+,ze-" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);            
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval, 
-                    yval_bin_center - offset_yval, 
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval, 0.0, 0.0);
-        }
-    } else if ("x,xe,y,ye,z,ze+,ze-" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);            
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
-                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval, 0.0, 0.0);
-        }
-    } else if ("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
-        for(long ibin = 0; ibin < nbin; ibin ++){
-            double xval_bin_center, yval_bin_center;
-            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
-            long ibin_x = GetHi2d()->GetIbinX(ibin);
-            long ibin_y = GetHi2d()->GetIbinY(ibin);            
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
-                    xval_bin_center - offset_xval, GetBinWidthX()/2., -1 * GetBinWidthX()/2.,
-                    yval_bin_center - offset_yval, GetBinWidthY()/2., -1 * GetBinWidthX()/2.,
-                    GetOvalElm(ibin_x, ibin_y) - offset_oval, 0.0, 0.0);
-        }
-    } else {
-        char msg[kLineSize];
-        sprintf(msg, "format(=%s)", format.c_str());
-        MPrintErrClass(msg);
-        abort();
-    }
-}
-
 void HistData2d::SaveRoot(string outfile,
                           double offset_xval,
                           double offset_yval,
@@ -497,25 +297,6 @@ void HistData2d::SaveRoot(string outfile,
     delete th2d;
     delete tfile;
 }
-
-//GraphData3d* const HistData2d::GenGraph3d() const
-//{
-//    long nbin = nbin_xval_ * nbin_yval_;
-//    double* xval_arr = NULL;
-//    double* yval_arr = NULL;
-//    long nbin_g3d;
-//    GenXYvalArr(&xval_arr, &yval_arr, &nbin_g3d);
-//    
-//    GraphData3d* g3d = new GraphData3d;
-//    g3d->Init();
-//    g3d->SetXvalArrDbl(nbin_g3d, xval_arr);
-//    g3d->SetYvalArrDbl(nbin_g3d, yval_arr);
-//    g3d->SetOvalArrDbl(nbin, GetOvalArrDbl());
-//    delete [] xval_arr;
-//    delete [] yval_arr;
-//    return g3d;
-//}
-//
 
 
 void HistData2d::MkTH2Fig(string outfig,

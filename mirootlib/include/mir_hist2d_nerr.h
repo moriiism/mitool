@@ -2,6 +2,7 @@
 #define MORIIISM_MITOOL_MIROOTLIB_HIST2D_NERR_H_
 
 #include "mir_hist2d.h"
+#include "mir_graph3d_nerr.h"
 
 class HistDataNerr2d : public HistData2d{
 public:
@@ -21,12 +22,9 @@ public:
                    double offset_xval,
                    double offset_yval,
                    double offset_oval) const;
-    HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const;
-    // virtual GraphData3d* const GenGraph3d() const;
     TH2D* const GenTH2D(double offset_xval,
                         double offset_yval,
                         double offset_oval) const;
-    HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const;
 
     void FillRandom(const MirFunc* const func,
                     const double* const func_par,

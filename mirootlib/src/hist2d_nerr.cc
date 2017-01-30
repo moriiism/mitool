@@ -60,19 +60,14 @@ void HistDataNerr2d::Load(string file)
         MPrintErrClass(msg);
         abort();
     }
-
-    abort();
-
-//    GraphData3d* gdata3d = new GraphData3d;
-//    gdata3d->Load(file, format);
-//    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
-//        long ibin_x = GetIbinXFromX(gdata3d->GetXvalElm(idata));
-//        long ibin_y = GetIbinYFromY(gdata3d->GetYvalElm(idata));
-//        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
-//    }
-//    delete gdata3d;
-//
-
+    GraphDataNerr3d* gdata3d = new GraphDataNerr3d;
+    gdata3d->Load(file, format);
+    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
+        long ibin_x = GetHi2d()->GetIbinXFromX(gdata3d->GetXvalElm(idata));
+        long ibin_y = GetHi2d()->GetIbinYFromY(gdata3d->GetYvalElm(idata));
+        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
+    }
+    delete gdata3d;
 }
 
 const DataArrayNerr1d* const HistDataNerr2d::GetOvalArr() const
@@ -171,68 +166,6 @@ void HistDataNerr2d::PrintData(FILE* fp, string format,
     }
 }
 
-
-//HistData2d* const HistData2d::GenHd2MaxInBin(long nbinx_new, long nbiny_new) const
-//{
-//    if(nbinx_new > GetNbinX()){
-//        MPrintErrClass("bad nbinx_new");
-//        abort();
-//    }
-//    if(nbinx_new < 1){
-//        MPrintErrClass("bad nbinx_new");
-//        abort();
-//    }
-//    if(0 != GetNbinX() % nbinx_new){
-//        MPrintErrClass("bad nbinx_new");
-//        abort();
-//    }
-//
-//    if(nbiny_new > GetNbinY()){
-//        MPrintErrClass("bad nbiny_new");
-//        abort();
-//    }
-//    if(nbiny_new < 1){
-//        MPrintErrClass("bad nbiny_new");
-//        abort();
-//    }
-//    if(0 != GetNbinY() % nbiny_new){
-//        MPrintErrClass("bad nbiny_new");
-//        abort();
-//    }
-//    
-//    HistData2d* h2d_new = new HistData2d;
-//    h2d_new->Init(nbinx_new, GetXvalLo(), GetXvalUp(),
-//                  nbiny_new, GetYvalLo(), GetYvalUp());
-//    for(long ibin = 0; ibin < GetNbin(); ibin ++){
-//        double xval = GetBinCenterXFromIbin(ibin);
-//        double yval = GetBinCenterYFromIbin(ibin);
-//        long ibin_x = GetIbinX(ibin);
-//        long ibin_y = GetIbinY(ibin);
-//        h2d_new->FillByLarger(xval, yval, GetOvalElm(ibin_x, ibin_y) );
-//    }
-//    return h2d_new;
-//}
-//
-//
-//GraphData3d* const HistData2d::GenGraph3d() const
-//{
-//    long nbin = nbin_xval_ * nbin_yval_;
-//    double* xval_arr = NULL;
-//    double* yval_arr = NULL;
-//    long nbin_g3d;
-//    GenXYvalArr(&xval_arr, &yval_arr, &nbin_g3d);
-//    
-//    GraphData3d* g3d = new GraphData3d;
-//    g3d->Init();
-//    g3d->SetXvalArrDbl(nbin_g3d, xval_arr);
-//    g3d->SetYvalArrDbl(nbin_g3d, yval_arr);
-//    g3d->SetOvalArrDbl(nbin, GetOvalArrDbl());
-//    delete [] xval_arr;
-//    delete [] yval_arr;
-//    return g3d;
-//}
-
-
 TH2D* const HistDataNerr2d::GenTH2D(double offset_xval,
                                     double offset_yval,
                                     double offset_oval) const
@@ -257,42 +190,6 @@ TH2D* const HistDataNerr2d::GenTH2D(double offset_xval,
     
     return th2d;
 }
-
-////
-//// generate HistData2d adding margin region in x and y directions
-////
-//
-//HistData2d* const HistData2d::GenHd2AddMargin(double margin_xval, double margin_yval) const
-//{
-//    long nbin_xval_margin = (long) ceil(margin_xval / GetBinWidthX());
-//    long nbin_yval_margin = (long) ceil(margin_yval / GetBinWidthY());
-//  
-//    double xval_lo_new = GetXvalLo() - nbin_xval_margin * GetBinWidthX();
-//    double xval_up_new = GetXvalUp() + nbin_xval_margin * GetBinWidthX();
-//    double yval_lo_new = GetYvalLo() - nbin_yval_margin * GetBinWidthY();
-//    double yval_up_new = GetYvalUp() + nbin_yval_margin * GetBinWidthY();
-//    long nbin_xval_new = GetNbinX() + 2 * nbin_xval_margin;
-//    long nbin_yval_new = GetNbinY() + 2 * nbin_yval_margin;
-//
-//    HistData2d* hd2_new = new HistData2d;
-//    hd2_new->Init(nbin_xval_new, xval_lo_new, xval_up_new,
-//                  nbin_yval_new, yval_lo_new, yval_up_new);
-//    hd2_new->SetZero();
-//
-//    for(long ibin = 0; ibin < GetNbin(); ibin++){
-//        long ibin_x = GetIbinX(ibin);
-//        long ibin_y = GetIbinY(ibin);
-//        double xval = GetBinCenterXFromIbinX(ibin_x);
-//        double yval = GetBinCenterYFromIbinY(ibin_y);
-//
-//        long ibin_x_new = hd2_new->GetIbinXFromX(xval);
-//        long ibin_y_new = hd2_new->GetIbinYFromY(yval);
-//        hd2_new->SetOvalElm(ibin_x_new,
-//                            ibin_y_new,
-//                            GetOvalElm(ibin_x, ibin_y));
-//    }
-//    return hd2_new;
-//}
 
 void HistDataNerr2d::FillRandom(const MirFunc* const func,
                                 const double* const func_par,
