@@ -2,7 +2,114 @@
 # install
 #
 
-su root 
+Installation steps are shown below.
+In this explanation, the user name is assumed to be "morii".
+The downloaded files will be stored in the sub-directory
+under "/home/morii/admin", and these files will be
+installed in the sub-directory of "/soft".
+
+
+1. Installation of GSL
+
+Follow the instruction at https://www.gnu.org/software/gsl/ .
+Memo for Cent OS 7 is shown below for an example.
+
+# Memo for CentOS 7
+
+Download gsl-2.3.tar.gz to
+/home/morii/admin/gsl/gsl-2.3.tar.gz
+
+% cd /home/morii/admin/gsl
+% tar xvfz gsl-2.3.tar.gz
+---> gsl-2.3
+
+% su root
+# mkdir -p /soft/gsl/2.3
+# chown morii /soft/gsl/2.3
+# exit
+
+% cd /home/morii/admin/gsl/gsl-2.3
+% ./configure --prefix=/soft/gsl/2.3
+% make
+% make install
+
+% su root
+# chown -R root /soft/gsl/2.3
+# exit
+
+
+2. Installation of cern/root
+
+Follow the instruction at https://root.cern.ch/ .
+For an example, memo for Cent OS 7 is shown below.
+
+# Memo for CentOS 7
+
+Download root_v6.08.02.source.tar.gz from 
+https://root.cern.ch/
+---> /home/morii/admin/root/root_v6.08.02.source.tar.gz
+
+% cd /home/morii/admin/root
+% tar xvfz root_v6.08.02.source.tar.gz
+---> root-6.08.02
+
+% su root
+# mkdir -p /soft/root/6.08.02
+# chown morii /soft/root/6.08.02
+# exit
+
+% cd /home/morii/admin/root/
+% mkdir builddir
+% cd builddir
+% cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
+  -Dgsl_shared=ON -Dmathmore=ON -DGSL_DIR=/soft/gsl/2.3 -Dminuit2=ON
+% cmake --build . 
+% cmake --build . --target install
+
+% su root
+# chown -R root /soft/root/6.08.02
+# exit
+
+
+3. MersenneTwister
+
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt64.html
+download --> 
+/home/morii/admin/MersenneTwister/mt19937-64.tgz
+
+(By root)
+# mkdir -p /soft/MersenneTwister/mt19937-64/lib
+# mkdir -p /soft/MersenneTwister/mt19937-64/include
+# chown -R morii /soft/MersenneTwister/mt19937-64
+
+(By morii)
+cd /home/morii/admin/MersenneTwister
+tar xvfz mt19937-64.tgz
+cd /home/morii/admin/MersenneTwister/mt19937-64
+
+g++ -c mt19937-64.c
+g++ -c mt19937-64test.c
+g++ mt19937-64test.o mt19937-64.o -o mt19937-64test
+./mt19937-64test > temp.dat
+
+diff mt19937-64.out.txt  temp.dat
+# If nothing is output, it is OK.
+
+ar -rv libmt19937-64.a mt19937-64.o
+ranlib libmt19937-64.a
+
+cd /home/morii/admin/MersenneTwister/mt19937-64
+cp libmt19937-64.a /soft/MersenneTwister/mt19937-64/lib
+cp mt64.h /soft/MersenneTwister/mt19937-64/include
+
+(By root)
+# chown -R root /soft/MersenneTwister
+
+
+4. Installation of mitool
+
+su root
 # mkdir /soft/mitool
 # chown morii /soft/mitool
 # exit
@@ -25,20 +132,18 @@ tail -f make.log
 # If you find bugs, please contact with Mikio Morii.
 
 
+##
+## etc
+##
 
-#
-# cern/root 
-#
+If you encounter some compilation errors, when you compile cern/root,
+the following memos may help you.
 
-memo for CentOS 7
 
 cd  /etc/yum.repos.d/
 wget http://people.centos.org/tru/devtools-2/devtools-2.repo
 yum install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
-
 # echo 'source /opt/rh/devtoolset-2/enable' >> /etc/profile.d/devtools.sh
-
-
 
 cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
 -Dgnuinstall=ON \
@@ -47,40 +152,20 @@ cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
 -DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
 -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
 -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
-
-
 -DGCC_INSTALL_PREFIX=/opt/rh/devtoolset-2/root/usr
+
+-DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
+-DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
+-DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
+-DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
+-DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
 
 make
 make install
 scl enable devtoolset-2 bash
 
-[ 80%] Linking CXX shared library ../../lib/libHbook.so
-/opt/rh/devtoolset-2/root/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/ld: ../../lib/libminicern.a(hbook.f.o): unrecognized relocation (0x2a) in section `.text'
-/opt/rh/devtoolset-2/root/usr/libexec/gcc/x86_64-redhat-linux/4.8.2/ld: final link failed: Bad value
-collect2: error: ld returned 1 exit status
-make[2]: *** [lib/libHbook.so] Error 1
-make[2]: Target `hist/hbook/CMakeFiles/Hbook.dir/build' not remade because of errors.
-make[1]: *** [hist/hbook/CMakeFiles/Hbook.dir/all] Error 2
-Scanning dependencies of target Gui
 
-
- Installing: /usr/local/include/TMVA/efficiencies.h
--- Installing: /usr/local/lib/libPyMVA_rdict.pcm
--- Installing: /usr/local/lib/libPyMVA.rootmap
-
-
-
-#####################
-
-/home/morii/admin/root/root-6.08.02/README/INSTALL 
-
-### install cmake
-
-CMake Error at CMakeLists.txt:2 (cmake_minimum_required):
-  CMake 3.4.3 or higher is required.  You are running version 2.8.12.2
--- Configuring incomplete, errors occurred!
-
+#  install cmake
 
 % cd /home/morii/admin/cmake/cmake-3.7.2
 % ./configure --prefix=/soft/cmake/3.7.2
@@ -93,101 +178,6 @@ yum install libX11-devel
 yum install libXpm-devel
 yum install libXft-devel
 yum install libXext-devel
-
-
-
-
-
-
-
-
-
-
-
-
-
- 2) Type the build commands:
-        mkdir <builddir>
-        cd <builddir>
-        cmake ../root
-        cmake --build . [ -- -j<N> ] [ or simply "make -j<N>" on Unix systems ] 
-
-   3) Add bin/ to PATH and lib/ to LD_LIBRARY_PATH. For the sh shell family do:
-        . bin/thisroot.sh
-
-      and for the csh shell family do:
-        source bin/thisroot.csh
-
-   4) try running root:
-        root
-
-3.2. Fixed location build:
-
-
-
-
-
- http://root.cern.ch/building-root#options
-cmake -DCMAKE_INSTALL_PREFIX=$LOCAL  -Dgnuinstall=ON -Dfftw3=ON 
-
--D<option>=ON
- http://root.cern.ch/building-root#options
-
-
-cmake --build .
-
-
-
-
-export PATH=/home/morii/admin/root/builddir/bin:$PATH
-export LD_LIBRARY_PATH=/home/morii/admin/root/builddir/lib:$LD_LIBRARY_PATH
-
-
-
-
--Dgnuinstall=ON 
-
-
-
-
-
--DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
--DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
--DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
--DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
--DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
-
-
-
-
-
-### gsl
-
-./configure --prefix=/soft/gsl/2.3
-make
-make install
-
-
-### root
-
-cd /home/morii/admin/root/builddir
-
-cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
--Dgsl_shared=ON -Dmathmore=ON -DGSL_DIR=/soft/gsl/2.3 -Dminuit2=ON 
-
-cmake --build . 
-cmake --build . --target install
-
-
-
-[morii@localhost builddir]$ source bin/thisroot.sh 
-[morii@localhost builddir]$ 
-[morii@localhost builddir]$ echo $LD_LIBRARY_PATH 
-/home/morii/admin/root/builddir/lib
-[morii@localhost builddir]$ echo $PATH 
-/home/morii/admin/root/builddir/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/morii/.local/bin:/home/morii/bin
-[morii@localhost builddir]$ 
-
 
 
 
