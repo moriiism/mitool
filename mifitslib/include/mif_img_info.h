@@ -38,6 +38,8 @@ public:
     
     // Load
     void Load(string file);
+    void Copy(const MifImgInfo* const org);
+    MifImgInfo* const Clone() const;
 
     // const func
     int GetNaxis() const {return naxis_;};
