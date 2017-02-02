@@ -9,8 +9,7 @@
 
 namespace HistData2dOpe
 {
-    void FillGd2d(const HistDataNerr2d* const hd2d,
-                  const GraphDataNerr2d* const gd2d,
+    void FillGd2d(const GraphDataNerr2d* const gd2d,
                   HistDataNerr2d* const hist_res_out);
 
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
@@ -26,16 +25,6 @@ namespace HistData2dOpe
     HistData1d* const GenProjectY(const HistData2d* const hist_data,
                                   long ibin_xlo, long ibin_xup,
                                   string calc_mode);
-
-//    // calc_mode  : "add", "integral", "amean"
-//    // error_mode: gauss, poisson, zero
-//    HistDataSerr1d* const GenProjectX(long ibin_ylo, long ibin_yup,
-//                                      string calc_mode, string error_mode) const;
-//    HistDataSerr1d* const GenProjectY(long ibin_xlo, long ibin_xup,
-//                                      string calc_mode, string error_mode) const;  
-
-    
-    
     
     void GetResValHd2(const HistDataNerr2d* const hist_data,
                       const MirFunc* const func, const double* const par,

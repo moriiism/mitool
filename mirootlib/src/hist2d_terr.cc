@@ -138,26 +138,23 @@ void HistDataTerr2d::Load(string file)
              &nbin_yval, &yval_lo, &yval_up, &format);
     Init(nbin_xval, xval_lo, xval_up,
          nbin_yval, yval_lo, yval_up);
-
-    abort();
-    
     if("x,y,z,ze+,ze-" != format){
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
         MPrintErrClass(msg);
         abort();
     }
-//    GraphDataTerr3d* gdata3d = new GraphDataTerr3d;
-//    gdata3d->Load(file, format);
-//    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
-//        long ibin_x = GetIbinXFromX(gdata3d->GetXvalElm(idata));
-//        long ibin_y = GetIbinYFromY(gdata3d->GetYvalElm(idata));
-//        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
-//        SetOvalTerrElm(ibin_x, ibin_y,
-//                       gdata3d->GetOvalTerrPlusElm(idata),
-//                       gdata3d->GetOvalTerrMinusElm(idata));
-//    }
-//    delete gdata3d;
+    GraphDataTerr3d* gdata3d = new GraphDataTerr3d;
+    gdata3d->Load(file, format);
+    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
+        long ibin_x = GetHi2d()->GetIbinXFromX(gdata3d->GetXvalElm(idata));
+        long ibin_y = GetHi2d()->GetIbinYFromY(gdata3d->GetYvalElm(idata));
+        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
+        SetOvalTerrElm(ibin_x, ibin_y,
+                       gdata3d->GetOvalTerrPlusElm(idata),
+                       gdata3d->GetOvalTerrMinusElm(idata));
+    }
+    delete gdata3d;
 
 }
 
@@ -236,7 +233,66 @@ void HistDataTerr2d::PrintData(FILE* fp, string format,
                                double offset_oval) const
 {
     long nbin = GetNbin();
-    if("x,xe,y,ye,z,ze+,ze-" == format){
+    if("x,y,z" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);
+            fprintf(fp, "%.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval,
+                    yval_bin_center - offset_yval,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
+        }
+    } else if ("x,y,z,ze" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval,
+                    yval_bin_center - offset_yval,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if ("x,xe,y,ye,z,ze" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if ("x,xe,y,ye,z" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
+        }
+    } else if ("x,y,z,ze+,ze-" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, 
+                    yval_bin_center - offset_yval, 
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalTerrPlusElm(ibin_x, ibin_y),
+                    GetOvalTerrMinusElm(ibin_x, ibin_y));
+        }
+    } else if("x,xe,y,ye,z,ze+,ze-" == format){
         for(long ibin = 0; ibin < nbin; ibin ++){
             double xval_bin_center, yval_bin_center;
             GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
@@ -252,6 +308,22 @@ void HistDataTerr2d::PrintData(FILE* fp, string format,
                     GetOvalTerrPlusElm(ibin_x, ibin_y),
                     GetOvalTerrMinusElm(ibin_x, ibin_y));
         }
+    } else if ("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp,
+                    "%.15e  %.15e  %.15e  "
+                    "%.15e  %.15e  %.15e  "
+                    "%.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2., -1 * GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2., -1 * GetBinWidthX()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalTerrPlusElm(ibin_x, ibin_y),
+                    GetOvalTerrMinusElm(ibin_x, ibin_y));
+        }
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
@@ -259,32 +331,3 @@ void HistDataTerr2d::PrintData(FILE* fp, string format,
         abort();
     }
 }
-
-
-//GraphDataTerr3d* const HistDataTerr2d::GenGraph3d() const
-//{
-//    long nbin = GetNbin();
-//    double* xval_arr = NULL;
-//    double* yval_arr = NULL;
-//    double* xval_serr_arr = NULL;
-//    double* yval_serr_arr = NULL;
-//    long nbin_g3d;
-//    long nbin_g3d_tmp;
-//    GenXYvalArr(&xval_arr, &yval_arr, &nbin_g3d);
-//    GenXYvalSerrArr(&xval_serr_arr, &yval_serr_arr, &nbin_g3d_tmp);
-//
-//    GraphDataTerr3d* g3d = new GraphDataTerr3d;
-//    g3d->Init();
-//    g3d->SetXvalAndTerrArrDbl(nbin, xval_arr, xval_serr_arr);
-//    g3d->SetYvalAndTerrArrDbl(nbin, yval_arr, yval_serr_arr);
-//    g3d->SetOvalAndTerrArrDbl(nbin, GetOvalArrDbl(),
-//                              GetOvalTerrPlusArrDbl(),
-//                              GetOvalTerrMinusArrDbl());
-//    delete [] xval_arr;
-//    delete [] yval_arr;
-//    delete [] xval_serr_arr;
-//    delete [] yval_serr_arr;
-//    return g3d;
-//}
-
-

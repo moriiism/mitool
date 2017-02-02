@@ -3,7 +3,7 @@
 
 #include "mir_hist1d_terr.h"
 #include "mir_hist2d.h"
-//#include "mir_graph3d_terr.h"
+#include "mir_graph3d_terr.h"
 
 class HistDataTerr2d : public HistData2d{
 public:
@@ -55,8 +55,6 @@ public:
                    double offset_xval,
                    double offset_yval,
                    double offset_oval) const;
-
-    // GraphDataTerr3d* const GenGraph3d() const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_TERR_H_

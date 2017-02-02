@@ -1,18 +1,16 @@
 #include "mir_vect.h"
 #include "mir_hist2d_ope.h"
 
-void HistData2dOpe::FillGd2d(const HistDataNerr2d* const hd2d,
-                             const GraphDataNerr2d* const gd2d,
+void HistData2dOpe::FillGd2d(const GraphDataNerr2d* const gd2d,
                              HistDataNerr2d* const hist_res_out)
 {
     vector<double> xval_vec;
     vector<double> yval_vec;
-    hist_res_out->Copy(hd2d);
     hist_res_out->SetConst(0.0);
     int nfine = 10;
     for(long idata = 0; idata < gd2d->GetNdata() - 1; idata++){
-        double bin_width_x_fine = hd2d->GetBinWidthX() / nfine;
-        double bin_width_y_fine = hd2d->GetBinWidthY() / nfine;
+        double bin_width_x_fine = hist_res_out->GetBinWidthX() / nfine;
+        double bin_width_y_fine = hist_res_out->GetBinWidthY() / nfine;
         int nbin_x = (int) ceil( fabs(gd2d->GetXvalElm(idata + 1) - gd2d->GetXvalElm(idata) ) / bin_width_x_fine );
         int nbin_y = (int) ceil( fabs(gd2d->GetOvalElm(idata + 1) - gd2d->GetOvalElm(idata) ) / bin_width_y_fine );
         int nbin = TMath::Max(nbin_x, nbin_y);

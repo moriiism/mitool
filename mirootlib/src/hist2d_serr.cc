@@ -102,18 +102,15 @@ void HistDataSerr2d::Load(string file)
              &nbin_yval, &yval_lo, &yval_up, &format);
     Init(nbin_xval, xval_lo, xval_up,
          nbin_yval, yval_lo, yval_up);
-
-    abort();
-    
-//    //GraphDataSerr3d* gdata3d = new GraphDataSerr3d;
-//    gdata3d->Load(file, format);
-//    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
-//        long ibin_x = GetIbinXFromX(gdata3d->GetXvalElm(idata));
-//        long ibin_y = GetIbinYFromY(gdata3d->GetYvalElm(idata));
-//        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
-//        SetOvalSerrElm(ibin_x, ibin_y, gdata3d->GetOvalSerrElm(idata) );
-//    }
-//    delete gdata3d;
+    GraphDataSerr3d* gdata3d = new GraphDataSerr3d;
+    gdata3d->Load(file, format);
+    for(long idata = 0; idata < gdata3d->GetNdata(); idata++){
+        long ibin_x = GetHi2d()->GetIbinXFromX(gdata3d->GetXvalElm(idata));
+        long ibin_y = GetHi2d()->GetIbinYFromY(gdata3d->GetYvalElm(idata));
+        SetOvalElm(ibin_x, ibin_y, gdata3d->GetOvalElm(idata) );
+        SetOvalSerrElm(ibin_x, ibin_y, gdata3d->GetOvalSerrElm(idata) );
+    }
+    delete gdata3d;
 }
 
 
@@ -153,97 +150,36 @@ void HistDataSerr2d::GenOvalSerrArr(double** const oval_serr_arr_ptr,
     *nbin_ptr = nbin;
 }
 
-//// calc_mode  : "add", "integral", "amean"
-//// error_mode: gauss, poisson, zero
-//HistDataSerr1d* const HistDataSerr2d::GenProjectX(long ibin_ylo, long ibin_yup,
-//                                                  string calc_mode, string error_mode) const
-//{
-//    int ret = IsValidIbinY(ibin_ylo) * IsValidIbinY(ibin_yup);
-//    if(1 != ret){
-//        char msg[kLineSize];
-//        sprintf(msg, "bad ibin_ylo(=%ld) or ibin_yup(=%ld)\n",
-//                ibin_ylo, ibin_yup);
-//        MPrintErrClass(msg);
-//        abort();
-//    }
-//    HistDataSerr1d* h1d = new HistDataSerr1d;
-//    h1d->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
-//    for(long ibin_xval = 0; ibin_xval < GetNbinX(); ibin_xval++){
-//        long nbin_tmp = ibin_yup - ibin_ylo + 1;
-//        double* tmp_arr = new double [nbin_tmp];
-//        double* tmp_err_arr = new double [nbin_tmp];
-//        long ibin_tmp = 0;
-//        for(long ibin_yval = ibin_ylo; ibin_yval <= ibin_yup; ibin_yval++){
-//            tmp_arr[ibin_tmp] = GetOvalElm(ibin_xval, ibin_yval);
-//            tmp_err_arr[ibin_tmp] = GetOvalSerrElm(ibin_xval, ibin_yval);
-//            ibin_tmp ++;
-//        }
-//        double val_proj;
-//        double val_proj_err;
-//    
-//        GetProject(nbin_tmp,
-//                   tmp_arr, tmp_err_arr,
-//                   calc_mode, error_mode,
-//                   GetBinWidthY(),
-//                   &val_proj, &val_proj_err);
-//        delete [] tmp_arr;
-//        delete [] tmp_err_arr;
-//        h1d->SetOvalElm(ibin_xval, val_proj);
-//        h1d->SetOvalSerrElm(ibin_xval, val_proj_err);
-//    }
-//    return h1d;
-//}
-//
-//// calc_mode  : "add", "integral", "amean"
-//// error_mode: gauss, poisson, zero
-//HistDataSerr1d* const HistDataSerr2d::GenProjectY(long ibin_xlo, long ibin_xup,
-//                                                  string calc_mode, string error_mode) const
-//{
-//    int ret = IsValidIbinX(ibin_xlo) * IsValidIbinX(ibin_xup);
-//    if(1 != ret){
-//        char msg[kLineSize];
-//        sprintf(msg, "bad ibin_xlo(=%ld) or ibin_xup(=%ld)\n",
-//                ibin_xlo, ibin_xup);
-//        MPrintErrClass(msg);
-//        abort();
-//    }
-//    
-//    HistDataSerr1d* h1d = new HistDataSerr1d;
-//    h1d->Init(GetNbinY(), GetYvalLo(), GetYvalUp());
-//    for(long ibin_yval = 0; ibin_yval < GetNbinY(); ibin_yval++){
-//        long nbin_tmp = ibin_xup - ibin_xlo + 1;
-//        double* tmp_arr = new double [nbin_tmp];
-//        double* tmp_err_arr = new double [nbin_tmp];
-//        long ibin_tmp = 0;
-//        for(long ibin_xval = ibin_xlo; ibin_xval <= ibin_xup; ibin_xval++){
-//            tmp_arr[ibin_tmp] = GetOvalElm(ibin_xval, ibin_yval);
-//            tmp_err_arr[ibin_tmp] = GetOvalSerrElm(ibin_xval, ibin_yval);
-//            ibin_tmp ++;
-//        }
-//        double val_proj;
-//        double val_proj_err;
-//        GetProject(nbin_tmp,
-//                   tmp_arr, tmp_err_arr,
-//                   calc_mode, error_mode,
-//                   GetBinWidthX(),
-//                   &val_proj, &val_proj_err);
-//        delete [] tmp_arr;
-//        delete [] tmp_err_arr;
-//        h1d->SetOvalElm(ibin_yval, val_proj);
-//        h1d->SetOvalSerrElm(ibin_yval, val_proj_err);
-//    }
-//    return h1d;
-//}
-
-
-// output
 void HistDataSerr2d::PrintData(FILE* fp, string format,
                                double offset_xval,
                                double offset_yval,
                                double offset_oval) const
 {
     long nbin = GetNbin();
-    if("x,xe,y,ye,z,ze" == format){
+    if("x,y,z" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);
+            fprintf(fp, "%.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval,
+                    yval_bin_center - offset_yval,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
+        }
+    } else if ("x,y,z,ze" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval,
+                    yval_bin_center - offset_yval,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if("x,xe,y,ye,z,ze" == format){
         for(long ibin = 0; ibin < nbin; ibin ++){
             double xval_bin_center, yval_bin_center;
             GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
@@ -254,6 +190,62 @@ void HistDataSerr2d::PrintData(FILE* fp, string format,
                     yval_bin_center - offset_yval, GetBinWidthY()/2.,
                     GetOvalElm(ibin_x, ibin_y) - offset_oval,
                     GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if ("x,xe,y,ye,z" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval);
+        }
+    } else if ("x,y,z,ze+,ze-" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, 
+                    yval_bin_center - offset_yval, 
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y),
+                    -1 * GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if("x,xe,y,ye,z,ze+,ze-" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);
+            fprintf(fp,
+                    "%.15e  %.15e  "
+                    "%.15e  %.15e  "
+                    "%.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y),
+                    -1 * GetOvalSerrElm(ibin_x, ibin_y));
+        }
+    } else if ("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
+        for(long ibin = 0; ibin < nbin; ibin ++){
+            double xval_bin_center, yval_bin_center;
+            GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_bin_center, &yval_bin_center);
+            long ibin_x = GetHi2d()->GetIbinX(ibin);
+            long ibin_y = GetHi2d()->GetIbinY(ibin);            
+            fprintf(fp,
+                    "%.15e  %.15e  %.15e  "
+                    "%.15e  %.15e  %.15e  "
+                    "%.15e  %.15e  %.15e\n",
+                    xval_bin_center - offset_xval, GetBinWidthX()/2., -1 * GetBinWidthX()/2.,
+                    yval_bin_center - offset_yval, GetBinWidthY()/2., -1 * GetBinWidthX()/2.,
+                    GetOvalElm(ibin_x, ibin_y) - offset_oval,
+                    GetOvalSerrElm(ibin_x, ibin_y),
+                    -1 * GetOvalSerrElm(ibin_x, ibin_y));
         }
      } else {
         char msg[kLineSize];

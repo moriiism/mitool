@@ -48,7 +48,7 @@ double FuncTest::Eval(const double* const xval,
 {
     double argx = xval[0];
     double argy = xval[1];    
-    double ans = par[0] + par[1] * argx + par[2] * pow(argy, 2.);
+    double ans = par[0] + par[1] * pow(argx, 2.) + par[2] * pow(argy, 2.);
     return ans;
 }
 
@@ -388,36 +388,70 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-////    virtual void Load(string file) = 0;
-//    {
-//        printf("--- test Load \n");
-////        // make temp.dat
-////        HistDataNerr2d* hd2d = new HistDataNerr2d;
-////        hd2d->Init(4, 0.0, 4.0, 4, 0.0, 4.0);
-////        for(long iarr = 0; iarr < 16; iarr ++){
-////            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
-////                             hd2d->GetHi2d()->GetIbinY(iarr),
-////                             2*(iarr + 1));
-////        }
-////        hd2d->Save("temp.dat", "x,y,z");
-////        delete hd2d;
-//
+//    virtual void Load(string file) = 0;
+    {
+        printf("--- test Load \n");
+//        // make temp.dat
 //        HistDataNerr2d* hd2d = new HistDataNerr2d;
-//        hd2d->Load("data/test_hist2d.dat");
-//        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);        
-//
+//        hd2d->Init(4, 0.0, 4.0, 4, 0.0, 4.0);
+//        for(long iarr = 0; iarr < 16; iarr ++){
+//            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+//                             hd2d->GetHi2d()->GetIbinY(iarr),
+//                             2*(iarr + 1));
+//        }
+//        hd2d->Save("temp.dat", "x,y,z");
 //        delete hd2d;
-//
-//        printf("=== \n");
-//    }
 
-// ----> Load is not yet implimented.
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Load("data/test_hist2d.dat");
+        hd2d->PrintInfo(stdout);
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);        
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
    
-
-    
-//
 //    const HistInfo2d* const GetHi2d() const {return hi2d_;};
+    {
+        printf("--- test  GetHi2d()\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(3, 0.0, 3.0, 3, 0.0, 3.0);
+        for(long iarr = 0; iarr < 9; iarr ++){
+            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+                             hd2d->GetHi2d()->GetIbinY(iarr),
+                             2*(iarr + 1));
+        }
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+
+        hd2d->GetHi2d()->Print(stdout);
+        
+
+        delete hd2d;
+
+
+        printf("=== \n");
+    }
+
+   
 //    virtual const DataArray1d* const GetOvalArr() const = 0;
+    {
+        printf("--- test  GetOvalArr()\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(3, 0.0, 3.0, 3, 0.0, 3.0);
+        for(long iarr = 0; iarr < 9; iarr ++){
+            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+                             hd2d->GetHi2d()->GetIbinY(iarr),
+                             2*(iarr + 1));
+        }
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        hd2d->GetOvalArr()->PrintData(stdout, 1, 0.0);
+
+        delete hd2d;
+
+
+        printf("=== \n");
+    }
 
 //    long GetNbinX() const {return GetHi2d()->GetNbinX();};
 //    long GetNbinY() const {return GetHi2d()->GetNbinY();};
@@ -434,49 +468,279 @@ int main(int argc, char* argv[])
 //    double GetBinWidthY() const {return GetHi2d()->GetBinWidthY();};
 //    double GetBinArea() const {return GetHi2d()->GetBinArea();};
 //    double GetFullArea() const {return GetHi2d()->GetFullArea();};
-//
-//    // get element
+    {
+        printf("--- test GetNbinX() \n");
+        printf("--- test GetNbinY() \n");
+        printf("--- test GetNbin()  \n");
+        printf("--- test GetXvalLo() \n");
+        printf("--- test GetXvalUp() \n");
+        printf("--- test GetYvalLo() \n");
+        printf("--- test GetYvalUp() \n");
+        printf("--- test GetXvalMd() \n");
+        printf("--- test GetYvalMd() \n");
+        printf("--- test GetXvalFullWidth() \n");
+        printf("--- test GetYvalFullWidth() \n");
+        printf("--- test GetBinWidthX() \n");
+        printf("--- test GetBinWidthY() \n");
+        printf("--- test GetBinArea()   \n");
+        printf("--- test GetFullArea()  \n");        
+
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(6, 0.0, 3.0, 4, 0.0, 4.0);
+        for(long iarr = 0; iarr < 24; iarr ++){
+            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+                             hd2d->GetHi2d()->GetIbinY(iarr),
+                             iarr + 1);
+        }
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        printf("hd2d->GetNbinX() = %ld\n", hd2d->GetNbinX());
+        printf("hd2d->GetNbinY() = %ld\n", hd2d->GetNbinY());
+        printf("hd2d->GetNbin() = %ld\n", hd2d->GetNbin());        
+        printf("hd2d->GetXvalLo() = %e\n", hd2d->GetXvalLo());
+        printf("hd2d->GetXvalUp() = %e\n", hd2d->GetXvalUp());        
+        printf("hd2d->GetYvalLo() = %e\n", hd2d->GetYvalLo());
+        printf("hd2d->GetYvalUp() = %e\n", hd2d->GetYvalUp());        
+        printf("hd2d->GetXvalMd() = %e\n", hd2d->GetXvalMd());
+        printf("hd2d->GetYvalMd() = %e\n", hd2d->GetYvalMd());
+        printf("hd2d->GetXvalFullWidth() = %e\n", hd2d->GetXvalFullWidth());
+        printf("hd2d->GetYvalFullWidth() = %e\n", hd2d->GetYvalFullWidth());
+        printf("hd2d->GetBinWidthX() = %e\n", hd2d->GetBinWidthX());                        
+        printf("hd2d->GetBinWidthY() = %e\n", hd2d->GetBinWidthY());
+        printf("hd2d->GetBinArea() = %e\n", hd2d->GetBinArea());
+        printf("hd2d->GetFullArea() = %e\n", hd2d->GetFullArea());
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
 //    double GetOvalElm(long ibin_xval, long ibin_yval) const;
+    {
+        printf("--- test GetOvalElm(long ibin_xval, long ibin_yval)\n");
+
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        for(long iarr = 0; iarr < 6; iarr ++){
+            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+                             hd2d->GetHi2d()->GetIbinY(iarr),
+                             iarr + 1);
+        }
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        for(long iarr = 0; iarr < hd2d->GetNbin(); iarr ++){
+            long ibin_xval = hd2d->GetHi2d()->GetIbinX(iarr);
+            long ibin_yval = hd2d->GetHi2d()->GetIbinY(iarr);
+            printf("hd2d->GetOvalElm(%ld, %ld) = %e\n",
+                   ibin_xval, ibin_yval,
+                   hd2d->GetOvalElm(ibin_xval, ibin_yval));
+        }
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+    
 //    double GetOvalElmAtXY(double xval, double yval) const;
+    {
+        printf("--- test GetOvalElmAtXY(double xval, double yval)\n");
+
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        for(long iarr = 0; iarr < 6; iarr ++){
+            hd2d->SetOvalElm(hd2d->GetHi2d()->GetIbinX(iarr),
+                             hd2d->GetHi2d()->GetIbinY(iarr),
+                             iarr + 1);
+        }
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        printf("hd2d->GetOvalElmAtXY(1.5, 2.5) = %e\n",
+               hd2d->GetOvalElmAtXY(1.5, 2.5));
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
+//    double GetXvalAtOvalMin() const;
 //    double GetXvalAtOvalMax() const;
 //    double GetYvalAtOvalMin() const;
 //    double GetYvalAtOvalMax() const;
+    {
+        printf("--- test GetXvalAtOvalMin()\n");
+        printf("--- test GetXvalAtOvalMax()\n");
+        printf("--- test GetYvalAtOvalMin()\n");
+        printf("--- test GetYvalAtOvalMax()\n");
 
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        printf("hd2d->GetXvalAtOvalMin() = %e\n",
+               hd2d->GetXvalAtOvalMin());        
+        printf("hd2d->GetXvalAtOvalMax() = %e\n",
+               hd2d->GetXvalAtOvalMax());
+        printf("hd2d->GetYvalAtOvalMin() = %e\n",
+               hd2d->GetYvalAtOvalMin());
+        printf("hd2d->GetYvalAtOvalMax() = %e\n",
+               hd2d->GetYvalAtOvalMax());                
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
+   
 //    void GenXYvalArr(double** const xval_arr_ptr,
 //                     double** const yval_arr_ptr,
 //                     long* const nbin_ptr) const;
-//    void GenXYvalSerrArr(double** const xval_serr_arr_ptr,
-//                         double** const yval_serr_arr_ptr,
-//                         long* const nbin_ptr) const;
 //    void GenOvalArr(double** const oval_arr_ptr,
 //                    long* const nbin_ptr) const;
-//    double GetOvalIntPolLin(double xval, double yval) const;
-//
+    {
+        printf("--- test GenXYvalArr\n");
+        printf("--- test GenOvalArr\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+        double* xval_arr = NULL;
+        double* yval_arr = NULL;
+        double* oval_arr = NULL;
+        long nbin_xy = 0;
+        long nbin_o = 0;
+        hd2d->GenXYvalArr(&xval_arr, &yval_arr, &nbin_xy);
+        hd2d->GenOvalArr(&oval_arr, &nbin_o);
+
+        printf("nbin_xy = %ld\n", nbin_xy);
+        printf("nbin_o = %ld\n", nbin_o);
+        for(long ibin = 0; ibin < nbin_xy; ibin ++){
+            printf("%ld: xval_arr, yval_arr, oval_arr = %e, %e, %e\n",
+                   ibin, xval_arr[ibin], yval_arr[ibin], oval_arr[ibin]);
+        }
+        delete [] xval_arr;
+        delete [] yval_arr;
+        delete [] oval_arr;
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
 //    void Save(string outfile, string format,
 //              double offset_xval = 0.0,
 //              double offset_yval = 0.0,
 //              double offset_oval = 0.0) const;
+    {
+        printf("--- test Save\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->Save("temp.dat", "x,y,z", 0.0, 0.0, 0.0);
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
+    
 //    void SaveData(string outfile, string format,
 //                  double offset_xval = 0.0,
 //                  double offset_yval = 0.0,
 //                  double offset_oval = 0.0) const;
-//    void PrintInfo(FILE* fp) const;    
+    {
+        printf("--- test SaveData\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->SaveData("temp.dat", "x,y,z", 0.0, 0.0, 0.0);
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
+    
+//    void PrintInfo(FILE* fp) const;
+    {
+        printf("--- test PrintInfo\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->PrintInfo(stdout);
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
+    
 //    virtual void PrintData(FILE* fp, string format,
 //                           double offset_xval,
 //                           double offset_yval,
 //                           double offset_oval) const = 0;
+    {
+        printf("--- test PrintData\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->PrintData(stdout, "x,y,z", 0.0, 0.0, 0.0);
+
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
+    
 //    void SaveRoot(string outfile,
 //                  double offset_xval = 0.0,
 //                  double offset_yval = 0.0,
 //                  double offset_oval = 0.0) const;
-//
-//
-////    virtual HistData2d* const GenHd2MaxInBin(long nbinx_new, long nbiny_new) const = 0;
-//    virtual TH2D* const GenTH2D(double offset_xval,
-//                                double offset_yval,
-//                                double offset_oval) const
-//        {MPrintErrVFunc; abort();};
-//        
+    {
+        printf("--- test SaveRoot\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+        hd2d->SaveRoot("temp.root");
+
+        delete hd2d;
+
+        // TFile* f = new TFile("temp.root");
+        // f->ls();
+        // TH2D* h = (TH2D*) f->Get("aaa");
+        // h->Draw("LEGO");
+        printf("=== \n");
+    }
+
+
 //    void MkTH2Fig(string outfig,
 //                  MirRootTool* const root_tool,
 //                  double offset_xval = 0.0,
@@ -486,6 +750,28 @@ int main(int argc, char* argv[])
 //                  string title_yaxis = "",
 //                  string title_oaxis = "",
 //                  string style = "def") const;
+    {
+        printf("--- test MkTH2Fig\n");
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("pub");        
+        
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        hd2d->MkTH2Fig("temp.png", root_tool);
+        delete hd2d;
+        delete root_tool;
+
+        printf("=== \n");
+    }
+
+   
 //    void MkTH2FigZrange(string outfig,
 //                        MirRootTool* const root_tool,
 //                        double zrange_lo, double zrange_up,
@@ -495,40 +781,119 @@ int main(int argc, char* argv[])
 //                        string title_xaxis = "",
 //                        string title_yaxis = "",
 //                        string title_oaxis = "") const;
-//
-//    // generate HistData2d adding margin region in x and y directions
-////    virtual HistData2d* const GenHd2AddMargin(double margin_xval, double margin_yval) const = 0;
-//
-//    // poisson error
-//    virtual void FillRandom(const MirFunc* const func,
-//                            const double* const func_par,
-//                            int rand_seed)
-//        {MPrintErrVFunc; abort();};
-//
-//    // gaussian error
-//    virtual void FillRandom(const MirFunc* const func,
-//                            const double* const func_par,
-//                            const MirFunc* const func_sigma,
-//                            const double* const func_par_sigma,
-//                            int rand_seed)
-//        {MPrintErrVFunc; abort();};    
-//
-//    // poisson error
-//    virtual void FillRandom(const HistData2d* const hist_data,
-//                            int rand_seed)
-//        {MPrintErrVFunc; abort();};
-//    
-//    // generate events from histogram with poisson statistic
+    {
+        printf("--- test MkTH2FigZrange\n");
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("pub");        
+        
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        hd2d->MkTH2FigZrange("temp.png", root_tool, 2.0, 5.0);
+        delete hd2d;
+        delete root_tool;
+
+        printf("=== \n");
+    }
+
 //    GraphDataNerr2d* const GenRandomEvt(int rand_seed = 1) const;
-//
-//    
+    {
+        printf("--- test GenRandomEvt\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        GraphDataNerr2d* gd2d = hd2d->GenRandomEvt(1);
+        gd2d->PrintData(stdout, "x,y", 0.0, 0.0);
+        
+        delete hd2d;
+        delete gd2d;
+
+        printf("=== \n");
+    }
+
+
 //    double GetOffsetXFromTag(string offset_tag) const;
+    {
+        printf("--- test GetOffsetXFromTag(string offset_tag)\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        printf("st = %e\n", hd2d->GetOffsetXFromTag("st"));
+        printf("md = %e\n", hd2d->GetOffsetXFromTag("md"));
+        printf("ed = %e\n", hd2d->GetOffsetXFromTag("ed"));
+        printf("no = %e\n", hd2d->GetOffsetXFromTag("no"));
+        printf("val = %e\n", hd2d->GetOffsetXFromTag("7.77"));
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
 //    double GetOffsetYFromTag(string offset_tag) const;
+    {
+        printf("--- test GetOffsetYFromTag(string offset_tag)\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        printf("st = %e\n", hd2d->GetOffsetYFromTag("st"));
+        printf("md = %e\n", hd2d->GetOffsetYFromTag("md"));
+        printf("ed = %e\n", hd2d->GetOffsetYFromTag("ed"));
+        printf("no = %e\n", hd2d->GetOffsetYFromTag("no"));
+        printf("val = %e\n", hd2d->GetOffsetYFromTag("7.77"));
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+
+  
 //    double GetOffsetOFromTag(string offset_tag) const;
-//
-//    //
-//    // static
-//    //
+    {
+        printf("--- test GetOffsetOFromTag(string offset_tag)\n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("aaa");
+        hd2d->Init(2, 0.0, 2.0, 3, 0.0, 3.0);
+        hd2d->SetOvalElm(0, 0, 1.0);
+        hd2d->SetOvalElm(1, 0, 2.0);
+        hd2d->SetOvalElm(0, 1, 3.0);
+        hd2d->SetOvalElm(1, 1, 4.0);
+        hd2d->SetOvalElm(0, 2, 5.0);
+        hd2d->SetOvalElm(1, 2, 6.0);
+
+        printf("st = %e\n", hd2d->GetOffsetOFromTag("st"));
+        printf("md = %e\n", hd2d->GetOffsetOFromTag("md"));
+        printf("ed = %e\n", hd2d->GetOffsetOFromTag("ed"));
+        printf("no = %e\n", hd2d->GetOffsetOFromTag("no"));
+        printf("val = %e\n", hd2d->GetOffsetOFromTag("7.77"));
+        
+        delete hd2d;
+
+        printf("=== \n");
+    }
+    
 //    static void ReadInfo(string file, 
 //                         long* nbin_xval_ptr,
 //                         double* xval_lo_ptr,
@@ -537,7 +902,30 @@ int main(int argc, char* argv[])
 //                         double* yval_lo_ptr,
 //                         double* yval_up_ptr,
 //                         string* format_ptr);
-//
+    {
+        printf("--- test ReadInfo\n");
+        long nbin_xval = 0;
+        double xval_lo = 0.0;
+        double xval_up = 0.0;
+        long nbin_yval = 0;
+        double yval_lo = 0.0;
+        double yval_up = 0.0;
+        string format = "";
+        HistData2d::ReadInfo("data/test_hist2d.dat",
+                             &nbin_xval, &xval_lo, &xval_up,
+                             &nbin_yval, &yval_lo, &yval_up,
+                             &format);
+        printf("nbin_xval = %ld\n", nbin_xval);
+        printf("xval_lo   = %e\n", xval_lo);
+        printf("xval_up   = %e\n", xval_up);
+        printf("nbin_yval = %ld\n", nbin_yval);
+        printf("yval_lo   = %e\n", yval_lo);
+        printf("yval_up   = %e\n", yval_up);
+        printf("format    = %s\n", format.c_str());
+        
+        printf("=== \n");
+    }
+
     
     return status_prog;
 }

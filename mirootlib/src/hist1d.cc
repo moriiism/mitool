@@ -107,67 +107,6 @@ void HistData1d::SetByFunc(const MirFunc* const func, const double* const par)
     }
 }
 
-//void HistData1d::SetByGraphData2d(const GraphData2d* const g2d)
-//{
-//    HistDataNerr1d* h1d_sum = new HistDataNerr1d;
-//    h1d_sum->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
-//    HistDataNerr1d* h1d_num = new HistDataNerr1d;
-//    h1d_num->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
-//    for(long idata = 0; idata < g2d->GetNdata(); idata ++){
-//        h1d_sum->Fill(g2d->GetXvalElm(idata), g2d->GetOvalElm(idata));
-//        h1d_num->Fill(g2d->GetXvalElm(idata));
-//    }
-//    
-//    
-//
-//
-//    
-//    HistData1d* h1d_amean = new HistData1d;
-//    h1d_amean->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
-//    vector<long> index_bad_vec;
-//    h1d_amean->Div(h1d_sum, h1d_num, &index_bad_vec);
-//
-//
-//    h1d_amean->GetOvalArr()
-//    SetOvalArr()
-//    
-//
-//    Set(h1d_amean);
-//
-//    delete h1d_sum;
-//    delete h1d_num;
-//    delete h1d_amean;
-//}
-
-//// Init & Set by hist1d, only if xval_arr of graph2d is equally-spaced.
-//void HistData1d::InitSetByGraphData2d(const GraphData2d* const g2d)
-//{
-//    if(1 != g2d->GetFlagXvalSorted()){
-//        MPrintErrClass("Not soted.");
-//        abort();
-//    }
-//    if(1 != g2d->IsEqualSpaceX()){
-//        MPrintErrClass("Not equally-spaced.");
-//        abort();
-//    }
-//    long npoint = g2d->GetNdata();
-//    if(npoint < 2){
-//        MPrintErrClass("npoint < 2.");
-//        abort();
-//    }
-//
-//    Null();
-//    long nbin_xval = npoint;
-//    double xval_min = g2d->GetXvalArr()->GetValMin();
-//    double xval_max = g2d->GetXvalArr()->GetValMax();
-//    double delta_xval = (xval_max - xval_min) / (npoint - 1);
-//    double xval_lo = xval_min - 0.5 * delta_xval;
-//    double xval_up = xval_max + 0.5 * delta_xval;
-//    Init(nbin_xval, xval_lo, xval_up);
-//    SetData(g2d->GetOvalArr());
-//}
-
-
 void HistData1d::Copy(const HistData1d* const org)
 {
     if(this == org) {abort();}
@@ -293,19 +232,6 @@ double HistData1d::GetOvalIntPolLin(double xval) const
     }
     return ans;
 }
-
-
-//double HistData1d::GetIntegral(double xval_lo, double xval_up) const
-//{
-//    GraphData2d* g2d_out = GenGraph2d();
-//    double ans = g2d_out->GetIntegral(xval_lo, xval_up);
-//    delete g2d_out;
-//    return ans;
-//}
-
-//
-// output
-//
 
 void HistData1d::Save(string outfile, string format,
                       double offset_xval,
