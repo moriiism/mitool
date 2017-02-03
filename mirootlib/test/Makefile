@@ -22,7 +22,8 @@ test_hist_info \
 \
 \
 test_interval  \
-test_hist2d_terr
+test_hist2d_terr \
+test_data1d_ope
 
 
 # 
@@ -33,7 +34,7 @@ test_hist2d_terr
 #	     \
 #	      \
 #	       \
-#	test_data1d_ope  test_graph2d_ope  test_graph3d_ope  test_hist1d_ope  test_hist2d_ope \
+#	  test_graph2d_ope  test_graph3d_ope  test_hist1d_ope  test_hist2d_ope \
 #	test_func  
 #	test_qdp_tool  test_cont
 #

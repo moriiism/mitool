@@ -124,8 +124,6 @@ void DataArrayNerr1d::PrintData(FILE* fp, int mode,
                                 double offset_val) const
 {
     long ndata = GetNdata();    
-    printf("ndata = %ld\n", ndata);
-
     if(0 == mode){
         for(long idata = 0; idata < ndata; idata ++){
             fprintf(fp, "%.10e\n",

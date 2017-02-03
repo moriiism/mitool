@@ -1,12 +1,15 @@
 #
 # setup.sh
 #
-# setup script for mitool
+# setup script for moriiism/mitool
 #
-# 2016.07.19 M. Morii
+# 2017.02.03 M. Morii
 #
 
-# This script must be loaded by "source" command of bash.
+#
+# This script must be loaded by "source" command of bash,
+# before using moriiism/mitool
+#
 
 ##
 ## mitool 

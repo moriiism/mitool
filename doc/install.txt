@@ -9,69 +9,105 @@ under "/home/morii/admin", and these files will be
 installed in the sub-directory of "/soft".
 
 
-1. Installation of GSL
+1. fitsio library
 
-Follow the instruction at https://www.gnu.org/software/gsl/ .
-Memo for Cent OS 7 is shown below for an example.
+http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html
+download --> 
+/home/morii/admin/cfitsio/cfitsio3410.tar.gz
 
-# Memo for CentOS 7
+(By root)
+# mkdir -p /soft/cfitsio/3410
+# chown morii /soft/cfitsio/3410
 
-Download gsl-2.3.tar.gz to
-/home/morii/admin/gsl/gsl-2.3.tar.gz
+(By morii)
+cd /home/morii/admin/cfitsio
+tar xvfz cfitsio3410.tar.gz
+cd cfitsio
 
-% cd /home/morii/admin/gsl
-% tar xvfz gsl-2.3.tar.gz
----> gsl-2.3
+./configure --prefix=/soft/cfitsio/3410
+make shared > make.log 2>&1 &
+tail -f make.log
 
-% su root
-# mkdir -p /soft/gsl/2.3
-# chown morii /soft/gsl/2.3
-# exit
+make install > make_install.log 2>&1 &
+tail -f make_install.log
 
-% cd /home/morii/admin/gsl/gsl-2.3
-% ./configure --prefix=/soft/gsl/2.3
-% make
-% make install
-
-% su root
-# chown -R root /soft/gsl/2.3
-# exit
+(By root)
+# chown -R root /soft/cfitsio/3410
 
 
-2. Installation of cern/root
 
-Follow the instruction at https://root.cern.ch/ .
-For an example, memo for Cent OS 7 is shown below.
+2. blas library
 
-# Memo for CentOS 7
+http://www.netlib.org/blas/
+REFERENCE BLAS Version 3.7.0
+download -->
+/home/morii/admin/blas/blas-3.7.0.tgz
 
-Download root_v6.08.02.source.tar.gz from 
-https://root.cern.ch/
----> /home/morii/admin/root/root_v6.08.02.source.tar.gz
+(By root)
+# mkdir -p /soft/blas/3.7.0/lib
+# chown -R morii /soft/blas/3.7.0
 
-% cd /home/morii/admin/root
-% tar xvfz root_v6.08.02.source.tar.gz
----> root-6.08.02
+(By morii)
+cd /home/morii/admin/blas
+tar xvfz blas-3.7.0.tgz
+cd /home/morii/admin/blas/BLAS-3.7.0
+make > make.log 2>&1 & 
+output --->
+/home/morii/admin/blas/BLAS-3.7.0/blas_LINUX.a
 
-% su root
-# mkdir -p /soft/root/6.08.02
-# chown morii /soft/root/6.08.02
-# exit
+cp /home/morii/admin/blas/BLAS-3.7.0/blas_LINUX.a \
+/soft/blas/3.7.0/lib/libblas.a
+ranlib /soft/blas/3.7.0/lib/libblas.a
 
-% cd /home/morii/admin/root/
-% mkdir builddir
-% cd builddir
-% cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
-  -Dgsl_shared=ON -Dmathmore=ON -DGSL_DIR=/soft/gsl/2.3 -Dminuit2=ON
-% cmake --build . 
-% cmake --build . --target install
-
-% su root
-# chown -R root /soft/root/6.08.02
-# exit
+(By root)
+# chown -R root /soft/blas/3.7.0
 
 
-3. MersenneTwister
+
+3. lapack library
+
+http://www.netlib.org/lapack/
+download ---> 
+/home/morii/admin/lapack/lapack-3.7.0.tgz
+
+(By root)
+# mkdir -p /soft/lapack/3.7.0/lib
+# chown -R morii /soft/lapack/3.7.0
+
+(By morii)
+cd /home/morii/admin/lapack
+tar xvfz lapack-3.7.0.tgz 
+cd /home/morii/admin/lapack/lapack-3.7.0
+cp make.inc.example make.inc
+
+Edit make.inc as follows:
+emacs make.inc &
+
+## BLASLIB      = ../../librefblas.a
+-->
+BLASLIB      =  /soft/blas/3.7.0/lib/libblas.a
+
+make > make.log 2>&1 & 
+
+# If you have errors in Testing step, set as follows:
+# ulimit -s 65000
+# and make again.
+
+output --->
+/home/morii/admin/lapack/lapack-3.7.0/
+liblapack.a  libtmglib.a
+
+cp /home/morii/admin/lapack/lapack-3.7.0/liblapack.a \
+   /home/morii/admin/lapack/lapack-3.7.0/libtmglib.a \
+   /soft/lapack/3.7.0/lib
+ranlib /soft/lapack/3.7.0/lib/liblapack.a
+ranlib /soft/lapack/3.7.0/lib/libtmglib.a
+
+(By root)
+# chown -R root /soft/lapack/3.7.0
+
+
+4. MersenneTwister
 
 http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html
 http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt64.html
@@ -107,7 +143,69 @@ cp mt64.h /soft/MersenneTwister/mt19937-64/include
 # chown -R root /soft/MersenneTwister
 
 
-4. Installation of mitool
+5. Installation of GSL
+
+Follow the instruction at https://www.gnu.org/software/gsl/ .
+Memo for Cent OS 7 is shown below for an example.
+
+# Memo for CentOS 7
+
+Download gsl-2.3.tar.gz to
+/home/morii/admin/gsl/gsl-2.3.tar.gz
+
+% cd /home/morii/admin/gsl
+% tar xvfz gsl-2.3.tar.gz
+---> gsl-2.3
+
+% su root
+# mkdir -p /soft/gsl/2.3
+# chown morii /soft/gsl/2.3
+# exit
+
+% cd /home/morii/admin/gsl/gsl-2.3
+% ./configure --prefix=/soft/gsl/2.3
+% make
+% make install
+
+% su root
+# chown -R root /soft/gsl/2.3
+# exit
+
+
+6. Installation of cern/root
+
+Follow the instruction at https://root.cern.ch/ .
+For an example, memo for Cent OS 7 is shown below.
+
+# Memo for CentOS 7
+
+Download root_v6.08.02.source.tar.gz from 
+https://root.cern.ch/
+---> /home/morii/admin/root/root_v6.08.02.source.tar.gz
+
+% cd /home/morii/admin/root
+% tar xvfz root_v6.08.02.source.tar.gz
+---> root-6.08.02
+
+% su root
+# mkdir -p /soft/root/6.08.02
+# chown morii /soft/root/6.08.02
+# exit
+
+% cd /home/morii/admin/root/
+% mkdir builddir
+% cd builddir
+% cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
+  -Dgsl_shared=ON -Dmathmore=ON -DGSL_DIR=/soft/gsl/2.3 -Dminuit2=ON
+% cmake --build . 
+% cmake --build . --target install
+
+% su root
+# chown -R root /soft/root/6.08.02
+# exit
+
+
+7. Installation of mitool
 
 su root
 # mkdir /soft/mitool
@@ -131,6 +229,34 @@ tail -f make.log
 # Check make.log and remove compile errors and warnings
 # If you find bugs, please contact with Mikio Morii.
 
+---------------------------------------------------------------------
+
+#
+# Optional
+#
+
+1. OpenBLAS library
+
+http://www.openblas.net/
+https://github.com/xianyi/OpenBLAS/wiki/Download
+---> 
+/home/morii/admin/OpenBLAS/xianyi-OpenBLAS-v0.2.19-2-gbcfc298.zip
+
+(By morii)
+cd /home/morii/admin/OpenBLAS
+unzip xianyi-OpenBLAS-v0.2.19-2-gbcfc298.zip
+
+(By root)
+# mkdir -p /soft/OpenBLAS/bcfc298
+# chown -R morii /soft/OpenBLAS/bcfc298
+
+(By morii)
+cd /home/morii/admin/OpenBLAS/xianyi-OpenBLAS-bcfc298
+make > make.log 2>&1 & 
+make PREFIX=/soft/OpenBLAS/bcfc298 install
+
+(By root)
+# chown -R root /soft/OpenBLAS/bcfc298
 
 ##
 ## etc
