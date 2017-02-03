@@ -83,7 +83,28 @@ void MifImgInfo::Load(string file)
     for(int iaxis = 0; iaxis < naxis_; iaxis ++){
         naxes_arr_[iaxis] = GetLpixelArrElm(iaxis) - GetFpixelArrElm(iaxis) + 1;
     }
+}
+
+
+void MifImgInfo::Copy(const MifImgInfo* const org)
+{
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
     
+    CopyTitle(org);
+    Init(org->GetNaxis());
+    for(int iaxis = 0; iaxis < naxis_; iaxis ++){
+        fpixel_arr_[iaxis] = org->fpixel_arr_[iaxis];
+        lpixel_arr_[iaxis] = org->lpixel_arr_[iaxis];
+        naxes_arr_[iaxis] = org->naxes_arr_[iaxis];
+    }
+}
+
+MifImgInfo* const MifImgInfo::Clone() const
+{
+    MifImgInfo* obj_new = new MifImgInfo;
+    obj_new->Copy(this);
+    return obj_new;
 }
 
 long MifImgInfo::GetNpixelImg() const
