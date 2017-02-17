@@ -41,9 +41,10 @@ int MifFits::InFitsImageF(string infile,
     naxes_sub[0] = img_info->GetNaxesArrElm(0);
     naxes_sub[1] = img_info->GetNaxesArrElm(1);
     long npix_image_sub_vec = naxes_sub[0] * naxes_sub[1];
-
+    
     float* image_sub_vec = new float [npix_image_sub_vec];
     long inc[2] = {1,1};
+    // long inc[4] = {1,1,1,1};
     fits_read_subset(fptr_in, TFLOAT,
                      img_info->GetFpixelArr(), img_info->GetLpixelArr(),
                      inc, NULL, image_sub_vec, NULL, &status);
@@ -60,9 +61,6 @@ int MifFits::InFitsImageF(string infile,
     delete [] image_sub_vec;
     
     *data_arr_ptr = data_arr;
-
-
-
     
     return (status);
 }
