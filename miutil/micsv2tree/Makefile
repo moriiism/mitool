@@ -1,0 +1,40 @@
+
+include ../../Makefile.in
+include ../../mirootlib/Makefile.in
+
+INCLUDE = $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
+LDLIBS  = $(ROOT_ALLLIBS) $(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
+
+OBJ = 
+
+TARGET = micsv2tree
+
+all: $(TARGET) 
+
+micsv2tree: micsv2tree.o  arg_micsv2tree.o  sub.o
+	$(CXXN) $@.o arg_$@.o sub.o ${LDLIBS} -o $@
+
+.SUFFIXES:
+.SUFFIXES: .o .c .f .F .cc
+
+.c.o:
+	$(CCN) -c $<
+
+.F.o : 
+	$(FCN) -c $<
+
+.f.o:
+	$(FCN) -c $<
+
+.cc.o:
+	${CXXN} -c $<
+
+install: all
+	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
+	install ${TARGET} ${INST_BIN_DIR}
+
+clean:
+	-rm -f *.o
+
+cleaner: clean
+	-rm -f ${TARGET} *% *~ core
