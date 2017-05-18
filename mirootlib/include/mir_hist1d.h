@@ -80,6 +80,7 @@ public:
     
     void SetConst(double constant);
     void SetOneAtInterval(const Interval* const interval);
+    void SetFracAtInterval(const Interval* const interval);
 
     virtual void SetOvalErrArrByPoissonErr()
         {MPrintErrVFunc; abort();};
@@ -208,6 +209,8 @@ public:
     
     Interval* const GenIntervalAboveThreshold(double threshold) const;
     Interval* const GenIntervalBelowThreshold(double threshold) const;
+
+    virtual HistData1d* GenSubHist(long ibinx_st, long ibinx_ed) const = 0;
 
     // offset_tag = "st", "md", "ed", "no"
     double GetOffsetXFromTag(string offset_tag) const;

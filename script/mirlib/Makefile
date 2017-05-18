@@ -1,4 +1,4 @@
-ALL = mipllib  mirlib  sample
+ALL = 
 
 all:
 	for dir in $(ALL); do \

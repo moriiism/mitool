@@ -329,7 +329,49 @@ int main(int argc, char* argv[])
         
         printf("=== \n");
     }
-    
+
+//    void SetFracAtIntervalXY(const Interval* const interval_x,
+//                             const Interval* const interval_y);
+
+    {
+        printf("--- test SetFracAtIntervalXY\n");
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("pub");
+
+        double tstart_x[3];
+        double tstop_x[3];
+        tstart_x[0] = 2.5; tstop_x[0] = 3.0;
+        tstart_x[1] = 4.5; tstop_x[1] = 8.0;
+        tstart_x[2] = 9.0; tstop_x[2] = 9.5;                
+        double tstart_y[2];
+        double tstop_y[2];
+        tstart_y[0] = 1.5; tstop_y[0] = 5.0;
+        tstart_y[1] = 8.0; tstop_y[1] = 8.5;
+        Interval* int_x = new Interval;
+        Interval* int_y = new Interval;
+        int_x->Init(3);
+        int_x->Set(3, tstart_x, tstop_x);
+        int_y->Init(2);
+        int_y->Set(2, tstart_y, tstop_y);
+        
+        HistDataNerr2d* hd2d = new HistDataNerr2d;
+        hd2d->Init(10, 0.0, 10.0, 10, 0.0, 10.0);
+        
+        hd2d->SetFracAtIntervalXY(int_x, int_y);
+        
+        TH2D* th2d = hd2d->GenTH2D(0.0, 0.0, 0.0);
+        th2d->Draw("text colz");
+        
+        root_tool->GetTCanvas()->Print("temp10.png");
+
+        delete root_tool;
+        delete hd2d;
+        delete th2d;
+        delete int_x;
+        delete int_y;
+        
+        printf("=== \n");
+    }
   
 //    void SetByFunc(const MirFunc* const func, const double* const par);
     {
@@ -346,7 +388,7 @@ int main(int argc, char* argv[])
 
         TH2D* th2d = hd2d->GenTH2D(0.0, 0.0, 0.0);
         th2d->Draw("colz");
-        root_tool->GetTCanvas()->Print("temp9.png");
+        root_tool->GetTCanvas()->Print("temp11.png");
 
         delete root_tool;
         delete hd2d;

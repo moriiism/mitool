@@ -35,6 +35,8 @@ public:
                      int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
                     int rand_seed);
+    HistDataNerr1d* GenSubHist(long ibinx_st, long ibinx_ed) const;
+    
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST1D_NERR_H_

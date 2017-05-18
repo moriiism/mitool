@@ -82,13 +82,40 @@ void HistData1d::SetOneAtInterval(const Interval* const interval)
     for(long iterm = 0; iterm < interval_and->GetNterm(); iterm++){
         double xlo = interval_and->GetTstartElm(iterm);
         double xup = interval_and->GetTstopElm(iterm);
-        printf("GetIbin(xlo) = %ld\n", GetIbin(xlo));
-        printf("GetIbin(xup) = %ld\n", GetIbin(xup));
         long ibin_x_lo = (long) MirMath::GetMax((double) GetIbin(xlo), 0.0);
         long ibin_x_up = (long) MirMath::GetMin((double) GetIbin(xup), (double) (GetNbinX() - 1) );
         
         for(long ibin = ibin_x_lo; ibin <= ibin_x_up; ibin ++){
             SetOvalElm(ibin, 1);
+        }
+    }
+    delete interval_hist;
+    delete interval_and;
+}
+
+void HistData1d::SetFracAtInterval(const Interval* const interval)
+{
+    SetOneAtInterval(interval);
+
+    Interval* interval_hist = new Interval;
+    interval_hist->InitSet(GetXvalLo(), GetXvalUp());
+    Interval* interval_and = new Interval;
+    interval_and->And(interval, interval_hist);
+
+    for(long iterm = 0; iterm < interval_and->GetNterm(); iterm++){
+        double xlo = interval_and->GetTstartElm(iterm);
+        double xup = interval_and->GetTstopElm(iterm);
+        long ibin_x_lo = (long) MirMath::GetMax((double) GetIbin(xlo), 0.0);
+        long ibin_x_up = (long) MirMath::GetMin((double) GetIbin(xup), (double) (GetNbinX() - 1) );
+
+        if (ibin_x_lo < ibin_x_up){
+            double frac_lo = (GetHi1d()->GetBinUp(ibin_x_lo) - xlo) / GetXvalBinWidth();
+            double frac_up = (xup - GetHi1d()->GetBinLo(ibin_x_up)) / GetXvalBinWidth();
+            SetOvalElm(ibin_x_lo, frac_lo);
+            SetOvalElm(ibin_x_up, frac_up);
+        } else {
+            double frac = (xup - xlo) / GetXvalBinWidth();
+            SetOvalElm(ibin_x_lo, frac);
         }
     }
     delete interval_hist;
@@ -412,8 +439,6 @@ Interval* const HistData1d::GenIntervalBelowThreshold(double threshold) const
     interval->Clean(tdiff);
     return interval;
 }
-
-
 
 double HistData1d::GetOffsetXFromTag(string offset_tag) const
 {

@@ -19,13 +19,18 @@ void ArgValMilcinfo::Init(int argc, char* argv[])
     if(0 < g_flag_verbose){
         printf("ArgVal::Init: # of arg = %d\n", argc - optind);
     }
-    int narg = 1;
+    int narg = 6;
     if (argc - optind != narg){
         printf("# of arguments must be %d.\n", narg);
         Usage(stdout);
     }
     int iarg = optind;
     infile_       = argv[iarg]; iarg++;
+    format_       = argv[iarg]; iarg++;
+    hist_info_diff_time_file_ = argv[iarg]; iarg++;
+    time_offset_  = argv[iarg]; iarg++;
+    outdir_       = argv[iarg]; iarg++;
+    outfile_head_ = argv[iarg]; iarg++;    
 }
 
 void ArgValMilcinfo::Print(FILE* fp) const
@@ -36,12 +41,23 @@ void ArgValMilcinfo::Print(FILE* fp) const
     
     fprintf(fp, "%s: progname_      : %s\n", __func__, progname_.c_str());
     fprintf(fp, "%s: infile_        : %s\n", __func__, infile_.c_str());
+    fprintf(fp, "%s: format_        : %s\n", __func__, format_.c_str());
+    fprintf(fp, "%s: hist_info_diff_time_file_ : %s\n",
+            __func__, hist_info_diff_time_file_.c_str());
+    fprintf(fp, "%s: time_offset_   : %s\n", __func__, time_offset_.c_str());
+    fprintf(fp, "%s: outdir_        : %s\n", __func__, outdir_.c_str());
+    fprintf(fp, "%s: outfile_head_  : %s\n", __func__, outfile_head_.c_str());    
 }
 
 void ArgValMilcinfo::Null()
 {
     progname_     = "";
-    infile_       = "";    
+    infile_       = "";
+    format_       = "";
+    hist_info_diff_time_file_ = "";
+    time_offset_  = "";
+    outdir_       = "";
+    outfile_head_ = "";    
 }
 
 void ArgValMilcinfo::SetOption(int argc, char* argv[], option* long_options)
@@ -99,7 +115,7 @@ void ArgValMilcinfo::Usage(FILE* fp) const
 {
     fprintf(fp,
             "usage: %s [--help (0)] [--verbose (0)] [--debug (0)] "
-            "infile \n",
+            "infile  format  hist_info_diff_time_file  time_offset  outdir  outfile_head \n",
             progname_.c_str());
     exit(1);
 }

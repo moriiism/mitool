@@ -55,6 +55,10 @@ public:
                    double offset_xval,
                    double offset_yval,
                    double offset_oval) const;
+
+    HistDataTerr2d* GenSubHist(long ibinx_st, long ibinx_ed,
+                               long ibiny_st, long ibiny_ed) const;
+    
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_TERR_H_

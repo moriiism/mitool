@@ -367,3 +367,18 @@ void HistDataTerr1d::MkTH1Fig(string outfig,
     root_tool->GetTCanvas()->Print(outfig.c_str());
     delete th1d;
 }
+
+
+HistDataTerr1d* HistDataTerr1d::GenSubHist(long ibinx_st, long ibinx_ed) const
+{
+    HistDataTerr1d* hd1d_sub = new HistDataTerr1d;
+    long nbinx_sub = ibinx_ed - ibinx_st + 1;
+    hd1d_sub->Init(nbinx_sub, GetBinLo(ibinx_st), GetBinUp(ibinx_ed));
+    for(long ibinx = 0; ibinx < nbinx_sub; ibinx ++){
+        hd1d_sub->SetOvalElm(ibinx, GetOvalElm(ibinx_st + ibinx));
+        hd1d_sub->SetOvalTerrPlusElm(ibinx, GetOvalTerrPlusElm(ibinx_st + ibinx));
+        hd1d_sub->SetOvalTerrMinusElm(ibinx, GetOvalTerrMinusElm(ibinx_st + ibinx));
+    }
+    return hd1d_sub;
+}
+

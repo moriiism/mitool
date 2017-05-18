@@ -61,6 +61,9 @@ public:
     // poisson error
     void FillRandom(const HistData2d* const hist_data,
                     int rand_seed);
+
+    HistDataSerr2d* GenSubHist(long ibinx_st, long ibinx_ed,
+                               long ibiny_st, long ibiny_ed) const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST2D_SERR_H_

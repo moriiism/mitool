@@ -58,6 +58,7 @@ public:
                     int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
                     int rand_seed);
+    HistDataSerr1d* GenSubHist(long ibinx_st, long ibinx_ed) const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST1D_SERR_H_

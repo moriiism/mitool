@@ -75,6 +75,46 @@ double HistData2dOpe::FindMdYbyEdge(const HistDataNerr2d* const hd2d)
 }
 
 
+//void HistData2dOpe::FillRect(double x_lo, double x_up, double y_lo, double y_up,
+//                             HistDataNerr2d* const hist_res_out)
+//{
+//    long ibin_x_lo = hist_res_out->GetHi2d()->GetIbinXFromX(x_lo);
+//    long ibin_x_up = hist_res_out->GetHi2d()->GetIbinXFromX(x_up);
+//    long ibin_y_lo = hist_res_out->GetHi2d()->GetIbinYFromY(y_lo);
+//    long ibin_y_up = hist_res_out->GetHi2d()->GetIbinYFromY(y_up);
+//
+//    // width 
+//    if( (x_up - x_lo) < hist_res_out->GetHi2d()->GetBinWidthX() ){
+//        ratio_x = (x_up - x_lo) / hist_res_out->GetHi2d()->GetBinWidthX();
+//    } else {
+//        for(long ibin_x = ibin_x_lo; ibin_x <= ibin_x_up; ibin_x ++){
+//
+//
+//        }
+//    }
+//    
+//
+//
+//
+//
+//        
+//        for(long ibin_y = ibin_y_lo; ibin_y <= ibin_y_up; ibin_y ++){
+//
+//            
+//
+//            
+//
+//            
+//        }
+//    }
+//
+//    hist_res_out->FillByLarger(xval, yval, 1.0);
+//
+//
+//}
+//
+
+
 
 void HistData2dOpe::GetResValHd2(const HistDataNerr2d* const hist_data,
                                  const MirFunc* const func, const double* const par,

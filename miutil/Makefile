@@ -1,4 +1,4 @@
-ALL = mipllib  mirlib  sample
+ALL =  micsv2tree  milcinfo
 
 all:
 	for dir in $(ALL); do \

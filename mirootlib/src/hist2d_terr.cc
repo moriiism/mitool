@@ -331,3 +331,30 @@ void HistDataTerr2d::PrintData(FILE* fp, string format,
         abort();
     }
 }
+
+HistDataTerr2d* HistDataTerr2d::GenSubHist(long ibinx_st, long ibinx_ed,
+                                           long ibiny_st, long ibiny_ed) const
+{
+    HistDataTerr2d* hd2d_sub = new HistDataTerr2d;
+    long nbinx_sub = ibinx_ed - ibinx_st + 1;
+    long nbiny_sub = ibiny_ed - ibiny_st + 1;
+    double xlo_sub = GetHi2d()->GetHistInfoX()->GetBinLo(ibinx_st);
+    double xup_sub = GetHi2d()->GetHistInfoX()->GetBinUp(ibinx_ed);
+    double ylo_sub = GetHi2d()->GetHistInfoY()->GetBinLo(ibiny_st);
+    double yup_sub = GetHi2d()->GetHistInfoY()->GetBinUp(ibiny_ed);    
+    hd2d_sub->Init(nbinx_sub, xlo_sub, xup_sub,
+                   nbiny_sub, ylo_sub, yup_sub);
+    for(long ibinx = 0; ibinx < nbinx_sub; ibinx ++){
+        for(long ibiny = 0; ibiny < nbiny_sub; ibiny ++){
+            hd2d_sub->SetOvalElm(ibinx, ibiny, GetOvalElm(ibinx_st + ibinx, ibiny_st + ibiny));
+            hd2d_sub->SetOvalTerrPlusElm(ibinx, ibiny,
+                                         GetOvalTerrPlusElm(ibinx_st + ibinx, ibiny_st + ibiny));
+            hd2d_sub->SetOvalTerrMinusElm(ibinx, ibiny,
+                                          GetOvalTerrMinusElm(ibinx_st + ibinx, ibiny_st + ibiny));
+        }
+    }
+    return hd2d_sub;
+}
+
+
+

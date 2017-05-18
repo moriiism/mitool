@@ -8,7 +8,12 @@ public:
     ArgValMilcinfo() :
         MiArgBase(),
         progname_(""),
-        infile_("") {}
+        infile_(""),
+        format_(""),
+        hist_info_diff_time_file_(""),
+        time_offset_(""),
+        outdir_(""),
+        outfile_head_("") {}
     ~ArgValMilcinfo(){
         Null();
     }
@@ -16,11 +21,21 @@ public:
     void Print(FILE* fp) const;
 
     string GetProgname() const {return progname_;};
-    string GetInfile()   const {return infile_;};    
+    string GetInfile()   const {return infile_;};
+    string GetFormat()   const {return format_;};
+    string GetHistInfoDiffTimeFile() const {return hist_info_diff_time_file_;};
+    string GetTimeOffset() const {return time_offset_;};
+    string GetOutdir()   const {return outdir_;};
+    string GetOutfileHead()   const {return outfile_head_;};
 
 private:
     string progname_;
     string infile_;
+    string format_;
+    string hist_info_diff_time_file_;
+    string time_offset_;
+    string outdir_;
+    string outfile_head_;
 
     void Null();
     void SetOption(int argc, char* argv[], option* long_options);    

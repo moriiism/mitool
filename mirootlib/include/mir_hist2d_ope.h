@@ -15,6 +15,10 @@ namespace HistData2dOpe
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
     double FindMdYbyEdge(const HistDataNerr2d* const hd2d);
 
+//    void FillRect(double x_lo, double x_up, double y_lo, double y_up,
+//                  HistDataNerr2d* const hist_res_out);
+    
+    
     double GetIntegral(const HistDataNerr2d* const hd2d,
                        double xval_lo, double xval_up);
 

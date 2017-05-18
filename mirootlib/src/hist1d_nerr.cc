@@ -243,4 +243,13 @@ void HistDataNerr1d::FillRandom(const HistData1d* const hist_data, int rand_seed
     delete trand;
 }
 
-
+HistDataNerr1d* HistDataNerr1d::GenSubHist(long ibinx_st, long ibinx_ed) const
+{
+    HistDataNerr1d* hd1d_sub = new HistDataNerr1d;
+    long nbinx_sub = ibinx_ed - ibinx_st + 1;
+    hd1d_sub->Init(nbinx_sub, GetBinLo(ibinx_st), GetBinUp(ibinx_ed));
+    for(long ibinx = 0; ibinx < nbinx_sub; ibinx ++){
+        hd1d_sub->SetOvalElm(ibinx, GetOvalElm(ibinx_st + ibinx));
+    }
+    return hd1d_sub;
+}

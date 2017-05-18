@@ -59,6 +59,7 @@ public:
                   MirRootTool* const root_tool,
                   double offset_xval,
                   double offset_oval) const;
+    HistDataTerr1d* GenSubHist(long ibinx_st, long ibinx_ed) const;
 };
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_HIST1D_TERR_H_

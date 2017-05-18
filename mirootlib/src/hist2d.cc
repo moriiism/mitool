@@ -1,4 +1,5 @@
 #include "mir_hist2d.h"
+#include "mir_hist1d_nerr.h"
 
 //
 // public
@@ -122,6 +123,24 @@ void HistData2d::SetOneAtIntervalXY(const Interval* const interval_x,
     delete interval_y_and;
 }
 
+
+void HistData2d::SetFracAtIntervalXY(const Interval* const interval_x,
+                                     const Interval* const interval_y)
+{
+    HistDataNerr1d* hd1d_x = new HistDataNerr1d;
+    hd1d_x->Init(GetNbinX(), GetXvalLo(), GetXvalUp());
+    hd1d_x->SetFracAtInterval(interval_x);
+    HistDataNerr1d* hd1d_y = new HistDataNerr1d;
+    hd1d_y->Init(GetNbinY(), GetYvalLo(), GetYvalUp());
+    hd1d_y->SetFracAtInterval(interval_y);
+    for(int ibinx = 0; ibinx < GetNbinX(); ibinx ++){
+        for(int ibiny = 0; ibiny < GetNbinY(); ibiny ++){
+            SetOvalElm(ibinx, ibiny, hd1d_x->GetOvalElm(ibinx) * hd1d_y->GetOvalElm(ibiny));
+        }
+    }
+    delete hd1d_x;
+    delete hd1d_y;
+}
 
 // Set by Func
 void HistData2d::SetByFunc(const MirFunc* const func, const double* const par)

@@ -82,6 +82,9 @@ public:
     void SetConst(double constant);
     void SetOneAtIntervalXY(const Interval* const interval_x,
                             const Interval* const interval_y);
+    void SetFracAtIntervalXY(const Interval* const interval_x,
+                             const Interval* const interval_y);
+    
     virtual void SetOvalErrArrByPoissonErr()
         {MPrintErrVFunc; abort();};
 
@@ -154,7 +157,7 @@ public:
                                 double** const oval_terr_minus_arr_ptr,
                                 long* const nbin_ptr) const
         {MPrintErrVFunc; abort();};
-    
+
     //
     // output
     //
@@ -231,6 +234,9 @@ public:
     // generate events from histogram with poisson statistic
     GraphDataNerr2d* const GenRandomEvt(int rand_seed = 1) const;
 
+
+    virtual HistData2d* GenSubHist(long ibinx_st, long ibinx_ed,
+                                   long ibiny_st, long ibiny_ed) const = 0;
     
     double GetOffsetXFromTag(string offset_tag) const;
     double GetOffsetYFromTag(string offset_tag) const;
