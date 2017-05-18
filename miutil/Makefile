@@ -1,4 +1,4 @@
-ALL =  micsv2tree  milcinfo
+ALL =  micsv2tree  milcinfo  minfold
 
 all:
 	for dir in $(ALL); do \
