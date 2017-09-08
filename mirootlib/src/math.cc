@@ -250,15 +250,20 @@ int MirMath::GetWMean(double val1, double val1_err, double val2, double val2_err
                       double* const wmean_ptr, double* const wmean_err_ptr)
 {
     int status = kRetNormal;
+    double wmean     = 0.0;
+    double wmean_err = 0.0;
     if(val1_err < DBL_EPSILON || val2_err < DBL_EPSILON) {
         status = kRetError;
-        return status;
+    } else {
+        double num = val1 / pow(val1_err, 2) + val2 / pow(val2_err, 2);
+        double den = 1.0 / pow(val1_err, 2) + 1.0 / pow(val2_err, 2);
+        if(den < DBL_EPSILON) {
+            status = kRetError;
+        } else {
+            wmean     = num / den;
+            wmean_err = sqrt( 1. / den);
+        }
     }
-    double num = val1 / pow(val1_err, 2) + val2 / pow(val2_err, 2);
-    double den = 1.0 / pow(val1_err, 2) + 1.0 / pow(val2_err, 2);
-    double wmean     = num / den;
-    double wmean_err = sqrt( 1. / den);
-
     *wmean_ptr = wmean;
     *wmean_err_ptr = wmean_err;
     return status;
@@ -343,7 +348,7 @@ long MirMath::GetLocMax(long narr, const double* const val_arr)
     return imax;
 }
 
-double MirMath::GetAdd(long narr, const double* const val_arr)
+double MirMath::GetSum(long narr, const double* const val_arr)
 {
     MiBase::IsValidArray(narr, val_arr);
     double ans = 0.0;
@@ -472,12 +477,12 @@ long MirMath::GetLocMax(vector<double> vec)
     return ans;
 }
 
-double MirMath::GetAdd(vector<double> vec)
+double MirMath::GetSum(vector<double> vec)
 {
     long narr = 0;
     double* val_arr = NULL;
     MiBase::GenArray(vec, &narr, &val_arr);
-    double ans = GetAdd(narr, val_arr);
+    double ans = GetSum(narr, val_arr);
     MiBase::DelArray(val_arr);
     return ans;
 }
@@ -554,22 +559,21 @@ double MirMath::GetMedian(vector<double> vec)
 
 // For N values with gaussian errors
 
-void MirMath::GetAdd(long narr, const double* const val_arr, const double* const val_err_arr,
-                     double* const val_add_ptr, double* const val_add_err_ptr)
+void MirMath::GetSum(long narr, const double* const val_arr, const double* const val_err_arr,
+                     double* const sum_ptr, double* const sum_err_ptr)
 {
     MiBase::IsValidArray(narr, val_arr);
     MiBase::IsValidArray(narr, val_err_arr);
-    double val_add      = 0.0;
-    double val_add_err  = 0.0;
-    double val_add_err2 = 0.0;
-    for(long idata = 0; idata < narr; idata++){
-        val_add += val_arr[idata];
-        val_add_err2 += pow(val_err_arr[idata], 2);
+    double sum      = 0.0;
+    double sum_err2 = 0.0;
+    for(long index = 0; index < narr; index++){    
+        sum += val_arr[index];
+        sum_err2 += pow(val_err_arr[index], 2);
     }
-    val_add_err = sqrt(val_add_err2);
+    double sum_err = sqrt(sum_err2);
     
-    *val_add_ptr     = val_add;
-    *val_add_err_ptr = val_add_err;
+    *sum_ptr     = sum;
+    *sum_err_ptr = sum_err;
 }
 
 void MirMath::GetAMean(long narr, const double* const val_arr, const double* const val_err_arr,
@@ -592,95 +596,130 @@ void MirMath::GetAMean(long narr, const double* const val_arr, const double* con
 
 int MirMath::GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
                       double* const wmean_ptr, double* const wmean_err_ptr,
-                      vector<long>* const index_bad_vec_ptr)
+                      long* const nsel_ptr, int** const mask_sel_arr_ptr)
 {
+    int status = kRetNormal;
     MiBase::IsValidArray(narr, val_arr);
     MiBase::IsValidArray(narr, val_err_arr);
     long num_bad = 0;
-    vector<long> index_bad_vec;
     double num = 0.0;
     double den = 0.0;
-    
+    long nsel = 0;
+    int* mask_sel_arr = new int [narr];
+    for(long index = 0; index < narr; index++){
+        mask_sel_arr[index] = 0;
+    }
     for(long index = 0; index < narr; index++){
         if( pow(val_err_arr[index], 2) < DBL_EPSILON ){
-            index_bad_vec.push_back(index);
             num_bad ++;
         } else {
+            nsel ++;
             num += val_arr[index] / pow(val_err_arr[index], 2);
             den += 1. / pow(val_err_arr[index], 2);
+            mask_sel_arr[index] = 1;
         }
     }
     double wmean     = num / den;
     double wmean_err = sqrt( 1. / den);
-
     *wmean_ptr = wmean;
     *wmean_err_ptr = wmean_err;
-    *index_bad_vec_ptr = index_bad_vec;
-    return num_bad;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;
+
+    if(num_bad > 0){
+        status = kRetError;
+    } else {
+        status = kRetNormal;
+    }
+    return status;
 }
 
 
-void MirMath::GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+
+
+void MirMath::GetSumWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                              const int* const mask_arr,
-                             double* const val_add_ptr, double* const val_add_err_ptr)
+                             double* const sum_ptr, double* const sum_err_ptr)
 {
     MiBase::IsValidArray(narr, val_arr);
     MiBase::IsValidArray(narr, val_err_arr);
     MiBase::IsValidArray(narr, mask_arr);
-    double val_add      = 0.0;
-    double val_add_err  = 0.0;
-    double val_add_err2 = 0.0;
-    for(long idata = 0; idata < narr; idata++){
-        val_add += val_arr[idata] * mask_arr[idata];
-        val_add_err2 += pow(val_err_arr[idata] * mask_arr[idata], 2);
+    double sum      = 0.0;
+    double sum_err2 = 0.0;
+    for(long index = 0; index < narr; index++){
+        if(1 == mask_arr[index]){
+            sum += val_arr[index];
+            sum_err2 += pow(val_err_arr[index], 2);
+        }
     }
-    val_add_err = sqrt(val_add_err2);
+    double sum_err = sqrt(sum_err2);
     
-    *val_add_ptr     = val_add;
-    *val_add_err_ptr = val_add_err;
+    *sum_ptr     = sum;
+    *sum_err_ptr = sum_err;
 }
+
+
+void MirMath::GetAMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+                               const int* const mask_arr,
+                               double* const amean_ptr, double* const amean_err_ptr)
+{
+    MiBase::IsValidArray(narr, val_arr);
+    MiBase::IsValidArray(narr, val_err_arr);
+    MiBase::IsValidArray(narr, mask_arr);
+    double sum = 0.0;
+    double sum_err2 = 0.0;
+    long nsel = 0;
+    for(long index = 0; index < narr; index++){
+        if(1 == mask_arr[index]){
+            nsel ++;
+            sum += val_arr[index];
+            sum_err2 += pow(val_err_arr[index], 2);
+        }
+    }
+    double amean = 0.0;
+    double amean_err = 0.0;
+    if(nsel > 0){
+        amean = sum / nsel;
+        amean_err = sqrt(sum_err2) / nsel;
+    }
+    *amean_ptr     = amean;
+    *amean_err_ptr = amean_err;
+}
+
 
 int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                               const int* const mask_arr,
                               double* const wmean_ptr, double* const wmean_err_ptr,
-                              vector<long>* const index_bad_vec_ptr)
+                              long* const nsel_ptr, int** const mask_sel_arr_ptr)
 {
+    int status = kRetNormal;
     MiBase::IsValidArray(narr, val_arr);
     MiBase::IsValidArray(narr, val_err_arr);
     MiBase::IsValidArray(narr, mask_arr);
     long num_bad = 0;
-    vector<long> index_bad_vec;
     double num = 0.0;
     double den = 0.0;
+    long nsel = 0;
+    int* mask_sel_arr = new int [narr];
     for(long index = 0; index < narr; index++){
-        if(pow(val_err_arr[index], 2) < DBL_EPSILON ){
-            index_bad_vec.push_back(index);
-            num_bad ++;
-        } else {
-            if(fabs(mask_arr[index] - 1.0) < DBL_EPSILON){
+        mask_sel_arr[index] = 0;
+    }
+    for(long index = 0; index < narr; index++){
+        if(fabs(mask_arr[index] - 1.0) < DBL_EPSILON){
+            if( pow(val_err_arr[index], 2) < DBL_EPSILON ){
+                num_bad ++;
+            } else {
+                nsel ++;
                 num += val_arr[index] / pow(val_err_arr[index], 2);
                 den += 1. / pow(val_err_arr[index], 2);
+                mask_sel_arr[index] = 1;
             }
         }
     }
-
     double wmean     = 0.0;
     double wmean_err = 0.0;
-    if(num_bad == narr){
-        wmean = 0.0;
-        wmean_err = 0.0;
-        char msg[kLineSize];
-        sprintf(msg, "num_bad (%ld) == narr (%ld)", num_bad, narr);
-        MPrintErr(msg);
-        abort();
-    }
     if( fabs(den) < DBL_EPSILON ){
-        wmean = 0.0;
-        wmean_err = 0.0;
-        char msg[kLineSize];
-        sprintf(msg, "fabs(den) < epsilon");
-        MPrintErr(msg);
-        abort();
+        num_bad ++;
     } else {
         wmean     = num / den;
         wmean_err = sqrt( 1. / den);
@@ -688,40 +727,50 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
 
     *wmean_ptr = wmean;
     *wmean_err_ptr = wmean_err;
-    *index_bad_vec_ptr = index_bad_vec;
-    return num_bad;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;    
+
+    if(num_bad > 0){
+        status = kRetError;
+    } else {
+        status = kRetNormal;
+    }
+    return status;
 }
 
-long MirMath::GetChi2byConst(long narr,
-                             const double* const val_arr,
-                             const double* const val_err_arr,
-                             double* const chi2_ptr,
-                             long* const dof_ptr,
-                             double* const chi2_red_ptr,
-                             double* const prob_ptr)
+int MirMath::GetChi2byConst(long narr,
+                            const double* const val_arr,
+                            const double* const val_err_arr,
+                            double* const wmean_ptr,
+                            double* const wmean_err_ptr,
+                            long* const nsel_ptr,
+                            int** const mask_sel_arr_ptr,
+                            double* const chi2_ptr,
+                            long* const dof_ptr,
+                            double* const chi2_red_ptr,
+                            double* const prob_ptr)
 {
+    int status = kRetNormal;
     double wmean = 0.0;
     double wmean_err = 0.0;
-    vector<long> index_bad_vec;
-    long num_bad_getwmean = GetWMean(narr, val_arr, val_err_arr,
-                                     &wmean, &wmean_err, &index_bad_vec);
-    long num_bad_chi2 = 0;
+    long nsel = 0;
+    int* mask_sel_arr = NULL;
+    int status_getwmean = GetWMean(narr, val_arr, val_err_arr,
+                                   &wmean, &wmean_err,
+                                   &nsel, &mask_sel_arr);
     double chi2 = 0.0;
-    for(long index = 0; index < narr; index++){
-        if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
-            chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
-        } else {
-            num_bad_chi2 ++;
+    for(long index = 0; index < narr; index ++){
+        if(1 == mask_sel_arr[index]){
+            if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
+                chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
+            }
         }
     }
-    if(num_bad_getwmean != num_bad_chi2){
-        char msg[kLineSize];
-        sprintf(msg, "num_bad_getwmean (%ld) != num_bad_chi2 (%ld), then something is wrong.",
-                num_bad_getwmean, num_bad_chi2);
-        MPrintErr(msg);
+    long dof = nsel - 1;
+    if(dof < 1){
+        printf("Error: dof(=%ld) < 1.", dof);
         abort();
     }
-    long dof = narr - num_bad_chi2 - 1;
     double chi2_red = chi2 / dof;
 
     // the probability that an observed Chi-squared exceeds
@@ -734,12 +783,77 @@ long MirMath::GetChi2byConst(long narr,
     // double prob = 1. - TMath::Gamma(dof/2., chi2/2.));
     //
 
+    *wmean_ptr = wmean;
+    *wmean_err_ptr = wmean_err;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;
     *chi2_ptr = chi2;
     *dof_ptr = dof;
     *chi2_red_ptr = chi2_red;
     *prob_ptr = prob;
-  
-    return num_bad_chi2;
+
+    status = status_getwmean;
+    return status;
+}
+
+int MirMath::GetChi2byConst(long narr,
+                            const double* const val_arr,
+                            const double* const val_err_arr,
+                            const int* const mask_arr,
+                            double* const wmean_ptr,
+                            double* const wmean_err_ptr,
+                            long* const nsel_ptr,
+                            int** const mask_sel_arr_ptr,
+                            double* const chi2_ptr,
+                            long* const dof_ptr,
+                            double* const chi2_red_ptr,
+                            double* const prob_ptr)
+{
+    int status = kRetNormal;
+    double wmean = 0.0;
+    double wmean_err = 0.0;
+    long nsel = 0;
+    int* mask_sel_arr = NULL;
+    int status_getwmean = GetWMeanWithMask(narr, val_arr, val_err_arr,
+                                           mask_arr,
+                                           &wmean, &wmean_err,
+                                           &nsel, &mask_sel_arr);
+    double chi2 = 0.0;
+    for(long index = 0; index < narr; index ++){
+        if(1 == mask_sel_arr[index]){
+            if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
+                chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
+            }
+        }
+    }
+    long dof = nsel - 1;
+    if(dof < 1){
+        printf("Error: dof(=%ld) < 1.", dof);
+        abort();
+    }
+    double chi2_red = chi2 / dof;
+
+    // the probability that an observed Chi-squared exceeds
+    // the value chi2 by chance, even for a correct model.
+    double prob = TMath::Prob(chi2, dof);
+
+    // See Numerical Recipes, Section 6.2
+    // prob = Q(chi2, dof) = gammq(dof/2, chi2/2) = 1 - gammp(dof/2, chi2/2)
+    //                     = 1 - TMath::Gamma(dof/2, chi2/2)
+    // double prob = 1. - TMath::Gamma(dof/2., chi2/2.));
+    //
+
+    *wmean_ptr = wmean;
+    *wmean_err_ptr = wmean_err;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;
+    *chi2_ptr = chi2;
+    *dof_ptr = dof;
+    *chi2_red_ptr = chi2_red;
+    *prob_ptr = prob;
+
+    status = status_getwmean;
+    return status;
 }
 
 // ichiji-hokan

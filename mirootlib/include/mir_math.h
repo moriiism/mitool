@@ -86,7 +86,7 @@ namespace MirMath
     double GetMax(long narr, const double* const val_arr);
     long GetLocMin(long narr, const double* const val_arr);
     long GetLocMax(long narr, const double* const val_arr);
-    double GetAdd(long narr, const double* const val_arr);    
+    double GetSum(long narr, const double* const val_arr);    
 
     double GetAMean(long narr, const double* const val_arr);
     // Arithmetic Mean = Sum x_i / N
@@ -113,7 +113,7 @@ namespace MirMath
     double GetMax(vector<double> vec);
     long GetLocMin(vector<double> vec);
     long GetLocMax(vector<double> vec);
-    double GetAdd(vector<double> vec);
+    double GetSum(vector<double> vec);
     double GetAMean(vector<double> vec);
     double GetVariance(vector<double> vec);
     double GetStddev(vector<double> vec);
@@ -124,32 +124,50 @@ namespace MirMath
     
     // For N values with gaussian errors
     //   for array
-    void GetAdd(long narr, const double* const val_arr, const double* const val_err_arr,
-                double* const val_add_ptr, double* const val_add_err_ptr);
+    void GetSum(long narr, const double* const val_arr, const double* const val_err_arr,
+                double* const sum_ptr, double* const sum_err_ptr);
     void GetAMean(long narr, const double* const val_arr, const double* const val_err_arr,
                   double* const amean_ptr, double* const amean_err_ptr);
     int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
                  double* const wmean_ptr, double* const wmean_err_ptr,
-                 vector<long>* const index_bad_vec_ptr);
+                 long* const nsel_ptr, int** const mask_sel_arr_ptr);
 
     //   for array with mask    
     // mask: use = 1, not use = 0
-    void GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+    void GetSumWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                         const int* const mask_arr,
-                        double* const val_add_ptr, double* const val_add_err_ptr);
+                        double* const sum_ptr, double* const sum_err_ptr);
+    void GetAMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+                          const int* const mask_arr,
+                          double* const amean_ptr, double* const amean_err_ptr);
     int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                          const int* const mask_arr,
                          double* const wmean_ptr, double* const wmean_err_ptr,
-                         vector<long>* const index_bad_vec_ptr);
+                         long* const nsel_ptr, int** const mask_sel_arr_ptr);
+    int GetChi2byConst(long narr,
+                       const double* const val_arr,
+                       const double* const val_err_arr,
+                       double* const wmean_ptr,
+                       double* const wmean_err_ptr,
+                       long* const nsel_ptr,
+                       int** const mask_sel_arr_ptr,
+                       double* const chi2_ptr,
+                       long* const dof_ptr,
+                       double* const chi2_red_ptr,
+                       double* const prob_ptr);
+    int GetChi2byConst(long narr,
+                       const double* const val_arr,
+                       const double* const val_err_arr,
+                       const int* const mask_arr,
+                       double* const wmean_ptr,
+                       double* const wmean_err_ptr,
+                       long* const nsel_ptr,
+                       int** const mask_sel_arr_ptr,
+                       double* const chi2_ptr,
+                       long* const dof_ptr,
+                       double* const chi2_red_ptr,
+                       double* const prob_ptr);
     
-    long GetChi2byConst(long narr,
-                        const double* const val_arr,
-                        const double* const val_err_arr,
-                        double* const chi2_ptr,
-                        long* const dof_ptr,
-                        double* const chi2_red_ptr,
-                        double* const prob_ptr);
-
     // interpolation, for 1dim
     double IntPolLin(double xval,
                      double xval_lo, double xval_up,

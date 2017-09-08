@@ -270,6 +270,28 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+//    GraphDataTerr2d* const Clone() const;
+    {
+        printf("--- test Clone\n");
+	GraphData2d* gd2d = new GraphDataTerr2d;
+	gd2d->Init(4);
+        gd2d->SetPoint(0, 0.0, 0.1, -0.2, 10.0, 0.5, -1.5);
+        gd2d->SetPoint(1, 1.0, 0.2, -0.4, 10.1, 0.6, -1.6);
+        gd2d->SetPoint(2, 2.0, 0.3, -0.6, 10.2, 0.7, -1.7);
+        gd2d->SetPoint(3, 3.0, 0.4, -0.8, 10.3, 0.8, -1.8);
+	gd2d->PrintData(stdout, "x,xe+,xe-,y,ye+,ye-", 0.0, 0.0);
+        printf("--- \n");
+        GraphDataTerr2d* gd2d_new = dynamic_cast<GraphDataTerr2d*>(gd2d->Clone());
+	gd2d_new->PrintData(stdout, "x,xe+,xe-,y,ye+,ye-", 0.0, 0.0);
+        
+	delete gd2d;
+	delete gd2d_new;
+
+        printf("=== \n");
+    }
+
+
+    
 //    void Load(string file);
     {
         printf("--- test Load(string file)\n");

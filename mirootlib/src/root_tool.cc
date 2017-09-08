@@ -43,9 +43,10 @@ void MirRootTool::InitTCanvas(string type)
     gStyle->SetTitleSize(0.06, "T");
 
     tcanvas_->SetLineWidth(2);
-    tcanvas_->SetLeftMargin(0.2);
+    tcanvas_->SetLeftMargin(0.15);
     tcanvas_->SetRightMargin(0.15);
     tcanvas_->SetBottomMargin(0.15);
+    tcanvas_->SetTopMargin(0.15);
     tcanvas_->SetTickx(1);
     tcanvas_->SetTicky(1);
     tcanvas_->SetBorderMode(0);

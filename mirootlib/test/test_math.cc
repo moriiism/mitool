@@ -327,22 +327,22 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-//    int GetWMean(double val1, double val1_err, double val2, double val2_err,
-//                 double* const wmean_ptr, double* const wmean_err_ptr);
-    {
-        printf("--- test GetWMean\n");
-        double val1     = 5.0;
-        double val1_err = 0.3;
-        double val2     = 7.0;
-        double val2_err = 0.2;
-        double ans = 0.0;
-        double ans_err = 0.0;
-        int ret = MirMath::GetWMean(val1, val1_err, val2, val2_err,
-                                    &ans, &ans_err);
-        printf("ret = %d\n", ret);
-        printf("ans, ans_err = %e, %e\n", ans, ans_err);
-        printf("=== \n");
-    }
+////    int GetWMean(double val1, double val1_err, double val2, double val2_err,
+////                 double* const wmean_ptr, double* const wmean_err_ptr);
+//    {
+//        printf("--- test GetWMean\n");
+//        double val1     = 5.0;
+//        double val1_err = 0.3;
+//        double val2     = 7.0;
+//        double val2_err = 0.2;
+//        double ans = 0.0;
+//        double ans_err = 0.0;
+//        int ret = MirMath::GetWMean(val1, val1_err, val2, val2_err,
+//                                    &ans, &ans_err);
+//        printf("ret = %d\n", ret);
+//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+//        printf("=== \n");
+//    }
     
 //    int GetSubAddRatio(double val1, double val1_err, double val2, double val2_err,
 //                       double* const ans_ptr, double* const ans_err_ptr);
@@ -390,8 +390,9 @@ int main(int argc, char* argv[])
 //        printf("val = %e\n", val);
 //        
 //        printf("=== \n");
+//
+//        // ---> error
 //    }
-
 //    {
 //        printf("--- test GetMin\n");
 //        double* val_arr = NULL;
@@ -399,6 +400,8 @@ int main(int argc, char* argv[])
 //        printf("val = %e\n", val);
 //        
 //        printf("=== \n");
+//
+//        // ---> error
 //    }
 
     
@@ -449,9 +452,9 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    double GetAdd(long narr, const double* const val_arr);
+//    double GetSum(long narr, const double* const val_arr);
     {
-        printf("--- test GetAdd\n");
+        printf("--- test GetSum\n");
         long narr = 5;
         double val_arr[5];
         val_arr[0] = 10.0;
@@ -459,7 +462,7 @@ int main(int argc, char* argv[])
         val_arr[2] = 12.0;
         val_arr[3] = 13.0;
         val_arr[4] = 14.0;
-        double ans = MirMath::GetAdd(narr, val_arr);
+        double ans = MirMath::GetSum(narr, val_arr);
         printf("ans = %e\n", ans);
         printf("=== \n");
     }
@@ -640,9 +643,9 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-//    double GetAdd(vector<double> vec);
+//    double GetSum(vector<double> vec);
     {
-        printf("--- test GetAdd\n");
+        printf("--- test GetSum\n");
         long narr = 5;
         vector<double> val_vec(narr);
         val_vec[0] = 10.0;
@@ -650,7 +653,7 @@ int main(int argc, char* argv[])
         val_vec[2] = 12.0;
         val_vec[3] = 13.0;
         val_vec[4] = 14.0;
-        double val = MirMath::GetAdd(val_vec);
+        double val = MirMath::GetSum(val_vec);
         printf("val = %e\n", val);
         // (10.0 + 11.0 + 12.0 + 13.0 + 14.0) = 60.0
         printf("=== \n");
@@ -771,10 +774,10 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    void GetAdd(long narr, const double* const val_arr, const double* const val_err_arr,
-//                double* const val_add_ptr, double* const val_add_err_ptr);
+//    void GetSum(long narr, const double* const val_arr, const double* const val_err_arr,
+//                double* const sum_ptr, double* const sum_err_ptr);
     {
-        printf("--- test GetAdd\n");
+        printf("--- test GetSum\n");
         long narr = 5;
         double val_arr[5];
         double val_err_arr[5];
@@ -790,7 +793,7 @@ int main(int argc, char* argv[])
         val_err_arr[4] = 5.0;
         double ans = 0.0;
         double ans_err = 0.0;
-        MirMath::GetAdd(narr, val_arr, val_err_arr, &ans, &ans_err);
+        MirMath::GetSum(narr, val_arr, val_err_arr, &ans, &ans_err);
         printf("ans, ans_err = %e, %e\n", ans, ans_err);
         // 10.0 + 11.0 + 12.0 + 13.0 + 14.0 = 60.0
         // sqrt(1.0**2 + 2.0**2 + 3.0**2 + 4.0**2 + 5.**2) = 7.41619848709566
@@ -822,30 +825,38 @@ int main(int argc, char* argv[])
         // ( sqrt(1.0**2 + 2.0**2 + 3.0**2 + 4.0**2 + 5.**2))/5. = 1.48323969741913
         printf("=== \n");
     }
-   
+
 //    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
 //                 double* const wmean_ptr, double* const wmean_err_ptr,
-//                 vector<long>* const index_bad_vec_ptr);
+//                 long* const nsel_ptr, int** const mask_sel_arr_ptr);
     {
         printf("--- test GetWMean\n");
-        long narr = 5;
-        double val_arr[5];
-        double val_err_arr[5];
+        long narr = 6;
+        double val_arr[6];
+        double val_err_arr[6];
         val_arr[0] = 10.0;
         val_arr[1] = 11.0;
         val_arr[2] = 12.0;
         val_arr[3] = 13.0;
         val_arr[4] = 14.0;
+        val_arr[5] = 15.0;        
         val_err_arr[0] = 1.0;
         val_err_arr[1] = 2.0;
         val_err_arr[2] = 3.0;
         val_err_arr[3] = 4.0;
         val_err_arr[4] = 5.0;
+        val_err_arr[5] = 0.0;
         double ans = 0.0;
         double ans_err = 0.0;
-        vector<long> index_bad_vec;
-        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err, &index_bad_vec);
+        long nsel = 0;
+        int* mask_sel_arr = NULL;
+        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err,
+                          &nsel, &mask_sel_arr);
         printf("ans, ans_err = %e, %e\n", ans, ans_err);
+        printf("nsel = %ld\n", nsel);
+        for(long iarr = 0; iarr < narr; iarr ++){
+            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
+        }
 
         // num = 10.0/(1.0**2) + 11.0/(2.0**2) + 12.0/(3.0**2) + 13.0/(4.0**2) + 14.0/(5.0**2)
         //     = 15.4558333333333
@@ -857,11 +868,11 @@ int main(int argc, char* argv[])
     }
 
     
-//    void GetAddWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+//    void GetSumWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
 //                        const int* const mask_arr,
-//                        double* const val_add_ptr, double* const val_add_err_ptr);
+//                        double* const sum_ptr, double* const sum_err_ptr);
     {
-        printf("--- test GetAddWithMask\n");
+        printf("--- test GetSumWithMask\n");
         long narr = 5;
         double val_arr[5];
         double val_err_arr[5];
@@ -884,7 +895,7 @@ int main(int argc, char* argv[])
         
         double ans = 0.0;
         double ans_err = 0.0;
-        MirMath::GetAddWithMask(narr, val_arr, val_err_arr,
+        MirMath::GetSumWithMask(narr, val_arr, val_err_arr,
                                 mask_arr, &ans, &ans_err);
         printf("ans, ans_err = %e, %e\n", ans, ans_err);
 
@@ -893,58 +904,16 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
     
-//    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-//                         const int* const mask_arr,
-//                         double* const wmean_ptr, double* const wmean_err_ptr,
-//                         vector<long>* const index_bad_vec_ptr);
-    {
-        printf("--- test GetWMeanWithMask\n");
-        long narr = 5;
-        double val_arr[5];
-        double val_err_arr[5];
-        int    mask_arr[5];
-        val_arr[0] = 10.0;
-        val_arr[1] = 11.0;
-        val_arr[2] = 12.0;
-        val_arr[3] = 13.0;
-        val_arr[4] = 14.0;
-        val_err_arr[0] = 1.0;
-        val_err_arr[1] = 2.0;
-        val_err_arr[2] = 3.0;
-        val_err_arr[3] = 4.0;
-        val_err_arr[4] = 5.0;
-        mask_arr[0] = 0;
-        mask_arr[1] = 1;
-        mask_arr[2] = 0;
-        mask_arr[3] = 1;
-        mask_arr[4] = 0;
-        
-        double ans = 0.0;
-        double ans_err = 0.0;
-        vector<long> index_bad_vec;
-        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
-                                  mask_arr, &ans, &ans_err, &index_bad_vec);
-        printf("ans, ans_err = %e, %e\n", ans, ans_err);
-
-        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
-        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
-        // wmean = num / den = 3.5625 / 0.3125 = 11.4
-        // sqrt(1./ den) = 1.78885438199983
-        printf("=== \n");
-    }
-   
-////    long GetChi2byConst(long narr,
-////                        const double* const val_arr,
-////                        const double* const val_err_arr,
-////                        double* const chi2_ptr,
-////                        long* const dof_ptr,
-////                        double* const chi2_red_ptr,
-////                        double* const prob_ptr);
+////    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+////                         const int* const mask_arr,
+////                         double* const wmean_ptr, double* const wmean_err_ptr,
+////                         long* const nsel_ptr, int** const mask_sel_arr_ptr);    
 //    {
-//        printf("--- test GetChi2byConst\n");
+//        printf("--- test GetWMeanWithMask\n");
 //        long narr = 5;
 //        double val_arr[5];
 //        double val_err_arr[5];
+//        int    mask_arr[5];
 //        val_arr[0] = 10.0;
 //        val_arr[1] = 11.0;
 //        val_arr[2] = 12.0;
@@ -955,20 +924,165 @@ int main(int argc, char* argv[])
 //        val_err_arr[2] = 3.0;
 //        val_err_arr[3] = 4.0;
 //        val_err_arr[4] = 5.0;
-//        double chi2 = 0.0;
-//        long dof = 0;
-//        double chi2_red = 0.0;
-//        double prob = 0.0;
-//        MirMath::GetChi2byConst(narr, val_arr, val_err_arr,
-//                                &chi2, &dof, &chi2_red, &prob);
-//        printf("chi2 = %e\n", chi2);
-//        printf("dof = %ld\n", dof);
-//        printf("chi2_red = %e\n", chi2_red);
-//        printf("prob = %e\n", prob);
+//        mask_arr[0] = 0;
+//        mask_arr[1] = 1;
+//        mask_arr[2] = 0;
+//        mask_arr[3] = 1;
+//        mask_arr[4] = 0;
 //        
+//        double ans = 0.0;
+//        double ans_err = 0.0;
+//        long nsel = 0;
+//        int* mask_sel_arr = NULL;
+//        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
+//                                  mask_arr, &ans, &ans_err,
+//                                  &nsel, &mask_sel_arr);
+//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+//        printf("nsel = %ld\n", nsel);
+//        for(long iarr = 0; iarr < narr; iarr ++){
+//            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
+//        }
+//
+//        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
+//        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
+//        // wmean = num / den = 3.5625 / 0.3125 = 11.4
+//        // sqrt(1./ den) = 1.78885438199983
 //        printf("=== \n");
 //    }
 
+
+//    int GetChi2byConst(long narr,
+//                       const double* const val_arr,
+//                       const double* const val_err_arr,
+//                       double* const wmean_ptr,
+//                       double* const wmean_err_ptr,
+//                       long* const nsel_ptr,
+//                       int** const mask_sel_arr_ptr,
+//                       double* const chi2_ptr,
+//                       long* const dof_ptr,
+//                       double* const chi2_red_ptr,
+//                       double* const prob_ptr);
+    {
+        printf("--- test GetChi2byConst\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+
+        double wmean = 0.0;
+        double wmean_err = 0.0;
+        long nsel = 0;
+        int* mask_sel_arr = NULL;
+        double chi2 = 0.0;
+        long dof = 0;
+        double chi2_red = 0.0;
+        double prob = 0.0;
+        MirMath::GetChi2byConst(narr, val_arr, val_err_arr,
+                                &wmean, &wmean_err,
+                                &nsel, &mask_sel_arr,
+                                &chi2, &dof, &chi2_red, &prob);
+        printf("wmean, wmean_err = %e, %e\n", wmean, wmean_err);
+        printf("nsel = %ld\n", nsel);
+        for(long iarr = 0; iarr < narr; iarr ++){
+            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
+        }
+        printf("chi2 = %e\n", chi2);
+        printf("dof = %ld\n", dof);
+        printf("chi2_red = %e\n", chi2_red);
+        printf("prob = %e\n", prob);
+
+        // num = 10.0/(1.0**2) + 11.0/(2.0**2) + 12.0/(3.0**2) + 13.0/(4.0**2) + 14.0/(5.0**2)
+        //     = 15.4558333333333
+        // den = 1.0/(1.0**2) + 1.0/(2.0**2) + 1.0/(3.0**2) + 1.0/(4.0**2) + 1.0/(5.0**2)
+        //     = 1.46361111111111
+        // wmean = num / den = 10.5600683241602
+        // wmean_err = sqrt(1./den) = 0.826584298073692
+        // chi2 = (10.0 - wmean)/ 1.0 + (11.0 - wmean)/ 2.0 + (12.0 - wmean)/ 3.0 +
+        //        (13.0 - wmean)/ 4.0 + (14.0 - wmean)/ 5.0 = 1.43784399316754
+        // dof = 5 - 1 = 4
+        // chi2_red = chi2/dof = 1.43784399316754 / 4. = 0.359460998291885
+        // TMath::Prob(1.43784399316754, 4) = 0.837592
+        printf("=== \n");
+    }
+
+//    
+//    int GetChi2byConst(long narr,
+//                       const double* const val_arr,
+//                       const double* const val_err_arr,
+//                       const int* const mask_arr,
+//                       double* const wmean_ptr,
+//                       double* const wmean_err_ptr,
+//                       long* const nsel_ptr,
+//                       int** const mask_sel_arr_ptr,
+//                       double* const chi2_ptr,
+//                       long* const dof_ptr,
+//                       double* const chi2_red_ptr,
+//                       double* const prob_ptr);
+//
+    {
+        printf("--- test GetChi2byConst\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        int mask_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        mask_arr[0] = 0;
+        mask_arr[1] = 1;
+        mask_arr[2] = 0;
+        mask_arr[3] = 1;
+        mask_arr[4] = 0;
+
+        double wmean = 0.0;
+        double wmean_err = 0.0;
+        long nsel = 0;
+        int* mask_sel_arr = NULL;
+        double chi2 = 0.0;
+        long dof = 0;
+        double chi2_red = 0.0;
+        double prob = 0.0;
+        MirMath::GetChi2byConst(narr, val_arr, val_err_arr, mask_arr,
+                                &wmean, &wmean_err,
+                                &nsel, &mask_sel_arr,
+                                &chi2, &dof, &chi2_red, &prob);
+        printf("wmean, wmean_err = %e, %e\n", wmean, wmean_err);
+        printf("nsel = %ld\n", nsel);
+        for(long iarr = 0; iarr < narr; iarr ++){
+            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
+        }
+        printf("chi2 = %e\n", chi2);
+        printf("dof = %ld\n", dof);
+        printf("chi2_red = %e\n", chi2_red);
+        printf("prob = %e\n", prob);
+
+        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
+        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
+        // wmean = num / den = 3.5625 / 0.3125 = 11.4
+        // sqrt(1./ den) = 1.78885438199983
+
+        // chi2 = (11.0 - 11.4)/ 2.0 + (13.0 - 11.4)/ 4.0 = 0.2
+        // dof = 2 - 1 = 1
+        // chi2_red = chi2/dof = 0.2/1 = 0.2
+        // TMath::Prob(0.2, 1) = 0.654721
+        printf("=== \n");
+    }
    
 //    double IntPolLin(double xval,
 //                     double xval_lo, double xval_up,
