@@ -327,22 +327,22 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-////    int GetWMean(double val1, double val1_err, double val2, double val2_err,
-////                 double* const wmean_ptr, double* const wmean_err_ptr);
-//    {
-//        printf("--- test GetWMean\n");
-//        double val1     = 5.0;
-//        double val1_err = 0.3;
-//        double val2     = 7.0;
-//        double val2_err = 0.2;
-//        double ans = 0.0;
-//        double ans_err = 0.0;
-//        int ret = MirMath::GetWMean(val1, val1_err, val2, val2_err,
-//                                    &ans, &ans_err);
-//        printf("ret = %d\n", ret);
-//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
-//        printf("=== \n");
-//    }
+//    int GetWMean(double val1, double val1_err, double val2, double val2_err,
+//                 double* const wmean_ptr, double* const wmean_err_ptr);
+    {
+        printf("--- test GetWMean\n");
+        double val1     = 5.0;
+        double val1_err = 0.3;
+        double val2     = 7.0;
+        double val2_err = 0.2;
+        double ans = 0.0;
+        double ans_err = 0.0;
+        int ret = MirMath::GetWMean(val1, val1_err, val2, val2_err,
+                                    &ans, &ans_err);
+        printf("ret = %d\n", ret);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+        printf("=== \n");
+    }
     
 //    int GetSubAddRatio(double val1, double val1_err, double val2, double val2_err,
 //                       double* const ans_ptr, double* const ans_err_ptr);
@@ -903,52 +903,90 @@ int main(int argc, char* argv[])
         // ans_err = sqrt(2.0**2 + 4.0**2) = 4.47213595499958
         printf("=== \n");
     }
+
+
+//   void GetAMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+//                          const int* const mask_arr,
+//                          double* const amean_ptr, double* const amean_err_ptr);
+    {
+        printf("--- test GetAMeanWithMask\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        int    mask_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        mask_arr[0] = 0;
+        mask_arr[1] = 1;
+        mask_arr[2] = 0;
+        mask_arr[3] = 1;
+        mask_arr[4] = 0;
+        
+        double ans = 0.0;
+        double ans_err = 0.0;
+        MirMath::GetAMeanWithMask(narr, val_arr, val_err_arr,
+                                  mask_arr, &ans, &ans_err);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+
+        // ans = (11.0 + 13.0)/2. = 24.0/2. = 12.0
+        // ans_err = sqrt(2.0**2 + 4.0**2) / 2. = 4.47213595499958 /2. = 2.23606797749979
+        printf("=== \n");
+    }
     
-////    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
-////                         const int* const mask_arr,
-////                         double* const wmean_ptr, double* const wmean_err_ptr,
-////                         long* const nsel_ptr, int** const mask_sel_arr_ptr);    
-//    {
-//        printf("--- test GetWMeanWithMask\n");
-//        long narr = 5;
-//        double val_arr[5];
-//        double val_err_arr[5];
-//        int    mask_arr[5];
-//        val_arr[0] = 10.0;
-//        val_arr[1] = 11.0;
-//        val_arr[2] = 12.0;
-//        val_arr[3] = 13.0;
-//        val_arr[4] = 14.0;
-//        val_err_arr[0] = 1.0;
-//        val_err_arr[1] = 2.0;
-//        val_err_arr[2] = 3.0;
-//        val_err_arr[3] = 4.0;
-//        val_err_arr[4] = 5.0;
-//        mask_arr[0] = 0;
-//        mask_arr[1] = 1;
-//        mask_arr[2] = 0;
-//        mask_arr[3] = 1;
-//        mask_arr[4] = 0;
-//        
-//        double ans = 0.0;
-//        double ans_err = 0.0;
-//        long nsel = 0;
-//        int* mask_sel_arr = NULL;
-//        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
-//                                  mask_arr, &ans, &ans_err,
-//                                  &nsel, &mask_sel_arr);
-//        printf("ans, ans_err = %e, %e\n", ans, ans_err);
-//        printf("nsel = %ld\n", nsel);
-//        for(long iarr = 0; iarr < narr; iarr ++){
-//            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
-//        }
-//
-//        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
-//        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
-//        // wmean = num / den = 3.5625 / 0.3125 = 11.4
-//        // sqrt(1./ den) = 1.78885438199983
-//        printf("=== \n");
-//    }
+    
+//    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+//                         const int* const mask_arr,
+//                         double* const wmean_ptr, double* const wmean_err_ptr,
+//                         long* const nsel_ptr, int** const mask_sel_arr_ptr);    
+    {
+        printf("--- test GetWMeanWithMask\n");
+        long narr = 5;
+        double val_arr[5];
+        double val_err_arr[5];
+        int    mask_arr[5];
+        val_arr[0] = 10.0;
+        val_arr[1] = 11.0;
+        val_arr[2] = 12.0;
+        val_arr[3] = 13.0;
+        val_arr[4] = 14.0;
+        val_err_arr[0] = 1.0;
+        val_err_arr[1] = 2.0;
+        val_err_arr[2] = 3.0;
+        val_err_arr[3] = 4.0;
+        val_err_arr[4] = 5.0;
+        mask_arr[0] = 0;
+        mask_arr[1] = 1;
+        mask_arr[2] = 0;
+        mask_arr[3] = 1;
+        mask_arr[4] = 0;
+        
+        double ans = 0.0;
+        double ans_err = 0.0;
+        long nsel = 0;
+        int* mask_sel_arr = NULL;
+        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
+                                  mask_arr, &ans, &ans_err,
+                                  &nsel, &mask_sel_arr);
+        printf("ans, ans_err = %e, %e\n", ans, ans_err);
+        printf("nsel = %ld\n", nsel);
+        for(long iarr = 0; iarr < narr; iarr ++){
+            printf("mask_sel_arr[%ld] = %d\n", iarr, mask_sel_arr[iarr]);
+        }
+
+        // num = 11.0 / 2.0**2 + 13.0/4.0**2 = 3.5625
+        // den = 1.0 / 2.0**2 + 1.0 / 4.0**2 = 0.3125
+        // wmean = num / den = 3.5625 / 0.3125 = 11.4
+        // sqrt(1./ den) = 1.78885438199983
+        printf("=== \n");
+    }
 
 
 //    int GetChi2byConst(long narr,
