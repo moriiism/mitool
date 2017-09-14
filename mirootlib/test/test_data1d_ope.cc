@@ -121,73 +121,191 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+//   void GetScale(const DataArray1d* const data_array,
+//                  double scale, double offset,
+//                  DataArrayTerr1d* const data_array_out);
+    {
+        printf("--- test GetScale\n");
+        DataArrayTerr1d* da1d = new DataArrayTerr1d;
+        da1d->Init(3);
+        da1d->SetValElm(0, 1.0);
+        da1d->SetValElm(1, 2.0);
+        da1d->SetValElm(2, 3.0);
+        da1d->SetValTerrElm(0, 0.5);
+        da1d->SetValTerrElm(1, 0.6);
+        da1d->SetValTerrElm(2, 0.7);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
 
-//
-////    void GetScale(const DataArrayTerr1d* const data_array,
-////                  double scale, double offset,
-////                  DataArrayTerr1d* data_array_out);
-////    void GetMin(const DataArrayNerr1d* const data_array1,
-////                const DataArrayNerr1d* const data_array2,
-////                DataArrayNerr1d* data_array_out);
-////    void GetMin(const DataArraySerr1d* const data_array1,
-////                const DataArraySerr1d* const data_array2,
-////                DataArraySerr1d* data_array_out);
-////    void GetMin(const DataArrayTerr1d* const data_array1,
-////                const DataArrayTerr1d* const data_array2,
-////                DataArrayTerr1d* data_array_out);
-////    void GetMax(const DataArrayNerr1d* const data_array1,
-////                const DataArrayNerr1d* const data_array2,
-////                DataArrayNerr1d* data_array_out);
-//    void GetMax(const DataArraySerr1d* const data_array1,
-//                const DataArraySerr1d* const data_array2,
-//                DataArraySerr1d* data_array_out);
-//    void GetMax(const DataArrayTerr1d* const data_array1,
-//                const DataArrayTerr1d* const data_array2,
-//                DataArrayTerr1d* data_array_out);
-//    void GetAdd(const DataArrayNerr1d* const data_array1,
-//                const DataArrayNerr1d* const data_array2,
-//                DataArrayNerr1d* data_array_out);
-//    void GetAdd(const DataArraySerr1d* const data_array1,
-//                const DataArraySerr1d* const data_array2,
-//                DataArraySerr1d* data_array_out);
-//    void GetSub(const DataArrayNerr1d* const data_array1,
-//                const DataArrayNerr1d* const data_array2,
-//                DataArrayNerr1d* data_array_out);
-//    void GetSub(const DataArraySerr1d* const data_array1,
-//                const DataArraySerr1d* const data_array2,
-//                DataArraySerr1d* data_array_out);
-//    void GetMul(const DataArrayNerr1d* const data_array1,
-//                const DataArrayNerr1d* const data_array2,
-//                DataArrayNerr1d* data_array_out);
-//    void GetMul(const DataArraySerr1d* const data_array1,
-//                const DataArraySerr1d* const data_array2,
-//                DataArraySerr1d* data_array_out);
-//    long GetDiv(const DataArrayNerr1d* const data_array_num,
-//                const DataArrayNerr1d* const data_array_den,
-//                vector<long>* const index_bad_vec_ptr,
-//                DataArrayNerr1d* data_array_out);
-//    long GetDiv(const DataArraySerr1d* const data_array_num,
-//                const DataArraySerr1d* const data_array_den,
-//                vector<long>* const index_bad_vec_ptr,
-//                DataArraySerr1d* data_array_out);
-//    void GetAMean(const DataArrayNerr1d* const data_array1,
-//                  const DataArrayNerr1d* const data_array2,
-//                  DataArrayNerr1d* data_array_out);
-//    void GetAMean(const DataArraySerr1d* const data_array1,
-//                  const DataArraySerr1d* const data_array2,
-//                  DataArraySerr1d* data_array_out);
-//    long GetWMean(const DataArraySerr1d* const data_array1,
-//                  const DataArraySerr1d* const data_array2,
-//                  vector<long>* const index_bad_vec_ptr,
-//                  DataArraySerr1d* data_array_out);
-//    long GetSubAddRatio(const DataArrayNerr1d* const data_array1,
-//                        const DataArrayNerr1d* const data_array2,
-//                        vector<long>* const index_bad_vec_ptr,
-//                        DataArrayNerr1d* data_array_out);
-//    long GetSubAddRatio(const DataArraySerr1d* const data_array1,
-//                        const DataArraySerr1d* const data_array2,
-//                        vector<long>* const index_bad_vec_ptr,
-//                        DataArraySerr1d* data_array_out);
+        double scale = 2.0;
+        double offset = 1.0;
+        DataArrayTerr1d* da1d_new = new DataArrayTerr1d;
+        DataArray1dOpe::GetScale(da1d, scale, offset, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+        
+        delete da1d;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+//    void GetMin(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArrayNerr1d* const data_array_out);
+
+    {
+        printf("--- test GetMin\n");
+        DataArray1d* da1d_1 = new DataArrayNerr1d;
+        DataArray1d* da1d_2 = new DataArrayNerr1d;
+        da1d_1->Init(3);
+        da1d_1->SetValElm(0, 1.0);
+        da1d_1->SetValElm(1, 2.0);
+        da1d_1->SetValElm(2, 3.0);
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_2->Init(3);
+        da1d_2->SetValElm(0, -1.0);
+        da1d_2->SetValElm(1, -2.0);
+        da1d_2->SetValElm(2, -3.0);
+        da1d_2->PrintInfo(stdout);
+        da1d_2->PrintData(stdout, 1, 0.0);
+
+        DataArrayNerr1d* da1d_new = new DataArrayNerr1d;
+        DataArray1dOpe::GetMin(da1d_1, da1d_2, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+        
+        delete da1d_1;
+        delete da1d_2;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+//        void GetMin(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArraySerr1d* const data_array_out);
+    {
+        printf("--- test GetMin\n");
+        DataArray1d* da1d_1 = new DataArraySerr1d;
+        DataArray1d* da1d_2 = new DataArraySerr1d;
+        da1d_1->Init(3);
+        da1d_1->SetValElm(0, 1.0);
+        da1d_1->SetValElm(1, 2.0);
+        da1d_1->SetValElm(2, 3.0);
+        da1d_1->SetValSerrElm(0, 0.5);
+        da1d_1->SetValSerrElm(1, 0.6);
+        da1d_1->SetValSerrElm(2, 0.7);
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_2->Init(3);
+        da1d_2->SetValElm(0, -1.0);
+        da1d_2->SetValElm(1, -2.0);
+        da1d_2->SetValElm(2, -3.0);
+        da1d_2->SetValSerrElm(0, 0.5);
+        da1d_2->SetValSerrElm(1, 0.6);
+        da1d_2->SetValSerrElm(2, 0.7);
+        da1d_2->PrintInfo(stdout);
+        da1d_2->PrintData(stdout, 1, 0.0);
+
+        DataArraySerr1d* da1d_new = new DataArraySerr1d;
+        DataArray1dOpe::GetMin(da1d_1, da1d_2, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+        
+        delete da1d_1;
+        delete da1d_2;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+//    void GetMin(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArrayTerr1d* const data_array_out);
+    {
+        printf("--- test GetMin\n");
+        DataArray1d* da1d_1 = new DataArrayTerr1d;
+        DataArray1d* da1d_2 = new DataArrayTerr1d;
+        da1d_1->Init(3);
+        da1d_1->SetValElm(0, 1.0);
+        da1d_1->SetValElm(1, 2.0);
+        da1d_1->SetValElm(2, 3.0);
+        da1d_1->SetValTerrElm(0, 0.5);
+        da1d_1->SetValTerrElm(1, 0.6);
+        da1d_1->SetValTerrElm(2, 0.7);
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_2->Init(3);
+        da1d_2->SetValElm(0, -1.0);
+        da1d_2->SetValElm(1, -2.0);
+        da1d_2->SetValElm(2, -3.0);
+        da1d_2->SetValTerrElm(0, 0.5);
+        da1d_2->SetValTerrElm(1, 0.6);
+        da1d_2->SetValTerrElm(2, 0.7);
+        da1d_2->PrintInfo(stdout);
+        da1d_2->PrintData(stdout, 1, 0.0);
+
+        DataArrayTerr1d* da1d_new = new DataArrayTerr1d;
+        DataArray1dOpe::GetMin(da1d_1, da1d_2, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+        
+        delete da1d_1;
+        delete da1d_2;
+        delete da1d_new;
+        printf("=== \n");
+    }
+    
+//   void GetMax(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArrayNerr1d* const data_array_out);
+    {
+        printf("--- test GetMax\n");
+        DataArray1d* da1d_1 = new DataArrayNerr1d;
+        DataArray1d* da1d_2 = new DataArrayNerr1d;
+        da1d_1->Init(3);
+        da1d_1->SetValElm(0, 1.0);
+        da1d_1->SetValElm(1, 2.0);
+        da1d_1->SetValElm(2, 3.0);
+        da1d_1->PrintInfo(stdout);
+        da1d_1->PrintData(stdout, 1, 0.0);
+
+        da1d_2->Init(3);
+        da1d_2->SetValElm(0, -1.0);
+        da1d_2->SetValElm(1, -2.0);
+        da1d_2->SetValElm(2, -3.0);
+        da1d_2->PrintInfo(stdout);
+        da1d_2->PrintData(stdout, 1, 0.0);
+
+        DataArrayNerr1d* da1d_new = new DataArrayNerr1d;
+        DataArray1dOpe::GetMax(da1d_1, da1d_2, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+
+        assert( 100.0 == da1d_new->GetValElm(0) );
+        
+        delete da1d_1;
+        delete da1d_2;
+        delete da1d_new;
+        printf("=== \n");
+    }
+    
+//    void GetMax(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArraySerr1d* const data_array_out);
+//    void GetMax(const DataArray1d* const data_array1,
+//                const DataArray1d* const data_array2,
+//                DataArrayTerr1d* const data_array_out);
+    
+
+
+
+    
+
+    /// ----------------------------------------------
+    
 //    void GetMin(const DataArrayNerr1d* const* const data_array_arr,
 //                int ndata_array,
 //                DataArrayNerr1d* data_array_out);
