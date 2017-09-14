@@ -28,11 +28,12 @@ int main(int argc, char* argv[]){
     //
     GraphData2d* gd2d = GraphData2dOpe::GenGd2dByLoad(argval->GetInfile(),
                                                       argval->GetFormat());
+
     GraphDataNerr2d* gd2d_new = new GraphDataNerr2d;
     gd2d_new->Init(gd2d->GetNdata());
 
-    double time_st = gd2d->GetXvalElm(0);
-    double time_ed = gd2d->GetXvalElm(gd2d->GetNdata() - 1);
+    double time_st = argval->GetTimeSt();
+    double time_ed = argval->GetTimeEd();
     for(long idata = 0; idata < gd2d->GetNdata(); idata++){
         double time = gd2d->GetXvalElm(idata);
         double phase = (time - time_st) / (time_ed - time_st);

@@ -38,6 +38,27 @@ int main(int argc, char* argv[]){
     //
     GraphData2d* gd2d = GraphData2dOpe::GenGd2dByLoad(argval->GetInfile(),
                                                       argval->GetFormat());
+    // head 10 line
+    long nline_head = 10;    
+    MiIolib::Printf2(fp_summary, "--- head %ld line ---\n", nline_head);
+    long idata_ed = MirMath::GetMin(nline_head, gd2d->GetNdata());
+    MiIolib::Printf2(fp_summary, "index  time  diff\n");
+    for(long idata = 0; idata < idata_ed; idata ++){
+        double diff = gd2d->GetXvalElm(idata + 1) - gd2d->GetXvalElm(idata);
+        MiIolib::Printf2(fp_summary, "%ld  %.10e  %e\n", idata, gd2d->GetXvalElm(idata), diff);
+    }
+    MiIolib::Printf2(fp_summary, "=========\n");
+    
+    // last 10 line
+    long nline_last = 10;    
+    MiIolib::Printf2(fp_summary, "--- last %ld line ---\n", nline_last);
+    long idata_st = MirMath::GetMax(0, gd2d->GetNdata() - nline_last);
+    for(long idata = idata_st; idata < gd2d->GetNdata(); idata ++){
+        double diff = gd2d->GetXvalElm(idata) - gd2d->GetXvalElm(idata - 1);
+        MiIolib::Printf2(fp_summary, "%ld  %.10e  %e\n", idata, gd2d->GetXvalElm(idata), diff);
+    }
+    MiIolib::Printf2(fp_summary, "=========\n");
+
     //
     // check sorted or not
     //
@@ -126,6 +147,7 @@ int main(int argc, char* argv[]){
     double time_ed = gd2d->GetXvalElm(gd2d->GetNdata() - 1);
     double time_span = time_ed - time_st;
 
+    MiIolib::Printf2(fp_summary, "ndata   = %ld\n", gd2d->GetNdata());
     MiIolib::Printf2(fp_summary, "time_st = %e\n", time_st);
     MiIolib::Printf2(fp_summary, "time_ed = %e\n", time_ed);
     MiIolib::Printf2(fp_summary, "time_span = %e\n", time_span);

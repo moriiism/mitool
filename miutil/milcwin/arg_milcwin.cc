@@ -19,7 +19,7 @@ void ArgValMilcwin::Init(int argc, char* argv[])
     if(0 < g_flag_verbose){
         printf("ArgVal::Init: # of arg = %d\n", argc - optind);
     }
-    int narg = 4;
+    int narg = 6;
     if (argc - optind != narg){
         printf("# of arguments must be %d.\n", narg);
         Usage(stdout);
@@ -27,6 +27,8 @@ void ArgValMilcwin::Init(int argc, char* argv[])
     int iarg = optind;
     infile_       = argv[iarg]; iarg++;
     format_       = argv[iarg]; iarg++;
+    time_st_      = atof(argv[iarg]); iarg++;
+    time_ed_      = atof(argv[iarg]); iarg++;
     outdir_       = argv[iarg]; iarg++;
     outfile_head_ = argv[iarg]; iarg++;    
 }
@@ -40,6 +42,8 @@ void ArgValMilcwin::Print(FILE* fp) const
     fprintf(fp, "%s: progname_      : %s\n", __func__, progname_.c_str());
     fprintf(fp, "%s: infile_        : %s\n", __func__, infile_.c_str());
     fprintf(fp, "%s: format_        : %s\n", __func__, format_.c_str());
+    fprintf(fp, "%s: time_st_       : %e\n", __func__, time_st_);
+    fprintf(fp, "%s: time_ed_       : %e\n", __func__, time_ed_);
     fprintf(fp, "%s: outdir_        : %s\n", __func__, outdir_.c_str());
     fprintf(fp, "%s: outfile_head_  : %s\n", __func__, outfile_head_.c_str());    
 }
@@ -49,6 +53,8 @@ void ArgValMilcwin::Null()
     progname_     = "";
     infile_       = "";
     format_       = "";
+    time_st_      = 0.0;
+    time_ed_      = 0.0;
     outdir_       = "";
     outfile_head_ = "";    
 }
@@ -108,7 +114,7 @@ void ArgValMilcwin::Usage(FILE* fp) const
 {
     fprintf(fp,
             "usage: %s [--help (0)] [--verbose (0)] [--debug (0)] "
-            "infile  format  outdir  outfile_head \n",
+            "infile  format  time_st  time_ed  outdir  outfile_head \n",
             progname_.c_str());
     exit(1);
 }

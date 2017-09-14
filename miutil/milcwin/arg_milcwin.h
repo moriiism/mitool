@@ -10,6 +10,8 @@ public:
         progname_(""),
         infile_(""),
         format_(""),
+        time_st_(0.0),
+        time_ed_(0.0),
         outdir_(""),
         outfile_head_("") {}
     ~ArgValMilcwin(){
@@ -21,6 +23,8 @@ public:
     string GetProgname() const {return progname_;};
     string GetInfile()   const {return infile_;};
     string GetFormat()   const {return format_;};
+    double GetTimeSt()   const {return time_st_;};
+    double GetTimeEd()   const {return time_ed_;};
     string GetOutdir()   const {return outdir_;};
     string GetOutfileHead()   const {return outfile_head_;};
 
@@ -28,7 +32,8 @@ private:
     string progname_;
     string infile_;
     string format_;
-    string time_offset_;
+    double time_st_;
+    double time_ed_;
     string outdir_;
     string outfile_head_;
 
