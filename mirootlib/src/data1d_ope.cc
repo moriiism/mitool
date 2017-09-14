@@ -483,13 +483,14 @@ int DataArray1dOpe::GetSubAddRatio(const DataArray1d* const data_array1,
         double ans = 0.0;
         if ( fabs( val1 + val2 ) > DBL_EPSILON ){
             ans = (val1 - val2) / (val1 + val2);
+            mask_sel_array_out->SetValElm(idata, 1);            
         } else {
             num_bad ++;
             ans = 0.0;
+            mask_sel_array_out->SetValElm(idata, 0);
         }
         data_array_out->SetValElm(idata, ans);
     }
-
     if(num_bad > 0){
         status = kRetError;
     } else {
