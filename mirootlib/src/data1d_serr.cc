@@ -197,6 +197,19 @@ double DataArraySerr1d::GetValSerrElm(long idata) const
     return val_serr_[idata];
 }
 
+double DataArraySerr1d::GetValTerrPlusElm(long idata) const
+{
+    IsValidRange(idata);
+    double val_terr_plus = GetValSerrElm(idata);
+    return val_terr_plus;
+}
+
+double DataArraySerr1d::GetValTerrMinusElm(long idata) const
+{
+    IsValidRange(idata);
+    double val_terr_minus = -1 * GetValSerrElm(idata);
+    return val_terr_minus;
+}
 
 double DataArraySerr1d::GetValAndErrMin() const
 {

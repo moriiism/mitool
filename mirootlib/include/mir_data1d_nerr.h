@@ -24,6 +24,10 @@ public:
     //
     // const functions
     //
+    double GetValSerrElm(long idata) const {return 0.0;};
+    double GetValTerrPlusElm(long idata) const {return 0.0;};
+    double GetValTerrMinusElm(long idata) const {return 0.0;};
+    
     double GetValAndErrMin() const;
     double GetValAndErrMax() const;
     

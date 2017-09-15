@@ -43,6 +43,9 @@ public:
     //
     const double* const GetValSerr() const {return val_serr_;};
     double GetValSerrElm(long idata) const;
+    double GetValTerrPlusElm(long idata) const;
+    double GetValTerrMinusElm(long idata) const;
+    
     double GetValAndErrMin() const;
     double GetValAndErrMax() const;
     void PrintData(FILE* fp, int mode,

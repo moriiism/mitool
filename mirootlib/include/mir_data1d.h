@@ -115,12 +115,9 @@ public:
         {MPrintErrVFunc; abort(); return NULL;};
     virtual const double* const GetValTerrMinus() const
         {MPrintErrVFunc; abort(); return NULL;};
-    virtual double GetValSerrElm(long idata) const
-        {MPrintErrVFunc; abort(); return 0;};
-    virtual double GetValTerrPlusElm(long idata) const
-        {MPrintErrVFunc; abort(); return 0;};
-    virtual double GetValTerrMinusElm(long idata) const
-        {MPrintErrVFunc; abort(); return 0;};
+    virtual double GetValSerrElm(long idata) const = 0;
+    virtual double GetValTerrPlusElm(long idata) const = 0;
+    virtual double GetValTerrMinusElm(long idata) const = 0;
 
     // terr --> serr by average
     virtual double* const GenValSerr() const

@@ -1043,7 +1043,7 @@ void DataArray1dOpe::GetAMeanWithMask(const DataArray1d* const* const data_array
             val_err_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValSerrElm(idata);
             mask_arr_tmp[idata_array]
-                = static_cast<int>(data_array_arr[idata_array]->GetValElm(idata));
+                = static_cast<int>(mask_array_arr[idata_array]->GetValElm(idata));
         }
         double val = 0.0;
         double val_serr = 0.0;
@@ -1083,7 +1083,7 @@ int DataArray1dOpe::GetWMeanWithMask(const DataArray1d* const* const data_array_
             val_err_arr_tmp[idata_array]
                 = data_array_arr[idata_array]->GetValSerrElm(idata);
             mask_arr_tmp[idata_array]
-                = static_cast<int>(data_array_arr[idata_array]->GetValElm(idata));
+                = static_cast<int>(mask_array_arr[idata_array]->GetValElm(idata));
         }
         double val = 0.0;
         double val_serr = 0.0;
