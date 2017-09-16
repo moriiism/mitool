@@ -3101,7 +3101,334 @@ int main(int argc, char* argv[])
 //        printf("=== \n");
 //    }
     
+//   void GetSelectDa1dByInterval(const DataArray1d* const data_array,
+//                                 const Interval* const interval,
+//                                 DataArrayNerr1d* const data_array_out);
+    {
+        printf("--- test GetSelectDa1dByInterval\n");
+        DataArray1d* da1d = new DataArrayNerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
 
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArrayNerr1d* da1d_new = new DataArrayNerr1d;
+        DataArray1dOpe::GetSelectDa1dByInterval(da1d, interval, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+
+        assert( "DataArrayNerr1d" == da1d_new->GetClassName() );
+        assert( 2 == da1d_new->GetNdata() );
+        assert( 0 == da1d_new->GetFlagValSorted() );
+        assert( 3.0 == da1d_new->GetValElm(0) );
+        assert( 9.0 == da1d_new->GetValElm(1) );
+
+        delete da1d;
+        delete interval;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+//   void GetSelectDa1dByInterval(const DataArray1d* const data_array,
+//                                const Interval* const interval,
+//                                DataArraySerr1d* const data_array_out);
+    {
+        printf("--- test GetSelectDa1dByInterval\n");
+        DataArray1d* da1d = new DataArraySerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->SetValSerrElm(0, 0.5);
+        da1d->SetValSerrElm(1, 0.5);
+        da1d->SetValSerrElm(2, 0.5);
+        da1d->SetValSerrElm(3, 0.5);
+        da1d->SetValSerrElm(4, 0.5);
+        
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
+
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArraySerr1d* da1d_new = new DataArraySerr1d;
+        DataArray1dOpe::GetSelectDa1dByInterval(da1d, interval, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+
+        assert( "DataArraySerr1d" == da1d_new->GetClassName() );
+        assert( 2 == da1d_new->GetNdata() );
+        assert( 0 == da1d_new->GetFlagValSorted() );
+        assert( 3.0 == da1d_new->GetValElm(0) );
+        assert( 9.0 == da1d_new->GetValElm(1) );
+        assert( 0.5 == da1d_new->GetValSerrElm(0) );
+        assert( 0.5 == da1d_new->GetValSerrElm(1) );
+
+        delete da1d;
+        delete interval;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+//void DataArray1dOpe::GetSelectDa1dByInterval(const DataArray1d* const data_array,
+//                                             const Interval* const interval,
+//                                             DataArrayTerr1d* const data_array_out)
+    {
+        printf("--- test GetSelectDa1dByInterval\n");
+        DataArray1d* da1d = new DataArrayTerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->SetValTerrPlusElm(0, 0.5);
+        da1d->SetValTerrPlusElm(1, 0.5);
+        da1d->SetValTerrPlusElm(2, 0.5);
+        da1d->SetValTerrPlusElm(3, 0.5);
+        da1d->SetValTerrPlusElm(4, 0.5);
+        da1d->SetValTerrMinusElm(0, -0.3);
+        da1d->SetValTerrMinusElm(1, -0.3);
+        da1d->SetValTerrMinusElm(2, -0.3);
+        da1d->SetValTerrMinusElm(3, -0.3);
+        da1d->SetValTerrMinusElm(4, -0.3);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
+
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArrayTerr1d* da1d_new = new DataArrayTerr1d;
+        DataArray1dOpe::GetSelectDa1dByInterval(da1d, interval, da1d_new);
+        da1d_new->PrintInfo(stdout);
+        da1d_new->PrintData(stdout, 1, 0.0);
+
+        assert( "DataArrayTerr1d" == da1d_new->GetClassName() );
+        assert( 2 == da1d_new->GetNdata() );
+        assert( 0 == da1d_new->GetFlagValSorted() );
+        assert( 3.0 == da1d_new->GetValElm(0) );
+        assert( 9.0 == da1d_new->GetValElm(1) );
+        assert( 0.5 == da1d_new->GetValTerrPlusElm(0) );
+        assert( 0.5 == da1d_new->GetValTerrPlusElm(1) );
+        assert( -0.3 == da1d_new->GetValTerrMinusElm(0) );
+        assert( -0.3 == da1d_new->GetValTerrMinusElm(1) );        
+
+        delete da1d;
+        delete interval;
+        delete da1d_new;
+        printf("=== \n");
+    }
+
+
+//    void GenSelectDa1dArrByIntervalNerr(const DataArray1d* const data_array,
+//                                        const Interval* const interval,
+//                                        DataArray1d*** const data_array_arr_ptr);
+    {
+        printf("--- test GenSelectDa1dArrByIntervalNerr\n");
+        DataArray1d* da1d = new DataArrayNerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
+
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArray1d** da1d_new_arr = NULL;
+        DataArray1dOpe::GenSelectDa1dArrByIntervalNerr(da1d, interval, &da1d_new_arr);
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            da1d_new_arr[iterm]->PrintInfo(stdout);
+            da1d_new_arr[iterm]->PrintData(stdout, 1, 0.0);
+        }
+
+        assert( "DataArrayNerr1d" == da1d_new_arr[0]->GetClassName() );
+        assert( 1 == da1d_new_arr[0]->GetNdata() );
+        assert( 0 == da1d_new_arr[0]->GetFlagValSorted() );
+        assert( 3.0 == da1d_new_arr[0]->GetValElm(0) );
+
+        assert( "DataArrayNerr1d" == da1d_new_arr[1]->GetClassName() );
+        assert( 1 == da1d_new_arr[1]->GetNdata() );
+        assert( 0 == da1d_new_arr[1]->GetFlagValSorted() );
+        assert( 9.0 == da1d_new_arr[1]->GetValElm(0) );
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            delete da1d_new_arr[iterm];
+        }
+        delete [] da1d_new_arr;
+        delete da1d;
+        delete interval;
+
+        printf("=== \n");
+    }
+
+//   void GenSelectDa1dArrByIntervalSerr(const DataArray1d* const data_array,
+//                                        const Interval* const interval,
+//                                        DataArray1d*** const data_array_arr_ptr);
+    {
+        printf("--- test GenSelectDa1dArrByIntervalSerr\n");
+        DataArray1d* da1d = new DataArraySerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->SetValSerrElm(0, 0.5);
+        da1d->SetValSerrElm(1, 0.5);
+        da1d->SetValSerrElm(2, 0.5);
+        da1d->SetValSerrElm(3, 0.5);
+        da1d->SetValSerrElm(4, 0.5);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
+
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArray1d** da1d_new_arr = NULL;
+        DataArray1dOpe::GenSelectDa1dArrByIntervalSerr(da1d, interval, &da1d_new_arr);
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            da1d_new_arr[iterm]->PrintInfo(stdout);
+            da1d_new_arr[iterm]->PrintData(stdout, 1, 0.0);
+        }
+
+        assert( "DataArraySerr1d" == da1d_new_arr[0]->GetClassName() );
+        assert( 1 == da1d_new_arr[0]->GetNdata() );
+        assert( 0 == da1d_new_arr[0]->GetFlagValSorted() );
+        assert( 3.0 == da1d_new_arr[0]->GetValElm(0) );
+        assert( 0.5 == da1d_new_arr[0]->GetValSerrElm(0) );
+
+        assert( "DataArraySerr1d" == da1d_new_arr[1]->GetClassName() );
+        assert( 1 == da1d_new_arr[1]->GetNdata() );
+        assert( 0 == da1d_new_arr[1]->GetFlagValSorted() );
+        assert( 9.0 == da1d_new_arr[1]->GetValElm(0) );
+        assert( 0.5 == da1d_new_arr[1]->GetValSerrElm(0) );
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            delete da1d_new_arr[iterm];
+        }
+        delete [] da1d_new_arr;
+        delete da1d;
+        delete interval;
+
+        printf("=== \n");
+    }
+    
+//    void GenSelectDa1dArrByIntervalTerr(const DataArray1d* const data_array,
+//                                        const Interval* const interval,
+//                                        DataArray1d*** const data_array_arr_ptr);
+    {
+        printf("--- test GenSelectDa1dArrByIntervalTerr\n");
+        DataArray1d* da1d = new DataArrayTerr1d;
+        da1d->Init(5);
+        da1d->SetValElm(0, 0.0);
+        da1d->SetValElm(1, 3.0);
+        da1d->SetValElm(2, 7.0);
+        da1d->SetValElm(3, 9.0);
+        da1d->SetValElm(4, 10.0);
+        da1d->SetValTerrPlusElm(0, 0.5);
+        da1d->SetValTerrPlusElm(1, 0.5);
+        da1d->SetValTerrPlusElm(2, 0.5);
+        da1d->SetValTerrPlusElm(3, 0.5);
+        da1d->SetValTerrPlusElm(4, 0.5);
+        da1d->SetValTerrMinusElm(0, -0.3);
+        da1d->SetValTerrMinusElm(1, -0.3);
+        da1d->SetValTerrMinusElm(2, -0.3);
+        da1d->SetValTerrMinusElm(3, -0.3);
+        da1d->SetValTerrMinusElm(4, -0.3);
+        da1d->PrintInfo(stdout);
+        da1d->PrintData(stdout, 1, 0.0);
+
+        Interval* interval = new Interval;
+        interval->Init(2);
+        double st_arr[2];
+        double ed_arr[2];
+        st_arr[0] = 1.0; ed_arr[0] = 4.0;
+        st_arr[1] = 8.0; ed_arr[1] = 9.5;
+        interval->Set(2, st_arr, ed_arr);
+        interval->Print(stdout);
+        
+        DataArray1d** da1d_new_arr = NULL;
+        DataArray1dOpe::GenSelectDa1dArrByIntervalTerr(da1d, interval, &da1d_new_arr);
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            da1d_new_arr[iterm]->PrintInfo(stdout);
+            da1d_new_arr[iterm]->PrintData(stdout, 1, 0.0);
+        }
+
+        assert( "DataArrayTerr1d" == da1d_new_arr[0]->GetClassName() );
+        assert( 1 == da1d_new_arr[0]->GetNdata() );
+        assert( 0 == da1d_new_arr[0]->GetFlagValSorted() );
+        assert( 3.0 == da1d_new_arr[0]->GetValElm(0) );
+        assert( 0.5 == da1d_new_arr[0]->GetValTerrPlusElm(0) );
+        assert( -0.3 == da1d_new_arr[0]->GetValTerrMinusElm(0) );        
+
+        assert( "DataArrayTerr1d" == da1d_new_arr[1]->GetClassName() );
+        assert( 1 == da1d_new_arr[1]->GetNdata() );
+        assert( 0 == da1d_new_arr[1]->GetFlagValSorted() );
+        assert( 9.0 == da1d_new_arr[1]->GetValElm(0) );
+        assert( 0.5 == da1d_new_arr[1]->GetValTerrPlusElm(0) );
+        assert( -0.3 == da1d_new_arr[1]->GetValTerrMinusElm(0) );
+
+        for(int iterm = 0; iterm < 2; iterm ++){
+            delete da1d_new_arr[iterm];
+        }
+        delete [] da1d_new_arr;
+        delete da1d;
+        delete interval;
+
+        printf("=== \n");
+    }
+    
+
+    
+
+
+    
     return status_prog;
 }
 
