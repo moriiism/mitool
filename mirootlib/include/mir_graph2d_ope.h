@@ -89,27 +89,28 @@ namespace GraphData2dOpe
                        const double* const par,
                        GraphDataTerr2d* const out);
   
-//    void GetResRatioGd2(const GraphDataNerr2d* const graph_data,
-//                        const MirFunc* const func,
-//                        const double* const par,
-//                        GraphDataNerr2d* const graph_res_out);
-//    void GetResRatioGd2(const GraphDataSerr2d* const graph_data,
-//                        const MirFunc* const func,
-//                        const double* const par,
-//                        GraphDataSerr2d* const graph_res_out);
-//    void GetResRatioGd2(const GraphDataTerr2d* const graph_data,
-//                        const MirFunc* const func,
-//                        const double* const par,
-//                        GraphDataTerr2d* const graph_res_out);
-//
-//    void GetResChiGd2(const GraphDataSerr2d* const graph_data,
-//                      const MirFunc* const func,
-//                      const double* const par,
-//                      GraphDataSerr2d* const graph_res_out);
-//    void GetResChiGd2(const GraphDataTerr2d* const graph_data,
-//                      const MirFunc* const func,
-//                      const double* const par,
-//                      GraphDataTerr2d* const graph_res_out);
+    void GetResRatioGd2d(const GraphData2d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         GraphDataNerr2d* const out);
+    void GetResRatioGd2d(const GraphData2d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         GraphDataSerr2d* const out);
+    void GetResRatioGd2d(const GraphData2d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         GraphDataTerr2d* const out);
+
+    void GetResChiGd2d(const GraphData2d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       GraphDataSerr2d* const out);
+    void GetResChiGd2d(const GraphData2d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       GraphDataTerr2d* const out);
+    
 //
 //    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
 //                                              double pval_threshold);

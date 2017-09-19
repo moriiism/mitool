@@ -733,206 +733,207 @@ void GraphData2dOpe::GetResValGd2d(const GraphData2d* const data,
     delete [] oval_res;
 }
 
+void GraphData2dOpe::GetResValGd2d(const GraphData2d* const data,
+                                   const MirFunc* const func,
+                                   const double* const par,
+                                   GraphDataSerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_serr = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = data->GetOvalElm(idata) - func->Eval(xval, par);
+        oval_res_serr[idata] = data->GetOvalSerrElm(idata);
+    }
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalSerrArr(ndata, data->GetXvalArr()->GetValSerr());
+    out->SetOvalArr(ndata, oval_res);
+    out->SetOvalSerrArr(ndata, oval_res_serr);
+  
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
 
-//void GraphData2dOpe::GetResValGd2(const GraphDataSerr2d* const graph_data,
-//                                  const MirFunc* const func,
-//                                  const double* const par,
-//                                  GraphDataSerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_serr = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = graph_data->GetOvalElm(idata) - func->Eval(xval, par);
-//        oval_res_serr[idata] = graph_data->GetOvalSerrElm(idata);
-//    }
-//    
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalSerrArr(ndata, graph_data->GetXvalArr()->GetValSerr());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//    graph_res_out->SetOvalSerrArr(ndata, oval_res_serr);
-//  
-//    delete [] oval_res;
-//    delete [] oval_res_serr;
-//}
-//
-//void GraphData2dOpe::GetResValGd2(const GraphDataTerr2d* const graph_data,
-//                                  const MirFunc* const func,
-//                                  const double* const par,
-//                                  GraphDataTerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_terr_plus  = new double[ndata];
-//    double* oval_res_terr_minus = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = graph_data->GetOvalElm(idata) - func->Eval(xval, par);
-//        oval_res_terr_plus[idata]  = graph_data->GetOvalTerrPlusElm(idata);
-//        oval_res_terr_minus[idata] = graph_data->GetOvalTerrMinusElm(idata);
-//    }
-//
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalTerrArr(ndata,
-//                                  graph_data->GetXvalArr()->GetValTerrPlus(),
-//                                  graph_data->GetXvalArr()->GetValTerrMinus());
-//    graph_res_out->SetOvalArr(ndata, graph_data->GetOvalArr()->GetVal());
-//    graph_res_out->SetOvalTerrArr(ndata,
-//                                  graph_data->GetOvalArr()->GetValTerrPlus(),
-//                                  graph_data->GetOvalArr()->GetValTerrMinus());
-//    delete [] oval_res;
-//    delete [] oval_res_terr_plus;
-//    delete [] oval_res_terr_minus;
-//}
-//
-//void GraphData2dOpe::GetResRatioGd2(const GraphDataNerr2d* const graph_data,
-//                                    const MirFunc* const func,
-//                                    const double* const par,
-//                                    GraphDataNerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//            func->Eval(xval, par);
-//    }
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//  
-//    delete [] oval_res;
-//}
-//
-//
-//void GraphData2dOpe::GetResRatioGd2(const GraphDataSerr2d* const graph_data,
-//                                    const MirFunc* const func,
-//                                    const double* const par,
-//                                    GraphDataSerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_serr = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//            func->Eval(xval, par);
-//        oval_res_serr[idata] = fabs(graph_data->GetOvalSerrElm(idata) / func->Eval(xval, par));
-//    }
-//
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalSerrArr(ndata, graph_data->GetXvalArr()->GetValSerr());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//    graph_res_out->SetOvalSerrArr(ndata, oval_res_serr);
-//
-//    delete [] oval_res;
-//    delete [] oval_res_serr;
-//}
-//
-//void GraphData2dOpe::GetResRatioGd2(const GraphDataTerr2d* const graph_data,
-//                                    const MirFunc* const func,
-//                                    const double* const par,
-//                                    GraphDataTerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_terr_plus  = new double[ndata];
-//    double* oval_res_terr_minus = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//            func->Eval(xval, par);
-//        oval_res_terr_plus[idata]  = fabs(graph_data->GetOvalTerrPlusElm(idata) / func->Eval(xval, par));
-//        oval_res_terr_minus[idata] = -1 * fabs(graph_data->GetOvalTerrMinusElm(idata) / func->Eval(xval, par));
-//    }
-//
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalTerrArr(ndata,
-//                                  graph_data->GetXvalArr()->GetValTerrPlus(),
-//                                  graph_data->GetXvalArr()->GetValTerrMinus());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//    graph_res_out->SetOvalTerrArr(ndata,
-//                                  oval_res_terr_plus,
-//                                  oval_res_terr_minus);
-//    delete [] oval_res;
-//    delete [] oval_res_terr_plus;
-//    delete [] oval_res_terr_minus;
-//}
-//
-//void GraphData2dOpe::GetResChiGd2(const GraphDataSerr2d* const graph_data,
-//                                  const MirFunc* const func,
-//                                  const double* const par,
-//                                  GraphDataSerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_serr = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//            graph_data->GetOvalSerrElm(idata);
-//        oval_res_serr[idata] = 1.0;
-//    }
-//
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalSerrArr(ndata, graph_data->GetXvalArr()->GetValSerr());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//    graph_res_out->SetOvalSerrArr(ndata, oval_res_serr);
-//
-//    delete [] oval_res;
-//    delete [] oval_res_serr;
-//}
-// 
-//
-//void GraphData2dOpe::GetResChiGd2(const GraphDataTerr2d* const graph_data,
-//                                  const MirFunc* const func,
-//                                  const double* const par,
-//                                  GraphDataTerr2d* const graph_res_out)
-//{
-//    long ndata = graph_data->GetNdata();
-//    double* oval_res = new double[ndata];
-//    double* oval_res_terr_plus  = new double[ndata];
-//    double* oval_res_terr_minus = new double[ndata];
-//    for(long idata = 0; idata < ndata; idata++){
-//        double xval[1];
-//        xval[0] = graph_data->GetXvalElm(idata);
-//        if( 0 <= graph_data->GetOvalElm(idata) - func->Eval(xval, par) ){
-//            oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//                (-1 * graph_data->GetOvalTerrMinusElm(idata));
-//        } else {
-//            oval_res[idata] = (graph_data->GetOvalElm(idata) - func->Eval(xval, par)) /
-//                graph_data->GetOvalTerrPlusElm(idata);
-//        }
-//        oval_res_terr_plus[idata] = 1.0;
-//        oval_res_terr_minus[idata] = -1.0;
-//    }
-//    
-//    graph_res_out->Init(ndata);
-//    graph_res_out->SetXvalArr(ndata, graph_data->GetXvalArr()->GetVal());
-//    graph_res_out->SetXvalTerrArr(ndata,
-//                                  graph_data->GetXvalArr()->GetValTerrPlus(),
-//                                  graph_data->GetXvalArr()->GetValTerrMinus());
-//    graph_res_out->SetOvalArr(ndata, oval_res);
-//    graph_res_out->SetOvalTerrArr(ndata,
-//                                  oval_res_terr_plus,
-//                                  oval_res_terr_minus);
-//    delete [] oval_res;
-//    delete [] oval_res_terr_plus;
-//    delete [] oval_res_terr_minus;
-//}
+void GraphData2dOpe::GetResValGd2d(const GraphData2d* const data,
+                                   const MirFunc* const func,
+                                   const double* const par,
+                                   GraphDataTerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_terr_plus  = new double[ndata];
+    double* oval_res_terr_minus = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = data->GetOvalElm(idata) - func->Eval(xval, par);
+        oval_res_terr_plus[idata]  = data->GetOvalTerrPlusElm(idata);
+        oval_res_terr_minus[idata] = data->GetOvalTerrMinusElm(idata);
+    }
 
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalTerrArr(ndata,
+                        data->GetXvalArr()->GetValTerrPlus(),
+                        data->GetXvalArr()->GetValTerrMinus());
+    out->SetOvalArr(ndata, data->GetOvalArr()->GetVal());
+    out->SetOvalTerrArr(ndata,
+                        data->GetOvalArr()->GetValTerrPlus(),
+                        data->GetOvalArr()->GetValTerrMinus());
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
+
+
+void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
+                                     const MirFunc* const func,
+                                     const double* const par,
+                                     GraphDataNerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+            func->Eval(xval, par);
+    }
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetOvalArr(ndata, oval_res);
+  
+    delete [] oval_res;
+}
+
+
+void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
+                                     const MirFunc* const func,
+                                     const double* const par,
+                                     GraphDataSerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_serr = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+            func->Eval(xval, par);
+        oval_res_serr[idata] = fabs(data->GetOvalSerrElm(idata) / func->Eval(xval, par));
+    }
+
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalSerrArr(ndata, data->GetXvalArr()->GetValSerr());
+    out->SetOvalArr(ndata, oval_res);
+    out->SetOvalSerrArr(ndata, oval_res_serr);
+
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
+                                     const MirFunc* const func,
+                                     const double* const par,
+                                     GraphDataTerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_terr_plus  = new double[ndata];
+    double* oval_res_terr_minus = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+            func->Eval(xval, par);
+        oval_res_terr_plus[idata]  =
+            fabs(data->GetOvalTerrPlusElm(idata) / func->Eval(xval, par));
+        oval_res_terr_minus[idata] =
+            -1 * fabs(data->GetOvalTerrMinusElm(idata) / func->Eval(xval, par));
+    }
+
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalTerrArr(ndata,
+                        data->GetXvalArr()->GetValTerrPlus(),
+                        data->GetXvalArr()->GetValTerrMinus());
+    out->SetOvalArr(ndata, oval_res);
+    out->SetOvalTerrArr(ndata,
+                        oval_res_terr_plus,
+                        oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
+
+
+void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
+                                   const MirFunc* const func,
+                                   const double* const par,
+                                   GraphDataSerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_serr = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+            data->GetOvalSerrElm(idata);
+        oval_res_serr[idata] = 1.0;
+    }
+
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalSerrArr(ndata, data->GetXvalArr()->GetValSerr());
+    out->SetOvalArr(ndata, oval_res);
+    out->SetOvalSerrArr(ndata, oval_res_serr);
+
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+ 
+
+void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
+                                   const MirFunc* const func,
+                                   const double* const par,
+                                   GraphDataTerr2d* const out)
+{
+    long ndata = data->GetNdata();
+    double* oval_res = new double[ndata];
+    double* oval_res_terr_plus  = new double[ndata];
+    double* oval_res_terr_minus = new double[ndata];
+    for(long idata = 0; idata < ndata; idata++){
+        double xval[1];
+        xval[0] = data->GetXvalElm(idata);
+        if( 0 <= data->GetOvalElm(idata) - func->Eval(xval, par) ){
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                (-1 * data->GetOvalTerrMinusElm(idata));
+        } else {
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                data->GetOvalTerrPlusElm(idata);
+        }
+        oval_res_terr_plus[idata] = 1.0;
+        oval_res_terr_minus[idata] = -1.0;
+    }
+    
+    out->Init(ndata);
+    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
+    out->SetXvalTerrArr(ndata,
+                        data->GetXvalArr()->GetValTerrPlus(),
+                        data->GetXvalArr()->GetValTerrMinus());
+    out->SetOvalArr(ndata, oval_res);
+    out->SetOvalTerrArr(ndata,
+                        oval_res_terr_plus,
+                        oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
 
 
 //
