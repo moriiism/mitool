@@ -1,0 +1,222 @@
+#
+# fit_func_chi2_multi_1d.txt
+#
+
+chi2 で fit する。
+1次元。
+
+#
+# argument:
+#
+    data_file_list    
+
+         data_fmt     : "x,y", "x,xe,y", "x,y,ye", "x,xe,y,ye" の format をサポート。
+
+    func_name    : 関数。
+    fitpar       : function の parameter の設定ファイル。
+    chi2par      : minfcn (= chi2 or cstat) の値  v.s.  parameter のplot の設定ファイル。
+                   必要無ければ、none を設定する。
+    chi2cont_par : minfcn (= chi2 or cstat) の値  v.s. (parameter 1, parameter 2) のplotの設定ファイル。
+                   必要無ければ、none を設定する。
+    plot_conf_file
+    outdir
+    outfile_head
+
+
+
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --plotmode (on)/off
+  --printmode (on)/off
+  --root_style (def)/std/pub/detail
+
+#
+# 設定files
+#
+  
+  #
+  # data_file
+  #
+    数字の行列。 x, y, ye column を使う。
+
+  #
+  # fitpar
+  #
+    format: 
+       par_name      init      err         lo           up      flag_calc_terr   index_comp
+
+       par_name: name of parameters
+       init    : 初期値
+       err     : ステップサイズ
+                 fix する場合は、マイナスの値を設定する。
+       lo      : lower boundary
+       up      : upper boundary
+
+                 boundary を設定しない場合は、両方とも "none" にセットする。
+                 boundary を設定する場合は、両方ともセットする。片方だけセットすることはできない。
+
+       flag_calc_terr : minos error を計算するかどうか (1/0)
+       index_comp     : function が 各component に分割できる場合の index (0, 1, 2, ...)
+                        必要ない場合は、0 に設定する。
+
+  #
+  # chi2par
+  #
+    format:
+       index  nstep  low   up  sigma  index1
+       
+       index  : index of parameter: fitpar の parameter index (0 から数える)
+       nstep  : number of steps
+       lo     : lower boundary
+       up     : upper boundary
+       sigma  : fitting を行った結果得られた 誤差 の sigma 倍の範囲をsearch する。
+
+         lo, up, sigma は関連している。
+           (lo, up) が (none, none) のときは、sigma に数字を設定する。
+           (lo, up) が共に 数字のときは、sigma にnone を設定する。
+           それ以外の組み合わせのときは abort する。
+
+       index1 : 他のparameter がどのように変化するかを調べる。
+                none:         必要ないとき。
+                all:          全てを調べる。
+                all_free:     fixed parameter でない全てのパラメータを調べる。
+                others:       同じパラメータは除く。
+                others_free:  fixed parameter でなく、また同じパラメータでないもの。
+                1,2,3  のようにも指定できる。
+                一番便利なのは、others_free
+
+  #
+  # chi2cont_par
+  #  
+
+    format: 
+      index0  nstep0  lo0     up0   sigma0    index1  nstep1   lo1    up1   sigma1    index2
+      
+      chi2par と同様。
+
+#
+# example
+#
+
+cd ~/temp
+
+# simulation
+
+mkdir setup
+
+for index in 1 2 3 4 5 6 7 8 9 10
+do
+  func_name="Gauss1dPlusConstFunc"
+  par_file="setup/par.dat"
+  hist_info="setup/hist_info.dat"
+  outdir="sim_func_rate_1d"
+  outfile_head=${func_name}_${index}
+  sim_mode="evt+bin"
+  rand_seed=${index}
+
+  cat << EOF > setup/par.dat
+# par_name  par
+mu_xp        0.0
+sigma_xp     1.0
+norm       100.0
+cons        10.0
+EOF
+
+  cat << EOF > setup/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+ 50   -10   10   none  none
+# none   -10   20   1.0  floor
+EOF
+
+  $MITOOL/miutil/mifunc/sim_func_rate_1d \
+  $func_name \
+  $par_file \
+  $hist_info \
+  $outdir \
+  $outfile_head \
+  $sim_mode \
+  $rand_seed
+done
+
+
+# 多データ同時フィット
+
+
+mkdir setup
+
+data_file_list=setup/datafile.list
+func_name="Gauss1dPlusConstFunc"
+
+fitpar=setup/fitpar.dat
+chi2par=setup/chi2par.dat
+chi2cont_par=setup/chi2cont_par.dat
+
+# chi2par=none
+# chi2cont_par=none
+
+plot_conf_file="setup/plot_conf.dat"
+outdir=fit_func_chi2_multi_1d
+outfile_head=try1
+
+cat << EOF > setup/datafile.list
+# data_file  fmt
+sim_func_rate_1d/Gauss1dPlusConstFunc_1_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_2_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_3_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_4_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_5_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_6_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_7_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_8_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_9_evt_fill_rate.dat   x,xe,y,ye
+sim_func_rate_1d/Gauss1dPlusConstFunc_10_evt_fill_rate.dat   x,xe,y,ye
+EOF
+
+
+cat << EOF > setup/fitpar.dat
+#  par_name      init      err         lo           up      flag_calc_terr   index_comp
+mu_xp            0.0      -0.01        -5          +5              1             0
+sigma_xp         1.0      -0.01        0.0         10.0            1             0
+rate             1.0       0.01        -10        500.0            1             0
+cons          1000.0       0.01        0.0        100.0            1             0
+EOF
+
+cat << EOF > setup/chi2par.dat
+# index  nstep    lo      up   sigma     index1
+#0         50     -5        5    none   others_free
+#1         50      1.0     7.0   none   others_free
+2          50    -10       100   none   others_free
+#3         50       5      15    none   others_free
+EOF
+
+cat << EOF > setup/chi2cont_par.dat
+# index0  nstep0  lo0     up0   sigma0    index1  nstep1   lo1    up1   sigma1    index2
+0          50     -5       5     none        1      50     1.0    7.0    none    others_free
+EOF
+
+cat << EOF > setup/plot_conf.dat
+# lo  up  offset  scale  ! label
+-10    10    no  lin  ! time [sec]
+-10   100    no  lin  ! rate [counts/sec]
+-20    20    no  lin  ! val
+none   none  no  lin  ! chi
+none   none  no  lin  ! ratio
+EOF
+
+
+$MITOOL/miutil/mifunc/fit_func_chi2_multi_1d \
+$data_file_list \
+$func_name \
+$fitpar \
+$chi2par \
+$chi2cont_par \
+$plot_conf_file \
+$outdir \
+$outfile_head
+

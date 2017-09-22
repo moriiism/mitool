@@ -1,5 +1,7 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
+include ../../miblaslib/Makefile.in
 
 INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
 

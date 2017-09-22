@@ -1,5 +1,6 @@
 #include "mi_str.h"
 #include "mi_iolib.h"
+#include "mir_data1d_ope.h"
 #include "mir_graph2d_ope.h"
 
 // global variable 

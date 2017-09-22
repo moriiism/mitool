@@ -1,0 +1,121 @@
+#
+# sim_func_rate_2d.txt
+#
+
+ rate(counts/sec/yval_unit) の値を返す関数を与えてsimulate する。
+ 2次元。
+
+#
+# argument
+#
+
+    func_name
+    par_file
+    hist_info_sim
+         simulation をするbin間隔の設定。
+
+    outdir
+    outfile_head
+    sim_mode
+         sim_mode="evt"     : event file (時刻, yval だけのfile) を出力する。
+         sim_mode="evt+bin" : event file (時刻, yval だけのfile) を出力する。
+                              さらに、そのevent を binning した 
+                              1 dim light curve, 1 dim yval hist, 2 dim hist を出力する。
+         sim_mode="bin"     : binned 1 dim light curve, 1 dim yval hist, 2 dim hist を出力する。
+
+    rand_seed
+         rand_seed = 0  : 実行する度に異なるseed を使うので、同じ結果が得られることはない。
+         rand_seed != 0 : 何度実行しても、同じ結果が得られる。
+
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --hist_info_out (none)
+          simulation で作成した event をbinning するときのbin間隔。
+          none のときは、hist_info_sim と同じbin間隔でbinning する。
+
+
+#
+# example
+#
+
+cd ~/temp
+
+mkdir setup
+
+func_name="Gauss2dFunc"
+par_file="setup/par.dat"
+hist_info_sim="setup/hist_info_sim.dat"
+outdir="sim_func_rate_2d"
+outfile_head=try1
+sim_mode="evt+bin"
+rand_seed=0
+hist_info_out="setup/hist_info_out.dat"
+
+cat << EOF > setup/par.dat
+# par_name  par
+sigma_xp  1.0
+sigma_yp  1.0
+norm       100.0
+rot_angle  0.0
+mu_xp      0.0
+mu_yp      0.0
+shift_z    10.0
+EOF
+
+
+cat << EOF > setup/hist_info_sim.dat
+# nbin  lo  up  delta-bin  mode
+1000    -10   10   none  none
+1000   -10   10   none  none
+EOF
+
+
+cat << EOF > setup/hist_info_out.dat
+# nbin  lo  up  delta-bin  mode
+50    -10   10   none  none
+50    -10   10   none  none
+EOF
+
+
+$MITOOL/miutil/mifunc/sim_func_rate_2d  \
+--hist_info_out $hist_info_out \
+-- \
+$func_name \
+$par_file \
+$hist_info_sim \
+$outdir \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+
+## output:
+
+# sim_mode="evt" のとき、
+
+sim_func_rate_2d/try1_evt.dat
+sim_func_rate_2d/try1_sim_func_rate_2d.log
+
+# sim_mode="evt+bin" のとき、
+
+sim_func_rate_2d/try1_evt.dat
+sim_func_rate_2d/try1_evt_fill_count.dat
+sim_func_rate_2d/try1_evt_fill_rate.dat
+sim_func_rate_2d/try1_evt_fill_rate_projx_diff_val.qdp
+sim_func_rate_2d/try1_evt_fill_rate_projy_diff_val.qdp
+sim_func_rate_2d/try1_sim_func_rate_2d.log
+
+# sim_mode="bin" のとき、
+
+sim_func_rate_2d/try1_bin_count.dat
+sim_func_rate_2d/try1_bin_rate.dat
+sim_func_rate_2d/try1_bin_rate_projx_diff_val.qdp
+sim_func_rate_2d/try1_bin_rate_projy_diff_val.qdp
+sim_func_rate_2d/try1_sim_func_rate_2d.log
+

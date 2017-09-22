@@ -1,0 +1,73 @@
+#
+# draw_func_data_1d.txt
+#
+
+関数のグラフとデータを描く。
+(1 graph, 1 data, 1 dim) 
+
+#
+# argument
+#
+
+    data_file
+    data_fmt
+    func_name
+    par_file
+    plot_conf_file
+    outdir
+    outfile_head
+
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+  --plotmode
+  --printmode
+  --root_style
+
+#
+# example
+#
+
+cd ~/temp
+
+
+mkdir data
+
+bindir=
+data_file=../13112600/sim_func_rate_1d/Gauss1dPlusConstFunc_evt_fill_rate.dat
+data_fmt="x,xe,y,ye"
+func_name="Gauss1dPlusConstFunc"
+par_file=data/par.dat
+plot_conf_file=data/plot_conf.dat
+outdir=draw_func_data_1d
+outfile_head=$func_name
+
+cat << EOF > data/par.dat
+# par_name  par
+mu_xp        0.0
+sigma_xp     3.0
+rate      1000.0
+cons        50.0
+EOF
+
+cat << EOF > data/plot_conf.dat
+# lo  up  scale  ! label
+-20.0  20.0   lin  ! time
+-10.0  1000.0  lin  ! rate
+EOF
+
+$bindir/draw_func_data_1d \
+$data_file \
+$data_fmt \
+$func_name \
+$par_file \
+$plot_conf_file \
+$outdir \
+$outfile_head
+
+

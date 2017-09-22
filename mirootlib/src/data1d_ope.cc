@@ -17,6 +17,14 @@ DataArray1d* const DataArray1dOpe::GenDa1dByLoad(string file, string format)
     return da1d;
 }
 
+void DataArray1dOpe::DelDa1dArr(DataArray1d** const da1d_arr, int narr)
+{
+    for(int iarr = 0; iarr < narr; iarr ++){
+        delete da1d_arr[iarr];
+    }
+    delete [] da1d_arr;
+}
+
 // For one DataArray1d
 void DataArray1dOpe::GetNot(const DataArray1d* const data_array,
                             DataArray1d* const data_array_out)

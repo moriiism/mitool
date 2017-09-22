@@ -10,7 +10,8 @@ namespace DataArray1dOpe
 {
     DataArray1d* const GenDa1dByLoad(string file, string format);
 
-
+    void DelDa1dArr(DataArray1d** const da1d_arr, int narr);
+    
     // For one DataArray1d    
     void GetNot(const DataArray1d* const data_array,
                 DataArray1d* const data_array_out);

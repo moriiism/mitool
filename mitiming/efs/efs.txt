@@ -1,0 +1,36 @@
+#
+# efs.txt
+#
+
+#
+# epoch folding search
+#
+
+
+bindir=${MXKWTOOL}/mxkwtiming/efs
+file=4_mjd55290_55349_bc_1.5d_40_200.time
+telescope=MAXI
+tunit=sec
+format="x"
+epoch_mjd=55320
+search_dat=setup/search.dat
+nbin=16
+outdir=efsout
+outfile_head=efs
+
+cat << EOF > setup/search.dat
+60  0.13024588  0.13024784  none none
+60  5.622e-14   8.2592e-13  none  none
+EOF
+
+$bindir/efs \
+$file \
+$telescope \
+$tunit   \
+$format   \
+$epoch_mjd  \
+$search_dat \
+$nbin \
+$outdir \
+$outfile_head
+

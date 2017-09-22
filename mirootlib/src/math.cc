@@ -1023,6 +1023,3 @@ double MirMath::GetInProd(double vec0_xval, double vec0_yval,
     return ans;
 }
 
-
-
-

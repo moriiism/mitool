@@ -1,4 +1,8 @@
-ALL = doc milib miblaslib mifitslib mirootlib miutil script setup
+ALL =  milib  miblaslib  mifitslib  mirootlib \
+	mifunclib  miminuitlib  mitiminglib  \
+	mitiming  miutil \
+	script setup doc \
+	try
 
 all:
 	for dir in $(ALL); do \

@@ -21,6 +21,14 @@ export PATH=/soft/root/6.08.02/bin:${PATH}
 
 alias root="root -l"
 
+#
+# HEADAS
+#
+
+HEADAS_VER=6.16
+export HEADAS=/soft/heasoft/heasoft-${HEADAS_VER}/x86_64-unknown-linux-gnu-libc2.12
+source $HEADAS/headas-init.sh
+
 ################################################################
 ################################################################
 ############ Don't Edit Below. #################################

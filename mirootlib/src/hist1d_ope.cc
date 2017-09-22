@@ -24,13 +24,1029 @@ HistData1d* const HistData1dOpe::GenHd1dByLoad(string file)
     return hd1d;
 }
 
-// For a HistDataNerr1d
 
-void HistData1dOpe::GetPowSpecNonfft(const HistDataNerr1d* const hist_data,
-                                     HistDataNerr1d* hist_data_out)
+DataArray1d** const HistData1dOpe::GenDa1dArrNerr(const HistData1d* const* const hd1d_arr,
+                                                  int narr)
 {
-    long nbin = hist_data->GetNbinX();
-    double tbinfwidth = hist_data->GetXvalBinWidth();
+    DataArray1d** da1d_arr = new DataArray1d* [narr];
+    for(int iarr = 0; iarr < narr; iarr ++){
+        da1d_arr[iarr] = new DataArrayNerr1d;
+        da1d_arr[iarr]->Copy(hd1d_arr[iarr]->GetOvalArr());
+    }
+    return da1d_arr;
+}
+
+DataArray1d** const HistData1dOpe::GenDa1dArrSerr(const HistData1d* const* const hd1d_arr,
+                                                  int narr)
+{
+    DataArray1d** da1d_arr = new DataArray1d* [narr];
+    for(int iarr = 0; iarr < narr; iarr ++){
+        da1d_arr[iarr] = new DataArraySerr1d;
+        da1d_arr[iarr]->Copy(hd1d_arr[iarr]->GetOvalArr());
+    }
+    return da1d_arr;
+}
+
+DataArray1d** const HistData1dOpe::GenDa1dArrTerr(const HistData1d* const* const hd1d_arr,
+                                                  int narr)
+{
+    DataArray1d** da1d_arr = new DataArray1d* [narr];
+    for(int iarr = 0; iarr < narr; iarr ++){
+        da1d_arr[iarr] = new DataArrayTerr1d;
+        da1d_arr[iarr]->Copy(hd1d_arr[iarr]->GetOvalArr());
+    }
+    return da1d_arr;
+}
+
+void HistData1dOpe::DelHd1dArr(HistData1d** const hd1d_arr, int narr)
+{
+    for(int iarr = 0; iarr < narr; iarr ++){
+        delete hd1d_arr[iarr];
+    }
+    delete [] hd1d_arr;
+}
+
+int HistData1dOpe::IsFormatSame(const HistData1d* const data1,
+                                const HistData1d* const data2)
+{
+    if(data1->GetNbinX() != data2->GetNbinX() ||
+       fabs(data1->GetXvalLo() - data2->GetXvalLo()) > DBL_EPSILON ||
+       fabs(data1->GetXvalUp() - data2->GetXvalUp()) > DBL_EPSILON ){
+        MPrintErr("format of data1 and data2 are diffenret.");
+        char msg[kLineSize];
+        sprintf(msg, "data1: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
+                data1->GetNbinX(),
+                data1->GetXvalLo(),
+                data1->GetXvalUp());
+        MPrintErr(msg);
+        sprintf(msg, "data2: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
+                data2->GetNbinX(),
+                data2->GetXvalLo(),
+                data2->GetXvalUp());
+        MPrintErr(msg);
+        abort();
+    }
+    return 1;
+}
+
+int HistData1dOpe::IsFormatSame(const HistData1d* const* const data_arr,
+                                int nhist)
+{
+    if(nhist < 2){
+        char msg[kLineSize];
+        sprintf(msg, "nhist(=%d) < 2\n", nhist);
+        MPrintWarn(msg);
+        MPrintWarn("skip check");
+        return 0;
+    }
+    for(int ihist = 1; ihist < nhist; ihist++){
+        if(data_arr[0]->GetNbinX()  != data_arr[ihist]->GetNbinX()  ||
+           fabs(data_arr[0]->GetXvalLo() - data_arr[ihist]->GetXvalLo()) > DBL_EPSILON ||
+           fabs(data_arr[0]->GetXvalUp() - data_arr[ihist]->GetXvalUp()) > DBL_EPSILON ){
+            char msg[kLineSize];
+            sprintf(msg, "format of data_arr[0] and data_arr[%d] are diffenret", ihist);
+            MPrintErr(msg);
+            sprintf(msg, "data_arr[0]: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
+                    data_arr[0]->GetNbinX(),
+                    data_arr[0]->GetXvalLo(),
+                    data_arr[0]->GetXvalUp());
+            MPrintErr(msg);            
+            sprintf(msg, "data_arr[%d]: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
+                    ihist,
+                    data_arr[ihist]->GetNbinX(),
+                    data_arr[ihist]->GetXvalLo(),
+                    data_arr[ihist]->GetXvalUp());
+            MPrintErr(msg);            
+            sprintf(msg, "data_arr[0]->GetXvalLo() - data_arr[%d]->GetXvalLo() = %e\n",
+                    ihist,
+                    fabs(data_arr[0]->GetXvalLo() - data_arr[ihist]->GetXvalLo()));
+            MPrintErr(msg);            
+            sprintf(msg, "data_arr[0]->GetXvalUp() - data_arr[%d]->GetXvalUp() = %e\n",
+                    ihist,
+                    fabs(data_arr[0]->GetXvalUp() - data_arr[ihist]->GetXvalUp()));
+            abort();
+        }
+    }
+    return 1;
+}
+
+// For one HistData1d
+void HistData1dOpe::GetNot(const HistData1d* const in,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetNot(in->GetOvalArr(),
+                           da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+
+void HistData1dOpe::GetNot(const HistData1d* const in,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetNot(in->GetOvalArr(),
+                           da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+
+void HistData1dOpe::GetNot(const HistData1d* const in,
+                           HistDataTerr1d* const out)
+{
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetNot(in->GetOvalArr(),
+                           da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+
+void HistData1dOpe::GetScale(const HistData1d* const in,
+                             double scale, double offset,
+                             HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetScale(in->GetOvalArr(),
+                             scale, offset,
+                             da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+
+   
+void HistData1dOpe::GetScale(const HistData1d* const in,
+                             double scale, double offset,
+                             HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetScale(in->GetOvalArr(),
+                             scale, offset,
+                             da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+
+void HistData1dOpe::GetScale(const HistData1d* const in,
+                             double scale, double offset,
+                             HistDataTerr1d* const out)
+{
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetScale(in->GetOvalArr(),
+                             scale, offset,
+                             da1d);
+    out->Init(in->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+// For two HistData1d
+void HistData1dOpe::GetMin(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMin(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMin(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetMin(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMin(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataTerr1d* const out)
+{
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetMin(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetMax(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMax(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMax(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetMax(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMax(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataTerr1d* const out)
+{
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetMax(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+   
+void HistData1dOpe::GetAdd(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetAdd(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetAdd(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetAdd(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetSub(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetSub(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetSub(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetSub(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetMul(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMul(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+
+void HistData1dOpe::GetMul(const HistData1d* const in1,
+                           const HistData1d* const in2,
+                           HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetMul(in1->GetOvalArr(),
+                           in2->GetOvalArr(),
+                           da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+    
+int HistData1dOpe::GetDiv(const HistData1d* const num,
+                          const HistData1d* const den,
+                          HistDataNerr1d* const mask_sel_out,
+                          HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArrayNerr1d* da1d_mask = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetDiv(num->GetOvalArr(),
+                                     den->GetOvalArr(),
+                                     da1d_mask,
+                                     da1d);
+    out->Init(num->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(num->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask);
+    delete da1d;
+    delete da1d_mask;
+    return ret;
+}
+    
+int HistData1dOpe::GetDiv(const HistData1d* const num,
+                          const HistData1d* const den,
+                          HistDataNerr1d* const mask_sel_out,
+                          HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArrayNerr1d* da1d_mask = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetDiv(num->GetOvalArr(),
+                                     den->GetOvalArr(),
+                                     da1d_mask,
+                                     da1d);
+    out->Init(num->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(num->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask);
+    delete da1d;
+    delete da1d_mask;
+    return ret;
+}
+    
+    
+void HistData1dOpe::GetAMean(const HistData1d* const in1,
+                             const HistData1d* const in2,
+                             HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetAMean(in1->GetOvalArr(),
+                             in2->GetOvalArr(),
+                             da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetAMean(const HistData1d* const in1,
+                             const HistData1d* const in2,
+                             HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetAMean(in1->GetOvalArr(),
+                             in2->GetOvalArr(),
+                             da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    delete da1d;
+}
+    
+    
+int HistData1dOpe::GetWMean(const HistData1d* const in1,
+                            const HistData1d* const in2,
+                            HistDataNerr1d* const mask_sel_out,
+                            HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArrayNerr1d* da1d_mask = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetWMean(in1->GetOvalArr(),
+                                       in2->GetOvalArr(),
+                                       da1d_mask,
+                                       da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(in1->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask);
+    delete da1d;
+    delete da1d_mask;
+    return ret;
+}
+    
+
+int HistData1dOpe::GetSubAddRatio(const HistData1d* const in1,
+                                  const HistData1d* const in2,
+                                  HistDataNerr1d* const mask_sel_out,
+                                  HistDataNerr1d* const out)
+{
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArrayNerr1d* da1d_mask = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetSubAddRatio(in1->GetOvalArr(),
+                                             in2->GetOvalArr(),
+                                             da1d_mask,
+                                             da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(in1->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask);
+    delete da1d;
+    delete da1d_mask;
+    return ret;
+}
+    
+
+int HistData1dOpe::GetSubAddRatio(const HistData1d* const in1,
+                                  const HistData1d* const in2,
+                                  HistDataNerr1d* const mask_sel_out,
+                                  HistDataSerr1d* const out)
+{
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArrayNerr1d* da1d_mask = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetSubAddRatio(in1->GetOvalArr(),
+                                             in2->GetOvalArr(),
+                                             da1d_mask,
+                                             da1d);
+    out->Init(in1->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(in1->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask);
+    delete da1d;
+    delete da1d_mask;
+    return ret;
+}
+    
+
+// For N HistData1d
+void HistData1dOpe::GetMin(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMin(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMin(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetMin(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+
+void HistData1dOpe::GetMin(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataTerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrTerr(in_arr, narr);
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetMin(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+
+    
+void HistData1dOpe::GetMax(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMax(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMax(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetMax(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+
+void HistData1dOpe::GetMax(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataTerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrTerr(in_arr, narr);
+    DataArrayTerr1d* da1d = new DataArrayTerr1d;
+    DataArray1dOpe::GetMax(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetSum(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetSum(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetSum(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetSum(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetAMean(const HistData1d* const* const in_arr,
+                             int narr,
+                             HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetAMean(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetAMean(const HistData1d* const* const in_arr,
+                             int narr,
+                             HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetAMean(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+    
+int HistData1dOpe::GetWMean(const HistData1d* const* const in_arr,
+                            int narr,
+                            HistDataNerr1d* const mask_sel_out,
+                            HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArrayNerr1d* da1d_mask_sel = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetWMean(da1d_arr, narr, da1d_mask_sel, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(in_arr[0]->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask_sel);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+    delete da1d_mask_sel;
+    return ret;
+}
+    
+    
+void HistData1dOpe::GetVariance(const HistData1d* const* const in_arr,
+                                int narr,
+                                HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetVariance(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetStddev(const HistData1d* const* const in_arr,
+                              int narr,
+                              HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetStddev(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetUnbiasedVariance(const HistData1d* const* const in_arr,
+                                        int narr,
+                                        HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetUnbiasedVariance(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetSqrtOfUnbiasedVariance(const HistData1d* const* const in_arr,
+                                              int narr,
+                                              HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetSqrtOfUnbiasedVariance(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetRMS(const HistData1d* const* const in_arr,
+                           int narr,
+                           HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetRMS(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetMedian(const HistData1d* const* const in_arr,
+                              int narr,
+                              HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetMedian(da1d_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    delete da1d;
+}
+    
+                   
+void HistData1dOpe::GetSumWithMask(const HistData1d* const* const in_arr,
+                                   const HistData1d* const* const mask_arr,
+                                   int narr,
+                                   HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArray1d** da1d_mask_arr = GenDa1dArrNerr(mask_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetSumWithMask(da1d_arr, da1d_mask_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    DataArray1dOpe::DelDa1dArr(da1d_mask_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetSumWithMask(const HistData1d* const* const in_arr,
+                                   const HistData1d* const* const mask_arr,
+                                   int narr,
+                                   HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArray1d** da1d_mask_arr = GenDa1dArrNerr(mask_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetSumWithMask(da1d_arr, da1d_mask_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    DataArray1dOpe::DelDa1dArr(da1d_mask_arr, narr);
+    delete da1d;
+}
+    
+    
+void HistData1dOpe::GetAMeanWithMask(const HistData1d* const* const in_arr,
+                                     const HistData1d* const* const mask_arr,
+                                     int narr,
+                                     HistDataNerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrNerr(in_arr, narr);
+    DataArray1d** da1d_mask_arr = GenDa1dArrNerr(mask_arr, narr);
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    DataArray1dOpe::GetAMeanWithMask(da1d_arr, da1d_mask_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    DataArray1dOpe::DelDa1dArr(da1d_mask_arr, narr);
+    delete da1d;
+}
+    
+void HistData1dOpe::GetAMeanWithMask(const HistData1d* const* const in_arr,
+                                     const HistData1d* const* const mask_arr,
+                                     int narr,
+                                     HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArray1d** da1d_mask_arr = GenDa1dArrNerr(mask_arr, narr);
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArray1dOpe::GetAMeanWithMask(da1d_arr, da1d_mask_arr, narr, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    DataArray1dOpe::DelDa1dArr(da1d_mask_arr, narr);
+    delete da1d;
+}
+    
+    
+int HistData1dOpe::GetWMeanWithMask(const HistData1d* const* const in_arr,
+                                    const HistData1d* const* const mask_arr,
+                                    int narr,
+                                    HistDataNerr1d* const mask_sel_out,
+                                    HistDataSerr1d* const out)
+{
+    DataArray1d** da1d_arr = GenDa1dArrSerr(in_arr, narr);
+    DataArray1d** da1d_mask_arr = GenDa1dArrNerr(mask_arr, narr);    
+    DataArraySerr1d* da1d = new DataArraySerr1d;
+    DataArrayNerr1d* da1d_mask_sel = new DataArrayNerr1d;
+    int ret = DataArray1dOpe::GetWMeanWithMask(da1d_arr, da1d_mask_arr,
+                                               narr, da1d_mask_sel, da1d);
+    out->Init(in_arr[0]->GetHi1d());
+    out->SetOvalArr(da1d);
+    mask_sel_out->Init(in_arr[0]->GetHi1d());
+    mask_sel_out->SetOvalArr(da1d_mask_sel);
+    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+    DataArray1dOpe::DelDa1dArr(da1d_mask_arr, narr);
+    delete da1d;
+    delete da1d_mask_sel;
+    return ret;
+}
+
+
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                 const MirFunc* const func,
+                                  const double* const par,
+                                  HistDataNerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->Eval(xval, par);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    delete [] oval_res;
+}
+
+
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                  const MirFunc* const func,
+                                  const double* const par,
+                                  HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->Eval(xval, par);
+        oval_res_serr[ibin] = data->GetOvalSerrElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                  const HistDataNerr1d* const func,
+                                  HistDataNerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->GetOvalElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    delete [] oval_res;
+}
+
+
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                  const HistDataNerr1d* const func,
+                                  HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval = data->GetBinCenter(ibin);
+        long ibin_func = func->GetIbin(xval);
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func);
+        oval_res_serr[ibin] = data->GetOvalSerrElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const MirFunc* const func,
+                                    const double* const par,
+                                    HistDataNerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    delete [] oval_res;
+}
+
+
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const MirFunc* const func,
+                                    const double* const par,
+                                    HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        if( func->Eval(xval, par) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
+            oval_res_serr[ibin] = fabs(data->GetOvalSerrElm(ibin) / func->Eval(xval, par));
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_serr[ibin] = 0.0;
+        }
+    }
+
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const HistDataNerr1d* const func,
+                                    HistDataNerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin)) /
+            func->GetOvalElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    delete [] oval_res;
+}
+
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const HistDataNerr1d* const func,
+                                    HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval = data->GetBinCenter(ibin);
+        long ibin_func = func->GetIbin(xval);
+        if( func->GetOvalElm(ibin_func) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
+                func->GetOvalElm(ibin_func);
+            oval_res_serr[ibin] = fabs(data->GetOvalSerrElm(ibin) / func->GetOvalElm(ibin_func));
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_serr[ibin] = 0.0;
+        }
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+
+void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
+                                  const MirFunc* const func,
+                                  const double* const par,
+                                  HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        oval_res[ibin] = ( data->GetOvalElm(ibin) - func->Eval(xval, par) ) / 
+            data->GetOvalSerrElm(ibin);
+        oval_res_serr[ibin] = 1.0;
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+
+void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
+                                  const HistDataNerr1d* const func,
+                                  HistDataSerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_serr = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval = data->GetBinCenter(ibin);
+        long ibin_func = func->GetIbin(xval);
+        oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
+            data->GetOvalSerrElm(ibin);
+        oval_res_serr[ibin] = 1.0;
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalSerrArr(nbin, oval_res_serr);
+    delete [] oval_res;
+    delete [] oval_res_serr;
+}
+
+// power spec
+
+void HistData1dOpe::GetPowSpecNonfft(const HistData1d* const in,
+                                     HistDataNerr1d* const out)
+{
+    long nbin = in->GetNbinX();
+    double tbinfwidth = in->GetXvalBinWidth();
   
     double* out_real = new double [nbin];
     double* out_imag = new double [nbin];
@@ -39,9 +1055,9 @@ void HistData1dOpe::GetPowSpecNonfft(const HistDataNerr1d* const hist_data,
         out_imag[ibin] = 0.0;
         for(long jbin = 0; jbin < nbin; jbin++){
             out_real[ibin] += cos(2 * M_PI * jbin * ibin /(nbin))
-                * hist_data->GetOvalElm(jbin);
+                * in->GetOvalElm(jbin);
             out_imag[ibin] += sin(2 * M_PI * jbin * ibin /(nbin))
-                * hist_data->GetOvalElm(jbin);
+                * in->GetOvalElm(jbin);
         }
     }
 
@@ -60,314 +1076,14 @@ void HistData1dOpe::GetPowSpecNonfft(const HistDataNerr1d* const hist_data,
 
     double xval_lo = -0.5 / (nbin * tbinfwidth);
     double xval_up = (nbin + 0.5) / (nbin * tbinfwidth);
-    hist_data_out->Init(nbin + 1, xval_lo, xval_up);
-    hist_data_out->SetOvalArr(nbin + 1, power);
+    out->Init(nbin + 1, xval_lo, xval_up);
+    out->SetOvalArr(nbin + 1, power);
 
     delete [] out_real;
     delete [] out_imag;
     delete [] freq;
     delete [] power;
 }
-
-
-void HistData1dOpe::GetResValHd1(const HistDataNerr1d* const hist_data,
-                                 const MirFunc* const func, const double* const par,
-                                 HistDataNerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenter(ibin);
-        oval_res[ibin] = hist_data->GetOvalElm(ibin) - func->Eval(xval, par);
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    delete [] oval_res;
-}
-
-
-void HistData1dOpe::GetResValHd1(const HistDataSerr1d* const hist_data,
-                                 const MirFunc* const func, const double* const par,
-                                 HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenter(ibin);
-        oval_res[ibin] = hist_data->GetOvalElm(ibin) - func->Eval(xval, par);
-        oval_res_serr[ibin] = hist_data->GetOvalSerrElm(ibin);
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-
-void HistData1dOpe::GetResValHd1(const HistDataNerr1d* const hist_data,
-                                 const HistDataNerr1d* const hist_func,
-                                 HistDataNerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        oval_res[ibin] = hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin);
-    }
-
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    
-    delete [] oval_res;
-}
-
-
-void HistData1dOpe::GetResValHd1(const HistDataSerr1d* const hist_data,
-                                 const HistDataNerr1d* const hist_func,
-                                 HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenter(ibin);
-        long ibin_func = hist_func->GetIbin(xval);
-        oval_res[ibin] = hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func);
-        oval_res_serr[ibin] = hist_data->GetOvalSerrElm(ibin);
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-
-void HistData1dOpe::GetResRatioHd1(const HistDataNerr1d* const hist_data,
-                                   const MirFunc* const func, const double* const par,
-                                   HistDataNerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenter(ibin);
-        oval_res[ibin] = (hist_data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    delete [] oval_res;
-}
-
-
-void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
-                                   const MirFunc* const func, const double* const par,
-                                   HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenter(ibin);
-        if( func->Eval(xval, par) > DBL_EPSILON){
-            oval_res[ibin] = (hist_data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
-            oval_res_serr[ibin] = fabs(hist_data->GetOvalSerrElm(ibin) / func->Eval(xval, par));
-        } else {
-            oval_res[ibin] = 0.0;
-            oval_res_serr[ibin] = 0.0;
-        }
-    }
-
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-void HistData1dOpe::GetResRatioHd1(const HistDataNerr1d* const hist_data,
-                                   const HistDataNerr1d* const hist_func,
-                                   HistDataNerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin)) /
-            hist_func->GetOvalElm(ibin);
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    
-    delete [] oval_res;
-}
-
-
-
-void HistData1dOpe::GetResRatioHd1(const HistDataSerr1d* const hist_data,
-                                   const HistDataNerr1d* const hist_func,
-                                   HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenter(ibin);
-        long ibin_func = hist_func->GetIbin(xval);
-        if( hist_func->GetOvalElm(ibin_func) > DBL_EPSILON){
-            oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func)) /
-                hist_func->GetOvalElm(ibin_func);
-            oval_res_serr[ibin] = fabs(hist_data->GetOvalSerrElm(ibin) / hist_func->GetOvalElm(ibin_func));
-        } else {
-            oval_res[ibin] = 0.0;
-            oval_res_serr[ibin] = 0.0;
-        }
-    }
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-
-void HistData1dOpe::GetResChiHd1(const HistDataSerr1d* const hist_data,
-                                 const MirFunc* const func, const double* const par,
-                                 HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval[1];
-        xval[0] = hist_data->GetBinCenter(ibin);
-        oval_res[ibin] = ( hist_data->GetOvalElm(ibin) - func->Eval(xval, par) ) / 
-            hist_data->GetOvalSerrElm(ibin);
-        oval_res_serr[ibin] = 1.0;
-    }
-
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-
-void HistData1dOpe::GetResChiHd1(const HistDataSerr1d* const hist_data,
-                                 const HistDataNerr1d* const hist_func,
-                                 HistDataSerr1d* const hist_res_out)
-{
-    long nbin = hist_data->GetNbinX();
-    double* oval_res = new double[nbin];
-    double* oval_res_serr = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        double xval = hist_data->GetBinCenter(ibin);
-        long ibin_func = hist_func->GetIbin(xval);
-        oval_res[ibin] = (hist_data->GetOvalElm(ibin) - hist_func->GetOvalElm(ibin_func)) /
-            hist_data->GetOvalSerrElm(ibin);
-        oval_res_serr[ibin] = 1.0;
-    }
-
-    hist_res_out->Init(nbin, hist_data->GetXvalLo(), hist_data->GetXvalUp());
-    hist_res_out->SetOvalArr(nbin, oval_res);
-    hist_res_out->SetOvalSerrArr(nbin, oval_res_serr);
-    
-    delete [] oval_res;
-    delete [] oval_res_serr;
-}
-
-
-
-int HistData1dOpe::IsFormatSame(const HistData1d* const hist_data1,
-                                const HistData1d* const hist_data2)
-{
-    if(hist_data1->GetNbinX() != hist_data2->GetNbinX() ||
-       fabs(hist_data1->GetXvalLo() - hist_data2->GetXvalLo()) > DBL_EPSILON ||
-       fabs(hist_data1->GetXvalUp() - hist_data2->GetXvalUp()) > DBL_EPSILON ){
-        MPrintErr("format of hist_data1 and hist_data2 are diffenret.");
-        char msg[kLineSize];
-        sprintf(msg, "hist_data1: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
-                hist_data1->GetNbinX(),
-                hist_data1->GetXvalLo(),
-                hist_data1->GetXvalUp());
-        MPrintErr(msg);
-        sprintf(msg, "hist_data2: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
-                hist_data2->GetNbinX(),
-                hist_data2->GetXvalLo(),
-                hist_data2->GetXvalUp());
-        MPrintErr(msg);
-        abort();
-    }
-    return 1;
-}
-
-int HistData1dOpe::IsFormatSame(const HistDataNerr1d* const* const hist_data_arr,
-                                int nhist)
-{
-    if(nhist < 2){
-        char msg[kLineSize];
-        sprintf(msg, "nhist(=%d) < 2\n", nhist);
-        MPrintWarn(msg);
-        MPrintWarn("skip check");
-        return 0;
-    }
-    for(int ihist = 1; ihist < nhist; ihist++){
-        if(hist_data_arr[0]->GetNbinX()  != hist_data_arr[ihist]->GetNbinX()  ||
-           fabs(hist_data_arr[0]->GetXvalLo() - hist_data_arr[ihist]->GetXvalLo()) > DBL_EPSILON ||
-           fabs(hist_data_arr[0]->GetXvalUp() - hist_data_arr[ihist]->GetXvalUp()) > DBL_EPSILON ){
-            char msg[kLineSize];
-            sprintf(msg, "format of hist_data_arr[0] and hist_data_arr[%d] are diffenret", ihist);
-            MPrintErr(msg);
-            sprintf(msg, "hist_data_arr[0]: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
-                    hist_data_arr[0]->GetNbinX(),
-                    hist_data_arr[0]->GetXvalLo(),
-                    hist_data_arr[0]->GetXvalUp());
-            MPrintErr(msg);            
-            sprintf(msg, "hist_data_arr[%d]: (GetNbinX(), GetXvalLo(), GetXvalUp()) = (%ld, %e, %e)",
-                    ihist,
-                    hist_data_arr[ihist]->GetNbinX(),
-                    hist_data_arr[ihist]->GetXvalLo(),
-                    hist_data_arr[ihist]->GetXvalUp());
-            MPrintErr(msg);            
-            sprintf(msg, "hist_data_arr[0]->GetXvalLo() - hist_data_arr[%d]->GetXvalLo() = %e\n",
-                    ihist,
-                    fabs(hist_data_arr[0]->GetXvalLo() - hist_data_arr[ihist]->GetXvalLo()));
-            MPrintErr(msg);            
-            sprintf(msg, "hist_data_arr[0]->GetXvalUp() - hist_data_arr[%d]->GetXvalUp() = %e\n",
-                    ihist,
-                    fabs(hist_data_arr[0]->GetXvalUp() - hist_data_arr[ihist]->GetXvalUp()));
-            abort();
-        }
-    }
-    return 1;
-}
-
-
-int HistData1dOpe::IsFormatSame(const HistDataSerr1d* const* const hist_data_arr,
-                                int nhist)
-{
-    HistDataNerr1d** h1d_arr = new HistDataNerr1d* [nhist];
-    for(int ihist = 1; ihist < nhist; ihist++){
-        h1d_arr[ihist] = new HistDataNerr1d;
-        h1d_arr[ihist]->Copy(hist_data_arr[ihist]);
-    }
-    IsFormatSame(h1d_arr, nhist);
-
-    for(int ihist = 1; ihist < nhist; ihist++){
-        delete h1d_arr[ihist]; h1d_arr[ihist] = NULL;
-    }
-    delete [] h1d_arr;
-    return 1;
-}
-
 
 
 // Init & Set by graph2d, only if xval_arr of graph2d is the same as hist_info
@@ -424,3 +1140,5 @@ void HistData1dOpe::IsValidForSetByGd2d(const HistData1d* const hd1d,
         }
     }
 }
+
+

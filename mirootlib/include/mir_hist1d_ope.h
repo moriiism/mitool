@@ -10,113 +10,284 @@
 #include "mir_hist1d_nerr.h"
 #include "mir_hist1d_serr.h"
 #include "mir_hist1d_terr.h"
+#include "mir_graph2d.h"
 
 namespace HistData1dOpe
 {
     HistData1d* const GenHd1dByLoad(string file);
 
-    // select_type: center, exclusive
-    //   center:      select a bin whose center is located in an interval.
-    //   exclusive:   select only the full bins, meaning to exclude bins at the interval edge.
-    void GetSelectHd1dByInterval(const HistDataNerr1d* const hist_data,
-                                 const Interval* const interval,
-                                 HistDataNerr1d* const hist_out,
-                                 string select_type = "exclusive");
-    void GetSelectHd1dByInterval(const HistDataSerr1d* const hist_data,
-                                 const Interval* const interval,
-                                 HistDataSerr1d* const hist_out,
-                                 string select_type = "exclusive");
-    void GetSelectHd1dByInterval(const HistDataTerr1d* const hist_data,
-                                 const Interval* const interval,
-                                 HistDataTerr1d* const hist_out,
-                                 string select_type = "exclusive");    
-    
-    void GenSelectHd1dArrByInterval(const HistDataNerr1d* const hist_data,
-                                    const Interval* const interval,
-                                    HistDataNerr1d*** hd1d_arr_ptr,
-                                    string select_type = "exclusive");
-    void GenSelectHd1dArrByInterval(const HistDataSerr1d* const hist_data,
-                                    const Interval* const interval,
-                                    HistDataSerr1d*** hd1d_arr_ptr,
-                                    string select_type = "exclusive");
-    void GenSelectHd1dArrByInterval(const HistDataTerr1d* const hist_data,
-                                    const Interval* const interval,
-                                    HistDataTerr1d*** hd1d_arr_ptr,
-                                    string select_type = "exclusive");    
-    
-    void GetPowSpec(const HistDataNerr1d* const hist_data,
-                    HistDataNerr1d* hist_data_out);
-    void GetPowSpecLeahyNorm(const HistDataNerr1d* const hist_data,
-                             HistDataNerr1d* hist_data_out);
-    void GetPowSpecNonfft(const HistDataNerr1d* const hist_data,
-                          HistDataNerr1d* hist_data_out);
-    
-    void GetPowSpecDecomp(long mbin, const HistDataNerr1d* const hist_data,
-                          HistDataNerr1d* hist_data_out);
-    void GetPowSpecDecompNonfft(long mbin, const HistDataNerr1d* const hist_data,
-                                HistDataNerr1d* hist_data_out);
-    void GetAutoCorr(const HistDataNerr1d* const hist_data,
-                     HistData1d* hist_data_out);
-    void GetCrossCorr(const HistDataNerr1d* const hist_data1,
-                      const HistDataNerr1d* const hist_data2,
-                      HistData1d* hist_data_out);
+    DataArray1d** const GenDa1dArrNerr(const HistData1d* const* const hd1d_arr,
+                                       int narr);
+    DataArray1d** const GenDa1dArrSerr(const HistData1d* const* const hd1d_arr,
+                                       int narr);
+    DataArray1d** const GenDa1dArrTerr(const HistData1d* const* const hd1d_arr,
+                                       int narr);
+    void DelHd1dArr(HistData1d** const hd1d_arr, int narr);
 
-    void GetResValHd1(const HistDataNerr1d* const hist_data,
-                      const MirFunc* const func, const double* const par,
-                      HistDataNerr1d* const hist_res_out);
-    void GetResValHd1(const HistDataSerr1d* const hist_data,
-                      const MirFunc* const func, const double* const par,
-                      HistDataSerr1d* const hist_res_out);
-    void GetResValHd1(const HistDataTerr1d* const hist_data,
-                      const MirFunc* const func, const double* const par,
-                      HistDataTerr1d* const hist_res_out);
-    
-    void GetResValHd1(const HistDataNerr1d* const hist_data,
-                      const HistDataNerr1d* const hist_func,
-                      HistDataNerr1d* const hist_res_out);
-    void GetResValHd1(const HistDataSerr1d* const hist_data,
-                      const HistDataNerr1d* const hist_func,
-                      HistDataSerr1d* const hist_res_out);
-    void GetResValHd1(const HistDataTerr1d* const hist_data,
-                      const HistDataNerr1d* const hist_func,
-                      HistDataTerr1d* const hist_res_out);
-
-    void GetResRatioHd1(const HistDataNerr1d* const hist_data,
-                        const MirFunc* const func, const double* const par,
-                        HistDataNerr1d* const hist_res_out);
-    void GetResRatioHd1(const HistDataSerr1d* const hist_data,
-                        const MirFunc* const func, const double* const par,
-                        HistDataSerr1d* const hist_res_out);
-    void GetResRatioHd1(const HistDataTerr1d* const hist_data,
-                        const MirFunc* const func, const double* const par,
-                        HistDataTerr1d* const hist_res_out);
-    
-    void GetResRatioHd1(const HistDataNerr1d* const hist_data,
-                        const HistDataNerr1d* const hist_func,
-                        HistDataNerr1d* const hist_res_out);
-    void GetResRatioHd1(const HistDataSerr1d* const hist_data,
-                        const HistDataNerr1d* const hist_func,
-                        HistDataSerr1d* const hist_res_out);
-    void GetResRatioHd1(const HistDataTerr1d* const hist_data,
-                        const HistDataNerr1d* const hist_func,
-                        HistDataTerr1d* const hist_res_out);
-
-    void GetResChiHd1(const HistDataSerr1d* const hist_data,
-                      const MirFunc* const func, const double* const par,
-                      HistDataSerr1d* const hist_res_out);
-    void GetResChiHd1(const HistDataSerr1d* const hist_data,
-                      const HistDataNerr1d* const hist_func,
-                      HistDataSerr1d* const hist_res_out);
-
-    int IsFormatSame(const HistData1d* const hist_data1,
-                     const HistData1d* const hist_data2);
-    int IsFormatSame(const HistDataNerr1d* const* const hist_data_arr,
+    int IsFormatSame(const HistData1d* const data1,
+                     const HistData1d* const data2);
+    int IsFormatSame(const HistData1d* const* const data_arr,
                      int nhist);
-    int IsFormatSame(const HistDataSerr1d* const* const hist_data_arr,
-                     int nhist);
-    int IsFormatSame(const HistDataTerr1d* const* const hist_data_arr,
-                     int nhist);
+    
+    // For one HistData1d
+    void GetNot(const HistData1d* const in,
+                HistDataNerr1d* const out);
+    void GetNot(const HistData1d* const in,
+                HistDataSerr1d* const out);
+    void GetNot(const HistData1d* const in,
+                HistDataTerr1d* const out);
+    
+    void GetScale(const HistData1d* const in,
+                  double scale, double offset,
+                  HistDataNerr1d* const out);
+    void GetScale(const HistData1d* const in,
+                  double scale, double offset,
+                  HistDataSerr1d* const out);
+    void GetScale(const HistData1d* const in,
+                  double scale, double offset,
+                  HistDataTerr1d* const out);
 
+    // For two HistData1d
+    void GetMin(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataNerr1d* const out);
+    void GetMin(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataSerr1d* const out);
+    void GetMin(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataTerr1d* const out);
+    
+    void GetMax(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataNerr1d* const out);
+    void GetMax(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataSerr1d* const out);
+    void GetMax(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataTerr1d* const out);
+    
+    void GetAdd(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataNerr1d* const out);
+    void GetAdd(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataSerr1d* const out);
+    
+    void GetSub(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataNerr1d* const out);
+    void GetSub(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataSerr1d* const out);
+    
+    void GetMul(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataNerr1d* const out);
+    void GetMul(const HistData1d* const in1,
+                const HistData1d* const in2,
+                HistDataSerr1d* const out);
+    
+    int GetDiv(const HistData1d* const num,
+               const HistData1d* const den,
+               HistDataNerr1d* const mask_sel_out,
+               HistDataNerr1d* const out);
+    int GetDiv(const HistData1d* const num,
+               const HistData1d* const den,
+               HistDataNerr1d* const mask_sel_out,
+               HistDataSerr1d* const out);
+    
+    void GetAMean(const HistData1d* const in1,
+                  const HistData1d* const in2,
+                  HistDataNerr1d* const out);
+    void GetAMean(const HistData1d* const in1,
+                  const HistData1d* const in2,
+                  HistDataSerr1d* const out);
+    
+    int GetWMean(const HistData1d* const in1,
+                 const HistData1d* const in2,
+                 HistDataNerr1d* const mask_sel_out,
+                 HistDataSerr1d* const out);
+
+    int GetSubAddRatio(const HistData1d* const in1,
+                       const HistData1d* const in2,
+                       HistDataNerr1d* const mask_sel_out,
+                       HistDataNerr1d* const out);
+
+    int GetSubAddRatio(const HistData1d* const in1,
+                       const HistData1d* const in2,
+                       HistDataNerr1d* const mask_sel_out,
+                       HistDataSerr1d* const out);
+    
+    // For N HistData1d
+    void GetMin(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataNerr1d* const out);
+    void GetMin(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataSerr1d* const out);
+    void GetMin(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataTerr1d* const out);
+    
+    void GetMax(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataNerr1d* const out);
+    void GetMax(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataSerr1d* const out);
+    void GetMax(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataTerr1d* const out);
+    
+    void GetSum(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataNerr1d* const out);
+    void GetSum(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataSerr1d* const out);
+    
+    void GetAMean(const HistData1d* const* const in_arr,
+                  int narr,
+                  HistDataNerr1d* const out);
+    void GetAMean(const HistData1d* const* const in_arr,
+                  int narr,
+                  HistDataSerr1d* const out);
+    
+    int GetWMean(const HistData1d* const* const in_arr,
+                 int narr,
+                 HistDataNerr1d* const mask_sel_out,
+                 HistDataSerr1d* const out);
+    
+    void GetVariance(const HistData1d* const* const in_arr,
+                     int narr,
+                     HistDataNerr1d* const out);
+    void GetStddev(const HistData1d* const* const in_arr,
+                   int narr,
+                   HistDataNerr1d* const out);
+    void GetUnbiasedVariance(const HistData1d* const* const in_arr,
+                             int narr,
+                             HistDataNerr1d* const out);
+    void GetSqrtOfUnbiasedVariance(const HistData1d* const* const in_arr,
+                                   int narr,
+                                   HistDataNerr1d* const out);
+    void GetRMS(const HistData1d* const* const in_arr,
+                int narr,
+                HistDataNerr1d* const out);
+    void GetMedian(const HistData1d* const* const in_arr,
+                   int narr,
+                   HistDataNerr1d* const out);
+                   
+    void GetSumWithMask(const HistData1d* const* const in_arr,
+                        const HistData1d* const* const mask_arr,
+                        int narr,
+                        HistDataNerr1d* const out);
+    void GetSumWithMask(const HistData1d* const* const in_arr,
+                        const HistData1d* const* const mask_arr,
+                        int narr,
+                        HistDataSerr1d* const out);
+    
+    void GetAMeanWithMask(const HistData1d* const* const in_arr,
+                          const HistData1d* const* const mask_arr,
+                          int narr,
+                          HistDataNerr1d* const out);
+    void GetAMeanWithMask(const HistData1d* const* const in_arr,
+                          const HistData1d* const* const mask_arr,
+                          int narr,
+                          HistDataSerr1d* const out);
+    
+    int GetWMeanWithMask(const HistData1d* const* const in_arr,
+                         const HistData1d* const* const mask_arr,
+                         int narr,
+                         HistDataNerr1d* const mask_sel_out,
+                         HistDataSerr1d* const out);
+  
+    // residual
+    void GetResValHd1d(const HistData1d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       HistDataNerr1d* const out);
+    void GetResValHd1d(const HistData1d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       HistDataSerr1d* const out);
+    void GetResValHd1d(const HistData1d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       HistDataTerr1d* const out);
+    
+    void GetResValHd1d(const HistData1d* const data,
+                       const HistDataNerr1d* const func,
+                       HistDataNerr1d* const out);
+    void GetResValHd1d(const HistData1d* const data,
+                       const HistDataNerr1d* const func,
+                       HistDataSerr1d* const out);
+    void GetResValHd1d(const HistData1d* const data,
+                       const HistDataNerr1d* const func,
+                       HistDataTerr1d* const out);
+
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         HistDataNerr1d* const out);
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         HistDataSerr1d* const out);
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const MirFunc* const func,
+                         const double* const par,
+                         HistDataTerr1d* const out);
+    
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const HistDataNerr1d* const func,
+                         HistDataNerr1d* const out);
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const HistDataNerr1d* const func,
+                         HistDataSerr1d* const out);
+    void GetResRatioHd1d(const HistData1d* const data,
+                         const HistDataNerr1d* const func,
+                         HistDataTerr1d* const out);
+
+    void GetResChiHd1d(const HistData1d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       HistDataSerr1d* const out);
+    void GetResChiHd1d(const HistData1d* const data,
+                       const MirFunc* const func,
+                       const double* const par,
+                       HistDataTerr1d* const out);
+
+    void GetResChiHd1d(const HistData1d* const data,
+                       const HistDataNerr1d* const func,
+                       HistDataSerr1d* const out);
+    void GetResChiHd1d(const HistData1d* const data,
+                       const HistDataNerr1d* const func,
+                       HistDataTerr1d* const out);    
+
+    void FillGd1d(const GraphDataNerr2d* const gd2d,
+                  HistDataNerr1d* const out);
+
+    
+    // power spectrum
+    void GetPowSpec(const HistData1d* const in,
+                    HistDataNerr1d* const out);
+    void GetPowSpecLeahyNorm(const HistData1d* const in,
+                             HistDataNerr1d* const out);
+    void GetPowSpecNonfft(const HistData1d* const in,
+                          HistDataNerr1d* const out);
+    
+    void GetPowSpecDecomp(long mbin, const HistData1d* const in,
+                          HistDataNerr1d* const out);
+    void GetPowSpecDecompNonfft(long mbin, const HistData1d* const in,
+                                HistDataNerr1d* const out);
+    void GetAutoCorr(const HistData1d* const in,
+                     HistDataNerr1d* out);
+    void GetCrossCorr(const HistData1d* const in1,
+                      const HistData1d* const in2,
+                      HistDataNerr1d* const out);
+    
     // Init & Set by graph2d, only if xval_arr of graph2d is the same as hist_info
     HistData1d* const GenHd1dByHistInfoAndGraphData2d(const HistInfo1d* const hist_info,
                                                       const GraphData2d* const g2d);

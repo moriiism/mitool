@@ -1,0 +1,96 @@
+#
+# draw_func_list_2d.txt
+#
+
+関数のグラフを描く。
+(N graph, 2 dim) 
+
+#
+# argument
+#
+    func_par_list
+    plot_conf_file
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --plotmode (on)/off
+  --printmode (on)/off
+  --root_style (def)/std/pub/detail
+
+#
+# example
+#
+
+cd ~/temp
+
+
+mkdir data
+
+bindir=
+func_par_list=data/func_par.list
+plot_conf_file=data/plot_conf.dat
+outdir=draw_func_list_2d
+outfile_head=func_list
+
+
+cat << EOF > data/par0.dat
+# par_name  par
+sigma_xp  1.0
+sigma_yp  1.0
+norm      10.0
+rot_angle  0.0
+mu_xp      0.0
+mu_yp      0.0
+shift_z   50.0
+EOF
+
+cat << EOF > data/par1.dat
+# par_name  par
+sigma_xp  1.0
+sigma_yp  1.0
+norm      1000.0
+rot_angle  0.0
+mu_xp      5.0
+mu_yp      2.0
+shift_z   50.0
+EOF
+
+
+cat << EOF > data/par2.dat
+# par_name  par
+sigma_xp  1.0
+sigma_yp  1.0
+norm      100.0
+rot_angle  0.0
+mu_xp      0.0
+mu_yp      3.0
+shift_z   5.0
+EOF
+
+cat << EOF > data/func_par.list
+# func_name   parfile   style  color  lo_x   up_x   lo_y  up_y
+Gauss2dFunc            data/par0.dat   1  1   -10  10  -10  10   
+Gauss2dFunc            data/par1.dat   1  2   -10  10  -10  10   
+Gauss2dFunc            data/par2.dat   1  3   -10  20  -10  10   
+EOF
+
+cat << EOF > data/plot_conf.dat
+# lo  up  scale  ! label
+-10.0  10.0   lin  ! time
+-10.0  10.0    lin  ! bex
+0.0    1000   lin  ! rate
+EOF
+
+
+$bindir/draw_func_list_2d \
+$func_par_list \
+$plot_conf_file \
+$outdir \
+$outfile_head

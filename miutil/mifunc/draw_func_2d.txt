@@ -1,0 +1,88 @@
+#
+# draw_func_2d.txt
+#
+
+関数のグラフを描く。
+(1 graph, 2 dim) 
+
+#
+# argument
+#
+
+    func_name
+    par_file
+    plot_conf_file
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+  --npoint_func (500)
+  --plotmode
+  --printmode
+  --root_style
+
+#
+# example
+#
+
+cd ~/temp
+
+
+mkdir setup
+
+func_name="Gauss2dFunc"
+par_file=setup/par.dat
+plot_conf_projx_file=setup/plot_conf_projx.dat
+plot_conf_projy_file=setup/plot_conf_projy.dat
+outdir=draw_func_2d
+outfile_head=try1
+npoint_func=50
+
+cat << EOF > setup/par.dat
+# par_name  par
+sigma_xp  1.0
+sigma_yp  3.0
+norm      1000.0
+rot_angle  0.785398163397448
+mu_xp      0.0
+mu_yp      0.0
+shift_z   50.0
+EOF
+
+cat << EOF > setup/plot_conf_projx.dat
+# lo  up  offset  scale  ! label
+-20.0  0.0   10.0 lin  ! time
+none   none  no  lin  ! rate
+EOF
+
+cat << EOF > setup/plot_conf_projy.dat
+# lo  up  offset  scale  ! label
+-10.0  10.0  no  lin  ! bex
+none   none  no  lin  ! rate
+EOF
+
+$MITOOL/miutil/mifunc/draw_func_2d \
+--npoint_func $npoint_func \
+-- \
+$func_name \
+$par_file \
+$plot_conf_projx_file \
+$plot_conf_projy_file \
+$outdir \
+$outfile_head
+
+
+output:
+
+draw_func_2d/try1_colz.png
+draw_func_2d/try1_draw_func_2d.log
+draw_func_2d/try1_lego.png
+draw_func_2d/try1_projx.qdp
+draw_func_2d/try1_projy.qdp
+

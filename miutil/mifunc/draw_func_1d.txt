@@ -1,0 +1,66 @@
+#
+# draw_func_1d.txt
+#
+
+関数のグラフを描く。
+(1 graph, 1 dim) 
+
+#
+# argument
+#
+
+    func_name
+    par_file
+    plot_conf_file
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+  --npoint_func (500)
+  --plotmode
+  --printmode
+  --root_style
+
+#
+# example
+#
+
+cd ~/temp
+
+mkdir setup
+
+func_name="Gauss1dPlusConstFunc"
+par_file=setup/par.dat
+plot_conf_file=setup/plot_conf.dat
+outdir=draw_func_1d
+outfile_head=try1
+npoint_func=50
+
+cat << EOF > setup/par.dat
+# par_name  par
+mu_xp       15.0
+sigma_xp     5.0
+rate       100.0
+cons        10.0
+EOF
+
+cat << EOF > setup/plot_conf.dat
+# lo  up  offset  scale  ! label
+  0.2   200.0  no   log  ! time 
+  0.0   20.0   no   lin  ! rate 
+EOF
+
+$MITOOL/miutil/mifunc/draw_func_1d \
+--npoint_func $npoint_func \
+-- \
+$func_name \
+$par_file \
+$plot_conf_file \
+$outdir \
+$outfile_head

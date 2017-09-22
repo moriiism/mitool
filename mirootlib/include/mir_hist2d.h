@@ -158,6 +158,8 @@ public:
                                 long* const nbin_ptr) const
         {MPrintErrVFunc; abort();};
 
+    double GetOvalIntPolLin(double xval, double yval) const;
+    
     //
     // output
     //

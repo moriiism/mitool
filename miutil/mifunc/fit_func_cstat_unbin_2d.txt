@@ -1,0 +1,183 @@
+#
+# fit_func_cstat_unbin_2d.txt
+#
+
+cstat (unbinned likelihood) で fit する。
+2次元。
+
+#
+# argument:
+#
+    data_file    
+    func_name    : rate(count/sec/y_unit) の値を返す関数。
+    hist_mask    : mask file to event selection
+    fitpar       : function の parameter の設定ファイル。
+    chi2par      : minfcn (= chi2 or cstat) の値  v.s.  parameter のplot の設定ファイル。
+                   必要無ければ、none を設定する。
+    chi2cont_par : minfcn (= chi2 or cstat) の値  v.s. (parameter 1, parameter 2) のplotの設定ファイル。
+                   必要無ければ、none を設定する。
+    hist_info    : 結果を表示するためのhistogramの info
+    minfcn_name  : "CstatUnbinFcn2d" or "CstatUnbinPhysFcn2d" 
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --plotmode (on)/off
+  --printmode (on)/off
+  --root_style (def)/std/pub/detail
+
+#
+# 設定files
+#
+  
+  #
+  # data_file
+  #
+    数字の行列。 x, y column だけ。
+
+  #
+  # fitpar
+  #
+    format: 
+       par_name      init      err         lo           up      flag_calc_terr   index_comp
+
+       par_name: name of parameters
+       init    : 初期値
+       err     : ステップサイズ
+                 fix する場合は、マイナスの値を設定する。
+       lo      : lower boundary
+       up      : upper boundary
+
+                 boundary を設定しない場合は、両方とも "none" にセットする。
+                 boundary を設定する場合は、両方ともセットする。片方だけセットすることはできない。
+
+       flag_calc_terr : minos error を計算するかどうか (1/0)
+       index_comp     : function が 各component に分割できる場合の index (0, 1, 2, ...)
+                        必要ない場合は、0 に設定する。
+
+  #
+  # chi2par
+  #
+    format:
+       index  nstep  low   up  sigma  index1
+       
+       index  : index of parameter: fitpar の parameter index (0 から数える)
+       nstep  : number of steps
+       lo     : lower boundary
+       up     : upper boundary
+       sigma  : fitting を行った結果得られた 誤差 の sigma 倍の範囲をsearch する。
+
+         lo, up, sigma は関連している。
+           (lo, up) が (none, none) のときは、sigma に数字を設定する。
+           (lo, up) が共に 数字のときは、sigma にnone を設定する。
+           それ以外の組み合わせのときは abort する。
+
+       index1 : 他のparameter がどのように変化するかを調べる。
+                none:         必要ないとき。
+                all:          全てを調べる。
+                all_free:     fixed parameter でない全てのパラメータを調べる。
+                others:       同じパラメータは除く。
+                others_free:  fixed parameter でなく、また同じパラメータでないもの。
+                1,2,3  のようにも指定できる。
+                一番便利なのは、others_free
+
+  #
+  # chi2cont_par
+  #  
+
+    format: 
+      index0  nstep0  lo0     up0   sigma0    index1  nstep1   lo1    up1   sigma1    index2
+      
+      chi2par と同様。
+
+#
+# example
+#
+
+# sim_func_rate_2d.txt で 作成した データを fitする。
+
+cd ~/temp
+
+mkdir data
+
+
+#########################################
+
+mask histogram が必要になる。
+
+cat << EOF > data/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+ 50      0   10   none  none
+ 50      0   10   none  none
+EOF
+
+$MITOOL/miutil/mihist/mk_mask_2d \
+data/hist_info.dat \
+data/mask.dat
+
+##############################################
+
+
+bindir=$MITOOL/miutil/mifunc
+data_file=sim_func_rate_2d/Gauss2dFunc_evt.dat
+func_name="Gauss2dFunc"
+hist_mask=data/mask.dat
+fitpar=data/fitpar.dat
+chi2par=data/chi2par.dat
+# chi2cont_par=data/chi2cont_par.dat
+
+# chi2par=none
+ chi2cont_par=none
+
+hist_info=data/hist_info.dat
+minfcn_name="CstatUnbinPhysFcn2d"
+outdir=fit_func_cstat_unbin_2d
+outfile_head=$func_name
+
+cat << EOF > data/fitpar.dat
+#  par_name      init      err         lo           up      flag_calc_terr   index_comp
+sigma_xp         1.0      -0.01       none         none          1                0
+sigma_yp         1.0      -0.01       none         none          1                0
+norm          1000.0       0.01       0            1e5          1                0
+rot_angle        0.0      -0.01       none         none          1                0
+mu_xp            5.0      -0.01       none         none          1                0
+mu_yp            5.0      -0.01       none         none          1                0
+shift_z         10.0       0.01       0            1e5          1                0
+EOF
+
+cat << EOF > data/chi2par.dat
+# index  nstep    lo      up   sigma     index1
+#0         50    none    none    3      others_free
+#1         50    none    none    3      others_free
+2         10      0      5000   none     others_free
+#3         50    none    none    3      others_free
+#4         50    none    none    3      others_free
+#5         50    none    none    3      others_free
+6         10      0      50     none    others_free
+EOF
+
+cat << EOF > data/chi2cont_par.dat
+# index0  nstep0  lo0     up0   sigma0    index1  nstep1   lo1    up1   sigma1    index2
+0          50     none    none    3        1      50       none   none   3      others_free
+EOF
+
+
+$bindir/fit_func_cstat_unbin_2d \
+$data_file \
+$func_name \
+$hist_mask \
+$fitpar \
+$chi2par \
+$chi2cont_par \
+$hist_info \
+$minfcn_name \
+$outdir \
+$outfile_head
+
+

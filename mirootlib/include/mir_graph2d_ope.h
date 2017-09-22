@@ -110,29 +110,36 @@ namespace GraphData2dOpe
                        const MirFunc* const func,
                        const double* const par,
                        GraphDataTerr2d* const out);
-    
-//
-//    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphDataSerr2d* const gd2d,
-//                                              double pval_threshold);
-//
-//    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphDataSerr2d* const gd2d,
-//                                              double pval_threshold);
-//
-//    void GetValBinned(vector<double> xval_vec,
-//                      vector<double> xval_serr_vec,
-//                      vector<double> oval_vec,
-//                      vector<double> oval_serr_vec,
-//                      double* xval_bin_center_ptr,
-//                      double* xval_bin_half_width_ptr,
-//                      double* wmean_ptr,
-//                      double* wmean_err_ptr);
 
-//    double GetIntegral(const GraphData2d* const gd2d,
-//                       double xval_lo, double xval_up);
-//    // Integral by trapezoid approximation
-//    double GetIntegralInner(const GraphDataNerr2d* const gd2d,
-//                            double xval_lo, double xval_up);
-//    double GetIntegralByTrapezoidApprox(const GraphDataNerr2d* const gd2d);
+    double GetIntegral(const GraphData2d* const gd2d,
+                       double xval_lo, double xval_up);
+    double GetIntegralPlus(const GraphData2d* const gd2d,
+                           double xval_lo, double xval_up);
+    double GetIntegralByTrapezoidApprox(const GraphData2d* const gd2d,
+                                        long idata_st, long idata_ed);
+    
+    GraphDataSerr2d* const GenGd2dBinBySigVar(const GraphData2d* const gd2d,
+                                              double pval_threshold);
+    GraphDataSerr2d* const GenGd2dBinBySigDet(const GraphData2d* const gd2d,
+                                              double pval_threshold);
+
+    void GetPoint2dSerrByBinning(long narr,
+                                 const double* const xval_arr,
+                                 const double* const xval_serr_arr,
+                                 const double* const oval_arr,
+                                 const double* const oval_serr_arr,
+                                 double* const xval_bin_center_ptr,
+                                 double* const xval_bin_half_width_ptr,
+                                 double* const wmean_ptr,
+                                 double* const wmean_err_ptr);
+    void GetPoint2dSerrByBinning(vector<double> xval_vec,
+                                 vector<double> xval_serr_vec,
+                                 vector<double> oval_vec,
+                                 vector<double> oval_serr_vec,
+                                 double* const xval_bin_center_ptr,
+                                 double* const xval_bin_half_width_ptr,
+                                 double* const wmean_ptr,
+                                 double* const wmean_err_ptr);
 
     
 }  // namespace GraphData2dOpe

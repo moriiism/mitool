@@ -1,0 +1,8 @@
+#
+# Makefile.in
+#
+
+### mifunclib
+MIFUNCLIB_DIR := ${MITOOL_DIR}/mifunclib
+MIFUNCLIB_INC := -I$(MIFUNCLIB_DIR)/include
+MIFUNCLIB_LIB := -L$(MIFUNCLIB_DIR)/lib -lmifunclib

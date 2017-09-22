@@ -1,0 +1,72 @@
+#
+# eval_1d.txt
+#
+
+関数の値を返す。
+
+#
+# argument:
+#
+  func_name:
+      function の名前。
+      MifcGen::GenFuncStd
+      MifcGen::GenFuncSpec
+      FuncUser::GenFuncUser
+      の順にfunction をサーチする。 
+
+  par_file:
+      function の parameter file
+  xval:
+      x軸の値。
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+
+#
+# example
+#
+
+cd ~/temp
+
+mkdir setup
+
+func_name="Gauss1dFunc"
+par_file="setup/eval_1d_par.dat"
+xval=0.3
+
+cat << EOF > setup/eval_1d_par.dat
+# par_name  par
+mu       0.3
+sigma    1.0
+norm     10.0
+EOF
+
+$MITOOL/miutil/mifunc/eval_1d  \
+$func_name \
+$par_file \
+$xval
+
+## your function
+
+cd ~/temp
+
+mkdir setup
+
+func_name="TestFunc"
+par_file="setup/eval_1d_par.dat"
+xval=0.3
+
+cat << EOF > setup/eval_1d_par.dat
+# par_name  par
+freq      0.3
+EOF
+
+$MITOOL/miutil/mifunc/eval_1d  \
+$func_name \
+$par_file \
+$xval

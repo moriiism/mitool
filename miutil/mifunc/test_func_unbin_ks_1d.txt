@@ -1,0 +1,97 @@
+#
+# test_func_unbin_ks_1d.txt
+#
+
+まず、simulate して、その後、K-S test を行う。
+
+cd /nfs/home/morii/localhome/work/maxi/mxkwtool/try/
+mkdir 14091700
+cd 14091700
+
+/home/morii/work/maxi/mxkwtool/trunk/doc/man/mxkwutil/mxkwfunc/
+sim_func_rate_1d.txt
+
+# maxit7
+cd /nfs/home/morii/localhome/work/maxi/mxkwtool/try/14091700
+
+
+source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
+
+mkdir setup
+
+func_name="Gauss1dPlusConstFunc"
+par_file="setup/par.dat"
+hist_info="setup/hist_info.dat"
+outdir="sim_func_rate_1d"
+outfile_head=$func_name
+sim_mode="evt+bin"
+rand_seed=0
+
+cat << EOF > setup/par.dat
+# par_name  par
+mu_xp        0.0
+sigma_xp     3.0
+rate      200.0
+cons        10.0
+EOF
+
+cat << EOF > setup/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+ 50    -10   10   none  none
+# none   -10   20   1.0  floor
+EOF
+
+
+${MXKWTOOL}/mxkwutil/mxkwfunc/sim_func_rate_1d \
+$func_name \
+$par_file \
+$hist_info \
+$outdir \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+###################################
+
+K-S test
+
+data_file="sim_func_rate_1d/Gauss1dPlusConstFunc_evt.dat"
+func_name="Gauss1dPlusConstFunc"
+func_par="setup/par_ks.dat"
+hist_mask="hist_info=setup/hist_info.dat"
+plot_conf_file="setup/plot_conf.dat"
+outdir="test_func_unbin_ks_1d"
+outfile_head=try1
+
+
+cat << EOF > setup/plot_conf.dat
+# lo  up  scale  ! label
+-10.0  10.0   lin  ! time
+-10.0  100.0  lin  ! rate
+EOF
+
+
+cat << EOF > setup/par_ks.dat
+# par_name  par
+mu_xp        0.0
+sigma_xp     3.0
+rate      200.0
+cons        10.0
+EOF
+
+
+
+${MXKWTOOL}/mxkwutil/mxkwfunc/test_func_unbin_ks_1d \
+$data_file \
+$func_name \
+$func_par \
+$hist_mask \
+$plot_conf_file \
+$outdir \
+$outfile_head
+
+
+
+
+
+

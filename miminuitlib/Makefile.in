@@ -1,0 +1,8 @@
+#
+# Makefile.in
+#
+
+### miminuitlib
+MIMINUITLIB_DIR := ${MITOOL_DIR}/miminuitlib
+MIMINUITLIB_INC := -I$(MIMINUITLIB_DIR)/include
+MIMINUITLIB_LIB := -L$(MIMINUITLIB_DIR)/lib -lmiminuitlib

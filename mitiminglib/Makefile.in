@@ -1,0 +1,24 @@
+#
+# Makefile.in
+#
+
+### HEADAS
+#HEADAS=/soft/heasoft/heasoft-6.15.1/x86_64-unknown-linux-gnu-libc2.5
+HEADAS=/soft/heasoft/heasoft-6.16/x86_64-unknown-linux-gnu-libc2.12
+HEADAS_INC = -I$(HEADAS)/include
+
+## for heasoft-6.15.1
+#HEADAS_LIB = -L$(HEADAS)/lib -latFunctions -lhdinit_2.7 -lhdutils_2.7 \
+-lape_2.8 -lcfitsio_3.35 -lhdio_2.7 -lwcs-4.16
+
+## for heasoft-6.16
+HEADAS_LIB = -L$(HEADAS)/lib -latFunctions -lhdinit_2.7 -lhdutils_2.7 \
+-lape_2.8 -lcfitsio_3.37 -lhdio_2.7 -lwcs-4.20
+
+# for heasoft-6.16
+ATFUNCTIONS_LIB = -L$(HEADAS)/lib -latFunctions -lcfitsio_3.37
+
+### mitiminglib
+MITIMINGLIB_DIR := ${MITOOL_DIR}/mitiminglib
+MITIMINGLIB_INC := -I$(MITIMINGLIB_DIR)/include
+MITIMINGLIB_LIB := -L$(MITIMINGLIB_DIR)/lib -lmitiminglib

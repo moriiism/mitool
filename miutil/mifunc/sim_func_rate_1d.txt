@@ -1,0 +1,114 @@
+#
+# sim_func_rate_1d.txt
+#
+
+ rate(counts/sec) の値を返す関数を与えてsimulate する。
+ 1次元。
+
+#
+# argument:
+#
+    func_name
+    par_file
+    hist_info_sim
+         simulation をするbin間隔の設定。
+
+    outdir
+    outfile_head
+    sim_mode
+         sim_mode="evt" : event file (時刻だけのfile) を出力する。
+         sim_mode="evt+bin" : event file (時刻だけのfile) を出力し、
+                              さらに、そのevent を binning したlight curve を出力する。
+         sim_mode="bin" : binned light curve を出力する。
+
+    rand_seed
+         rand_seed = 0  : 実行する度に異なるseed を使うので、同じ結果が得られることはない。
+         rand_seed != 0 : 何度実行しても、同じ結果が得られる。
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --hist_info_out (none)
+          simulation で作成した event をbinning するときのbin間隔。
+          none のときは、hist_info_sim と同じbin間隔でbinning する。
+  --npoint_func (500)
+
+
+#
+# example
+#
+
+cd ~/temp
+
+mkdir setup
+
+func_name="Gauss1dPlusConstFunc"
+par_file="setup/par.dat"
+hist_info_sim="setup/hist_info_sim.dat"
+outdir="sim_func_rate_1d"
+outfile_head=try1
+sim_mode="evt+bin"
+rand_seed=0
+hist_info_out="setup/hist_info_out.dat"
+# hist_info_out=none
+
+cat << EOF > setup/par.dat
+# par_name  par
+mu_xp        0.0
+sigma_xp     3.0
+rate       1000.0
+cons         1.0
+EOF
+
+cat << EOF > setup/hist_info_sim.dat
+# nbin  lo  up  delta-bin  mode
+1000    -10   10   none  none
+EOF
+
+cat << EOF > setup/hist_info_out.dat
+# nbin  lo  up  delta-bin  mode
+50    -10   10   none  none
+EOF
+
+$MITOOL/miutil/mifunc/sim_func_rate_1d  \
+--hist_info_out $hist_info_out \
+-- \
+$func_name \
+$par_file \
+$hist_info_sim \
+$outdir \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+
+## output:
+
+# sim_mode="evt" のとき、
+
+sim_func_rate_1d/try1_evt.dat
+sim_func_rate_1d/try1_sim_func_rate_1d.log
+
+# sim_mode="evt+bin" のとき、
+
+sim_func_rate_1d/try1_evt.dat
+sim_func_rate_1d/try1_evt_fill_count.dat
+sim_func_rate_1d/try1_evt_fill_rate.dat
+sim_func_rate_1d/try1_evt_fill_rate_diff_chi.qdp
+sim_func_rate_1d/try1_evt_fill_rate_diff_ratio.qdp
+sim_func_rate_1d/try1_evt_fill_rate_diff_val.qdp
+sim_func_rate_1d/try1_sim_func_rate_1d.log
+
+# sim_mode="bin" のとき、
+
+sim_func_rate_1d/try1_bin_count.dat
+sim_func_rate_1d/try1_bin_rate.dat
+sim_func_rate_1d/try1_bin_rate_diff_chi.qdp
+sim_func_rate_1d/try1_bin_rate_diff_ratio.qdp
+sim_func_rate_1d/try1_bin_rate_diff_val.qdp
+sim_func_rate_1d/try1_sim_func_rate_1d.log
+

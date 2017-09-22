@@ -197,14 +197,11 @@ namespace MirMath
     long GetNbin(double val_lo, double val_up, double delta_val, string mode);
     long GetNbinEven(double val_lo, double val_up, double delta_val);
 
-
     int IsSorted(long narr, const double* const val_arr);
 
     // inner product
     double GetInProd(double vec0_xval, double vec0_yval,
                      double vec1_xval, double vec1_yval);
-
-
     
 } //  namespace MirMath
 

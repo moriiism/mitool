@@ -1,0 +1,209 @@
+#
+# draw_func_data_list_1d.txt
+#
+
+関数（N graph）と データ（M data）をplot する。
+1次元。
+
+#
+# argument:
+#
+
+  data_file_list  : 
+  func_par_list   : 
+  plot_conf_file  : 
+  outdir          : 
+  outfile_head    : 
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --plotmode (on)/off
+  --printmode (on)/off
+  --root_style (def)/std/pub/detail
+
+#
+# list が zero の場合
+#
+
+data list が zero でも動く。
+func_par list が zero でも動く。
+C++ が zero sized array をサポートしているから(doc/coding_cpp.txt をみよ)。
+
+
+#
+# example
+#
+
+cd ~/temp
+
+
+mkdir data
+
+bindir=
+data_file_list=data/datafile.list
+func_par_list=data/func_par.list
+plot_conf_file=data/plot.dat
+outdir=out
+outfile_head=head
+
+cat << EOF > data/datafile.list
+# data_file  fmt  style  color  size
+../13120500/data/4u_av3.5_nufnu_cgs_serr_temp.dat                   x,xe,y,ye  20  1  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_09.dat              x,xe,y,ye  21  2  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_upper-limit_09.dat  x,xe,y,ye  23  2  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_10.dat              x,xe,y,ye  21  3  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_upper-limit_10.dat  x,xe,y,ye  23  3  1
+../13122000/nobeyama_limit.dat  x,xe,y,ye  29 1  4
+../13122000/radio_limit.dat  x,xe,y,ye     32 1  2
+EOF
+
+cat << EOF > data/par_dust_disk1.dat
+# par_name  par
+rin   20.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+
+cat << EOF > data/par_dust_disk2.dat
+# par_name  par
+rin   40.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+cat << EOF > data/par_dust_disk3.dat
+# par_name  par
+rin   55.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+
+cat << EOF > data/par_dust_disk4.dat
+# par_name  par
+rin   55.e10
+rout  120.e11
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+cat << EOF > data/par_stdacc_disk_1000au.dat
+# par_name  par
+Tin   500.0
+rin   1.2e12
+rout  1.5e16
+inc   60.0
+dist  1.203423e+22
+index  0.5
+EOF
+
+cat << EOF > data/par_stdacc_disk_100au.dat
+# par_name  par
+Tin   500.0
+rin   1.2e12
+rout  1.5e15
+inc   60.0
+dist  1.203423e+22
+index  0.5
+EOF
+
+cat << EOF > data/par_opt_pulse.dat
+# par_name  par
+index   -0.5
+freq0   1.0e14
+norm    1.0e-28
+EOF
+
+cat << EOF > data/func_par.list
+# func_name   parfile   style  color  low   up
+DustDiskWangFunc   data/par_dust_disk1.dat    1  1    1e13  2e14
+#DustDiskWangFunc  data/par_dust_disk2.dat    4  3   none  none
+#DustDiskWangFunc  data/par_dust_disk3.dat    4  2   none  none 
+#DustDiskWangFunc  data/par_dust_disk4.dat    4  4   none  none
+StdAccDiskFunc     data/par_stdacc_disk_1000au.dat   4  2   none  1e13
+StdAccDiskFunc     data/par_stdacc_disk_100au.dat   4  3   none  1e13
+PowerlawSpecFunc   data/par_opt_pulse.dat     2  4   1e10  1e15
+EOF
+
+cat << EOF > data/plot.dat
+# lo  up  scale  label
+1e8   1e15       log  !  Frequency (Hz)
+4e-40  1e10  log  !  F_Nu  (erg/s/cm2/Hz)
+EOF
+
+${bindir}/draw_func_data_list_1d \
+${data_file_list} \
+${func_par_list} \
+${plot_conf_file} \
+${outdir} \
+${outfile_head}
+
+
+#
+# example 2
+# 
+
+cd ~/temp
+
+mkdir data
+
+bindir=
+data_file_list=data/datafile.list
+func_par_list=data/func_par.list
+plot_conf_file=data/plot.dat
+outdir=out
+outfile_head=head
+
+
+cat << EOF > data/lin.dat
+-7 +2.0 -0.4   0.4 +0.4  -0.5
+-1 +1.0 -2.0   4.0 +0.8  -1.0
+7  +0.5 -5.0  -3.0 +0.9  -1.5
+EOF
+
+cat << EOF > data/datafile.list
+# data_file  fmt  style  color  size
+data/lin.dat  x,xe+,xe-,y,ye+,ye-  20  1  1
+EOF
+
+cat << EOF > data/gau1d.dat
+# par_name  par
+mu_xp       5.0
+sigma_xp    2.0
+norm        10.0
+EOF
+
+cat << EOF > data/func_par.list
+# func_name   parfile   style  color  low   up
+Gauss1dFunc   data/gau1d.dat  2   2  -10  10
+EOF
+
+cat << EOF > data/plot.dat
+# lo  up  scale  label
+-10   10   lin  !  time (s)
+ -5   5    lin  !  Rate (c/s)
+EOF
+
+${bindir}/draw_func_data_list_1d \
+${data_file_list} \
+${func_par_list} \
+${plot_conf_file} \
+${outdir} \
+${outfile_head}

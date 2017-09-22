@@ -1,0 +1,13 @@
+#
+# Makefile.in
+#
+
+### gsl
+GSL_DIR := /soft/gsl/2.3
+GSL_INC := -I$(GSL_DIR)/include
+GSL_LIB := -L$(GSL_DIR)/lib -lgsl -lgslcblas
+
+### miblaslib
+MIBLASLIB_DIR := ${MITOOL_DIR}/miblaslib
+MIBLASLIB_INC := -I$(MIBLASLIB_DIR)/include
+MIBLASLIB_LIB := -L$(MIBLASLIB_DIR)/lib -lmiblaslib

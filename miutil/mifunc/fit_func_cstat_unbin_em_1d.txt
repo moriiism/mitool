@@ -1,0 +1,129 @@
+#
+# fit_func_cstat_unbin_em_1d.txt
+#
+
+parameter について linear な関数の場合のEM
+
+まず、simulation をする。
+
+cd ~/temp
+
+mkdir setup
+
+
+bindir=$MITOOL/miutil/mifunc
+func_par_norm_list=setup/func_par_norm.list
+hist_info="setup/hist_info.dat"
+outdir="sim_func_lincomb_rate_1d"
+outfile_head=sim
+sim_mode="evt+bin"
+rand_seed=0
+
+
+cat << EOF > setup/par_Gauss1d_1.list
+# par_name  par
+mu        0.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Gauss1d_2.list
+# par_name  par
+mu        5.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Gauss1d_3.list
+# par_name  par
+mu        -5.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Const1d.list
+# par_name  par
+const       1.0
+EOF
+
+cat << EOF > setup/func_par_norm.list
+# func_name   parfile   norm
+Gauss1dFunc   setup/par_Gauss1d_1.list   10.0
+Gauss1dFunc   setup/par_Gauss1d_2.list   20.0
+Gauss1dFunc   setup/par_Gauss1d_3.list   50.0
+Const1dFunc   setup/par_Const1d.list     1.0
+EOF
+
+
+cat << EOF > setup/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+ 100   -10   10   none  none
+EOF
+
+$bindir/sim_func_lincomb_rate_1d  \
+$func_par_norm_list \
+$hist_info \
+$outdir \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+###############################################
+
+
+bindir=$MITOOL/miutil/mifunc
+
+data_file=sim_func_lincomb_rate_1d/sim_evt.dat
+func_par_list=setup/func_par.list
+hist_mask="hist_info=setup/hist_info.dat"
+plot_conf_file=setup/plot_conf.dat
+outdir=fit_func_cstat_unbin_em_1d
+outfile_head=test
+
+cat << EOF > setup/func_par.list
+# func_name   parfile   style  color  low   up
+Gauss1dFunc   setup/par_Gauss1d_1.list   1  1  -10  10
+Gauss1dFunc   setup/par_Gauss1d_2.list   1  1  -10  10
+Gauss1dFunc   setup/par_Gauss1d_3.list   1  1  -10  10
+Const1dFunc   setup/par_Const1d.list     1  2  -10  10
+EOF
+
+cat << EOF > setup/plot_conf.dat
+# lo  up  offset scale  ! label
+-20.0  20.0  0.0  lin  ! time
+none   none  0.0  lin  ! rate
+none   none  0.0  lin  ! val
+none   none  0.0  lin  ! chi
+none   none  0.0  lin  ! ratio
+EOF
+
+
+$bindir/fit_func_cstat_unbin_em_1d \
+-- \
+$data_file \
+$func_par_list \
+$hist_mask \
+$plot_conf_file \
+$outdir \
+$outfile_head
+
+
+em algorithm
+real	0m0.093s
+user	0m0.078s
+sys	0m0.014s
+
+minuit
+real	0m0.819s
+user	0m0.806s
+sys	0m0.011s
+
+
+0.819 / 0.093 = 8.8 
+
+minuit より、EM algorithm は、8.8倍速い。
+
+
+
+
+

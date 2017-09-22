@@ -1,6 +1,7 @@
 
 include ../../Makefile.in
-include ../Makefile.in
+include ../../milib/Makefile.in
+include ../../mirootlib/Makefile.in
 
 INCLUDE := $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
 
@@ -17,7 +18,8 @@ OBJ := math.o  interval.o  stat1d.o  vect.o  geom.o \
 	hist2d.o  hist2d_nerr.o  hist2d_serr.o  hist2d_terr.o \
 	qdp_tool.o  cont.o \
 	data1d_ope.o  graph2d_ope.o  hist1d_ope.o  hist2d_ope.o \
-	hist_info_ope.o
+	hist_info_ope.o \
+	solve.o  func_ope.o
 
 all: $(TARGET)
 

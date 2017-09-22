@@ -75,6 +75,22 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+//    void DelDa1dArr(DataArray1d** const da1d_arr, int narr);
+    {
+        printf("--- test DelDa1dArr(DataArray1d** const da1d_arr, int narr)\n");
+        int narr = 3;
+        DataArray1d** da1d_arr = new DataArray1d* [narr];
+        for(int iarr = 0; iarr < narr; iarr++){
+            da1d_arr[iarr] = new DataArrayNerr1d;
+        }
+        for(int iarr = 0; iarr < narr; iarr++){
+            da1d_arr[iarr]->PrintInfo(stdout);
+            da1d_arr[iarr]->PrintData(stdout, 1, 0.0);
+        }
+        DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
+        printf("=== \n");
+    }
+    
 //    void GetNot(const DataArray1d* const data_array,
 //                DataArray1d* data_array_out);
     {

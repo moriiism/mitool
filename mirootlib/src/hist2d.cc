@@ -272,6 +272,44 @@ void HistData2d::GenOvalArr(double** const oval_arr_ptr,
 }
 
 
+double HistData2d::GetOvalIntPolLin(double xval, double yval) const
+{
+    abort();
+    
+    double ans = 0.0;
+//    long index_xval = GetIbinX_WithHalfBinShifted(xval);
+//    long index_yval = GetIbinY_WithHalfBinShifted(yval);
+//    
+//    if (-1 < index_xval && index_xval < nbin_xval_ - 1 &&
+//        -1 < index_yval && index_yval < nbin_yval_ - 1   ){
+//        long index_xval0 = index_xval;
+//        long index_xval1 = index_xval0 + 1;
+//        long index_yval0 = index_yval;
+//        long index_yval1 = index_yval0 + 1;
+//
+//        long index0 = index_xval0 + index_yval0 * nbin_xval_;
+//        long index1 = index0 + 1;
+//        long index2 = index0 + nbin_xval_ + 1;
+//        long index3 = index0 + nbin_xval_;
+//        
+//        ans = MirMath::IntPolLin(xval, yval,
+//                                 GetBinCenterXFromIbinX(index_xval0),
+//                                 GetBinCenterXFromIbinX(index_xval1),
+//                                 GetBinCenterYFromIbinY(index_yval0),
+//                                 GetBinCenterYFromIbinY(index_yval1),
+//                                 GetOvalArr()->GetValElm(index0),
+//                                 GetOvalArr()->GetValElm(index1),
+//                                 GetOvalArr()->GetValElm(index2),
+//                                 GetOvalArr()->GetValElm(index3));
+//    } else {
+//        if(0 < g_flag_verbose){
+//            MPrintWarnClass("bad xval and/or yval, then just return 0.0");
+//        }
+//        ans = 0.0;
+//    }
+    return ans;
+}
+
 void HistData2d::Save(string outfile, string format,
                       double offset_xval,
                       double offset_yval,

@@ -1,0 +1,117 @@
+#
+# draw_nufnu_data_list.txt
+#
+
+cd ~/temp
+
+bindir=
+data_file_list=datafile.list
+func_par_list=func_par.list
+plot_conf_file=plot.dat
+outdir=out
+outfile_head=data+model
+
+cat << EOF > datafile.list
+# data_file  fmt  style  color  size
+../13120500/data/4u_av3.5_nufnu_cgs_serr_temp.dat                   x,xe,y,ye  20  1  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_09.dat              x,xe,y,ye  21  2  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_upper-limit_09.dat  x,xe,y,ye  23  2  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_10.dat              x,xe,y,ye  21  3  1
+#../13120500/data/4u_av3.5_nufnu_cgs_serr_kaneko_upper-limit_10.dat  x,xe,y,ye  23  3  1
+nobeyama_limit.dat  x,xe,y,ye  29 1  4
+radio_limit.dat  x,xe,y,ye     32 1  2
+EOF
+
+cat << EOF > par_dust_disk1.dat
+# par_name  par
+rin   20.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+
+cat << EOF > par_dust_disk2.dat
+# par_name  par
+rin   40.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+cat << EOF > par_dust_disk3.dat
+# par_name  par
+rin   55.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+
+cat << EOF > par_dust_disk4.dat
+# par_name  par
+rin   55.e10
+rout  120.e11
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+cat << EOF > par_stdacc_disk_1000au.dat
+# par_name  par
+Tin   500.0
+rin   1.2e12
+rout  1.5e16
+inc   60.0
+dist  1.203423e+22
+index  0.5
+EOF
+
+cat << EOF > par_stdacc_disk_100au.dat
+# par_name  par
+Tin   500.0
+rin   1.2e12
+rout  1.5e15
+inc   60.0
+dist  1.203423e+22
+index  0.5
+EOF
+
+cat << EOF > par_opt_pulse.dat
+# par_name  par
+index   -0.5
+freq0   1.0e14
+norm    1.0e-28
+EOF
+
+cat << EOF > func_par.list
+# func_name   parfile   style  color  low   up
+DustDiskWangFunc  par_dust_disk1.dat    1  1    1e13  2e14
+#DustDiskWangFunc  par_dust_disk2.dat    4  3   none  none
+#DustDiskWangFunc  par_dust_disk3.dat    4  2   none  none 
+#DustDiskWangFunc  par_dust_disk4.dat    4  4   none  none
+StdAccDiskFunc     par_stdacc_disk_1000au.dat   4  2   none  1e13
+StdAccDiskFunc     par_stdacc_disk_100au.dat   4  3   none  1e13
+PowerlawSpecFunc   par_opt_pulse.dat     2  4   1e10  1e15
+EOF
+
+cat << EOF > plot.dat
+# lo  up  scale  label
+1e8   1e15       log  !  Frequency (Hz)
+4e-19  1e-12  log  !  Nu F_Nu  (erg/s/cm2/Hz Hz)
+EOF
+
+${bindir}/draw_nufnu_data_list --root_style=pub -- \
+${data_file_list} \
+${func_par_list} \
+${plot_conf_file} \
+${outdir} \
+${outfile_head}
+

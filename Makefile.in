@@ -4,41 +4,6 @@
 
 MITOOL_DIR := /home/morii/work/github/moriiism/mitool
 
-### MersenneTwister
-MT_DIR := /soft/MersenneTwister/mt19937-64
-MT_INC := -I$(MT_DIR)/include
-MT_LIB := -L$(MT_DIR)/lib -lmt19937-64
-
-### cfitsio
-CFITSIO_DIR := /soft/cfitsio/3410
-CFITSIO_INC := -I$(CFITSIO_DIR)/include
-CFITSIO_LIB := -L$(CFITSIO_DIR)/lib -lcfitsio
-
-### gsl
-GSL_DIR := /soft/gsl/2.3
-GSL_INC := -I$(GSL_DIR)/include
-GSL_LIB := -L$(GSL_DIR)/lib -lgsl -lgslcblas
-
-### milib
-MILIB_DIR := ${MITOOL_DIR}/milib
-MILIB_INC := -I$(MILIB_DIR)/include
-MILIB_LIB := -L$(MILIB_DIR)/lib -lmilib
-
-### miblaslib
-MIBLASLIB_DIR := ${MITOOL_DIR}/miblaslib
-MIBLASLIB_INC := -I$(MIBLASLIB_DIR)/include
-MIBLASLIB_LIB := -L$(MIBLASLIB_DIR)/lib -lmiblaslib
-
-### mifitslib
-MIFITSLIB_DIR := ${MITOOL_DIR}/mifitslib
-MIFITSLIB_INC := -I$(MIFITSLIB_DIR)/include
-MIFITSLIB_LIB := -L$(MIFITSLIB_DIR)/lib -lmifitslib
-
-### mirootlib
-MIROOTLIB_DIR := ${MITOOL_DIR}/mirootlib
-MIROOTLIB_INC := -I$(MIROOTLIB_DIR)/include
-MIROOTLIB_LIB := -L$(MIROOTLIB_DIR)/lib -lmirootlib
-
 ### library
 LIB := -lm -lrt
 

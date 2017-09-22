@@ -1,0 +1,91 @@
+複数データの同時fittingをしてみる。
+parameter 同士に制限がある場合を考える。それをQPで実現する。
+さらに、得られたベストフィットパラメータを初期値として、
+Minuitで fit して誤差を求める。
+
+
+14120100.txt を参考にする。
+
+# common
+
+mkdir setup
+
+hist_info="setup/hist_info.dat"
+outfile_head=sim
+sim_mode="evt+bin"
+rand_seed=0
+
+cat << EOF > setup/par_Gauss1d_1.list
+# par_name  par
+mu        0.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Gauss1d_2.list
+# par_name  par
+mu        2.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Gauss1d_3.list
+# par_name  par
+mu        -5.0
+sigma     1.0
+norm      1.0
+EOF
+
+cat << EOF > setup/par_Const1d.list
+# par_name  par
+const       1.0
+EOF
+
+cat << EOF > setup/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+ 200   -10   10   none  none
+EOF
+
+# data 1
+
+func_par_norm_list_data1=setup/func_par_norm_data1.list
+outdir_data1="sim_func_lincomb_rate_1d/data1"
+
+cat << EOF > setup/func_par_norm_data1.list
+# func_name   parfile   norm
+Gauss1dFunc   setup/par_Gauss1d_1.list   200.0
+Gauss1dFunc   setup/par_Gauss1d_2.list   400.0
+Gauss1dFunc   setup/par_Gauss1d_3.list   500.0
+Const1dFunc   setup/par_Const1d.list     100.0
+EOF
+
+# data 2
+
+func_par_norm_list_data2=setup/func_par_norm_data2.list
+outdir_data2="sim_func_lincomb_rate_1d/data2"
+
+cat << EOF > setup/func_par_norm_data2.list
+# func_name   parfile   norm
+Gauss1dFunc   setup/par_Gauss1d_1.list   200.0
+Gauss1dFunc   setup/par_Gauss1d_2.list   400.0
+Gauss1dFunc   setup/par_Gauss1d_3.list    50.0
+Const1dFunc   setup/par_Const1d.list     300.0
+EOF
+
+$MITOOL/miutil/mifunc/sim_func_lincomb_rate_1d  \
+$func_par_norm_list_data1 \
+$hist_info \
+$outdir_data1 \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+
+$MITOOL/miutil/mifunc/sim_func_lincomb_rate_1d  \
+$func_par_norm_list_data2 \
+$hist_info \
+$outdir_data2 \
+$outfile_head \
+$sim_mode \
+$rand_seed
+

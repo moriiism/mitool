@@ -1,0 +1,77 @@
+#
+# draw_spec_data.txt
+#
+
+spectrum のグラフとデータを描く。
+(1 graph, 1 data, 1 dim) 
+
+#
+# argument
+#
+
+    data_file
+    data_fmt
+    func_name
+    par_file
+    spec_type          : fnu, nufnu, phnu
+    plot_conf_file
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+  --plotmode
+  --printmode
+  --root_style
+
+#
+# example
+#
+
+cd ~/temp
+
+
+mkdir data
+
+
+bindir=
+data_file=../13120500/data/4u_av3.5_nufnu_cgs_serr_temp.dat
+data_fmt="x,xe,y,ye"
+func_name="DustDiskWangFunc"
+par_file=data/par_dust_disk1.dat
+spec_type="nu_f_nu"
+plot_conf_file=data/plot_conf.dat
+outdir=spec
+outfile_head=$func_name
+
+cat << EOF > data/par_dust_disk1.dat
+# par_name  par
+rin   20.e10
+rout  120.e10
+inc   60.0
+dist  1.203423e+22
+albedo      0.975
+flux_x      4.8e-10
+EOF
+
+cat << EOF > data/plot_conf.dat
+# lo  up  scale  label
+1e8   1e15    log  !  Frequency (Hz)
+4e-19  1e-12  log  !  Nu F_Nu  (erg/s/cm2/Hz Hz)
+EOF
+
+${bindir}/draw_spec_data \
+${data_file} \
+${data_fmt} \
+${func_name} \
+${par_file} \
+${spec_type} \
+${plot_conf_file} \
+${outdir} \
+${outfile_head}
+

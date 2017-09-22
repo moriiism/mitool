@@ -1,15 +1,15 @@
 include ../../Makefile.in
-include ../Makefile.in
+include ../../milib/Makefile.in
+include ../../mirootlib/Makefile.in
 
 INCLUDE := $(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC)  $(MT_INC)
 LDLIBS  := $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(MT_LIB) $(LIB)
 
-
 # test passed using assert
-TARGET_PASS := test_data1d_ope
+TARGET_PASS := test_vect  test_data1d_ope
 
 # test passed (manual check)
-TARGET_PASS_MANUAL := test_vect  test_stat1d \
+TARGET_PASS_MANUAL := test_stat1d \
 	test_data1d   test_data1d_copy \
 	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
 	test_graph2d  test_graph2d_nerr  test_graph2d_serr  test_graph2d_terr \
@@ -34,7 +34,7 @@ test_graph2d_ope
 #	     \
 #	      \
 #	       \
-#	    test_graph3d_ope  test_hist1d_ope  test_hist2d_ope \
+#	    test_hist1d_ope  test_hist2d_ope \
 #	test_func  
 #	test_qdp_tool  test_cont
 #

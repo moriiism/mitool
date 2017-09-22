@@ -1,0 +1,60 @@
+#
+# eval_2d.txt
+#
+
+関数の値を返す。
+
+
+#
+# argument:
+#
+  func_name:
+      function の名前。
+      MifcGen::GenFuncStd
+      MifcGen::GenFuncSpec
+      FuncUser::GenFuncUser
+      の順にfunction をサーチする。 
+
+  par_file:
+      function の parameter file
+  xval:
+      x軸の値。
+  yval:
+      y軸の値。
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+
+#
+# example
+#
+
+cd ~/temp
+
+
+func_name="Gauss2dFunc"
+par_file="eval_2d_par.dat"
+xval=0.3
+yval=0.4
+
+cat << EOF > eval_2d_par.dat
+# par_name  par
+sigma_x     10
+sigma_y     10
+norm        10.0
+rot_angle   0.0
+mu_x        1.0
+mu_y        2.0
+shift_z     2.0
+EOF
+
+$MITOOL/miutil/mifunc/eval_2d  \
+$func_name \
+$par_file \
+$xval \
+$yval
