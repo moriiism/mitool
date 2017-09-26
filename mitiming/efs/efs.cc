@@ -2,7 +2,7 @@
 #include "mir_hist1d_serr.h"
 #include "mir_hist_info.h"
 #include "mir_qdp_tool.h"
-
+#include "mim_search_par.h"
 #include "mit_eph.h"
 #include "mit_telescope.h"
 #include "mit_folding.h"
@@ -39,14 +39,14 @@ int main(int argc, char* argv[]){
     GraphDataSerr2d* g2d  = NULL;
     
     if("x" == argval->GetFormat()){
-        data_arr = new DataArray1d;
+        data_arr = new DataArrayNerr1d;
         data_arr->Load(argval->GetFile());
     } else {
         g2d = new GraphDataSerr2d;
         g2d->Load(argval->GetFile(), argval->GetFormat());
     }
 
-    HistInfo1d* search_par = new HistInfo1d;
+    MimSearchPar* search_par = new MimSearchPar;
     search_par->Load(argval->GetSearchDat());
     search_par->Print(stdout);
 

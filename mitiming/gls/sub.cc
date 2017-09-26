@@ -3,13 +3,13 @@
 HistData1d* const GenHd1dGls(const GraphDataSerr2d* const gd2d_sec,
                              long nnu, double nu_lo, double nu_up)
 {
-    HistData1d* hd1d_gls = new HistData1d;
+    HistData1d* hd1d_gls = new HistDataNerr1d;
     hd1d_gls->Init(nnu, nu_lo, nu_up);
-    double delta_nu = hd1d_gls->GetBinWidth();
+    double delta_nu = hd1d_gls->GetHi1d()->GetBinWidth();
     for(long inu = 0; inu < nnu; inu ++){
         double nu = nu_lo + (inu + 0.5) * delta_nu;
-        double tau = MxkwTimingGls::GetTau(gd2d_sec, nu);
-        double gls = MxkwTimingGls::GetGls(gd2d_sec, nu, tau);
+        double tau = MitGls::GetTau(gd2d_sec, nu);
+        double gls = MitGls::GetGls(gd2d_sec, nu, tau);
         hd1d_gls->SetOvalElm(inu, gls);
     }
     return hd1d_gls;
@@ -29,7 +29,7 @@ HistData2d* const GenHd2dGls(const GraphDataSerr2d* const gd2d_sec,
          abort();
      }
 
-     HistData2d* hd2d_gls = new HistData2d;
+     HistData2d* hd2d_gls = new HistDataNerr2d;
      hd2d_gls->Init(nnu, nu_lo, nu_up,
                     nratio, ratio_lo, ratio_up);
      
@@ -42,7 +42,7 @@ HistData2d* const GenHd2dGls(const GraphDataSerr2d* const gd2d_sec,
          printf(" %ld", iratio);
          fflush(stdout);
          GraphDataSerr2d* gd2d_sec_shift = new GraphDataSerr2d;
-         gd2d_sec_shift->Init();
+         gd2d_sec_shift->Init(gd2d_sec->GetNdata());
          for(long idata = 0; idata < gd2d_sec->GetNdata(); idata ++){
              double time = gd2d_sec->GetXvalElm(idata);
              double time_shift = time + ratio / 2.0 * pow(time - epoch_sec, 2);
@@ -56,7 +56,7 @@ HistData2d* const GenHd2dGls(const GraphDataSerr2d* const gd2d_sec,
          
          //char temp[kLineSize];
          //sprintf(temp, "%s_%2.2d.qdp", "temp", (int) iratio);
-         //MxkwQdpTool::MkQdp(hd1d_gls, temp, "x,xe,y,ye");
+         //MirQdpTool::MkQdp(hd1d_gls, temp, "x,xe,y,ye");
          
          for(long inu = 0; inu < nnu; inu ++){
              hd2d_gls->SetOvalElm(inu, iratio, hd1d_gls->GetOvalElm(inu));

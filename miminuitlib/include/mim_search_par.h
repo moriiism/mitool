@@ -5,6 +5,7 @@
 #include "TAxis.h"
 #include "TPad.h"
 
+#include "mi_iolib.h"
 #include "mir_hist_info.h"
 
 class MimSearchPar : public MiObject{
@@ -19,6 +20,8 @@ public:
     void Init(long npar);
     void Load(string file);
     void Copy(const MimSearchPar* const org);
+    MimSearchPar* const Clone() const;
+    
     void Print(FILE* fp) const;
   
     // const func

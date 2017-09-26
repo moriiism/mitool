@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_EPH_ARG_EPHATT_H_
-#define MXKWTOOL_MXKWTIMING_EPH_ARG_EPHATT_H_
+#ifndef MORIIISM_MITOOL_MITIMING_EPH_ARG_EPHATT_H_
+#define MORIIISM_MITOOL_MITIMING_EPH_ARG_EPHATT_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValEphatt : public MxkwArgBase{
+class ArgValEphatt : public MiArgBase{
 public:
-    explicit ArgValEphatt(string title = "") :
-        MxkwArgBase("ArgValEphatt", title),
+    ArgValEphatt() :
+        MiArgBase(),
         progname_(""),
         ephfile_in_(""),
         time_mjd_(0.0),
@@ -33,4 +33,4 @@ private:
 };
 
 
-#endif // MXKWTOOL_MXKWTIMING_EPH_ARG_EPHATT_H_
+#endif // MORIIISM_MITOOL_MITIMING_EPH_ARG_EPHATT_H_

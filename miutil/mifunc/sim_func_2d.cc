@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
     hi2d_sim->Load(argval->GetHistInfoSim());
 
     // hist (count function)
-    HistData2d* hd2d_func_count = new HistData2d;
+    HistData2d* hd2d_func_count = new HistDataNerr2d;
     hd2d_func_count->Init(hi2d_sim);
     hd2d_func_count->SetByFunc(func, func_par->GetPar());
 
@@ -67,9 +67,9 @@ int main(int argc, char* argv[]){
                              + argval->GetOutfileHead() + "_bin_count.dat",
                              "x,xe,y,ye,z,ze");
         
-        MirQdpTool::MkQdpDiffProj(hd2d_sim_count, func, func_par->GetPar(),
-                                   argval->GetOutdir(), argval->GetOutfileHead() + "_bin_count",
-                                   add_mode, error_mode);
+//        MirQdpTool::MkQdpDiffProj(hd2d_sim_count, func, func_par->GetPar(),
+//                                   argval->GetOutdir(), argval->GetOutfileHead() + "_bin_count",
+//                                   add_mode, error_mode);
         hd2d_sim_count->Save(argval->GetOutdir() + "/"
                              + argval->GetOutfileHead() + "_bin_count.dat",
                              "x,xe,y,ye,z,ze");
@@ -102,9 +102,9 @@ int main(int argc, char* argv[]){
                             + argval->GetOutfileHead() + "_evt_fill_count.dat",
                             "x,xe,y,ye,z,ze");
 
-        MirQdpTool::MkQdpDiffProj(hd2d_evt_fill, func, func_par->GetPar(),
-                                   argval->GetOutdir(), argval->GetOutfileHead() + "_evt_fill_count",
-                                   add_mode, error_mode);
+//        MirQdpTool::MkQdpDiffProj(hd2d_evt_fill, func, func_par->GetPar(),
+//                                   argval->GetOutdir(), argval->GetOutfileHead() + "_evt_fill_count",
+//                                   add_mode, error_mode);
         delete hi2d_out;
         delete gd2d_evt;
         delete hd2d_evt_fill;

@@ -46,13 +46,14 @@ int main(int argc, char* argv[]){
     hi1d_sim->Load(argval->GetHistInfoSim());
     
     // hist (rate function)
-    HistData1d* hd1d_func_rate = new HistData1d;
+    HistData1d* hd1d_func_rate = new HistDataNerr1d;
     hd1d_func_rate->Init(hi1d_sim);
     hd1d_func_rate->SetByFunc(func, func_par->GetPar());
 
     // hist (count function)
-    HistData1d* hd1d_func_count = new HistData1d;
-    hd1d_func_count->Scale(hd1d_func_rate, hi1d_sim->GetBinWidth(), 0.0);
+    HistDataNerr1d* hd1d_func_count = new HistDataNerr1d;
+    HistData1dOpe::GetScale(hd1d_func_rate, hi1d_sim->GetBinWidth(), 0.0,
+                            hd1d_func_count);
 
     // sim_mode:
     //   bin: calculate binned value directly
@@ -77,11 +78,12 @@ int main(int argc, char* argv[]){
                              "x,xe,y,ye");
         // hist (rate)
         HistDataSerr1d* hd1d_sim_count_rate = new HistDataSerr1d;
-        hd1d_sim_count_rate->Scale(hd1d_sim_count, 1./hi1d_sim->GetBinWidth(), 0.0);
+        HistData1dOpe::GetScale(hd1d_sim_count, 1./hi1d_sim->GetBinWidth(), 0.0,
+                                hd1d_sim_count_rate);
 
-        MirQdpTool::MkQdpDiff3(hd1d_sim_count_rate, func, func_par->GetPar(),
-                                argval->GetNpointFunc(),
-                                argval->GetOutdir(), argval->GetOutfileHead() + "_bin_rate");
+//        MirQdpTool::MkQdpDiff3(hd1d_sim_count_rate, func, func_par->GetPar(),
+//                                argval->GetNpointFunc(),
+//                                argval->GetOutdir(), argval->GetOutfileHead() + "_bin_rate");
         hd1d_sim_count_rate->Save(argval->GetOutdir() + "/"
                                   + argval->GetOutfileHead() + "_bin_rate.dat",
                                   "x,xe,y,ye");
@@ -116,16 +118,17 @@ int main(int argc, char* argv[]){
                             "x,xe,y,ye");
 
         HistDataSerr1d* hd1d_evt_fill_rate = new HistDataSerr1d;
-        hd1d_evt_fill_rate->Scale(hd1d_evt_fill, 1./hi1d_out->GetBinWidth(), 0.0);
-
+        HistData1dOpe::GetScale(hd1d_evt_fill, 1./hi1d_out->GetBinWidth(), 0.0,
+                                hd1d_evt_fill_rate);
+        
         hd1d_evt_fill_rate->Save(argval->GetOutdir() + "/"
                                  + argval->GetOutfileHead() + "_evt_fill_rate.dat",
                                  "x,xe,y,ye");
     
-        MirQdpTool::MkQdpDiff3(hd1d_evt_fill_rate, func, func_par->GetPar(),
-                                argval->GetNpointFunc(),
-                                argval->GetOutdir(),
-                                argval->GetOutfileHead() + "_evt_fill_rate");
+//        MirQdpTool::MkQdpDiff3(hd1d_evt_fill_rate, func, func_par->GetPar(),
+//                                argval->GetNpointFunc(),
+//                                argval->GetOutdir(),
+//                                argval->GetOutfileHead() + "_evt_fill_rate");
         delete hi1d_out;
         delete da1d_evt;
         delete hd1d_evt_fill;

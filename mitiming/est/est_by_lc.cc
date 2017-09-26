@@ -1,12 +1,11 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_search_par.h"
-#include "mxkw_qdp_tool.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_timing_estimate.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_nerr.h"
+#include "mir_hist1d_serr.h"
+#include "mim_search_par.h"
+#include "mir_qdp_tool.h"
+#include "mit_eph.h"
+#include "mit_folding.h"
+#include "mit_estimate.h"
 
 #include "arg_est_by_lc.h"
 
@@ -27,7 +26,7 @@ int main(int argc, char* argv[]){
 
     double time_span = 0.0;
     if("x" == argval->GetLcFormat()){
-        data_arr = new DataArray1d;
+        data_arr = new DataArrayNerr1d;
         data_arr->Load(argval->GetLcFile());
         time_span = data_arr->GetValMax() - data_arr->GetValMin();
     } else {
@@ -55,9 +54,9 @@ int main(int argc, char* argv[]){
         abort();
     }
     
-    double delta_nu    = MxkwEstimate::GetDeltaNu(time_span_sec);
-    double delta_nudot = MxkwEstimate::GetDeltaNudot(time_span_sec);
-    double delta_nudot2 = MxkwEstimate::GetDeltaNudot2(time_span_sec);
+    double delta_nu    = MitEstimate::GetDeltaNu(time_span_sec);
+    double delta_nudot = MitEstimate::GetDeltaNudot(time_span_sec);
+    double delta_nudot2 = MitEstimate::GetDeltaNudot2(time_span_sec);
 
     printf("delta_nu     = %e (Hz)\n", delta_nu);
     printf("delta_nudot  = %e (Hz/s)\n", delta_nudot);

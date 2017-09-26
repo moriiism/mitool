@@ -49,7 +49,7 @@ void ArgValGtiIsOrdered::Null()
 void ArgValGtiIsOrdered::SetOption(int argc, char* argv[], option* long_options)
 {
     if(0 < g_flag_verbose){
-        MPrintInfoClass("start...");
+        MPrintInfo("start...");
     }
     // option default
     g_flag_debug   = 0;
@@ -94,7 +94,7 @@ void ArgValGtiIsOrdered::SetOption(int argc, char* argv[], option* long_options)
         }
     }
     if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
+        MPrintInfo("done.");
     }
 }
 

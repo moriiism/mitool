@@ -1,4 +1,4 @@
-#include "mxkw_interval.h"
+#include "mir_interval.h"
 #include "arg_gti_length.h"
 
 // global variable 

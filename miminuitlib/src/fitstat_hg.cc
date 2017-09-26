@@ -370,14 +370,14 @@ void FitStatHG::MkOutParSearch1d(string outdir, string outfile_head, string flag
         //                         GetFitStat()->GetFitParam()->GetParTerrPlusElm(index_par),
         //                         GetFitStat()->GetFcnMin(),
         //                         par_name);
-        MirQdpTool::MkQdpMinFcn(GetHistChi2ArrElm(ihist),
-                                 outdir + "/" + outfile_head + "_" +
-                                 "chi2_" + hist_char + ".qdp",
-                                 GetFitParamBest()->GetParElm(index_par),
-                                 GetFitParamBest()->GetParTerrMinusElm(index_par),
-                                 GetFitParamBest()->GetParTerrPlusElm(index_par),
-                                 GetFitStat()->GetFcnMin(),
-                                 par_name);
+//        MirQdpTool::MkQdpMinFcn(GetHistChi2ArrElm(ihist),
+//                                 outdir + "/" + outfile_head + "_" +
+//                                 "chi2_" + hist_char + ".qdp",
+//                                 GetFitParamBest()->GetParElm(index_par),
+//                                 GetFitParamBest()->GetParTerrMinusElm(index_par),
+//                                 GetFitParamBest()->GetParTerrPlusElm(index_par),
+//                                 GetFitStat()->GetFcnMin(),
+//                                 par_name);
 
         
         MirQdpTool::MkQdp(GetHistValidArrElm(ihist),
@@ -467,14 +467,14 @@ void FitStatHG::MkOutParSearch2d(string outdir,
 //            GetFitStat()->GetFcnMin(),
 //            name_x, name_y);
 
-        MirQdpTool::MkQdpContMinFcnWithBest(
-            GetHistChi2ContArrElm(ihist),
-            outdir + "/" + outfile_head + "_" +
-            "chi2_cont_" + hist_char + ".qdp",
-            GetFitParamBest()->GetParElm(index_x),
-            GetFitParamBest()->GetParElm(index_y),
-            GetFitStat()->GetFcnMin(),
-            name_x, name_y);
+//        MirQdpTool::MkQdpContMinFcnWithBest(
+//            GetHistChi2ContArrElm(ihist),
+//            outdir + "/" + outfile_head + "_" +
+//            "chi2_cont_" + hist_char + ".qdp",
+//            GetFitParamBest()->GetParElm(index_x),
+//            GetFitParamBest()->GetParElm(index_y),
+//            GetFitStat()->GetFcnMin(),
+//            name_x, name_y);
         
         GetHistChi2ContArrElm(ihist)->Save(
             outdir + "/" + outfile_head + "_" +
@@ -618,10 +618,10 @@ void FitStatHG::MkOutFitPlot(const HistDataSerr1d* const h1d_data,
                              string outfile_head,
                              const MirPlotConf* const plot_conf)
 {
-    MirQdpTool::MkQdpDiff3(h1d_data, func, par_arr,
-                            npoint_func,
-                            outdir, outfile_head,
-                            plot_conf);
+//    MirQdpTool::MkQdpDiff3(h1d_data, func, par_arr,
+//                            npoint_func,
+//                            outdir, outfile_head,
+//                            plot_conf);
 }
 
 void FitStatHG::MkOutFitPlot(const HistDataSerr2d* const h2d_data,

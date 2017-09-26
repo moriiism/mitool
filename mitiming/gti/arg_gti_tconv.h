@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_TCONV_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_TCONV_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_TCONV_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_TCONV_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValGtiTconv : public MxkwArgBase{
+class ArgValGtiTconv : public MiArgBase{
 public:
-    explicit ArgValGtiTconv(string title = "") :
-        MxkwArgBase("ArgValGtiTconv", title),
+    ArgValGtiTconv() :
+        MiArgBase(),
         progname_(""),
         gti_in_(""),
         telescope_in_(""),
@@ -42,4 +42,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_TCONV_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_TCONV_H_

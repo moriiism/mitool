@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_LC_ARG_PLOT_LC_HD1D_H_
-#define MXKWTOOL_MXKWTIMING_LC_ARG_PLOT_LC_HD1D_H_
+#ifndef MORIIISM_MITOOL_MITIMING_LC_ARG_PLOT_LC_HD1D_H_
+#define MORIIISM_MITOOL_MITIMING_LC_ARG_PLOT_LC_HD1D_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValPlotLcHd1d : public MxkwArgBase{
+class ArgValPlotLcHd1d : public MiArgBase{
 public:
-    explicit ArgValPlotLcHd1d(string title = "") :
-        MxkwArgBase("ArgValPlotLcHd1d", title),
+    ArgValPlotLcHd1d() :
+        MiArgBase(),
         progname_(""),
         file_in_(""),
         file_out_(""),
@@ -36,4 +36,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_LC_ARG_PLOT_LC_HD1D_H_
+#endif // MORIIISM_MITOOL_MITIMING_LC_ARG_PLOT_LC_HD1D_H_

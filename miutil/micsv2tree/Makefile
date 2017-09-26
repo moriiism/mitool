@@ -1,5 +1,6 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 
 INCLUDE = $(ROOT_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)

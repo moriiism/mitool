@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_FOLD_ARG_FOLD_H_
-#define MXKWTOOL_MXKWTIMING_FOLD_ARG_FOLD_H_
+#ifndef MORIIISM_MITOOL_MITIMING_FOLD_ARG_FOLD_H_
+#define MORIIISM_MITOOL_MITIMING_FOLD_ARG_FOLD_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValFold : public MxkwArgBase{
+class ArgValFold : public MiArgBase{
 public:
-    explicit ArgValFold(string title = "") :
-        MxkwArgBase("ArgValFold", title),
+    ArgValFold() :
+        MiArgBase(),
         progname_(""),
         file_(""),
         telescope_(""),
@@ -57,5 +57,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-
-#endif // MXKWTOOL_MXKWTIMING_FOLD_ARG_FOLD_H_
+#endif // MORIIISM_MITOOL_MITIMING_FOLD_ARG_FOLD_H_

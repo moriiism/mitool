@@ -1,5 +1,5 @@
-#include "mxkw_data_ope.h"
-#include "mxkw_hist1d_ope.h"
+#include "mi_data1d_ope.h"
+#include "mi_hist1d_ope.h"
 
 #include "arg_binning.h"
 
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);

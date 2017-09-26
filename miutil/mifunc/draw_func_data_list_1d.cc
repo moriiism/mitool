@@ -1,6 +1,7 @@
 #include "mi_iolib.h"
 #include "mir_plot_conf.h"
 #include "mir_root_tool.h"
+#include "mir_graph2d_nerr.h"
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
 #include "mir_func_ope.h"
@@ -122,7 +123,7 @@ int main(int argc, char* argv[]){
             MPrintErr("bad format");
             abort();
         } else if("x,y" == data_fmt_arr[ifile]){
-            g2d_arr[ifile] = new GraphData2d;
+            g2d_arr[ifile] = new GraphDataNerr2d;
         } else if("x,y,ye" == data_fmt_arr[ifile]){
             g2d_arr[ifile] = new GraphDataSerr2d;        
         } else if("x,xe,y,ye" == data_fmt_arr[ifile]){
@@ -140,7 +141,7 @@ int main(int argc, char* argv[]){
             abort();
         }
         g2d_arr[ifile]->Load(files_arr[ifile], data_fmt_arr[ifile]);
-        tgraph_arr[ifile] = g2d_arr[ifile]->GenTGraph();
+        tgraph_arr[ifile] = g2d_arr[ifile]->GenTGraph(0.0, 0.0);
     }
     
     //

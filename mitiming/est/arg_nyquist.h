@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_EST_ARG_NYQUIST_H_
-#define MXKWTOOL_MXKWTIMING_EST_ARG_NYQUIST_H_
+#ifndef MORIIISM_MITOOL_MITIMING_EST_ARG_NYQUIST_H_
+#define MORIIISM_MITOOL_MITIMING_EST_ARG_NYQUIST_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValNyquist : public MxkwArgBase{
+class ArgValNyquist : public MiArgBase{
 public:
-    explicit ArgValNyquist(string title = "") :
-        MxkwArgBase("ArgValNyquist", title),
+    ArgValNyquist() :
+        MiArgBase(),
         progname_(""),
         delta_time_(0.0) {}
     ~ArgValNyquist(){
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif // MXKWTOOL_MXKWTIMING_EST_ARG_NYQUIST_H_
+#endif // MORIIISM_MITOOL_MITIMING_EST_ARG_NYQUIST_H_

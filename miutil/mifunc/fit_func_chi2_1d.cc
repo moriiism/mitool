@@ -82,11 +82,13 @@ int main(int argc, char* argv[]){
     // minfcn
     //
     MinFcn* minfcn = MinFcnOne::GenMinFcnOne("Chi2Fcn1d", func,
-                                             g2d->GetNdata(), g2d->GetXvalArrDbl(), NULL,
-                                             g2d->GetOvalArrDbl(), g2d->GetOvalSerrArrDbl(), NULL, NULL,
+                                             g2d->GetNdata(),
+                                             g2d->GetXvalArr()->GetVal(),
+                                             NULL,
+                                             g2d->GetOvalArr()->GetVal(),
+                                             g2d->GetOvalArr()->GetValSerr(), NULL, NULL,
                                              NULL, NULL);
 
-    
     //
     // fit
     //

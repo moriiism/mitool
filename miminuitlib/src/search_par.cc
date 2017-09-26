@@ -53,6 +53,13 @@ void MimSearchPar::Copy(const MimSearchPar* const org)
 }
 
 
+MimSearchPar* const MimSearchPar::Clone() const
+{
+    MimSearchPar* obj_new = new MimSearchPar;
+    obj_new->Copy(this);
+    return obj_new;
+}
+
 void MimSearchPar::Print(FILE* fp) const
 {
     fprintf(fp, "npar_ = %ld\n", npar_);

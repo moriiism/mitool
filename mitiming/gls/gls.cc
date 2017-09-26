@@ -1,13 +1,12 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_search_par.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_nerr.h"
+#include "mir_hist1d_serr.h"
+#include "mim_search_par.h"
+#include "mir_qdp_tool.h"
 
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_folding.h"
 #include "arg_gls.h"
 #include "sub.h"
 
@@ -23,7 +22,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
  
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -33,7 +32,7 @@ int main(int argc, char* argv[]){
                     + argval->GetProgname() + ".log").c_str(), "w");
     argval->Print(fp_log);
 
-    MxkwRootTool* root_tool = new MxkwRootTool;
+    MirRootTool* root_tool = new MirRootTool;
     root_tool->InitTCanvas(argval->GetRootStyle());
     
     GraphDataSerr2d* gd2d  = NULL;
@@ -55,7 +54,7 @@ int main(int argc, char* argv[]){
         delete gd2d_mjd;
     }
 
-    MxkwSearchPar* plot_dat_par = new MxkwSearchPar;
+    MimSearchPar* plot_dat_par = new MimSearchPar;
     plot_dat_par->Load(argval->GetSearchDat());
     plot_dat_par->Print(stdout);
     plot_dat_par->Print(fp_log);
@@ -69,7 +68,7 @@ int main(int argc, char* argv[]){
                                   plot_dat_par->GetLoElm(0),
                                   plot_dat_par->GetUpElm(0));
         }
-        MxkwQdpTool::MkQdp(hd1d_gls, argval->GetOutdir() + "/"
+        MirQdpTool::MkQdp(hd1d_gls, argval->GetOutdir() + "/"
                            + argval->GetOutfileHead() + "_gls.qdp",
                            "x,y");
         delete hd1d_gls;

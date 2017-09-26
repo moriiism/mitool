@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_LC_ARG_BINNING_H_
-#define MXKWTOOL_MXKWTIMING_LC_ARG_BINNING_H_
+#ifndef MORIIISM_MITOOL_MITIMING_LC_ARG_BINNING_H_
+#define MORIIISM_MITOOL_MITIMING_LC_ARG_BINNING_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValBinning : public MxkwArgBase{
+class ArgValBinning : public MiArgBase{
 public:
-    explicit ArgValBinning(string title = "") :
-        MxkwArgBase("ArgValBinning", title),
+    ArgValBinning() :
+        MiArgBase(),
         progname_(""),
         file_(""),
         hist_info_(""),
@@ -34,4 +34,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_LC_ARG_BINNING_H_
+#endif // MORIIISM_MITOOL_MITIMING_LC_ARG_BINNING_H_

@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_HIST_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_HIST_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_HIST_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_HIST_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValLcthrHist : public MxkwArgBase{
+class ArgValLcthrHist : public MiArgBase{
 public:
-    explicit ArgValLcthrHist(string title = "") :
-        MxkwArgBase("ArgValLcthrHist", title),
+    ArgValLcthrHist() :
+        MiArgBase(),
         progname_(""),
         file_(""),
         format_(""),
@@ -48,4 +48,5 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_HIST_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_HIST_H_
+

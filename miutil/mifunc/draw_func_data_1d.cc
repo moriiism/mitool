@@ -51,10 +51,10 @@ int main(int argc, char* argv[]){
     plot_conf->Print(stdout);
     root_tool->SetPlotConf(plot_conf);
 
-    MirQdpTool::MkQdpDiff3(gdata2d, func, func_par->GetPar(),
-                            argval->GetNpointFunc(),
-                            argval->GetOutdir(), argval->GetOutfileHead(),
-                            plot_conf);
+//    MirQdpTool::MkQdpDiff3(gdata2d, func, func_par->GetPar(),
+//                            argval->GetNpointFunc(),
+//                            argval->GetOutdir(), argval->GetOutfileHead(),
+//                            plot_conf);
 
     //
     // plot by root
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
     double yval_lo = atof(plot_conf->GetLoStrElm(1).c_str());
     double yval_up = atof(plot_conf->GetUpStrElm(1).c_str());
 
-    TGraph* tgraph = gdata2d->GenTGraph();
+    TGraph* tgraph = gdata2d->GenTGraph(0.0, 0.0);
     tgraph->GetXaxis()->SetLimits(xval_lo, xval_up);
     tgraph->SetMinimum(yval_lo);
     tgraph->SetMaximum(yval_up);
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
     // draw function
     //
 
-    TF1* tf1_func = new TF1("func", func, &FuncUser::Eval,
+    TF1* tf1_func = new TF1("func", func, &MirFunc::Eval,
                             xval_lo, xval_up,
                             func->GetNpar(), "FuncUser", "Eval");
     MirFuncPar::CopyPar(func_par, tf1_func);

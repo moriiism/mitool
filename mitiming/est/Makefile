@@ -1,19 +1,25 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
+include ../../miminuitlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
+INCLUDE := $(MITIMINGLIB_INC) $(MIMINUITLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
 	$(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIMINUITLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
 	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
 
-TARGET = mklc
+TARGET = est_by_lc  nyquist
 
 all: $(TARGET) 
 
-mklc: mklc.o  arg_mklc.o
+est_by_lc: est_by_lc.o  arg_est_by_lc.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+nyquist: nyquist.o  arg_nyquist.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc

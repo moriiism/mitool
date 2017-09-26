@@ -1,5 +1,5 @@
-#include "mxkw_iolib.h"
-#include "mxkw_timing_estimate.h"
+#include "mi_iolib.h"
+#include "mit_estimate.h"
 
 #include "arg_nyquist.h"
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     argval->Print(stdout);
 
     double nyquist_freq =
-        MxkwEstimate::GetNyquistFreq(argval->GetDeltaTime());
+        MitEstimate::GetNyquistFreq(argval->GetDeltaTime());
     printf("nyquist_freq = %e (Hz)\n",
            nyquist_freq);
     

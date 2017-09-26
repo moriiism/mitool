@@ -53,6 +53,8 @@ void MirQdpTool::PrintQdpCmdStd(FILE* fp)
     fprintf(fp, "lw 5\n");
     fprintf(fp, "csize 1.2\n");
     fprintf(fp, "la rot \n");
+    fprintf(fp, "loc 0.05 0.05 0.95 0.95\n");
+    fprintf(fp, "la pos y 3.0\n");
     fprintf(fp, "\n");    
 }
 
@@ -75,7 +77,7 @@ void MirQdpTool::PrintQdpAxisTitle(FILE* fp, string xy,
         sprintf(cmd, "la %s %s",
                 xy.c_str(), title.c_str());
     } else {
-        sprintf(cmd, "la %s %s (offset = %.15e)",
+        sprintf(cmd, "la %s %s (offset = %.5e)",
                 xy.c_str(), title.c_str(), offset);
     }
     fprintf(fp, "%s\n", cmd);
@@ -86,6 +88,11 @@ void MirQdpTool::PrintQdpScale(FILE* fp, string xy, string scale)
     if("log" == scale){
         fprintf(fp, "log   %s  on\n",
                 xy.c_str());
+    } else if("lin" == scale){
+        fprintf(fp, "log   %s  off\n",
+                xy.c_str());
+    } else {
+        abort();
     }
 }
 
@@ -102,7 +109,7 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     
     FILE* fp = fopen(qdpout.c_str(), "w");
     fprintf(fp, "skip sing \n");
-    if("DataArray1d" == data_array->GetClassName()){
+    if("DataArrayNerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y");
     } else if ("DataArraySerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y,ye");
@@ -114,7 +121,6 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
         MPrintErr(msg);
         abort();
     }
-
     string title_xval = "index";
     double offset_xval = 0.0;
 
@@ -137,6 +143,7 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     double oval_up_shifted = oval_up - offset_oval;
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "ma 6 on\n");
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -164,7 +171,7 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
 
     FILE* fp = fopen(qdpout.c_str(), "w");
     fprintf(fp, "skip sing \n");
-    if("DataArray1d" == data_array->GetClassName()){
+    if("DataArrayNerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y");
     } else if ("DataArraySerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y,ye");
@@ -179,11 +186,10 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
 
     string title_xval  = plot_conf->GetLabelElm(0);
     string title_oval  = plot_conf->GetLabelElm(1);
-    // offset_xval must be zero
-    if("no" !=  plot_conf->GetOffsetTagElm(0) &&
-       fabs(atof(plot_conf->GetOffsetTagElm(0).c_str())) > DBL_EPSILON ){
+    // offset_xval must be "no"
+    if("no" !=  plot_conf->GetOffsetTagElm(0) ){
         char msg[kLineSize];
-        sprintf(msg, "offset_xval must be zero");
+        sprintf(msg, "offset_xval must be zero. Then, set offset_xval = no.");
         MPrintErr(msg);
         abort();
     }
@@ -229,6 +235,7 @@ void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     }
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "ma 6 on\n");    
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -252,7 +259,7 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     
     FILE* fp = fopen(qdpout.c_str(), "w");
     fprintf(fp, "skip sing \n");
-    if("DataArray1d" == data_array->GetClassName()){
+    if("DataArrayNerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y");
     } else if ("DataArraySerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,xe,y");
@@ -283,6 +290,7 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     double oval_up_shifted = oval_up - offset_oval;
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "ma 6 on\n");
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -309,7 +317,7 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     
     FILE* fp = fopen(qdpout.c_str(), "w");
     fprintf(fp, "skip sing \n");
-    if("DataArray1d" == data_array->GetClassName()){
+    if("DataArrayNerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,y");
     } else if ("DataArraySerr1d" == data_array->GetClassName()){
         PrintQdpRead(fp, "x,xe,y");
@@ -325,11 +333,10 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     string title_xval = plot_conf->GetLabelElm(0);
     string title_oval = plot_conf->GetLabelElm(1);
     double offset_xval = data_array->GetOffsetValFromTag(plot_conf->GetOffsetTagElm(0));    
-    // offset_oval must be zero
-    if("no" !=  plot_conf->GetOffsetTagElm(1) &&
-       fabs(atof(plot_conf->GetOffsetTagElm(1).c_str())) > DBL_EPSILON ){
+    // offset_oval must be "no"
+    if("no" !=  plot_conf->GetOffsetTagElm(1) ){
         char msg[kLineSize];
-        sprintf(msg, "offset_oval must be zero");
+        sprintf(msg, "offset_oval must be zero. Then, set offset_oval = no.");
         MPrintErr(msg);
         abort();
     }
@@ -371,6 +378,7 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     }
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "ma 6 on\n");    
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -388,7 +396,9 @@ void MirQdpTool::MkQdp(const GraphData2d* const graph_data,
                        double offset_xval,
                        double offset_oval,
                        string scale_xval,
-                       string scale_oval)
+                       string scale_oval,
+                       int flag_line,
+                       int flag_mark)
 {
     FILE* fp = fopen(qdpout.c_str(), "w");
     fprintf(fp, "skip sing \n");
@@ -412,6 +422,12 @@ void MirQdpTool::MkQdp(const GraphData2d* const graph_data,
     double oval_up_shifted = oval_up - offset_oval;
     
     PrintQdpCmdStd(fp);
+    if(1 == flag_line){
+        fprintf(fp, "line on\n");
+    }
+    if(1 == flag_mark){
+        fprintf(fp, "ma 6 on\n");
+    }
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -425,7 +441,9 @@ void MirQdpTool::MkQdp(const GraphData2d* const graph_data,
 void MirQdpTool::MkQdp(const GraphData2d* const graph_data,
                        string qdpout,
                        string format,
-                       const MirPlotConf* const plot_conf)
+                       const MirPlotConf* const plot_conf,
+                       int flag_line,
+                       int flag_mark)
 {
     if(2 != plot_conf->GetNdim()){
         char msg[kLineSize];
@@ -480,6 +498,12 @@ void MirQdpTool::MkQdp(const GraphData2d* const graph_data,
     }
     
     PrintQdpCmdStd(fp);
+    if(1 == flag_line){
+        fprintf(fp, "line on\n");
+    }
+    if(1 == flag_mark){
+        fprintf(fp, "ma 6 on\n");
+    }
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -502,7 +526,7 @@ void MirQdpTool::MkQdp(const HistData1d* const hist_data,
 {
     string format_this = "";
     if("def" == format){
-        if("HistData1d" == hist_data->GetClassName()){
+        if("HistDataNerr1d" == hist_data->GetClassName()){
             format_this = "x,y";
         } else if ("HistDataSerr1d" == hist_data->GetClassName()){
             format_this = "x,y,ye";
@@ -538,6 +562,8 @@ void MirQdpTool::MkQdp(const HistData1d* const hist_data,
     double oval_up_shifted = oval_up - offset_oval;
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "line st\n");
+    fprintf(fp, "ma 6 on\n");
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -555,7 +581,7 @@ void MirQdpTool::MkQdp(const HistData1d* const hist_data,
 {
     string format_this = "";
     if("def" == format){
-        if("HistData1d" == hist_data->GetClassName()){
+        if("HistDataNerr1d" == hist_data->GetClassName()){
             format_this = "x,y";
         } else if ("HistDataSerr1d" == hist_data->GetClassName()){
             format_this = "x,y,ye";
@@ -622,6 +648,8 @@ void MirQdpTool::MkQdp(const HistData1d* const hist_data,
     }
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "line st\n");
+    fprintf(fp, "ma 6 on\n");    
     PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
     PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
     PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
@@ -647,7 +675,7 @@ void MirQdpTool::MkQdp(const MirFunc* const func, const double* const par,
     MkQdp(gd2d, outqdp, "x,y",
           title_xval, title_oval,
           offset_xval, offset_oval,
-          scale_xval, scale_oval);
+          scale_xval, scale_oval, 1, 0);
     delete gd2d;
 }
 
@@ -664,7 +692,7 @@ void MirQdpTool::MkQdp(const MirFunc* const func, const double* const par,
     }
     GraphDataNerr2d* gd2d = new GraphDataNerr2d;
     gd2d->InitSetByFunc(func, par, npoint, xval_lo, xval_up, plot_conf->GetScaleElm(0));
-    MkQdp(gd2d, outqdp, "x,y", plot_conf);
+    MkQdp(gd2d, outqdp, "x,y", plot_conf, 1, 0);
     delete gd2d;
 }
 
@@ -1005,6 +1033,7 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
     double oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "line st\n");    
     fprintf(fp, "win 1\n");
     fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
     fprintf(fp, "LAB  NX OFF\n");
@@ -1129,6 +1158,7 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
     }
 
     PrintQdpCmdStd(fp);
+    fprintf(fp, "line st\n");    
     fprintf(fp, "win 1\n");
     fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
     fprintf(fp, "LAB  NX OFF\n");
@@ -1202,6 +1232,7 @@ void MirQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
     fprintf(fp, "lw 5\n");
     fprintf(fp, "la rot\n");
     fprintf(fp, "csize 1.2\n");
+    fprintf(fp, "line st\n");
 
     int ilabel = 1;
     for(int iwin = 0; iwin < nwin; iwin++){

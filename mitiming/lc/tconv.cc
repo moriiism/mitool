@@ -1,8 +1,6 @@
-
-#include "mxkw_hist1d_serr.h"
-
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_timeconv.h"
+#include "mir_hist1d_serr.h"
+#include "mit_telescope.h"
+#include "mit_timeconv.h"
 
 #include "arg.h"
 
@@ -18,7 +16,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MirIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);

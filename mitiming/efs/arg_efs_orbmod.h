@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_EFS_ARG_EFS_ORBMOD_H_
-#define MXKWTOOL_MXKWTIMING_EFS_ARG_EFS_ORBMOD_H_
+#ifndef MORIIISM_MITOOL_MITIMING_EFS_ARG_EFS_ORBMOD_H_
+#define MORIIISM_MITOOL_MITIMING_EFS_ARG_EFS_ORBMOD_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValEfsOrbmod : public MxkwArgBase{
+class ArgValEfsOrbmod : public MiArgBase{
 public:
-    explicit ArgValEfsOrbmod(string title = "") :
-        MxkwArgBase("ArgValEfsOrbmod", title),
+    explicit ArgValEfsOrbmod() :
+        MiArgBase(),
         progname_(""),
         file_(""),
         telescope_(""),
@@ -66,4 +66,5 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_EFS_ARG_EFS_ORBMOD_H_
+#endif // MORIIISM_MITOOL_MITIMING_EFS_ARG_EFS_ORBMOD_H_
+

@@ -1,5 +1,5 @@
-#include "mxkw_timing_gti.h"
-#include "mxkw_timing_telescope.h"
+#include "mit_gti.h"
+#include "mit_telescope.h"
 #include "arg_gti_tconv.h"
 
 // global variable 

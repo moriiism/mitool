@@ -1,15 +1,15 @@
-#ifndef MXKWTOOL_MXKWTIMING_EFS_SUB_H_
-#define MXKWTOOL_MXKWTIMING_EFS_SUB_H_
+#ifndef MORIIISM_MITOOL_MITIMING_EFS_SUB_H_
+#define MORIIISM_MITOOL_MITIMING_EFS_SUB_H_
 
-#include "mxkw_data.h"
-#include "mxkw_data_ope.h"
-#include "mxkw_hist2d.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_timeconv.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_timing_pulseprof_stat.h"
-#include "mxkw_timing_binary_orb.h"
-#include "mxkw_timing_gti.h"
+#include "mir_data1d_nerr.h"
+#include "mir_data1d_ope.h"
+#include "mir_hist2d.h"
+#include "mit_eph.h"
+#include "mit_timeconv.h"
+#include "mit_folding.h"
+#include "mit_pulseprof_stat.h"
+#include "mit_binary_orb.h"
+#include "mit_gti.h"
 
 void GenEfsNu(const DataArray1d* const data_arr, double mjdref, string tunit,
               int nbin_nu, double nu_lo, double nu_up,
@@ -70,4 +70,4 @@ void GenEfsNuOrbmod(const GraphDataSerr2d* const g2d, double mjdref, string tuni
 
 
 
-#endif // MXKWTOOL_MXKWTIMING_EFS_SUB_H_
+#endif // MORIIISM_MITOOL_MITIMING_EFS_SUB_H_

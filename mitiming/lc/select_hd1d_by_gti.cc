@@ -1,6 +1,5 @@
-#include "mxkw_data_serr.h"
-#include "mxkw_timing_gti.h"
-
+#include "mir_data1d_serr.h"
+#include "mit_gti.h"
 #include "arg_select_hd1d_by_gti.h"
 
 // global variable 
@@ -15,7 +14,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);

@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_EST_ARG_EST_BY_LC_H_
-#define MXKWTOOL_MXKWTIMING_EST_ARG_EST_BY_LC_H_
+#ifndef MORIIISM_MITOOL_MITIMING_EST_ARG_EST_BY_LC_H_
+#define MORIIISM_MITOOL_MITIMING_EST_ARG_EST_BY_LC_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValEstByLc : public MxkwArgBase{
+class ArgValEstByLc : public MiArgBase{
 public:
-    explicit ArgValEstByLc(string title = "") :
-        MxkwArgBase("ArgValEstByLc", title),
+    ArgValEstByLc() :
+        MiArgBase(),
         progname_(""),
         lc_file_(""),
         lc_tunit_(""),
@@ -33,6 +33,5 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-
-#endif // MMXKWTOOL_MXKWTIMING_EST_ARG_EST_BY_LC_H_
+#endif // MORIIISM_MITOOL_MITIMING_EST_ARG_EST_BY_LC_H_
 

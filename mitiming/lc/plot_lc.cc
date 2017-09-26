@@ -1,5 +1,5 @@
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_telescope.h"
+#include "mi_hist1d_serr.h"
+#include "mit_telescope.h"
 
 #include "arg.h"
 
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
         double tbinfwidth = atof(argval->GetTbinfwidthStr().c_str());
         double time_lo = data_arr->GetValMin() - 0.5 * tbinfwidth;
         double time_up = data_arr->GetValMax() + 0.5 * tbinfwidth;
-        long nbin_lc = MxkwMath::GetNbin(time_lo, time_up, tbinfwidth, "ceil");
+        long nbin_lc = MirMath::GetNbin(time_lo, time_up, tbinfwidth, "ceil");
         printf("nbin_lc = %ld\n", nbin_lc);
     
         HistData1d* h1d_lcbin = new HistData1d;

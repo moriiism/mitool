@@ -1,5 +1,6 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
@@ -8,12 +9,16 @@ INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
 LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
 	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
 
-TARGET = mklc
+TARGET = ephatt  mkeph
 
 all: $(TARGET) 
 
-mklc: mklc.o  arg_mklc.o
+ephatt: ephatt.o  arg_ephatt.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+mkeph: mkeph.o  arg_mkeph.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc

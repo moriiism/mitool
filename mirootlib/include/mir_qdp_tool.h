@@ -29,14 +29,15 @@ namespace MirQdpTool
     void PrintQdpAxisRescale(FILE* fp, string xy,
                              double val_lo, double val_up);
     void PrintQdpAxisTitle(FILE* fp, string xy,
-                           string title, double offset);
+                           string title,
+                           double offset);
     void PrintQdpScale(FILE* fp, string xy, string scale);
 
     // format: index  data
     void MkQdpMode1(const DataArray1d* const data_array,
                     string qdpout,
-                    string title_oval,
-                    double offset_oval,
+                    string title_oval = "",
+                    double offset_oval = 0.0,
                     string scale_xval = "lin",
                     string scale_oval = "lin");
     void MkQdpMode1(const DataArray1d* const data_array,
@@ -46,8 +47,8 @@ namespace MirQdpTool
     // format: data  1.0
     void MkQdpMode2(const DataArray1d* const data_array,
                     string qdpout,
-                    string title_xval,
-                    double offset_xval,
+                    string title_xval = "",
+                    double offset_xval = 0.0,
                     string scale_xval = "lin");
     void MkQdpMode2(const DataArray1d* const data_array,
                     string qdpout,
@@ -62,12 +63,15 @@ namespace MirQdpTool
                double offset_xval = 0.0,
                double offset_oval = 0.0,
                string scale_xval = "lin",
-               string scale_oval = "lin");
+               string scale_oval = "lin",
+               int flag_line = 0,
+               int flag_mark = 1);
     void MkQdp(const GraphData2d* const graph_data,
                string qdpout,
                string format,
-               const MirPlotConf* const plot_conf);
-
+               const MirPlotConf* const plot_conf,
+               int flag_line = 0,
+               int flag_mark = 1);
     // also valid for HistDataSerr1d, HistDataTerr1d by polymorphism
     void MkQdp(const HistData1d* const hist_data,
                string outqdp,
@@ -270,7 +274,6 @@ namespace MirQdpTool
                                  double offset_xval = 0.0,
                                  double offset_yval = 0.0,
                                  double offset_oval = 0.0);
-    
 }
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_QDP_TOOL_H_

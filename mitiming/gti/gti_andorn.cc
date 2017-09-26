@@ -1,4 +1,4 @@
-#include "mxkw_timing_gti.h"
+#include "mit_gti.h"
 #include "arg_gti_andorn.h"
 
 // global variable 
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -23,8 +23,8 @@ int main(int argc, char* argv[]){
 
     string* gtifile_arr = NULL;
     long ngti;
-    MxkwIolib::GenReadFile(argval->GetGtiFileList(), &gtifile_arr, &ngti);
-    MxkwIolib::Printf2(fp_log, "ngti = %d\n", ngti);
+    MiIolib::GenReadFile(argval->GetGtiFileList(), &gtifile_arr, &ngti);
+    MiIolib::Printf2(fp_log, "ngti = %d\n", ngti);
 
     Interval** gti_arr = new Interval* [ngti];
     for (int igti = 0; igti < ngti; igti ++){
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
     for (int igti = 0; igti < ngti; igti ++){
         gti_arr[igti]->Load(gtifile_arr[igti]);
     }
-    MxkwIolib::DelReadFile(gtifile_arr);
+    MiIolib::DelReadFile(gtifile_arr);
 
     Interval* gti_out = new Interval;
     if("and" == argval->GetAndOr()){
@@ -48,13 +48,13 @@ int main(int argc, char* argv[]){
     
     double offset
         = gti_out->GetOffsetFromTag(argval->GetOffsetTag());
-    MxkwIolib::Printf2(fp_log,
+    MiIolib::Printf2(fp_log,
                        "gti_out->GetNterm(): %d\n",
                        gti_out->GetNterm());
-    MxkwQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
+    MirQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + ".qdp");
-    MxkwQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
+    MirQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + "_offset.qdp",
                        "", offset);

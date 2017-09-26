@@ -1,11 +1,11 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_search_par.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_serr.h"
+#include "mim_search_par.h"
+#include "mir_qdp_tool.h"
 
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_folding.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_folding.h"
 
 #include "sub.h"
 #include "arg_efs_orbmod.h"
@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
  
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -32,13 +32,13 @@ int main(int argc, char* argv[]){
                     + argval->GetProgname() + ".log").c_str(), "w");
 
 
-    MxkwRootTool* root_tool = new MxkwRootTool;
+    MirRootTool* root_tool = new MirRootTool;
     root_tool->InitTCanvas(argval->GetRootStyle());
     
     DataArray1d* data_arr = NULL;
     GraphDataSerr2d* g2d  = NULL;
     if("x" == argval->GetFormat()){
-        data_arr = new DataArray1d;
+        data_arr = new DataArrayNerr1d;
         data_arr->Load(argval->GetFile());
         data_arr->Sort();
     } else {
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
         g2d->Sort();
     }
 
-    MxkwSearchPar* search_par = new MxkwSearchPar;
+    MimSearchPar* search_par = new MimSearchPar;
     search_par->Load(argval->GetSearchDat());
     search_par->Print(stdout);
 
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
         h2d_chi2->MkTH2Fig(argval->GetOutdir() + "/"
                            + argval->GetOutfileHead() + "_chi2.png",
                            root_tool);
-        MxkwQdpTool::MkQdpNhist(h1d_chi2_arr, search_par->GetNbinElm(1),
+        MirQdpTool::MkQdpNhist(h1d_chi2_arr, search_par->GetNbinElm(1),
                                 argval->GetOutdir() + "/"
                                 + argval->GetOutfileHead() + "_nhist_chi2.qdp",
                                 0.0);
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]){
     h1d_pls_best->Save(argval->GetOutdir() + "/"
                        + argval->GetOutfileHead() + "_best_pls.txt",
                        "x,xe,y,ye");
-    MxkwQdpTool::MkQdp(h1d_pls_best, argval->GetOutdir() + "/"
+    MirQdpTool::MkQdp(h1d_pls_best, argval->GetOutdir() + "/"
                        + argval->GetOutfileHead() + "_best_pls.qdp", "x,xe,y,ye");
 
     // cleaning

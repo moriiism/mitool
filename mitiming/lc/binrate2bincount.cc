@@ -1,5 +1,5 @@
-#include "mxkw_graph2d_serr.h"
-#include "mxkw_timing_telescope.h"
+#include "mi_graph2d_serr.h"
+#include "mit_telescope.h"
 #include "arg.h"
 
 // global variable 
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);

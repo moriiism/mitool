@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValLcthr : public MxkwArgBase{
+class ArgValLcthr : public MiArgBase{
 public:
-    explicit ArgValLcthr(string title = "") :
-        MxkwArgBase("ArgValLcthr", title),
+    ArgValLcthr() :
+        MiArgBase(),
         progname_(""),
         file_(""),
         format_(""),
@@ -46,4 +46,4 @@ private:
 };
 
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_LCTHR_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_LCTHR_H_

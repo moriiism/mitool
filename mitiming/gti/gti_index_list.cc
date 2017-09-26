@@ -1,4 +1,4 @@
-#include "mxkw_timing_gti.h"
+#include "mit_gti.h"
 #include "arg_gti_index_list.h"
 
 // global variable 
@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 
     string* line_arr = NULL;
     long nline = 0;
-    MxkwIolib::GenReadFileSkipComment(argval->GetTimeList(),
+    MiIolib::GenReadFileSkipComment(argval->GetTimeList(),
                                       &line_arr,
                                       &nline);
 
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]){
     for(long iline = 0; iline < nline; iline ++){
         int ncolumn = 0;
         string* split_arr = NULL;
-        MxkwStr::GenSplit(line_arr[iline], &ncolumn, &split_arr);
+        MiStr::GenSplit(line_arr[iline], &ncolumn, &split_arr);
         if(1 > ncolumn){
             MPrintWarn("ncolum < 1");
             continue;
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
                 line_arr[iline].c_str());
     }
     fclose(fp);
-    MxkwIolib::DelReadFile(line_arr);
+    MiIolib::DelReadFile(line_arr);
 
 
     delete argval;

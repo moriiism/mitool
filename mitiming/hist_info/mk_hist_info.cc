@@ -1,6 +1,5 @@
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_timeconv.h"
-
+#include "mit_telescope.h"
+#include "mit_timeconv.h"
 #include "arg_mk_hist_info.h"
 
 // global variable 

@@ -1,23 +1,23 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
+include ../../miminuitlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
+INCLUDE := $(MITIMINGLIB_INC) $(MIMINUITLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
 	$(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIMINUITLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
 	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
-
-OBS = sub.o
 
 TARGET = efs efs_orbmod
 
 all: $(TARGET) 
 
-efs: efs.o  arg_efs.o ${OBS}
-	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
-efs_orbmod: efs_orbmod.o  arg_efs_orbmod.o ${OBS}
-	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+efs: efs.o  arg_efs.o sub.o
+	$(CXXN) $@.o arg_$@.o sub.o ${LDLIBS} -o $@
+efs_orbmod: efs_orbmod.o  arg_efs_orbmod.o sub.o
+	$(CXXN) $@.o arg_$@.o sub.o ${LDLIBS} -o $@
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc

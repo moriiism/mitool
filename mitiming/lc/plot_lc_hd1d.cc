@@ -1,5 +1,5 @@
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_hist1d_serr.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_plot_lc_hd1d.h"
 
@@ -15,12 +15,12 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    MxkwPlotConf* plot_conf = new MxkwPlotConf;
+    MirPlotConf* plot_conf = new MirPlotConf;
     plot_conf->Load(argval->GetPlotConfFile());
     plot_conf->Print(stdout);
 
     HistData1d* hd1d = HistData1d::GenHd1dByLoad(argval->GetFileIn());
-    MxkwQdpTool::MkQdp(hd1d, argval->GetFileOut(),
+    MirQdpTool::MkQdp(hd1d, argval->GetFileOut(),
                        argval->GetFormat(), plot_conf);
 
     //

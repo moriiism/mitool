@@ -1,4 +1,4 @@
-#include "mxkw_timing_gti.h"
+#include "mit_gti.h"
 #include "arg_gti_andor2.h"
 
 // global variable 
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -38,12 +38,12 @@ int main(int argc, char* argv[]){
     }
 
     double offset = gti_out->GetOffsetFromTag(argval->GetOffsetTag());
-    MxkwIolib::Printf2(fp_log, "gti_out->GetNterm(): %d\n",
+    MiIolib::Printf2(fp_log, "gti_out->GetNterm(): %d\n",
                        gti_out->GetNterm());
-    MxkwQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
+    MirQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + ".qdp");
-    MxkwQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
+    MirQdpTool::MkQdp(gti_out, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + "_offset.qdp",
                        "", offset);

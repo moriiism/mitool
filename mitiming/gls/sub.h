@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GLS_SUB_H_
-#define MXKWTOOL_MXKWTIMING_GLS_SUB_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GLS_SUB_H_
+#define MORIIISM_MITOOL_MITIMING_GLS_SUB_H_
 
-#include "mxkw_data.h"
-#include "mxkw_hist1d_ope.h"
-#include "mxkw_hist2d.h"
-#include "mxkw_timing_timeconv.h"
-#include "mxkw_timing_gls.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_data1d_nerr.h"
+#include "mir_hist1d_ope.h"
+#include "mir_hist2d_nerr.h"
+#include "mit_timeconv.h"
+#include "mit_gls.h"
+#include "mir_qdp_tool.h"
 
 HistData1d* const GenHd1dGls(const GraphDataSerr2d* const gd2d_sec,
                              long nnu, double nu_lo, double nu_up);
@@ -16,4 +16,4 @@ HistData2d* const GenHd2dGls(const GraphDataSerr2d* const gd2d_sec,
                              long nratio, double ratio_lo, double ratio_up,
                              double epoch_sec);
 
-#endif // MXKWTOOL_MXKWTIMING_GLS_SUB_H_
+#endif // MORIIISM_MITOOL_MITIMING_GLS_SUB_H_

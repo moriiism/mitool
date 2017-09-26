@@ -1,9 +1,10 @@
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
+include ../../mifunclib/Makefile.in
 
-INCLUDE := $(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC)  $(MT_INC)
-LDLIBS  := $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(MT_LIB) $(LIB)
+INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC)  $(MT_INC)
+LDLIBS  := $(MIFUNCLIB_LIB) $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(MT_LIB) $(LIB)
 
 # test passed using assert
 TARGET_PASS := test_vect  test_data1d_ope
@@ -25,8 +26,8 @@ TARGET_TESTING := test_plot_conf    \
 	test_hist_info \
 test_interval  \
 test_hist2d_terr \
-test_graph2d_ope
-
+test_graph2d_ope \
+test_qdp_tool
 
 # not yet tested :
 #	  test_hist_info_ope \
@@ -36,7 +37,7 @@ test_graph2d_ope
 #	       \
 #	    test_hist1d_ope  test_hist2d_ope \
 #	test_func  
-#	test_qdp_tool  test_cont
+#	test_cont
 #
 # test_func_par
 

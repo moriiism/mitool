@@ -1,6 +1,6 @@
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_gti.h"
+#include "mir_hist1d_serr.h"
+#include "mit_telescope.h"
+#include "mit_gti.h"
 
 #include "arg.h"
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
     fp_log = fopen((argval->GetOutdir() + "/"
                     + argval->GetProgname() + ".log").c_str(), "w");
 
-    MxkwGti* gti = new MxkwGti;
+    MitGti* gti = new MitGti;
     gti->Load(argval->GetGtiFile());
     gti->SetInfo(argval->GetGtiTunit(),
                  Telescope::GetMjdref(argval->GetGtiTelescope()));

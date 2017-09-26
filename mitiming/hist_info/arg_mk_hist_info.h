@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_HIST_INFO_ARG_MK_HIST_INFO_H_
-#define MXKWTOOL_MXKWTIMING_HIST_INFO_ARG_MK_HIST_INFO_H_
+#ifndef MORIIISM_MITOOL_MITIMING_HIST_INFO_ARG_MK_HIST_INFO_H_
+#define MORIIISM_MITOOL_MITIMING_HIST_INFO_ARG_MK_HIST_INFO_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValMkHistInfo : public MxkwArgBase{
+class ArgValMkHistInfo : public MiArgBase{
 public:
-    explicit ArgValMkHistInfo(string title = "") :
-        MxkwArgBase("ArgValMkHistInfo", title),
+    ArgValMkHistInfo() :
+        MiArgBase(),
         progname_(""),
         start_mjd_(0.0),
         end_mjd_(0.0),
@@ -45,5 +45,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-
-#endif // MXKWTOOL_MXKWTIMING_HIST_INFO_ARG_MK_HIST_INFO_H_
+#endif // MORIIISM_MITOOL_MITIMING_HIST_INFO_ARG_MK_HIST_INFO_H_

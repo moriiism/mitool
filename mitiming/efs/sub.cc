@@ -22,7 +22,7 @@ void GenEfsNu(const DataArray1d* const data_arr, double mjdref, string tunit,
     Ephemeris* eph_best = new Ephemeris;
     HistDataSerr1d* h1d_pls_best = new HistDataSerr1d;
     Ephemeris* eph = new Ephemeris;
-    HistData1d* h1d_chi2 = new HistData1d;
+    HistData1d* h1d_chi2 = new HistDataNerr1d;
     h1d_chi2->Init(nbin_nu, nu_lo, nu_up);
 
     double time_mjd_st = TimeConv::TimeToMjd(data_arr->GetValMin(), mjdref, tunit);
@@ -81,12 +81,12 @@ void GenEfsNuNuDot(const DataArray1d* const data_arr, double mjdref, string tuni
     Ephemeris* eph_best = new Ephemeris;
     HistDataSerr1d* h1d_pls_best = new HistDataSerr1d;    
     Ephemeris* eph = new Ephemeris;
-    HistData2d* h2d_chi2 = new HistData2d;
+    HistData2d* h2d_chi2 = new HistDataNerr2d;
     h2d_chi2->Init(nbin_nu, nu_lo, nu_up,
                    nbin_nudot, nudot_lo, nudot_up);
     HistData1d** h1d_chi2_arr = new HistData1d* [nbin_nudot];
     for(int ibin = 0; ibin < nbin_nudot; ibin ++){
-        h1d_chi2_arr[ibin] = new HistData1d;
+        h1d_chi2_arr[ibin] = new HistDataNerr1d;
         h1d_chi2_arr[ibin]->Init(nbin_nu, nu_lo, nu_up);
     }
 
@@ -154,7 +154,7 @@ void GenEfsNu(const GraphDataSerr2d* const g2d, double mjdref, string tunit,
     Ephemeris* eph_best = new Ephemeris;
     HistDataSerr1d* h1d_pls_best = new HistDataSerr1d;
     Ephemeris* eph = new Ephemeris;
-    HistData1d* h1d_chi2 = new HistData1d;
+    HistData1d* h1d_chi2 = new HistDataNerr1d;
     h1d_chi2->Init(nbin_nu, nu_lo, nu_up);
 
     double time_mjd_st = TimeConv::TimeToMjd(g2d->GetXvalArr()->GetValMin(), mjdref, tunit);
@@ -213,12 +213,12 @@ void GenEfsNuNuDot(const GraphDataSerr2d* const g2d, double mjdref, string tunit
     Ephemeris* eph_best = new Ephemeris;
     HistDataSerr1d* h1d_pls_best = new HistDataSerr1d;
     Ephemeris* eph = new Ephemeris;
-    HistData2d* h2d_chi2 = new HistData2d;
+    HistData2d* h2d_chi2 = new HistDataNerr2d;
     h2d_chi2->Init(nbin_nu, nu_lo, nu_up,
                   nbin_nudot, nudot_lo, nudot_up);
     HistData1d** h1d_chi2_arr = new HistData1d* [nbin_nudot];
     for(int ibin = 0; ibin < nbin_nudot; ibin ++){
-        h1d_chi2_arr[ibin] = new HistData1d;
+        h1d_chi2_arr[ibin] = new HistDataNerr1d;
         h1d_chi2_arr[ibin]->Init(nbin_nu, nu_lo, nu_up);
     }
 
@@ -294,12 +294,12 @@ void GenEfsNuOrbAmp(const DataArray1d* const data_arr, double mjdref, string tun
     Ephemeris* eph_best = new Ephemeris;
     HistDataSerr1d* h1d_pls_best = new HistDataSerr1d;    
     Ephemeris* eph = new Ephemeris;
-    HistData2d* h2d_chi2 = new HistData2d;
+    HistData2d* h2d_chi2 = new HistDataNerr2d;
     h2d_chi2->Init(nbin_nu, nu_lo, nu_up,
                    nbin_orbamp, orbamp_lo, orbamp_up);
     HistData1d** h1d_chi2_arr = new HistData1d* [nbin_orbamp];
     for(int ibin = 0; ibin < nbin_orbamp; ibin ++){
-        h1d_chi2_arr[ibin] = new HistData1d;
+        h1d_chi2_arr[ibin] = new HistDataNerr1d;
         h1d_chi2_arr[ibin]->Init(nbin_nu, nu_lo, nu_up);
     }
 
@@ -330,7 +330,7 @@ void GenEfsNuOrbAmp(const DataArray1d* const data_arr, double mjdref, string tun
                     ecc, time_peri,
                     angle_peri);
 
-        DataArray1d* data_arr_shift = new DataArray1d;
+        DataArray1d* data_arr_shift = new DataArrayNerr1d;
         vector<double> time_obj_vec;
         for(long idata = 0; idata < data_arr->GetNdata(); idata ++){
             double time = data_arr->GetValElm(idata);
@@ -349,7 +349,8 @@ void GenEfsNuOrbAmp(const DataArray1d* const data_arr, double mjdref, string tun
 
             fprintf(fp, "%e  %e\n", time_mjd, time - time_obj);
         }
-        data_arr_shift->InitSetVal(time_obj_vec);
+        data_arr_shift->Init(time_obj_vec.size());
+        data_arr_shift->SetVal(time_obj_vec);
         delete binorb;
 
         int nterm = 50;
@@ -358,13 +359,11 @@ void GenEfsNuOrbAmp(const DataArray1d* const data_arr, double mjdref, string tun
         Interval* gti_split = new Interval;
         gti_split->Split(gti_one, nterm);
         DataArray1d** data_arr_shift_arr = NULL;
-        DataArray1dOpe::GenSelectDa1dArrByInterval(data_arr_shift, gti_split,
-                                                   &data_arr_shift_arr);
+        DataArray1dOpe::GenSelectDa1dArrByIntervalNerr(data_arr_shift, gti_split,
+                                                       &data_arr_shift_arr);
 
-        HistData1d* h1d_chi2_sum = new HistData1d;
+        HistData1d* h1d_chi2_sum = new HistDataNerr1d;
         h1d_chi2_sum->Init(nbin_nu, nu_lo, nu_up);
-
-
         
         for(int iterm = 0; iterm < nterm; iterm++){
             for(long inu = 0; inu < nbin_nu; inu ++){

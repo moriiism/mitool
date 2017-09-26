@@ -1,4 +1,4 @@
-#include "mxkw_timing_gti.h"
+#include "mit_gti.h"
 #include "arg_gti_index.h"
 
 // global variable 

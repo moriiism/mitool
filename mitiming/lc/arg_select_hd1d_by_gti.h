@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
-#define MXKWTOOL_MXKWTIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
+#ifndef MORIIISM_MITOOL_MITIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
+#define MORIIISM_MITOOL_MITIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValSelectHd1dByGti : public MxkwArgBase{
+class ArgValSelectHd1dByGti : public MiArgBase{
 public:
-    explicit ArgValSelectHd1dByGti(string title = "") :
-        MxkwArgBase("ArgValSelectHd1dByGti", title),
+    ArgValSelectHd1dByGti() :
+        MiArgBase(),
         progname_(""),
         lc_file_(""),
         gti_file_(""),
@@ -34,4 +34,5 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
+#endif // MORIIISM_MITOOL_MITIMING_LC_ARG_SELECT_HD1D_BY_GTI_H_
+

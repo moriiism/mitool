@@ -1,5 +1,5 @@
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_hist1d_serr.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_plot_lc_da1d.h"
 
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
     fp_log = fopen((argval->GetOutdir() + "/"
                     + argval->GetProgname() + ".log").c_str(), "w");
     
-    DataArray1d* data_arr = new DataArray1d;
+    DataArray1d* data_arr = new DataArrayNerr1d;
     data_arr->Load(argval->GetFile());
     data_arr->Sort();
 
@@ -43,10 +43,10 @@ int main(int argc, char* argv[]){
 
     string outqdp_count = argval->GetOutdir() + "/"
         + argval->GetOutfileHead() + "_count.qdp";
-    MxkwQdpTool::MkQdp(hd1d_count, outqdp_count, "x,xe,y,ye");
+    MirQdpTool::MkQdp(hd1d_count, outqdp_count, "x,xe,y,ye");
     string outqdp_rate = argval->GetOutdir() + "/"
         + argval->GetOutfileHead() + "_rate.qdp";
-    MxkwQdpTool::MkQdp(hd1d_rate, outqdp_rate, "x,xe,y,ye");
+    MirQdpTool::MkQdp(hd1d_rate, outqdp_rate, "x,xe,y,ye");
 
     //
     // cleaning

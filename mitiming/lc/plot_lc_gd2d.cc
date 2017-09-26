@@ -1,6 +1,6 @@
-#include "mxkw_graph2d_serr.h"
-#include "mxkw_graph2d_terr.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_graph2d_serr.h"
+#include "mir_graph2d_terr.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_plot_lc_gd2d.h"
 
@@ -20,10 +20,10 @@ int main(int argc, char* argv[]){
         argval->GetFileIn(), argval->GetFormat() );
     gd2d->Sort();
 
-    MxkwPlotConf* plot_conf = new MxkwPlotConf;
+    MirPlotConf* plot_conf = new MirPlotConf;
     plot_conf->Load(argval->GetPlotConfFile());
 
-    MxkwQdpTool::MkQdp(gd2d, argval->GetFileOut(), argval->GetFormat());
+    MirQdpTool::MkQdp(gd2d, argval->GetFileOut(), argval->GetFormat());
 
     // cleaning
     delete argval;

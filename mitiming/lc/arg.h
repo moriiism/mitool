@@ -1,13 +1,13 @@
-#ifndef MXKWTOOL_MXKWTIMING_LC_ARG_H_
-#define MXKWTOOL_MXKWTIMING_LC_ARG_H_
+#ifndef MORIIISM_MITOOL_MITIMING_LC_ARG_H_
+#define MORIIISM_MITOOL_MITIMING_LC_ARG_H_
 
 #include <getopt.h>
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValTconv : public MxkwObject{
+class ArgValTconv : public MiObject{
 public:
-    explicit ArgValTconv(string title = "") :
-        MxkwObject("ArgValTconv", title),
+    ArgValTconv() :
+        MiObject(),
         progname_(""),
         telescope_(""),
         lc_file_(""),
@@ -48,10 +48,10 @@ private:
 };
 
 
-class ArgValBinRate2BinCount : public MxkwObject{
+class ArgValBinRate2BinCount : public MiObject{
 public:
-    explicit ArgValBinRate2BinCount(string title = "") :
-        MxkwObject("ArgValBinRate2BinCount", title),
+    ArgValBinRate2BinCount() :
+        MiObject(),
         progname_(""),
         telescope_(""),
         lc_file_(""),
@@ -89,10 +89,10 @@ private:
 };
 
 
-class ArgValPlotLc : public MxkwObject{
+class ArgValPlotLc : public MiObject{
 public:
-    explicit ArgValPlotLc(string title = "") :
-        MxkwObject("ArgValPlotLc", title),
+    ArgValPlotLc() :
+        MiObject(),
         progname_(""),
         file_(""),
         telescope_(""),
@@ -133,10 +133,10 @@ private:
 
 
 
-class ArgValBinning : public MxkwObject{
+class ArgValBinning : public MiObject{
 public:
-    explicit ArgValBinning(string title = "") :
-        MxkwObject("ArgValBinning", title),
+    ArgValBinning() :
+        MiObject(),
         progname_(""),
         file_(""),
         telescope_(""),
@@ -169,10 +169,10 @@ private:
 };
 
 
-class ArgValSplitByGti : public MxkwObject{
+class ArgValSplitByGti : public MiObject{
 public:
-    explicit ArgValSplitByGti(string title = "") :
-        MxkwObject("ArgValSplitByGti", title),
+    ArgValSplitByGti() :
+        MiObject(),
         progname_(""),
         lc_file_(""),
         lc_telescope_(""),
@@ -217,5 +217,4 @@ private:
     string outfile_head_;
 };
 
-
-#endif // MXKWTOOL_MXKWTIMING_LC_ARG_H_
+#endif // MORIIISM_MITOOL_MITIMING_LC_ARG_H_

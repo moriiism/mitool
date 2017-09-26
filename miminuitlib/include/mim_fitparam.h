@@ -61,7 +61,6 @@ public:
     
     void Copy(const FitParam* const org);
     FitParam* const Clone() const;
-
     
     void Print(FILE* fp) const;
 

@@ -1,6 +1,6 @@
-#include "mxkw_graph2d_serr.h"
-#include "mxkw_hist1d.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_graph2d_serr.h"
+#include "mir_hist1d_nerr.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_gti_lcthr.h"
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -29,16 +29,16 @@ int main(int argc, char* argv[]){
     g2d->Load(argval->GetFile(), argval->GetFormat());
     g2d->Sort();
 
-    HistData1d* h1d = new HistData1d;
+    HistData1d* h1d = new HistDataNerr1d;
     h1d->InitSetByGraphData2d(g2d);
     Interval* gti = h1d->GenIntervalAboveThreshold(argval->GetThreshold());
 
     double offset = gti->GetOffsetFromTag(argval->GetOffsetTag());
-    MxkwIolib::Printf2(fp_log, "gti->GetNterm(): %d\n", gti->GetNterm());
-    MxkwQdpTool::MkQdp(gti, argval->GetOutdir() + "/" +
+    MiIolib::Printf2(fp_log, "gti->GetNterm(): %d\n", gti->GetNterm());
+    MirQdpTool::MkQdp(gti, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + ".qdp");
-    MxkwQdpTool::MkQdp(gti, argval->GetOutdir() + "/" +
+    MirQdpTool::MkQdp(gti, argval->GetOutdir() + "/" +
                        argval->GetOutfileHead() + "_" +
                        argval->GetProgname() + "_offset.qdp",
                        "", offset);

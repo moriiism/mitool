@@ -1,5 +1,7 @@
 
 include ../../Makefile.in
+include ../../milib/Makefile.in
+include ../../mifitslib/Makefile.in
 include ../../mirootlib/Makefile.in
 
 INCLUDE = $(MIFITSLIB_INC) $(MILIB_INC) $(CFITSIO_INC) $(MT_INC)

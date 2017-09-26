@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_PLOT_GTI_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_PLOT_GTI_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_PLOT_GTI_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_PLOT_GTI_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValPlotGti : public MxkwArgBase{
+class ArgValPlotGti : public MiArgBase{
 public:
-    explicit ArgValPlotGti(string title = "") :
-        MxkwArgBase("ArgValPlotGti", title),
+    ArgValPlotGti() :
+        MiArgBase(),
         progname_(""),
         gti_file_(""),
         outdir_(""),
@@ -44,4 +44,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_PLOT_GTI_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_PLOT_GTI_H_

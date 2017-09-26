@@ -1,8 +1,7 @@
-
-#include "mxkw_qdp_tool.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_folding.h"
+#include "mir_qdp_tool.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_folding.h"
 
 #include "arg_fold.h"
 
@@ -19,7 +18,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -36,22 +35,22 @@ int main(int argc, char* argv[]){
     DataArray1d* data_arr = NULL;
     GraphDataSerr2d* g2d  = NULL;
     if("x" == argval->GetFormat()){
-        data_arr = new DataArray1d;
+        data_arr = new DataArrayNerr1d;
         data_arr->Load(argval->GetFile());
-        h1d_pls = MxkwFolding::GenFolding(data_arr,
+        h1d_pls = MitFolding::GenFolding(data_arr,
                                           Telescope::GetMjdref(argval->GetTelescope()),
                                           argval->GetTunit(),
                                           eph, argval->GetNbin());
     } else {
         g2d = new GraphDataSerr2d;
         g2d->Load(argval->GetFile(), argval->GetFormat());
-        h1d_pls = MxkwFolding::GenFoldingBinCenter(g2d,
+        h1d_pls = MitFolding::GenFoldingBinCenter(g2d,
                                                    Telescope::GetMjdref(argval->GetTelescope()),
                                                    argval->GetTunit(),
                                                    eph, argval->GetNbin());
     }
 
-    MxkwQdpTool::MkQdp(h1d_pls, argval->GetOutdir() + "/"
+    MirQdpTool::MkQdp(h1d_pls, argval->GetOutdir() + "/"
                        + argval->GetOutfileHead() + "_pls.qdp", "x,xe,y,ye");
 
     // cleaning

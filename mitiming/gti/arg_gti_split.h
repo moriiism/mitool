@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_SPLIT_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_SPLIT_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_SPLIT_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_SPLIT_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValGtiSplit : public MxkwArgBase{
+class ArgValGtiSplit : public MiArgBase{
 public:
-    explicit ArgValGtiSplit(string title = "") :
-        MxkwArgBase("ArgValGtiSplit", title),
+    ArgValGtiSplit() :
+        MiArgBase(),
         progname_(""),
         tstart_(0.0),
         tstop_(0.0),
@@ -36,4 +36,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_SPLIT_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_SPLIT_H_

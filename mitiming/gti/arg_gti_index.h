@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_INDEX_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_INDEX_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_INDEX_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_INDEX_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValGtiIndex : public MxkwArgBase{
+class ArgValGtiIndex : public MiArgBase{
 public:
-    explicit ArgValGtiIndex(string title = "") :
-        MxkwArgBase("ArgValGtiIndex", title),
+    ArgValGtiIndex() :
+        MiArgBase(),
         progname_(""),
         gti_(""),
         time_(0.0) {}
@@ -30,4 +30,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_INDEX_H_
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_INDEX_H_

@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_MARGIN_H_
-#define MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_MARGIN_H_
+#ifndef MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_MARGIN_H_
+#define MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_MARGIN_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValMargin : public MxkwArgBase{
+class ArgValMargin : public MiArgBase{
 public:
-    explicit ArgValMargin(string title = "") :
-        MxkwArgBase("ArgValMargin", title),
+    ArgValMargin() :
+        MiArgBase(),
         progname_(""),
         gti_file_(""),
         telescope_(""),
@@ -48,5 +48,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_GTI_ARG_GTI_MARGIN_H_
-
+#endif // MORIIISM_MITOOL_MITIMING_GTI_ARG_GTI_MARGIN_H_
