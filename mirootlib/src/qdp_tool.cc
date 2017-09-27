@@ -68,7 +68,6 @@ void MirQdpTool::PrintQdpAxisRescale(FILE* fp, string xy,
     }
 }
 
-
 void MirQdpTool::PrintQdpAxisTitle(FILE* fp, string xy,
                                    string title, double offset)
 {
@@ -95,6 +94,169 @@ void MirQdpTool::PrintQdpScale(FILE* fp, string xy, string scale)
         abort();
     }
 }
+
+void MirQdpTool::PrintQdpCmdDiffPlot(FILE* fp,
+                                     double xval_lo_data, double xval_up_data,
+                                     double oval_lo_w1_data, double oval_up_w1_data,
+                                     double oval_lo_w2_data, double oval_up_w2_data,
+                                     double offset_xval,
+                                     double offset_oval,
+                                     double offset_oval_res,
+                                     string title_xval,
+                                     string title_oval,
+                                     string title_oval_res,
+                                     string scale_xval,
+                                     string scale_oval,
+                                     string scale_oval_res)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    double oval_lo_w1 = 0.0;
+    double oval_up_w1 = 0.0;
+    double oval_lo_w2 = 0.0;
+    double oval_up_w2 = 0.0;
+    GetRangeQdp(xval_lo_data,
+                xval_up_data,
+                &xval_lo, &xval_up);
+    GetRangeQdp(oval_lo_w1_data,
+                oval_up_w1_data,
+                &oval_lo_w1, &oval_up_w1);
+    GetRangeQdp(oval_lo_w2_data,
+                oval_up_w2_data,
+                &oval_lo_w2, &oval_up_w2);        
+    double xval_lo_shifted = xval_lo - offset_xval;
+    double xval_up_shifted = xval_up - offset_xval;
+    double oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
+    double oval_up_w1_shifted = oval_up_w1 - offset_oval;
+    double oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
+    double oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
+    
+    PrintQdpCmdStd(fp);
+    fprintf(fp, "win 1\n");
+    fprintf(fp, "LOC  0.05 0.3 0.95 0.9\n");
+    fprintf(fp, "LAB  NX OFF\n");
+    fprintf(fp, "yplot 1 2\n");
+    fprintf(fp, "line st on 2\n");
+    fprintf(fp, "la pos y 3.0\n");    
+    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
+    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
+    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
+    PrintQdpScale(fp, "x", scale_xval);
+    PrintQdpScale(fp, "y", scale_oval);    
+
+    fprintf(fp, "win 2\n");
+    fprintf(fp, "LOC  0.05 0.1 0.95 0.39\n");
+    fprintf(fp, "yplot 3\n");
+    fprintf(fp, "la pos y 3.0\n");    
+    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
+    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
+    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
+    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
+    PrintQdpScale(fp, "y", scale_oval_res);        
+    
+    fprintf(fp, "mark 22 on 1 3\n");
+    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
+            xval_lo_shifted, 0.0);
+}
+
+
+void MirQdpTool::PrintQdpCmdDiffPlot(FILE* fp,
+                                     double xval_lo_data, double xval_up_data,
+                                     double oval_lo_w1_data, double oval_up_w1_data,
+                                     double oval_lo_w2_data, double oval_up_w2_data,
+                                     double offset_xval,
+                                     double offset_oval,
+                                     double offset_oval_res,
+                                     const MirPlotConf* const plot_conf)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    double oval_lo_w1 = 0.0;
+    double oval_up_w1 = 0.0;
+    double oval_lo_w2 = 0.0;
+    double oval_up_w2 = 0.0;
+    GetRangeQdp(xval_lo_data,
+                xval_up_data,
+                &xval_lo, &xval_up);
+    GetRangeQdp(oval_lo_w1_data,
+                oval_up_w1_data,
+                &oval_lo_w1, &oval_up_w1);
+    GetRangeQdp(oval_lo_w2_data,
+                oval_up_w2_data,
+                &oval_lo_w2, &oval_up_w2);        
+    double xval_lo_shifted = 0.0;
+    double xval_up_shifted = 0.0;
+    double oval_lo_w1_shifted = 0.0;
+    double oval_up_w1_shifted = 0.0;
+    double oval_lo_w2_shifted = 0.0;
+    double oval_up_w2_shifted = 0.0;
+    if("none" == plot_conf->GetLoStrElm(0)){
+        xval_lo_shifted = xval_lo - offset_xval;
+    } else {
+        xval_lo_shifted = atof(plot_conf->GetLoStrElm(0).c_str());
+    }
+    if("none" == plot_conf->GetUpStrElm(0)){
+        xval_up_shifted = xval_up - offset_xval;
+    } else {
+        xval_up_shifted = atof(plot_conf->GetUpStrElm(0).c_str());
+    }
+    if("none" == plot_conf->GetLoStrElm(1)){
+        oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
+    } else {
+        oval_lo_w1_shifted = atof(plot_conf->GetLoStrElm(1).c_str());
+    }
+    if("none" == plot_conf->GetUpStrElm(1)){
+        oval_up_w1_shifted = oval_up_w1 - offset_oval;
+    } else {
+        oval_up_w1_shifted = atof(plot_conf->GetUpStrElm(1).c_str());
+    }
+
+    if("none" == plot_conf->GetLoStrElm(2)){
+        oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
+    } else {
+        oval_lo_w2_shifted = atof(plot_conf->GetLoStrElm(2).c_str());
+    }
+    if("none" == plot_conf->GetUpStrElm(2)){
+        oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
+    } else {
+        oval_up_w2_shifted = atof(plot_conf->GetUpStrElm(2).c_str());
+    }
+
+    string title_xval = plot_conf->GetLabelElm(0);
+    string title_oval = plot_conf->GetLabelElm(1);
+    string title_oval_res = plot_conf->GetLabelElm(2);
+    string scale_xval = plot_conf->GetScaleElm(0);
+    string scale_oval = plot_conf->GetScaleElm(1);
+    string scale_oval_res = plot_conf->GetScaleElm(2);
+    
+    PrintQdpCmdStd(fp);
+    fprintf(fp, "win 1\n");
+    fprintf(fp, "LOC  0.05 0.3 0.95 0.9\n");
+    fprintf(fp, "LAB  NX OFF\n");
+    fprintf(fp, "yplot 1 2\n");
+    fprintf(fp, "line st on 2\n");
+    fprintf(fp, "la pos y 3.0\n");    
+    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
+    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
+    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
+    PrintQdpScale(fp, "x", scale_xval);
+    PrintQdpScale(fp, "y", scale_oval);    
+
+    fprintf(fp, "win 2\n");
+    fprintf(fp, "LOC  0.05 0.1 0.95 0.39\n");
+    fprintf(fp, "yplot 3\n");
+    fprintf(fp, "la pos y 3.0\n");    
+    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
+    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
+    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
+    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
+    PrintQdpScale(fp, "y", scale_oval_res);        
+    
+    fprintf(fp, "mark 22 on 1 3\n");
+    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
+            xval_lo_shifted, 0.0);
+}
+
 
 void MirQdpTool::MkQdpMode1(const DataArray1d* const data_array,
                             string qdpout,
@@ -726,7 +888,8 @@ void MirQdpTool::MkQdp(const Interval* const interval,
     MkQdp(gd2d, qdpout, "x,y",
           title_xval, title_oval,
           offset_xval, offset_oval,
-          scale_xval, "lin");
+          scale_xval, "lin",
+          1, 0);
     delete gd2d;
 }
 
@@ -759,7 +922,7 @@ void MirQdpTool::MkQdp(const Interval* const interval,
     gd2d->SetXvalArr(xval_vec);
     gd2d->SetOvalArr(oval_vec);
     gd2d->SetFlagXvalSorted(0);
-    MkQdp(gd2d, qdpout, "x,y", plot_conf);
+    MkQdp(gd2d, qdpout, "x,y", plot_conf, 1, 0);
     delete gd2d;
 }
 
@@ -800,54 +963,17 @@ void MirQdpTool::MkQdpDiff(const GraphData2d* const graph_data,
 
     fprintf(fp, "\n");
 
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    double oval_lo_w1 = 0.0;
-    double oval_up_w1 = 0.0;
-    double oval_lo_w2 = 0.0;
-    double oval_up_w2 = 0.0;
-    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
-                graph_data->GetXvalArr()->GetValAndErrMax(),
-                &xval_lo, &xval_up);
-    GetRangeQdp(graph_data->GetOvalArr()->GetValAndErrMin(),
-                graph_data->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w1, &oval_up_w1);
-    GetRangeQdp(graph_res->GetOvalArr()->GetValAndErrMin(),
-                graph_res->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w2, &oval_up_w2);        
-    double xval_lo_shifted = xval_lo - offset_xval;
-    double xval_up_shifted = xval_up - offset_xval;
-    double oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
-    double oval_up_w1_shifted = oval_up_w1 - offset_oval;
-    double oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
-    double oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
-
-    PrintQdpCmdStd(fp);
-    fprintf(fp, "win 1\n");
-    fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
-    fprintf(fp, "LAB  NX OFF\n");
-    fprintf(fp, "yplot 1 2\n");
-    fprintf(fp, "line st on 2\n");
-    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
-    PrintQdpScale(fp, "x", scale_xval);
-    PrintQdpScale(fp, "y", scale_oval);    
-
-    fprintf(fp, "win 2\n");
-    fprintf(fp, "LOC  0 0.100000001 1 0.389999986\n");
-    fprintf(fp, "yplot 3\n");
-    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
-    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
-    PrintQdpScale(fp, "y", scale_oval_res);        
-    
-    fprintf(fp, "mark 22 on 1 3\n");
-    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
-            xval_lo_shifted, 0.0);
-
-    fclose(fp);
+    PrintQdpCmdDiffPlot(fp,
+                        graph_data->GetXvalArr()->GetValAndErrMin(),
+                        graph_data->GetXvalArr()->GetValAndErrMax(),
+                        graph_data->GetOvalArr()->GetValAndErrMin(),
+                        graph_data->GetOvalArr()->GetValAndErrMax(),
+                        graph_res->GetOvalArr()->GetValAndErrMin(),
+                        graph_res->GetOvalArr()->GetValAndErrMax(),
+                        offset_xval, offset_oval, offset_oval_res,                        
+                        title_xval, title_oval, title_oval_res,
+                        scale_xval, scale_oval, scale_oval_res);
+     fclose(fp);
 }
 
 
@@ -870,9 +996,6 @@ void MirQdpTool::MkQdpDiff(const GraphData2d* const graph_data,
     PrintQdpRead(fp, format);
     fprintf(fp, "\n");
 
-    string title_xval = plot_conf->GetLabelElm(0);
-    string title_oval = plot_conf->GetLabelElm(1);
-    string title_oval_res = plot_conf->GetLabelElm(2);
     double offset_xval = graph_data->GetOffsetXFromTag(plot_conf->GetOffsetTagElm(0));
     double offset_oval = graph_data->GetOffsetOFromTag(plot_conf->GetOffsetTagElm(1));
     double offset_oval_res = graph_res->GetOffsetOFromTag(plot_conf->GetOffsetTagElm(2));
@@ -893,83 +1016,15 @@ void MirQdpTool::MkQdpDiff(const GraphData2d* const graph_data,
 
     fprintf(fp, "\n");
 
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    double oval_lo_w1 = 0.0;
-    double oval_up_w1 = 0.0;
-    double oval_lo_w2 = 0.0;
-    double oval_up_w2 = 0.0;
-    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
-                graph_data->GetXvalArr()->GetValAndErrMax(),
-                &xval_lo, &xval_up);
-    GetRangeQdp(graph_data->GetOvalArr()->GetValAndErrMin(),
-                graph_data->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w1, &oval_up_w1);
-    GetRangeQdp(graph_res->GetOvalArr()->GetValAndErrMin(),
-                graph_res->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w2, &oval_up_w2);        
-    double xval_lo_shifted = 0.0;
-    double xval_up_shifted = 0.0;
-    double oval_lo_w1_shifted = 0.0;
-    double oval_up_w1_shifted = 0.0;
-    double oval_lo_w2_shifted = 0.0;
-    double oval_up_w2_shifted = 0.0;
-    if("none" == plot_conf->GetLoStrElm(0)){
-        xval_lo_shifted = xval_lo - offset_xval;
-    } else {
-        xval_lo_shifted = atof(plot_conf->GetLoStrElm(0).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(0)){
-        xval_up_shifted = xval_up - offset_xval;
-    } else {
-        xval_up_shifted = atof(plot_conf->GetUpStrElm(0).c_str());
-    }
-    if("none" == plot_conf->GetLoStrElm(1)){
-        oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
-    } else {
-        oval_lo_w1_shifted = atof(plot_conf->GetLoStrElm(1).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(1)){
-        oval_up_w1_shifted = oval_up_w1 - offset_oval;
-    } else {
-        oval_up_w1_shifted = atof(plot_conf->GetUpStrElm(1).c_str());
-    }
-
-    if("none" == plot_conf->GetLoStrElm(2)){
-        oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
-    } else {
-        oval_lo_w2_shifted = atof(plot_conf->GetLoStrElm(2).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(2)){
-        oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
-    } else {
-        oval_up_w2_shifted = atof(plot_conf->GetUpStrElm(2).c_str());
-    }
-
-    PrintQdpCmdStd(fp);
-    fprintf(fp, "win 1\n");
-    fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
-    fprintf(fp, "LAB  NX OFF\n");
-    fprintf(fp, "yplot 1 2\n");
-    fprintf(fp, "line st on 2\n");
-    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
-    PrintQdpScale(fp, "x", plot_conf->GetScaleElm(0));
-    PrintQdpScale(fp, "y", plot_conf->GetScaleElm(1));
-    
-    fprintf(fp, "win 2\n");
-    fprintf(fp, "LOC  0 0.100000001 1 0.389999986\n");
-    fprintf(fp, "yplot 3\n");
-    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
-    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
-    PrintQdpScale(fp, "y", plot_conf->GetScaleElm(2));
-
-    fprintf(fp, "mark 22 on 1 3\n");
-    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
-            xval_lo_shifted, 0.0);
+    PrintQdpCmdDiffPlot(fp,
+                        graph_data->GetXvalArr()->GetValAndErrMin(),
+                        graph_data->GetXvalArr()->GetValAndErrMax(),
+                        graph_data->GetOvalArr()->GetValAndErrMin(),
+                        graph_data->GetOvalArr()->GetValAndErrMax(),
+                        graph_res->GetOvalArr()->GetValAndErrMin(),
+                        graph_res->GetOvalArr()->GetValAndErrMax(),
+                        offset_xval, offset_oval, offset_oval_res,
+                        plot_conf);
     fclose(fp);
 }
 
@@ -1010,54 +1065,16 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
 
     fprintf(fp, "\n");
 
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    double oval_lo_w1 = 0.0;
-    double oval_up_w1 = 0.0;
-    double oval_lo_w2 = 0.0;
-    double oval_up_w2 = 0.0;
-    GetRangeQdp(hist_data->GetXvalLo(),
-                hist_data->GetXvalUp(),
-                &xval_lo, &xval_up);
-    GetRangeQdp(hist_data->GetOvalArr()->GetValAndErrMin(),
-                hist_data->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w1, &oval_up_w1);
-    GetRangeQdp(hist_res->GetOvalArr()->GetValAndErrMin(),
-                hist_res->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w2, &oval_up_w2);        
-    double xval_lo_shifted = xval_lo - offset_xval;
-    double xval_up_shifted = xval_up - offset_xval;
-    double oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
-    double oval_up_w1_shifted = oval_up_w1 - offset_oval;
-    double oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
-    double oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
-
-    PrintQdpCmdStd(fp);
-    fprintf(fp, "line st\n");    
-    fprintf(fp, "win 1\n");
-    fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
-    fprintf(fp, "LAB  NX OFF\n");
-    fprintf(fp, "yplot 1 2\n");
-    fprintf(fp, "line st on 2\n");
-    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);    
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
-    PrintQdpScale(fp, "x", scale_xval);
-    PrintQdpScale(fp, "y", scale_oval);    
-
-    fprintf(fp, "win 2\n");
-    fprintf(fp, "LOC  0 0.100000001 1 0.389999986\n");
-    fprintf(fp, "yplot 3\n");
-    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
-    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
-    PrintQdpScale(fp, "x", scale_xval);    
-    PrintQdpScale(fp, "y", scale_oval_res);    
-
-    fprintf(fp, "mark 22 on 1 3\n");
-    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
-            xval_lo_shifted, 0.0);
+    PrintQdpCmdDiffPlot(fp,
+                        hist_data->GetXvalLo(),
+                        hist_data->GetXvalUp(),
+                        hist_data->GetOvalArr()->GetValAndErrMin(),
+                        hist_data->GetOvalArr()->GetValAndErrMax(),
+                        hist_res->GetOvalArr()->GetValAndErrMin(),
+                        hist_res->GetOvalArr()->GetValAndErrMax(),
+                        offset_xval, offset_oval, offset_oval_res,                        
+                        title_xval, title_oval, title_oval_res,
+                        scale_xval, scale_oval, scale_oval_res);
     fclose(fp);
 }
 
@@ -1080,9 +1097,6 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
     PrintQdpRead(fp, format);
     fprintf(fp, "\n");
 
-    string title_xval = plot_conf->GetLabelElm(0);
-    string title_oval = plot_conf->GetLabelElm(1);
-    string title_oval_res = plot_conf->GetLabelElm(2);
     double offset_xval = hist_data->GetOffsetXFromTag(plot_conf->GetOffsetTagElm(0));
     double offset_oval = hist_data->GetOffsetOFromTag(plot_conf->GetOffsetTagElm(1));
     double offset_oval_res = hist_res->GetOffsetOFromTag(plot_conf->GetOffsetTagElm(2));
@@ -1103,86 +1117,15 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
 
     fprintf(fp, "\n");
 
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    double oval_lo_w1 = 0.0;
-    double oval_up_w1 = 0.0;
-    double oval_lo_w2 = 0.0;
-    double oval_up_w2 = 0.0;
-    GetRangeQdp(hist_data->GetXvalLo(),
-                hist_data->GetXvalUp(),
-                &xval_lo, &xval_up);
-    GetRangeQdp(hist_data->GetOvalArr()->GetValAndErrMin(),
-                hist_data->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w1, &oval_up_w1);
-    GetRangeQdp(hist_res->GetOvalArr()->GetValAndErrMin(),
-                hist_res->GetOvalArr()->GetValAndErrMax(),
-                &oval_lo_w2, &oval_up_w2);        
-
-    double xval_lo_shifted = 0.0;
-    double xval_up_shifted = 0.0;
-    double oval_lo_w1_shifted = 0.0;
-    double oval_up_w1_shifted = 0.0;
-    double oval_lo_w2_shifted = 0.0;
-    double oval_up_w2_shifted = 0.0;
-    if("none" == plot_conf->GetLoStrElm(0)){
-        xval_lo_shifted = xval_lo - offset_xval;
-    } else {
-        xval_lo_shifted = atof(plot_conf->GetLoStrElm(0).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(0)){
-        xval_up_shifted = xval_up - offset_xval;
-    } else {
-        xval_up_shifted = atof(plot_conf->GetUpStrElm(0).c_str());
-    }
-    if("none" == plot_conf->GetLoStrElm(1)){
-        oval_lo_w1_shifted = oval_lo_w1 - offset_oval;
-    } else {
-        oval_lo_w1_shifted = atof(plot_conf->GetLoStrElm(1).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(1)){
-        oval_up_w1_shifted = oval_up_w1 - offset_oval;
-    } else {
-        oval_up_w1_shifted = atof(plot_conf->GetUpStrElm(1).c_str());
-    }
-
-    if("none" == plot_conf->GetLoStrElm(2)){
-        oval_lo_w2_shifted = oval_lo_w2 - offset_oval_res;
-    } else {
-        oval_lo_w2_shifted = atof(plot_conf->GetLoStrElm(2).c_str());
-    }
-    if("none" == plot_conf->GetUpStrElm(2)){
-        oval_up_w2_shifted = oval_up_w2 - offset_oval_res;
-    } else {
-        oval_up_w2_shifted = atof(plot_conf->GetUpStrElm(2).c_str());
-    }
-
-    PrintQdpCmdStd(fp);
-    fprintf(fp, "line st\n");    
-    fprintf(fp, "win 1\n");
-    fprintf(fp, "LOC  0 0.301999986 1 0.899999976\n");
-    fprintf(fp, "LAB  NX OFF\n");
-    fprintf(fp, "yplot 1 2\n");
-    fprintf(fp, "line st on 2\n");
-    PrintQdpAxisTitle(fp, "y", title_oval, offset_oval);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w1_shifted, oval_up_w1_shifted);
-    PrintQdpScale(fp, "x", plot_conf->GetScaleElm(0));
-    PrintQdpScale(fp, "y", plot_conf->GetScaleElm(1));    
-
-    fprintf(fp, "win 2\n");
-    fprintf(fp, "LOC  0 0.100000001 1 0.389999986\n");
-    fprintf(fp, "yplot 3\n");
-    PrintQdpAxisTitle(fp, "x", title_xval, offset_xval);
-    PrintQdpAxisTitle(fp, "y", title_oval_res, offset_oval_res);
-    PrintQdpAxisRescale(fp, "x", xval_lo_shifted, xval_up_shifted);
-    PrintQdpAxisRescale(fp, "y", oval_lo_w2_shifted, oval_up_w2_shifted);
-    PrintQdpScale(fp, "x", plot_conf->GetScaleElm(0));
-    PrintQdpScale(fp, "y", plot_conf->GetScaleElm(2));
-
-    fprintf(fp, "mark 22 on 1 3\n");
-    fprintf(fp, "la 1 line 0.0 1.0 pos %.15e %.15e \" \" lst 4\n",
-            xval_lo_shifted, 0.0);
+    PrintQdpCmdDiffPlot(fp,
+                        hist_data->GetXvalLo(),
+                        hist_data->GetXvalUp(),
+                        hist_data->GetOvalArr()->GetValAndErrMin(),
+                        hist_data->GetOvalArr()->GetValAndErrMax(),
+                        hist_res->GetOvalArr()->GetValAndErrMin(),
+                        hist_res->GetOvalArr()->GetValAndErrMax(),
+                        offset_xval, offset_oval, offset_oval_res,
+                        plot_conf);
     fclose(fp);
 }
 

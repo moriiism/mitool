@@ -483,16 +483,56 @@ int main(int argc, char* argv[])
         delete func;
         printf("=== \n");
     }
-
+    
 //    void MkQdp(const Interval* const interval,
 //               string qdpout,
 //               string title_xval = "",
 //               double offset_xval = 0.0,
 //               string scale_xval = "lin");
+    {
+        printf("--- test MkQdp, Interval\n");
+        Interval* interval = new Interval;
+        interval->Init(3);
+        double term_st[3];
+        double term_ed[3];
+        term_st[0] = 0.0; term_ed[0] = 1.0;
+        term_st[1] = 1.5; term_ed[1] = 3.0;
+        term_st[2] = 4.0; term_ed[2] = 10.0;
+        interval->Set(3, term_st, term_ed);
+        string qdpout = "/home/morii/temp/temp18.qdp";
+        MirQdpTool::MkQdp(interval, qdpout, "time", 0.0, "lin");
+        delete interval;
+        printf("=== \n");
+    }
+
 //    void MkQdp(const Interval* const interval,
 //               string qdpout,
 //               const MirPlotConf* const plot_conf);
-//
+    {
+        printf("--- test MkQdp, Interval\n");
+        Interval* interval = new Interval;
+        interval->Init(3);
+        double term_st[3];
+        double term_ed[3];
+        term_st[0] = 0.0; term_ed[0] = 1.0;
+        term_st[1] = 1.5; term_ed[1] = 3.0;
+        term_st[2] = 4.0; term_ed[2] = 10.0;
+        interval->Set(3, term_st, term_ed);
+
+        string qdpout = "/home/morii/temp/temp19.qdp";
+        MirPlotConf* plot_conf = new MirPlotConf;
+        plot_conf->Init(2);
+        plot_conf->SetIdimElm(0, "-3", "12", "no",
+                              "lin", "time");
+        plot_conf->SetIdimElm(1, "-1", "7", "no",
+                              "lin", "flipflop");
+        MirQdpTool::MkQdp(interval, qdpout, plot_conf);
+        delete interval;
+        delete plot_conf;
+        printf("=== \n");
+    }
+
+
 //    void MkQdpDiff(const GraphData2d* const graph_data,
 //                   const GraphData2d* const graph_model,
 //                   const GraphData2d* const graph_res,
@@ -507,13 +547,122 @@ int main(int argc, char* argv[])
 //                   string scale_xval = "lin",
 //                   string scale_oval = "lin",
 //                   string scale_oval_res = "lin");
+    {
+        printf("--- test MkQdpDiff\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+        long npoint_model = 1000;
+        double xval_lo = -10;
+        double xval_up =  10;
+        long ndata = 3;
+        GraphDataNerr2d* gd2d_model = new GraphDataNerr2d;
+        gd2d_model->InitSetByFunc(func, par,
+                                  npoint_model, xval_lo, xval_up, "lin");
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+        GraphDataNerr2d* gd2d_data = new GraphDataNerr2d;
+        gd2d_data->Init(ndata);
+        double xval[3];
+        xval[0] = -5;
+        xval[1] = 0;
+        xval[2] = 3;
+        for(long idata = 0; idata < ndata; idata ++){
+            double func_val = func->Eval1d(xval[idata], par);
+            double oval_rand = trand->PoissonD(func_val);
+            gd2d_data->SetPoint(idata, xval[idata], oval_rand);
+        }
+        GraphDataNerr2d* gd2d_res = new GraphDataNerr2d;
+        GraphData2dOpe::GetResValGd2d(gd2d_data,
+                                      func, par, gd2d_res);
+
+        string qdpout = "/home/morii/temp/temp20.qdp";
+        MirQdpTool::MkQdpDiff(gd2d_data, gd2d_model, gd2d_res,
+                              qdpout, "x,y",
+                              "time", "flux", "residual",
+                              0.0, 0.0, 0.0,
+                              "lin", "lin", "lin");
+        delete gd2d_data;
+        delete gd2d_model;
+        delete gd2d_res;
+        delete func;
+        delete trand;
+        printf("=== \n");
+    }
+    
+  
 //    void MkQdpDiff(const GraphData2d* const graph_data,
 //                   const GraphData2d* const graph_model,
 //                   const GraphData2d* const graph_res,
 //                   string qdpout,
 //                   string format,
 //                   const MirPlotConf* const plot_conf);
-//    
+    {
+        printf("--- test MkQdpDiff\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+        long npoint_model = 1000;
+        double xval_lo = -10;
+        double xval_up =  10;
+        long ndata = 3;
+        GraphDataNerr2d* gd2d_model = new GraphDataNerr2d;
+        gd2d_model->InitSetByFunc(func, par,
+                                  npoint_model, xval_lo, xval_up, "lin");
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+        GraphDataNerr2d* gd2d_data = new GraphDataNerr2d;
+        gd2d_data->Init(ndata);
+        double xval[3];
+        xval[0] = -5;
+        xval[1] = 0;
+        xval[2] = 3;
+        for(long idata = 0; idata < ndata; idata ++){
+            double func_val = func->Eval1d(xval[idata], par);
+            double oval_rand = trand->PoissonD(func_val);
+            gd2d_data->SetPoint(idata, xval[idata], oval_rand);
+        }
+        GraphDataNerr2d* gd2d_res = new GraphDataNerr2d;
+        GraphData2dOpe::GetResValGd2d(gd2d_data,
+                                      func, par, gd2d_res);
+
+        string qdpout = "/home/morii/temp/temp21.qdp";
+        MirPlotConf* plot_conf = new MirPlotConf;
+        plot_conf->Init(3);
+        plot_conf->SetIdimElm(0, "-12", "12", "no",
+                              "lin", "time");
+        plot_conf->SetIdimElm(1, "none", "none", "no",
+                              "lin", "flux");
+        plot_conf->SetIdimElm(2, "none", "none", "no",
+                              "lin", "residual");        
+        
+        MirQdpTool::MkQdpDiff(gd2d_data, gd2d_model, gd2d_res,
+                              qdpout, "x,y",
+                              plot_conf);
+
+        delete gd2d_data;
+        delete gd2d_model;
+        delete gd2d_res;
+        delete func;
+        delete trand;
+        delete plot_conf;
+        printf("=== \n");
+    }
+
 //    void MkQdpDiff(const HistData1d* const hist_data,
 //                   const HistData1d* const hist_model,
 //                   const HistData1d* const hist_res,

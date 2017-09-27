@@ -32,6 +32,27 @@ namespace MirQdpTool
                            string title,
                            double offset);
     void PrintQdpScale(FILE* fp, string xy, string scale);
+    void PrintQdpCmdDiffPlot(FILE* fp,
+                             double xval_lo_data, double xval_up_data,
+                             double oval_lo_w1_data, double oval_up_w1_data,
+                             double oval_lo_w2_data, double oval_up_w2_data,
+                             double offset_xval,
+                             double offset_oval,
+                             double offset_oval_res,
+                             string title_xval,
+                             string title_oval,
+                             string title_oval_res,
+                             string scale_xval,
+                             string scale_oval,
+                             string scale_oval_res);
+    void PrintQdpCmdDiffPlot(FILE* fp,
+                             double xval_lo_data, double xval_up_data,
+                             double oval_lo_w1_data, double oval_up_w1_data,
+                             double oval_lo_w2_data, double oval_up_w2_data,
+                             double offset_xval,
+                             double offset_oval,
+                             double offset_oval_res,
+                             const MirPlotConf* const plot_conf);
 
     // format: index  data
     void MkQdpMode1(const DataArray1d* const data_array,
@@ -54,7 +75,6 @@ namespace MirQdpTool
                     string qdpout,
                     const MirPlotConf* const plot_conf);
     
-    // also valid for GraphDataSerr2d, GraphDataTerr2d by polymorphism
     void MkQdp(const GraphData2d* const graph_data,
                string qdpout,
                string format,
@@ -72,7 +92,7 @@ namespace MirQdpTool
                const MirPlotConf* const plot_conf,
                int flag_line = 0,
                int flag_mark = 1);
-    // also valid for HistDataSerr1d, HistDataTerr1d by polymorphism
+
     void MkQdp(const HistData1d* const hist_data,
                string outqdp,
                string format,
