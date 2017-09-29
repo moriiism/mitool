@@ -558,7 +558,7 @@ int main(int argc, char* argv[])
         par[0] = mu;
         par[1] = sigma;
         par[2] = norm;
-
+        
         long npoint_model = 1000;
         double xval_lo = -10;
         double xval_up =  10;
@@ -677,136 +677,244 @@ int main(int argc, char* argv[])
 //                   string scale_xval = "lin",
 //                   string scale_oval = "lin",
 //                   string scale_oval_res = "lin");
+    {
+        printf("--- test MkQdpDiff, HistData1d\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+
+        long nbin = 100;
+        double x_lo = 0.0;
+        double x_up = 10.0;
+        
+        HistDataNerr1d* hd1d_model = new HistDataNerr1d;
+        hd1d_model->Init(nbin, x_lo, x_up);
+        hd1d_model->SetByFunc(func, par);
+
+        HistDataSerr1d* hd1d_data = new HistDataSerr1d;
+        hd1d_data->Init(nbin, x_lo, x_up);
+
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+
+        for(long ibin = 0; ibin < nbin; ibin++){
+            double xval = hd1d_data->GetBinCenter(ibin);
+            double func_val = func->Eval1d(xval, par);
+            double oval_rand = trand->PoissonD(func_val);
+            hd1d_data->SetOvalElm(ibin, oval_rand);
+            hd1d_data->SetOvalSerrElm(ibin, sqrt(oval_rand));
+        }
+
+        
+        HistDataSerr1d* hd1d_res = new HistDataSerr1d;
+        HistData1dOpe::GetResValHd1d(hd1d_data,
+                                     func, par, hd1d_res);
+
+        string qdpout = "/home/morii/temp/temp22.qdp";
+        MirQdpTool::MkQdpDiff(hd1d_data, hd1d_model, hd1d_res,
+                              qdpout, "x,xe,y,ye",
+                              "time", "flux", "residual",
+                              0.0, 0.0, 0.0,
+                              "lin", "lin", "lin");
+        delete hd1d_data;
+        delete hd1d_model;
+        delete hd1d_res;
+        delete func;
+        delete trand;
+        printf("=== \n");
+    }
+
+    
 //    void MkQdpDiff(const HistData1d* const hist_data,
 //                   const HistData1d* const hist_model,
 //                   const HistData1d* const hist_res,
 //                   string qdpout,
 //                   string format,
 //                   const MirPlotConf* const plot_conf);
-//    
-//    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
-//                    const MirFunc* const func, const double* const par,
-//                    int npoint_func,
-//                    string outdir, string qdpout_head,
-//                    string title_xval = "",
-//                    string title_oval = "",
-//                    double offset_xval = 0.0,
-//                    double offset_oval = 0.0,
-//                    string scale_xval = "lin",
-//                    string scale_oval = "lin");
-//    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
-//                    const MirFunc* const func, const double* const par,
-//                    int npoint_func,
-//                    string outdir, string qdpout_head,
-//                    const MirPlotConf* const plot_conf);
-//    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
-//                    const GraphData2d* const graph_model,
-//                    string outdir, string qdpout_head,
-//                    const MirPlotConf* const plot_conf);
-//    
-//    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
-//                    const MirFunc* const func, const double* const par,
-//                    int npoint_func,
-//                    string outdir, string qdpout_head,
-//                    string title_xval = "",
-//                    string title_oval = "",
-//                    double offset_xval = 0.0,
-//                    double offset_oval = 0.0,
-//                    string scale_xval = "lin",
-//                    string scale_oval = "lin");
-//    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
-//                    const MirFunc* const func, const double* const par,
-//                    int npoint_func,
-//                    string outdir, string qdpout_head,
-//                    const MirPlotConf* const plot_conf);
-//    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
-//                    const HistData1d* const hist_model,
-//                    string outdir, string qdpout_head,
-//                    const MirPlotConf* const plot_conf);
-//
-//    void MkQdpMinFcn(const HistData1d* const hist_data,
-//                     string outqdp,
-//                     double xval_at_fcnmin,
-//                     double xval_terr_minus,
-//                     double xval_terr_plus,
-//                     double fcnmin,
-//                     string title_xval = "");
-//    
-//    // plot N HistData in one qdp file
-//    void MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
-//                    string qdpout,
-//                    double offset_xval = 0.0);
-//
-//    void MkQdpProj(const MirFunc* const func, const double* const par,
-//                   double xval_lo, double xval_up, double yval_lo, double yval_up,
-//                   string outdir, string qdpout_head, string calc_mode,
-//                   int npoint_func,
-//                   string title_xval = "",
-//                   string title_yval = "",
-//                   string title_oval = "",
-//                   double offset_xval = 0.0,
-//                   double offset_yval = 0.0,
-//                   double offset_oval = 0.0,
-//                   string scale_xval = "lin",
-//                   string scale_yval = "lin",
-//                   string scale_oval = "lin");
-//    void MkQdpProj(const MirFunc* const func, const double* const par,
-//                   double xval_lo, double xval_up, double yval_lo, double yval_up,
-//                   string outdir, string qdpout_head, string calc_mode,
-//                   int npoint_func,
-//                   const MirPlotConf* const plot_conf_projx,
-//                   const MirPlotConf* const plot_conf_projy);
-//    
-//    void MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-//                       const MirFunc* const func, const double* const par,
-//                       string outdir, string qdpout_head,
-//                       string add_mode, string error_mode,
-//                       string title_xval = "",
-//                       string title_yval = "",
-//                       string title_oval = "",                              
-//                       double offset_xval = 0.0,
-//                       double offset_yval = 0.0,
-//                       double offset_oval = 0.0,
-//                       string scale_xval = "lin",
-//                       string scale_yval = "lin",
-//                       string scale_oval = "lin");
-//    void MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-//                       const MirFunc* const func, const double* const par,
-//                       string outdir, string qdpout_head,
-//                       string add_mode, string error_mode,
-//                       const MirPlotConf* const plot_conf_projx,
-//                       const MirPlotConf* const plot_conf_projy);
-//    
-//    void MkQdpCont(const HistData2d* const h2d,
-//                   string qdpout, int ncont,
-//                   string title_xval = "",
-//                   string title_yval = "",
-//                   string title_oval = "",
-//                   double offset_xval = 0.0,
-//                   double offset_yval = 0.0,
-//                   double offset_oval = 0.0);
-//
-//    void MkQdpContMinFcn(const HistData2d* const h2d,
-//                         string qdpout,
-//                         string title_xval = "",
-//                         string title_yval = "",
-//                         string title_oval = "",
-//                         double offset_xval = 0.0,
-//                         double offset_yval = 0.0,
-//                         double offset_oval = 0.0);
-//
-//    void MkQdpContMinFcnWithBest(const HistData2d* const h2d,
-//                                 string qdpout,
-//                                 double xval_best,
-//                                 double yval_best,
-//                                 double zval_best,
-//                                 string title_xval = "",
-//                                 string title_yval = "",
-//                                 string title_oval = "",
-//                                 double offset_xval = 0.0,
-//                                 double offset_yval = 0.0,
-//                                 double offset_oval = 0.0);
-  
+    {
+        printf("--- test MkQdpDiff, HistData1d\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+
+        long nbin = 100;
+        double x_lo = -10.0;
+        double x_up = 10.0;
+        
+        HistDataNerr1d* hd1d_model = new HistDataNerr1d;
+        hd1d_model->Init(nbin, x_lo, x_up);
+        hd1d_model->SetByFunc(func, par);
+
+        HistDataSerr1d* hd1d_data = new HistDataSerr1d;
+        hd1d_data->Init(nbin, x_lo, x_up);
+
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+
+        for(long ibin = 0; ibin < nbin; ibin++){
+            double xval = hd1d_data->GetBinCenter(ibin);
+            double func_val = func->Eval1d(xval, par);
+            double oval_rand = trand->PoissonD(func_val);
+            hd1d_data->SetOvalElm(ibin, oval_rand);
+            hd1d_data->SetOvalSerrElm(ibin, sqrt(oval_rand));
+        }
+
+        
+        HistDataSerr1d* hd1d_res = new HistDataSerr1d;
+        HistData1dOpe::GetResValHd1d(hd1d_data,
+                                     func, par, hd1d_res);
+
+        string qdpout = "/home/morii/temp/temp23.qdp";
+        MirPlotConf* plot_conf = new MirPlotConf;
+        plot_conf->Init(3);
+        plot_conf->SetIdimElm(0, "-7", "7", "no",
+                              "lin", "time");
+        plot_conf->SetIdimElm(1, "none", "none", "no",
+                              "lin", "flux");
+        plot_conf->SetIdimElm(2, "none", "none", "no",
+                              "lin", "residual");        
+        MirQdpTool::MkQdpDiff(hd1d_data, hd1d_model, hd1d_res,
+                              qdpout, "x,xe,y,ye",
+                              plot_conf);
+
+        delete hd1d_data;
+        delete hd1d_model;
+        delete hd1d_res;
+        delete func;
+        delete trand;
+        printf("=== \n");
+    }
+    
+//    void MkQdpDiff3Serr(const GraphData2d* const graph_data,
+//                        const MirFunc* const func, const double* const par,
+//                        int npoint_func,
+//                        string outdir, string qdpout_head,
+//                        string title_xval = "",
+//                        string title_oval = "",
+//                        double offset_xval = 0.0,
+//                        double offset_oval = 0.0,
+//                        string scale_xval = "lin",
+//                        string scale_oval = "lin");
+    {
+        printf("--- test MkQdpDiff3Serr\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+        long npoint_model = 1000;
+        double xval_lo = -10;
+        double xval_up =  10;
+        long ndata = 3;
+        GraphDataNerr2d* gd2d_model = new GraphDataNerr2d;
+        gd2d_model->InitSetByFunc(func, par,
+                                  npoint_model, xval_lo, xval_up, "lin");
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+        GraphDataSerr2d* gd2d_data = new GraphDataSerr2d;
+        gd2d_data->Init(ndata);
+        double xval[3];
+        xval[0] = -5;
+        xval[1] = 1;
+        xval[2] = 3;
+        for(long idata = 0; idata < ndata; idata ++){
+            double func_val = func->Eval1d(xval[idata], par);
+            double oval_rand = trand->PoissonD(func_val);
+            gd2d_data->SetPoint(idata, xval[idata], 2.0,
+                                oval_rand, sqrt(oval_rand));
+        }
+
+        MirQdpTool::MkQdpDiff3Serr(gd2d_data,
+                                   func, par,
+                                   npoint_model,
+                                   "/home/morii/temp", "diff",
+                                   "time", "flux",
+                                   0.0, 0.0,
+                                   "lin", "lin");
+        delete gd2d_data;
+        delete gd2d_model;
+        delete func;
+        delete trand;
+        printf("=== \n");
+    }
+    
+//    void MkQdpDiff3Terr(const GraphData2d* const graph_data,
+//                        const MirFunc* const func, const double* const par,
+//                        int npoint_func,
+//                        string outdir, string qdpout_head,
+//                        string title_xval = "",
+//                        string title_oval = "",
+//                        double offset_xval = 0.0,
+//                        double offset_oval = 0.0,
+//                        string scale_xval = "lin",
+//                        string scale_oval = "lin");
+    {
+        printf("--- test MkQdpDiff3Terr\n");
+
+        MirFunc* func = new Gauss1dFunc;
+        double mu = 1.0;
+        double sigma = 1.0;
+        double norm = 100.0;
+        double par[3];
+        par[0] = mu;
+        par[1] = sigma;
+        par[2] = norm;
+
+        long npoint_model = 1000;
+        double xval_lo = -10;
+        double xval_up =  10;
+        long ndata = 3;
+        GraphDataNerr2d* gd2d_model = new GraphDataNerr2d;
+        gd2d_model->InitSetByFunc(func, par,
+                                  npoint_model, xval_lo, xval_up, "lin");
+        int rand_seed = 0;
+        TRandom3* trand = new TRandom3(rand_seed);
+        GraphDataTerr2d* gd2d_data = new GraphDataTerr2d;
+        gd2d_data->Init(ndata);
+        double xval[3];
+        xval[0] = -5;
+        xval[1] = 1;
+        xval[2] = 3;
+        for(long idata = 0; idata < ndata; idata ++){
+            double func_val = func->Eval1d(xval[idata], par);
+            double oval_rand = trand->PoissonD(func_val);
+            gd2d_data->SetPoint(idata, xval[idata], +2.0, -1.0,
+                                oval_rand, +sqrt(oval_rand), -0.5 * sqrt(oval_rand));
+        }
+        
+        MirQdpTool::MkQdpDiff3Terr(gd2d_data,
+                                   func, par,
+                                   npoint_model,
+                                   "/home/morii/temp", "terr",
+                                   "time", "flux",
+                                   0.0, 0.0,
+                                   "lin", "lin");
+        delete gd2d_data;
+        delete gd2d_model;
+        delete func;
+        delete trand;
+        printf("=== \n");
+    }
+   
 
     return status_prog;
 }

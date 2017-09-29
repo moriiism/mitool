@@ -28,6 +28,7 @@ alias root="root -l"
 HEADAS_VER=6.16
 export HEADAS=/soft/heasoft/heasoft-${HEADAS_VER}/x86_64-unknown-linux-gnu-libc2.12
 source $HEADAS/headas-init.sh
+export PGPLOT_TYPE=/xw
 
 ################################################################
 ################################################################

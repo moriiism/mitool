@@ -886,7 +886,6 @@ void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
             data->GetOvalSerrElm(idata);
         oval_res_serr[idata] = 1.0;
     }
-
     out->Init(ndata);
     out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
     out->SetXvalSerrArr(ndata, data->GetXvalArr()->GetValSerr());

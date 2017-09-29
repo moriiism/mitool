@@ -172,27 +172,40 @@ namespace MirQdpTool
                    string format,
                    const MirPlotConf* const plot_conf);
     
-    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
-                    const MirFunc* const func, const double* const par,
-                    int npoint_func,
-                    string outdir, string qdpout_head,
-                    string title_xval = "",
-                    string title_oval = "",
-                    double offset_xval = 0.0,
-                    double offset_oval = 0.0,
-                    string scale_xval = "lin",
-                    string scale_oval = "lin");
-    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
+    void MkQdpDiff3Serr(const GraphData2d* const graph_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        string title_xval = "",
+                        string title_oval = "",
+                        double offset_xval = 0.0,
+                        double offset_oval = 0.0,
+                        string scale_xval = "lin",
+                        string scale_oval = "lin");
+    void MkQdpDiff3Terr(const GraphData2d* const graph_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        string title_xval = "",
+                        string title_oval = "",
+                        double offset_xval = 0.0,
+                        double offset_oval = 0.0,
+                        string scale_xval = "lin",
+                        string scale_oval = "lin");
+
+    
+    
+    void MkQdpDiff3(const GraphData2d* const graph_data,
                     const MirFunc* const func, const double* const par,
                     int npoint_func,
                     string outdir, string qdpout_head,
                     const MirPlotConf* const plot_conf);
-    void MkQdpDiff3(const GraphDataSerr2d* const graph_data,
+    void MkQdpDiff3(const GraphData2d* const graph_data,
                     const GraphData2d* const graph_model,
                     string outdir, string qdpout_head,
                     const MirPlotConf* const plot_conf);
     
-    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
+    void MkQdpDiff3(const HistData1d* const hist_data,
                     const MirFunc* const func, const double* const par,
                     int npoint_func,
                     string outdir, string qdpout_head,
@@ -202,12 +215,12 @@ namespace MirQdpTool
                     double offset_oval = 0.0,
                     string scale_xval = "lin",
                     string scale_oval = "lin");
-    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
+    void MkQdpDiff3(const HistData1d* const hist_data,
                     const MirFunc* const func, const double* const par,
                     int npoint_func,
                     string outdir, string qdpout_head,
                     const MirPlotConf* const plot_conf);
-    void MkQdpDiff3(const HistDataSerr1d* const hist_data,
+    void MkQdpDiff3(const HistData1d* const hist_data,
                     const HistData1d* const hist_model,
                     string outdir, string qdpout_head,
                     const MirPlotConf* const plot_conf);

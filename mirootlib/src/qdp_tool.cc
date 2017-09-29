@@ -439,7 +439,7 @@ void MirQdpTool::MkQdpMode2(const DataArray1d* const data_array,
 
     int mode = 2;
     data_array->PrintData(fp, mode, offset_xval);
-
+    
     double xval_lo = 0.0;
     double xval_up = 0.0;
     double oval_lo = -0.5;
@@ -1128,6 +1128,146 @@ void MirQdpTool::MkQdpDiff(const HistData1d* const hist_data,
                         plot_conf);
     fclose(fp);
 }
+
+void MirQdpTool::MkQdpDiff3Serr(const GraphData2d* const graph_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                string title_xval,
+                                string title_oval,
+                                double offset_xval,
+                                double offset_oval,
+                                string scale_xval,
+                                string scale_oval)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
+                graph_data->GetXvalArr()->GetValAndErrMax(),
+                &xval_lo, &xval_up);
+
+    GraphDataNerr2d* graph_func = new GraphDataNerr2d;
+    graph_func->InitSetByFunc(func, par,
+                              npoint_func, xval_lo, xval_up,
+                              scale_xval);
+
+    GraphDataSerr2d* graph_res_val   = new GraphDataSerr2d;
+    GraphDataSerr2d* graph_res_chi   = new GraphDataSerr2d;
+    GraphDataSerr2d* graph_res_ratio = new GraphDataSerr2d;
+    GraphData2dOpe::GetResValGd2d(graph_data, func, par,
+                                  graph_res_val);
+    GraphData2dOpe::GetResChiGd2d(graph_data, func, par,
+                                  graph_res_chi);
+    GraphData2dOpe::GetResRatioGd2d(graph_data, func, par,
+                                    graph_res_ratio);
+    string format = "x,xe,y,ye";
+    MkQdpDiff(graph_data, graph_func, graph_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              title_xval, title_oval, "res_val",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+    MkQdpDiff(graph_data, graph_func, graph_res_chi, 
+              outdir + "/" + qdpout_head + "_diff_chi.qdp",
+              format, 
+              title_xval, title_oval, "chi",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+    MkQdpDiff(graph_data, graph_func, graph_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              title_xval, title_oval, "ratio",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+
+    delete graph_res_val;
+    delete graph_res_chi;
+    delete graph_res_ratio;
+    delete graph_func;
+}
+
+
+void MirQdpTool::MkQdpDiff3Terr(const GraphData2d* const graph_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                string title_xval,
+                                string title_oval,
+                                double offset_xval,
+                                double offset_oval,
+                                string scale_xval,
+                                string scale_oval)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
+                graph_data->GetXvalArr()->GetValAndErrMax(),
+                &xval_lo, &xval_up);
+    GraphDataNerr2d* graph_func = new GraphDataNerr2d;
+    graph_func->InitSetByFunc(func, par,
+                              npoint_func, xval_lo, xval_up,
+                              scale_xval);
+
+    GraphDataTerr2d* graph_res_val   = new GraphDataTerr2d;
+    GraphDataTerr2d* graph_res_chi   = new GraphDataTerr2d;
+    GraphDataTerr2d* graph_res_ratio = new GraphDataTerr2d;
+    GraphData2dOpe::GetResValGd2d(graph_data, func, par,
+                                  graph_res_val);
+    GraphData2dOpe::GetResChiGd2d(graph_data, func, par,
+                                  graph_res_chi);
+    GraphData2dOpe::GetResRatioGd2d(graph_data, func, par,
+                                    graph_res_ratio);
+    string format = "x,xe+,xe-,y,ye+,ye-";
+    MkQdpDiff(graph_data, graph_func, graph_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              title_xval, title_oval, "res_val",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+    MkQdpDiff(graph_data, graph_func, graph_res_chi, 
+              outdir + "/" + qdpout_head + "_diff_chi.qdp",
+              format, 
+              title_xval, title_oval, "chi",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+    MkQdpDiff(graph_data, graph_func, graph_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              title_xval, title_oval, "ratio",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+
+
+    delete graph_res_val;
+    delete graph_res_chi;
+    delete graph_res_ratio;
+    delete graph_func;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // plot N HistData in one qdp file
