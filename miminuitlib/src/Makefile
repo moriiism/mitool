@@ -16,7 +16,7 @@ OBJ := func_par_index.o \
 	fitstat_hg.o  \
 	link.o  ls.o \
 	minfcn.o  search_par.o \
-	tie.o
+	tie.o  qdp_tool.o
 
 all: $(TARGET)
 

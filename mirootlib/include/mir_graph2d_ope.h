@@ -106,10 +106,6 @@ namespace GraphData2dOpe
                        const MirFunc* const func,
                        const double* const par,
                        GraphDataSerr2d* const out);
-    void GetResChiGd2d(const GraphData2d* const data,
-                       const MirFunc* const func,
-                       const double* const par,
-                       GraphDataTerr2d* const out);
 
     double GetIntegral(const GraphData2d* const gd2d,
                        double xval_lo, double xval_up);

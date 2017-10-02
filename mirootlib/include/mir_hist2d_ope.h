@@ -2,6 +2,11 @@
 #define MORIIISM_MITOOL_MIROOTLIB_HIST2D_OPE_H_
 
 #include "mir_data1d_ope.h"
+
+#include "mir_hist1d_nerr.h"
+#include "mir_hist1d_serr.h"
+#include "mir_hist1d_terr.h"
+
 #include "mir_hist2d_nerr.h"
 #include "mir_hist2d_serr.h"
 #include "mir_hist2d_terr.h"
@@ -268,40 +273,40 @@ namespace HistData2dOpe
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
     double FindMdYbyEdge(const HistDataNerr2d* const hd2d);
 
-//    void FillRect(double x_lo, double x_up, double y_lo, double y_up,
-//                  HistDataNerr2d* const hist_res_out);
-    
-    
-    double GetIntegral(const HistDataNerr2d* const hd2d,
-                       double xval_lo, double xval_up);
+    // calc_mode : "add", "integral", "amean", "min", "max"
+    // error_mode: gauss, poisson, zero    
+    void GetProjectX(const HistData2d* const in,
+                     long ibin_ylo, long ibin_yup,
+                     string calc_mode,
+                     HistDataNerr1d* const out);
+    void GetProjectX(const HistData2d* const in,
+                     long ibin_ylo, long ibin_yup,
+                     string calc_mode, string error_mode,
+                     HistDataSerr1d* const out);
+
+    void GetProjectY(const HistData2d* const in,
+                     long ibin_xlo, long ibin_xup,
+                     string calc_mode,
+                     HistDataNerr1d* const out);
+    void GetProjectY(const HistData2d* const in,
+                     long ibin_xlo, long ibin_xup,
+                     string calc_mode, string error_mode,
+                     HistDataSerr1d* const out);
 
     // calc_mode: "add", "integral", "amean", "min", "max"
-    HistData1d* const GenProjectX(const HistData2d* const hist_data,
-                                  long ibin_ylo, long ibin_yup,
-                                  string calc_mode);
-    HistData1d* const GenProjectY(const HistData2d* const hist_data,
-                                  long ibin_xlo, long ibin_xup,
-                                  string calc_mode);
+    // error_mode: gauss, poisson, zero    
+    void GetProject(long ndata,
+                    const double* const array,
+                    string calc_mode, double bin_width,
+                    double* const val_proj_ptr);
+    void GetProject(long ndata,
+                    const double* const array,
+                    const double* const array_err,
+                    string calc_mode, string error_mode,
+                    double bin_width,
+                    double* const val_proj_ptr,
+                    double* const val_proj_err_ptr);
     
-
-    void GenContMinFcn(const HistDataNerr2d* const hd2d,
-                       double zval_min,
-                       int nlevel,
-                       const double* const delta_minfcn_arr,
-                       MirCont*** const cont_arr_ptr,
-                       MirRootTool* const root_tool,
-                       double offset_xval = 0.0,
-                       double offset_yval = 0.0);
-
-    void GenContWithBestMinFcn(const HistDataNerr2d* const hd2d,
-                               double zval_min, double xval_best, double yval_best,
-                               int nlevel, const double* const delta_minfcn_arr,
-                               MirContWithBest*** const cont_with_best_arr_ptr,
-                               MirRootTool* const root_tool,
-                               double offset_xval = 0.0,
-                               double offset_yval = 0.0);
-
-
     // hd2d_mask: 1 or 0
     void GetHd2dMaskWithMargin(const HistDataNerr2d* const hd2d_mask,
                                double xval_margin, double yval_margin,

@@ -594,7 +594,7 @@ void MirMath::GetAMean(long narr, const double* const val_arr, const double* con
     *amean_err_ptr = amean_err;
 }
 
-int MirMath::GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
+int MirMath::GenWMean(long narr, const double* const val_arr, const double* const val_err_arr,
                       double* const wmean_ptr, double* const wmean_err_ptr,
                       long* const nsel_ptr, int** const mask_sel_arr_ptr)
 {
@@ -687,7 +687,7 @@ void MirMath::GetAMeanWithMask(long narr, const double* const val_arr, const dou
 }
 
 
-int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+int MirMath::GenWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                               const int* const mask_arr,
                               double* const wmean_ptr, double* const wmean_err_ptr,
                               long* const nsel_ptr, int** const mask_sel_arr_ptr)
@@ -738,7 +738,7 @@ int MirMath::GetWMeanWithMask(long narr, const double* const val_arr, const doub
     return status;
 }
 
-int MirMath::GetChi2byConst(long narr,
+int MirMath::GenChi2byConst(long narr,
                             const double* const val_arr,
                             const double* const val_err_arr,
                             double* const wmean_ptr,
@@ -755,7 +755,7 @@ int MirMath::GetChi2byConst(long narr,
     double wmean_err = 0.0;
     long nsel = 0;
     int* mask_sel_arr = NULL;
-    int status_getwmean = GetWMean(narr, val_arr, val_err_arr,
+    int status_getwmean = GenWMean(narr, val_arr, val_err_arr,
                                    &wmean, &wmean_err,
                                    &nsel, &mask_sel_arr);
     double chi2 = 0.0;
@@ -796,7 +796,7 @@ int MirMath::GetChi2byConst(long narr,
     return status;
 }
 
-int MirMath::GetChi2byConst(long narr,
+int MirMath::GenChi2byConst(long narr,
                             const double* const val_arr,
                             const double* const val_err_arr,
                             const int* const mask_arr,
@@ -814,7 +814,7 @@ int MirMath::GetChi2byConst(long narr,
     double wmean_err = 0.0;
     long nsel = 0;
     int* mask_sel_arr = NULL;
-    int status_getwmean = GetWMeanWithMask(narr, val_arr, val_err_arr,
+    int status_getwmean = GenWMeanWithMask(narr, val_arr, val_err_arr,
                                            mask_arr,
                                            &wmean, &wmean_err,
                                            &nsel, &mask_sel_arr);

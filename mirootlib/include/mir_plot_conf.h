@@ -70,7 +70,10 @@ public:
     // diff_val
     // diff_chi
     // diff_ratio
-    
+
+    static void GenPlotConf2(const MirPlotConf* const plot_conf,
+                             MirPlotConf** const plot_conf_val_ptr,
+                             MirPlotConf** const plot_conf_ratio_ptr);
     static void GenPlotConf3(const MirPlotConf* const plot_conf,
                              MirPlotConf** const plot_conf_val_ptr,
                              MirPlotConf** const plot_conf_chi_ptr,

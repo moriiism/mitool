@@ -1189,8 +1189,76 @@ void MirQdpTool::MkQdpDiff3Serr(const GraphData2d* const graph_data,
     delete graph_func;
 }
 
+void MirQdpTool::MkQdpDiff3Serr(const GraphData2d* const graph_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                const MirPlotConf* const plot_conf)
+{
+    if(5 != plot_conf->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf->GetNdim() != 5");
+        MPrintErr(msg);
+        abort();
+    }
+    
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
+                graph_data->GetXvalArr()->GetValAndErrMax(),
+                &xval_lo, &xval_up);
 
-void MirQdpTool::MkQdpDiff3Terr(const GraphData2d* const graph_data,
+    GraphDataNerr2d* graph_func = new GraphDataNerr2d;
+    graph_func->InitSetByFunc(func, par,
+                              npoint_func, xval_lo, xval_up,
+                              plot_conf->GetScaleElm(0));
+
+
+    GraphDataSerr2d* graph_res_val   = new GraphDataSerr2d;
+    GraphDataSerr2d* graph_res_chi   = new GraphDataSerr2d;
+    GraphDataSerr2d* graph_res_ratio = new GraphDataSerr2d;
+    GraphData2dOpe::GetResValGd2d(graph_data, func, par,
+                                  graph_res_val);
+    GraphData2dOpe::GetResChiGd2d(graph_data, func, par,
+                                  graph_res_chi);
+    GraphData2dOpe::GetResRatioGd2d(graph_data, func, par,
+                                    graph_res_ratio);
+    
+    MirPlotConf* plot_conf_val   = NULL;
+    MirPlotConf* plot_conf_chi   = NULL;
+    MirPlotConf* plot_conf_ratio = NULL;
+    MirPlotConf::GenPlotConf3(plot_conf,
+                              &plot_conf_val,
+                              &plot_conf_chi,
+                              &plot_conf_ratio);
+
+    
+    string format = "x,xe,y,ye";
+    MkQdpDiff(graph_data, graph_func, graph_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              plot_conf_val);
+
+    MkQdpDiff(graph_data, graph_func, graph_res_chi, 
+              outdir + "/" + qdpout_head + "_diff_chi.qdp",
+              format,
+              plot_conf_chi);
+
+    MkQdpDiff(graph_data, graph_func, graph_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              plot_conf_ratio);
+
+    delete graph_res_val;
+    delete graph_res_chi;
+    delete graph_res_ratio;
+    delete graph_func;
+    delete plot_conf_val;
+    delete plot_conf_chi;
+    delete plot_conf_ratio;
+}
+
+void MirQdpTool::MkQdpDiff2Terr(const GraphData2d* const graph_data,
                                 const MirFunc* const func, const double* const par,
                                 int npoint_func,
                                 string outdir, string qdpout_head,
@@ -1212,12 +1280,9 @@ void MirQdpTool::MkQdpDiff3Terr(const GraphData2d* const graph_data,
                               scale_xval);
 
     GraphDataTerr2d* graph_res_val   = new GraphDataTerr2d;
-    GraphDataTerr2d* graph_res_chi   = new GraphDataTerr2d;
     GraphDataTerr2d* graph_res_ratio = new GraphDataTerr2d;
     GraphData2dOpe::GetResValGd2d(graph_data, func, par,
                                   graph_res_val);
-    GraphData2dOpe::GetResChiGd2d(graph_data, func, par,
-                                  graph_res_chi);
     GraphData2dOpe::GetResRatioGd2d(graph_data, func, par,
                                     graph_res_ratio);
     string format = "x,xe+,xe-,y,ye+,ye-";
@@ -1227,14 +1292,6 @@ void MirQdpTool::MkQdpDiff3Terr(const GraphData2d* const graph_data,
               title_xval, title_oval, "res_val",
               offset_xval, offset_oval, 0.0,
               scale_xval, scale_oval, "lin");
-
-    MkQdpDiff(graph_data, graph_func, graph_res_chi, 
-              outdir + "/" + qdpout_head + "_diff_chi.qdp",
-              format, 
-              title_xval, title_oval, "chi",
-              offset_xval, offset_oval, 0.0,
-              scale_xval, scale_oval, "lin");
-
     MkQdpDiff(graph_data, graph_func, graph_res_ratio, 
               outdir + "/" + qdpout_head + "_diff_ratio.qdp",
               format,
@@ -1244,31 +1301,292 @@ void MirQdpTool::MkQdpDiff3Terr(const GraphData2d* const graph_data,
 
 
     delete graph_res_val;
-    delete graph_res_chi;
     delete graph_res_ratio;
     delete graph_func;
 }
 
+void MirQdpTool::MkQdpDiff2Terr(const GraphData2d* const graph_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                const MirPlotConf* const plot_conf)
+{
+    if(4 != plot_conf->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf->GetNdim() != 4");
+        MPrintErr(msg);
+        abort();
+    }
+    
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(graph_data->GetXvalArr()->GetValAndErrMin(),
+                graph_data->GetXvalArr()->GetValAndErrMax(),
+                &xval_lo, &xval_up);
+
+    GraphDataNerr2d* graph_func = new GraphDataNerr2d;
+    graph_func->InitSetByFunc(func, par,
+                              npoint_func, xval_lo, xval_up,
+                              plot_conf->GetScaleElm(0));
 
 
+    GraphDataTerr2d* graph_res_val   = new GraphDataTerr2d;
+    GraphDataTerr2d* graph_res_ratio = new GraphDataTerr2d;
+    GraphData2dOpe::GetResValGd2d(graph_data, func, par,
+                                  graph_res_val);
+    GraphData2dOpe::GetResRatioGd2d(graph_data, func, par,
+                                    graph_res_ratio);
+    
+    MirPlotConf* plot_conf_val   = NULL;
+    MirPlotConf* plot_conf_ratio = NULL;
+    MirPlotConf::GenPlotConf2(plot_conf,
+                              &plot_conf_val,
+                              &plot_conf_ratio);
+    string format = "x,xe+,xe-,y,ye+,ye-";
+    MkQdpDiff(graph_data, graph_func, graph_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              plot_conf_val);
+
+    MkQdpDiff(graph_data, graph_func, graph_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              plot_conf_ratio);
+
+    delete graph_res_val;
+    delete graph_res_ratio;
+    delete graph_func;
+    delete plot_conf_val;
+    delete plot_conf_ratio;
+}
 
 
+// hist_data, func
+void MirQdpTool::MkQdpDiff3Serr(const HistData1d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                string title_xval,
+                                string title_oval,
+                                double offset_xval,
+                                double offset_oval,
+                                string scale_xval,
+                                string scale_oval)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
+                hist_data->GetHi1d()->GetUp(),
+                &xval_lo, &xval_up);
 
+    HistDataNerr1d* hist_func = new HistDataNerr1d;
+    hist_func->Init(npoint_func, xval_lo, xval_up);
+    hist_func->SetByFunc(func, par);
 
+    HistDataSerr1d* hist_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* hist_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* hist_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(hist_data, func, par,
+                                 hist_res_val);
+    HistData1dOpe::GetResChiHd1d(hist_data, func, par,
+                                 hist_res_chi);
+    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
+                                   hist_res_ratio);
+    string format = "x,xe,y,ye";
+    MkQdpDiff(hist_data, hist_func, hist_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              title_xval, title_oval, "res_val",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
 
+    MkQdpDiff(hist_data, hist_func, hist_res_chi, 
+              outdir + "/" + qdpout_head + "_diff_chi.qdp",
+              format, 
+              title_xval, title_oval, "chi",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
 
+    MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              title_xval, title_oval, "ratio",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
 
+    delete hist_res_val;
+    delete hist_res_chi;
+    delete hist_res_ratio;
+    delete hist_func;
+}
+   
+    
+void MirQdpTool::MkQdpDiff3Serr(const HistData1d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                const MirPlotConf* const plot_conf)
+{
+    if(5 != plot_conf->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf->GetNdim() != 5");
+        MPrintErr(msg);
+        abort();
+    }
+    
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
+                hist_data->GetHi1d()->GetUp(),
+                &xval_lo, &xval_up);    
 
+    HistDataNerr1d* hist_func = new HistDataNerr1d;
+    hist_func->Init(npoint_func, xval_lo, xval_up);
+    hist_func->SetByFunc(func, par);
 
+    HistDataSerr1d* hist_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* hist_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* hist_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(hist_data, func, par,
+                                 hist_res_val);
+    HistData1dOpe::GetResChiHd1d(hist_data, func, par,
+                                 hist_res_chi);
+    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
+                                   hist_res_ratio);
 
+    MirPlotConf* plot_conf_val   = NULL;
+    MirPlotConf* plot_conf_chi   = NULL;
+    MirPlotConf* plot_conf_ratio = NULL;
+    MirPlotConf::GenPlotConf3(plot_conf,
+                              &plot_conf_val,
+                              &plot_conf_chi,
+                              &plot_conf_ratio);
+    
+    string format = "x,xe,y,ye";
+    MkQdpDiff(hist_data, hist_func, hist_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              plot_conf_val);
 
+    MkQdpDiff(hist_data, hist_func, hist_res_chi, 
+              outdir + "/" + qdpout_head + "_diff_chi.qdp",
+              format,
+              plot_conf_val);
 
+    MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              plot_conf_val);
 
+    delete hist_res_val;
+    delete hist_res_chi;
+    delete hist_res_ratio;
+    delete hist_func;
+    delete plot_conf_val;
+    delete plot_conf_chi;
+    delete plot_conf_ratio;    
+}
 
+void MirQdpTool::MkQdpDiff2Terr(const HistData1d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                string title_xval,
+                                string title_oval,
+                                double offset_xval,
+                                double offset_oval,
+                                string scale_xval,
+                                string scale_oval)
+{
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
+                hist_data->GetHi1d()->GetUp(),
+                &xval_lo, &xval_up);    
 
+    HistDataNerr1d* hist_func = new HistDataNerr1d;
+    hist_func->Init(npoint_func, xval_lo, xval_up);
+    hist_func->SetByFunc(func, par);
 
+    HistDataTerr1d* hist_res_val   = new HistDataTerr1d;
+    HistDataTerr1d* hist_res_ratio = new HistDataTerr1d;
+    HistData1dOpe::GetResValHd1d(hist_data, func, par,
+                                 hist_res_val);
+    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
+                                   hist_res_ratio);
+    string format = "x,xe+,xe-,y,ye+,ye-";
+    MkQdpDiff(hist_data, hist_func, hist_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              title_xval, title_oval, "res_val",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+    MkQdpDiff(hist_data, hist_func, hist_res_ratio,
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              title_xval, title_oval, "ratio",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
 
+    delete hist_res_val;
+    delete hist_res_ratio;
+    delete hist_func;
+}
 
+void MirQdpTool::MkQdpDiff2Terr(const HistData1d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                int npoint_func,
+                                string outdir, string qdpout_head,
+                                const MirPlotConf* const plot_conf)
+{
+    if(4 != plot_conf->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf->GetNdim() != 4");
+        MPrintErr(msg);
+        abort();
+    }
+    
+    double xval_lo = 0.0;
+    double xval_up = 0.0;
+    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
+                hist_data->GetHi1d()->GetUp(),
+                &xval_lo, &xval_up);    
+
+    HistDataNerr1d* hist_func = new HistDataNerr1d;
+    hist_func->Init(npoint_func, xval_lo, xval_up);
+    hist_func->SetByFunc(func, par);
+
+    HistDataTerr1d* hist_res_val   = new HistDataTerr1d;
+    HistDataTerr1d* hist_res_ratio = new HistDataTerr1d;
+    HistData1dOpe::GetResValHd1d(hist_data, func, par,
+                                 hist_res_val);
+    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
+                                   hist_res_ratio);
+
+    MirPlotConf* plot_conf_val   = NULL;
+    MirPlotConf* plot_conf_ratio = NULL;
+    MirPlotConf::GenPlotConf2(plot_conf,
+                              &plot_conf_val,
+                              &plot_conf_ratio);
+    
+    string format = "x,xe+,xe-,y,ye+,ye-";
+    MkQdpDiff(hist_data, hist_func, hist_res_val, 
+              outdir + "/" + qdpout_head + "_diff_val.qdp",
+              format,
+              plot_conf_val);
+
+    MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
+              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
+              format,
+              plot_conf_val);
+
+    delete hist_res_val;
+    delete hist_res_ratio;
+    delete hist_func;
+    delete plot_conf_val;
+    delete plot_conf_ratio;    
+}
+        
 
 // plot N HistData in one qdp file
 void MirQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
@@ -1339,3 +1657,362 @@ void MirQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
     
     fclose(fp);
 }
+
+
+void MirQdpTool::MkQdpProj(const MirFunc* const func, const double* const par,
+                            double xval_lo, double xval_up, double yval_lo, double yval_up,
+                            string outdir, string qdpout_head, string calc_mode,
+                            int npoint_func,
+                            string title_xval, string title_yval, string title_oval,
+                            double offset_xval, double offset_yval, double offset_oval,
+                            string scale_xval, string scale_yval, string scale_oval)
+{
+    int nbin_func_x = npoint_func;
+    int nbin_func_y = npoint_func;
+    HistDataNerr2d* h2d_func = new HistDataNerr2d;
+    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
+                   nbin_func_y, yval_lo, yval_up);
+    h2d_func->SetByFunc(func, par);
+
+    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
+    HistData2dOpe::GetProjectX(h2d_func,
+                               0, h2d_func->GetNbinY() - 1,
+                               calc_mode,
+                               h1d_func_projx);
+    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
+    HistData2dOpe::GetProjectY(h2d_func,
+                               0, h2d_func->GetNbinX() - 1,
+                               calc_mode,
+                               h1d_func_projy);
+    string outqdp_projx = outdir + "/" + qdpout_head + "_projx.qdp";
+    string outqdp_projy = outdir + "/" + qdpout_head + "_projy.qdp";
+
+    MkQdp(h1d_func_projx, outqdp_projx, "x,y",
+          title_xval, title_oval,
+          offset_xval, offset_oval,
+          scale_xval, scale_oval);
+    MkQdp(h1d_func_projy, outqdp_projy, "x,y",
+          title_yval, title_oval,
+          offset_yval, offset_oval,
+          scale_yval, scale_oval);
+
+    delete h2d_func;    
+    delete h1d_func_projx;
+    delete h1d_func_projy;
+}
+
+
+void MirQdpTool::MkQdpProj(const MirFunc* const func, const double* const par,
+                            double xval_lo, double xval_up, double yval_lo, double yval_up,
+                            string outdir, string qdpout_head, string calc_mode,
+                            int npoint_func,
+                            const MirPlotConf* const plot_conf_projx,
+                            const MirPlotConf* const plot_conf_projy)
+{
+    if(2 != plot_conf_projx->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf_projx->GetNdim() != 2");
+        MPrintErr(msg);
+        abort();
+    }
+    if(2 != plot_conf_projy->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf_projy->GetNdim() != 2");
+        MPrintErr(msg);
+        abort();
+    }
+    
+    int nbin_func_x = npoint_func;
+    int nbin_func_y = npoint_func;
+    HistData2d* h2d_func = new HistDataNerr2d;
+    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
+                   nbin_func_y, yval_lo, yval_up);
+    h2d_func->SetByFunc(func, par);
+
+    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
+    HistData2dOpe::GetProjectX(h2d_func,
+                               0, h2d_func->GetNbinY() - 1,
+                               calc_mode,
+                               h1d_func_projx);
+    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
+    HistData2dOpe::GetProjectY(h2d_func,
+                               0, h2d_func->GetNbinX() - 1,
+                               calc_mode,
+                               h1d_func_projy);
+    string outqdp_projx = outdir + "/" + qdpout_head + "_projx.qdp";
+    string outqdp_projy = outdir + "/" + qdpout_head + "_projy.qdp";
+
+    MkQdp(h1d_func_projx, outqdp_projx, "x,y",
+          plot_conf_projx);
+    MkQdp(h1d_func_projy, outqdp_projy, "x,y",
+          plot_conf_projy);
+
+    delete h2d_func;    
+    delete h1d_func_projx;
+    delete h1d_func_projy;
+}
+
+
+void MirQdpTool::MkQdpDiffProj(const HistDataSerr2d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                string outdir, string qdpout_head,
+                                string add_mode, string error_mode,
+                                string title_xval,
+                                string title_yval,
+                                string title_oval,
+                                double offset_xval,
+                                double offset_yval,
+                                double offset_oval,
+                                string scale_xval,
+                                string scale_yval,
+                                string scale_oval)
+{
+    HistDataSerr1d* h1d_projx = new HistDataSerr1d;
+    HistData2dOpe::GetProjectX(hist_data,
+                               0, hist_data->GetNbinY() - 1,
+                               add_mode, error_mode,
+                               h1d_projx);
+    HistDataSerr1d* h1d_projy = new HistDataSerr1d;
+    HistData2dOpe::GetProjectY(hist_data,
+                               0, hist_data->GetNbinX() - 1,
+                               add_mode, error_mode,
+                               h1d_projy);
+    long nbin_func_x = hist_data->GetNbinX();
+    long nbin_func_y = hist_data->GetNbinY();    
+    double xval_lo = hist_data->GetXvalLo();
+    double xval_up = hist_data->GetXvalUp();
+    double yval_lo = hist_data->GetYvalLo();
+    double yval_up = hist_data->GetYvalUp();
+
+    HistData2d* h2d_func = new HistDataNerr2d;
+    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
+                   nbin_func_y, yval_lo, yval_up);
+
+    h2d_func->SetByFunc(func, par);
+    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
+    HistData2dOpe::GetProjectX(h2d_func,
+                               0, h2d_func->GetNbinY() - 1,
+                               add_mode,
+                               h1d_func_projx);
+    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
+    HistData2dOpe::GetProjectY(h2d_func,
+                               0, h2d_func->GetNbinX() - 1,
+                               add_mode,
+                               h1d_func_projy);
+    HistDataSerr1d* h1d_projx_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projx_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projx_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(h1d_projx, h1d_func_projx,
+                                h1d_projx_res_val);
+    HistData1dOpe::GetResChiHd1d(h1d_projx, h1d_func_projx,
+                                h1d_projx_res_chi);
+    HistData1dOpe::GetResRatioHd1d(h1d_projx, h1d_func_projx,
+                                  h1d_projx_res_ratio);
+
+    HistDataSerr1d* h1d_projy_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projy_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projy_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(h1d_projy, h1d_func_projy,
+                                h1d_projy_res_val);
+    HistData1dOpe::GetResChiHd1d(h1d_projy, h1d_func_projy,
+                                h1d_projy_res_chi);
+    HistData1dOpe::GetResRatioHd1d(h1d_projy, h1d_func_projy,
+                                  h1d_projy_res_ratio);
+    string format = "x,xe,y,ye";
+    MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_val, 
+              outdir + "/" + qdpout_head + "_projx_diff_val.qdp",
+              format,
+              title_xval, title_oval, "res_val",
+              offset_xval, offset_oval, 0.0,
+              scale_xval, scale_oval, "lin");
+    MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_val, 
+              outdir + "/" + qdpout_head + "_projy_diff_val.qdp",
+              format,
+              title_yval, title_oval, "res_val",
+              offset_yval, offset_oval, 0.0,
+              scale_yval, scale_oval, "lin");
+
+    if(0 < g_flag_verbose){
+        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_chi, 
+                  outdir + "/" + qdpout_head + "_projx_diff_chi.qdp",
+                  format,
+                  title_xval, title_oval, "chi",
+                  offset_xval, offset_oval, 0.0,
+                  scale_xval, scale_oval, "lin");
+
+        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_ratio, 
+                  outdir + "/" + qdpout_head + "_projx_diff_ratio.qdp",
+                  format,
+                  title_xval, title_oval, "ratio",
+                  offset_xval, offset_oval, 0.0,
+                  scale_xval, scale_oval, "lin");
+
+        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_chi, 
+                  outdir + "/" + qdpout_head + "_projy_diff_chi.qdp",
+                  format,
+                  title_yval, title_oval, "chi",
+                  offset_yval, offset_oval, 0.0,
+                  scale_yval, scale_oval, "lin");
+
+        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_ratio, 
+                  outdir + "/" + qdpout_head + "_projy_diff_ratio.qdp",
+                  format,
+                  title_yval, title_oval, "ratio",
+                  offset_yval, offset_oval, 0.0,
+                  scale_yval, scale_oval, "lin");
+    }
+    
+    delete h1d_projx;
+    delete h1d_projy;
+    delete h2d_func;
+    delete h1d_func_projx;
+    delete h1d_func_projy;
+    delete h1d_projx_res_val;
+    delete h1d_projx_res_chi;
+    delete h1d_projx_res_ratio;
+    delete h1d_projy_res_val;
+    delete h1d_projy_res_chi;
+    delete h1d_projy_res_ratio;
+}
+
+
+
+void MirQdpTool::MkQdpDiffProj(const HistDataSerr2d* const hist_data,
+                                const MirFunc* const func, const double* const par,
+                                string outdir, string qdpout_head,
+                                string add_mode, string error_mode,
+                                const MirPlotConf* const plot_conf_projx,
+                                const MirPlotConf* const plot_conf_projy)
+{
+    if(5 != plot_conf_projx->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf_projx->GetNdim() != 5");
+        MPrintErr(msg);
+        abort();
+    }
+    if(5 != plot_conf_projy->GetNdim()){
+        char msg[kLineSize];
+        sprintf(msg, "plot_conf_projy->GetNdim() != 5");
+        MPrintErr(msg);
+        abort();
+    }
+   
+    HistDataSerr1d* h1d_projx = new HistDataSerr1d;
+    HistData2dOpe::GetProjectX(hist_data,
+                               0, hist_data->GetNbinY() - 1,
+                               add_mode, error_mode,
+                               h1d_projx);
+    HistDataSerr1d* h1d_projy = new HistDataSerr1d;
+    HistData2dOpe::GetProjectY(hist_data,
+                               0, hist_data->GetNbinX() - 1,
+                               add_mode, error_mode,
+                               h1d_projy);
+
+    long nbin_func_x = hist_data->GetNbinX();
+    long nbin_func_y = hist_data->GetNbinY();    
+    double xval_lo = hist_data->GetXvalLo();
+    double xval_up = hist_data->GetXvalUp();
+    double yval_lo = hist_data->GetYvalLo();
+    double yval_up = hist_data->GetYvalUp();
+
+    HistData2d* h2d_func = new HistDataNerr2d;
+    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
+                   nbin_func_y, yval_lo, yval_up);
+
+    h2d_func->SetByFunc(func, par);
+    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
+    HistData2dOpe::GetProjectX(h2d_func,
+                               0, h2d_func->GetNbinY() - 1,
+                               add_mode,
+                               h1d_func_projx);
+    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
+    HistData2dOpe::GetProjectY(h2d_func,
+                               0, h2d_func->GetNbinX() - 1,
+                               add_mode,
+                               h1d_func_projy);
+    HistDataSerr1d* h1d_projx_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projx_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projx_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(h1d_projx, h1d_func_projx,
+                                h1d_projx_res_val);
+    HistData1dOpe::GetResChiHd1d(h1d_projx, h1d_func_projx,
+                                h1d_projx_res_chi);
+    HistData1dOpe::GetResRatioHd1d(h1d_projx, h1d_func_projx,
+                                  h1d_projx_res_ratio);
+
+    HistDataSerr1d* h1d_projy_res_val   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projy_res_chi   = new HistDataSerr1d;
+    HistDataSerr1d* h1d_projy_res_ratio = new HistDataSerr1d;
+    HistData1dOpe::GetResValHd1d(h1d_projy, h1d_func_projy,
+                                h1d_projy_res_val);
+    HistData1dOpe::GetResChiHd1d(h1d_projy, h1d_func_projy,
+                                h1d_projy_res_chi);
+    HistData1dOpe::GetResRatioHd1d(h1d_projy, h1d_func_projy,
+                                  h1d_projy_res_ratio);
+
+    MirPlotConf* plot_conf_val_projx   = NULL;
+    MirPlotConf* plot_conf_chi_projx   = NULL;
+    MirPlotConf* plot_conf_ratio_projx = NULL;
+    MirPlotConf* plot_conf_val_projy   = NULL;
+    MirPlotConf* plot_conf_chi_projy   = NULL;
+    MirPlotConf* plot_conf_ratio_projy = NULL;
+    MirPlotConf::GenPlotConf3(plot_conf_projx,
+                               &plot_conf_val_projx,
+                               &plot_conf_chi_projx,
+                               &plot_conf_ratio_projx);
+    MirPlotConf::GenPlotConf3(plot_conf_projy,
+                               &plot_conf_val_projy,
+                               &plot_conf_chi_projy,
+                               &plot_conf_ratio_projy);    
+    
+    string format = "x,xe,y,ye";
+    MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_val, 
+              outdir + "/" + qdpout_head + "_projx_diff_val.qdp",
+              format,
+              plot_conf_val_projx);
+    MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_val, 
+              outdir + "/" + qdpout_head + "_projy_diff_val.qdp",
+              format,
+              plot_conf_val_projy);
+
+    if(0 < g_flag_verbose){
+        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_chi, 
+                  outdir + "/" + qdpout_head + "_projx_diff_chi.qdp",
+                  format,
+                  plot_conf_chi_projx);
+
+        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_ratio, 
+                  outdir + "/" + qdpout_head + "_projx_diff_ratio.qdp",
+                  format,
+                  plot_conf_ratio_projx);
+
+        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_chi, 
+                  outdir + "/" + qdpout_head + "_projy_diff_chi.qdp",
+                  format,
+                  plot_conf_chi_projy);
+
+        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_ratio, 
+                  outdir + "/" + qdpout_head + "_projy_diff_ratio.qdp",
+                  format,
+                  plot_conf_ratio_projy);
+    }
+    
+    delete h1d_projx;
+    delete h1d_projy;
+    delete h2d_func;
+    delete h1d_func_projx;
+    delete h1d_func_projy;
+    delete h1d_projx_res_val;
+    delete h1d_projx_res_chi;
+    delete h1d_projx_res_ratio;
+    delete h1d_projy_res_val;
+    delete h1d_projy_res_chi;
+    delete h1d_projy_res_ratio;
+    delete plot_conf_val_projx;
+    delete plot_conf_chi_projx;
+    delete plot_conf_ratio_projx;
+    delete plot_conf_val_projy;
+    delete plot_conf_chi_projy;
+    delete plot_conf_ratio_projy;
+}
+

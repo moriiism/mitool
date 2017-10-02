@@ -255,16 +255,8 @@ namespace HistData1dOpe
                        const double* const par,
                        HistDataSerr1d* const out);
     void GetResChiHd1d(const HistData1d* const data,
-                       const MirFunc* const func,
-                       const double* const par,
-                       HistDataTerr1d* const out);
-
-    void GetResChiHd1d(const HistData1d* const data,
                        const HistDataNerr1d* const func,
                        HistDataSerr1d* const out);
-    void GetResChiHd1d(const HistData1d* const data,
-                       const HistDataNerr1d* const func,
-                       HistDataTerr1d* const out);    
 
     void FillGd1d(const GraphDataNerr2d* const gd2d,
                   HistDataNerr1d* const out);

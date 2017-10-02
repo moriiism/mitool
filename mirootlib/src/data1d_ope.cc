@@ -800,7 +800,7 @@ int DataArray1dOpe::GetWMean(const DataArray1d* const* const data_array_arr,
         double val_serr = 0.0;
         long nsel = 0;
         int* mask_sel_arr = NULL;
-        int ret = MirMath::GetWMean(ndata_array,
+        int ret = MirMath::GenWMean(ndata_array,
                                     val_arr_tmp,
                                     val_err_arr_tmp,
                                     &val,
@@ -1097,7 +1097,7 @@ int DataArray1dOpe::GetWMeanWithMask(const DataArray1d* const* const data_array_
         double val_serr = 0.0;
         long nsel = 0;
         int* mask_sel_arr_tmp = NULL;
-        int ret = MirMath::GetWMeanWithMask(ndata_array, val_arr_tmp, val_err_arr_tmp,
+        int ret = MirMath::GenWMeanWithMask(ndata_array, val_arr_tmp, val_err_arr_tmp,
                                             mask_arr_tmp,
                                             &val, &val_serr,
                                             &nsel, &mask_sel_arr_tmp);

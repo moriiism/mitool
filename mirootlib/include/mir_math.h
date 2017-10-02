@@ -128,7 +128,7 @@ namespace MirMath
                 double* const sum_ptr, double* const sum_err_ptr);
     void GetAMean(long narr, const double* const val_arr, const double* const val_err_arr,
                   double* const amean_ptr, double* const amean_err_ptr);
-    int GetWMean(long narr, const double* const val_arr, const double* const val_err_arr,
+    int GenWMean(long narr, const double* const val_arr, const double* const val_err_arr,
                  double* const wmean_ptr, double* const wmean_err_ptr,
                  long* const nsel_ptr, int** const mask_sel_arr_ptr);
 
@@ -140,11 +140,11 @@ namespace MirMath
     void GetAMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                           const int* const mask_arr,
                           double* const amean_ptr, double* const amean_err_ptr);
-    int GetWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
+    int GenWMeanWithMask(long narr, const double* const val_arr, const double* const val_err_arr,
                          const int* const mask_arr,
                          double* const wmean_ptr, double* const wmean_err_ptr,
                          long* const nsel_ptr, int** const mask_sel_arr_ptr);
-    int GetChi2byConst(long narr,
+    int GenChi2byConst(long narr,
                        const double* const val_arr,
                        const double* const val_err_arr,
                        double* const wmean_ptr,
@@ -155,7 +155,7 @@ namespace MirMath
                        long* const dof_ptr,
                        double* const chi2_red_ptr,
                        double* const prob_ptr);
-    int GetChi2byConst(long narr,
+    int GenChi2byConst(long narr,
                        const double* const val_arr,
                        const double* const val_err_arr,
                        const int* const mask_arr,

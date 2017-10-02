@@ -799,8 +799,12 @@ void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
     for(long idata = 0; idata < ndata; idata++){
         double xval[1];
         xval[0] = data->GetXvalElm(idata);
-        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-            func->Eval(xval, par);
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                func->Eval(xval, par);
+        } else {
+            oval_res[idata] = 0.0;
+        }
     }
     out->Init(ndata);
     out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
@@ -821,11 +825,15 @@ void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
     for(long idata = 0; idata < ndata; idata++){
         double xval[1];
         xval[0] = data->GetXvalElm(idata);
-        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-            func->Eval(xval, par);
-        oval_res_serr[idata] = fabs(data->GetOvalSerrElm(idata) / func->Eval(xval, par));
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                func->Eval(xval, par);
+            oval_res_serr[idata] = fabs(data->GetOvalSerrElm(idata) / func->Eval(xval, par));
+        } else {
+            oval_res[idata] = 0.0;
+            oval_res_serr[idata] = 0.0;
+        }
     }
-
     out->Init(ndata);
     out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
     out->SetXvalSerrArr(ndata, data->GetXvalArr()->GetValSerr());
@@ -848,14 +856,23 @@ void GraphData2dOpe::GetResRatioGd2d(const GraphData2d* const data,
     for(long idata = 0; idata < ndata; idata++){
         double xval[1];
         xval[0] = data->GetXvalElm(idata);
-        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-            func->Eval(xval, par);
-        oval_res_terr_plus[idata]  =
-            fabs(data->GetOvalTerrPlusElm(idata) / func->Eval(xval, par));
-        oval_res_terr_minus[idata] =
-            -1 * fabs(data->GetOvalTerrMinusElm(idata) / func->Eval(xval, par));
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                func->Eval(xval, par);
+            double terr1 = data->GetOvalTerrPlusElm(idata) / func->Eval(xval, par);
+            double terr2 = data->GetOvalTerrMinusElm(idata) / func->Eval(xval, par);
+            if(terr1 * terr2 <= 0.0){
+                oval_res_terr_plus[idata]  = MirMath::GetMax(terr1, terr2);
+                oval_res_terr_minus[idata] = MirMath::GetMin(terr1, terr2);
+            } else {
+                abort();
+            }
+        } else {
+            oval_res[idata] = 0.0;
+            oval_res_terr_plus[idata]  = 0.0;
+            oval_res_terr_minus[idata] = 0.0;
+        }
     }
-
     out->Init(ndata);
     out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
     out->SetXvalTerrArr(ndata,
@@ -882,9 +899,14 @@ void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
     for(long idata = 0; idata < ndata; idata++){
         double xval[1];
         xval[0] = data->GetXvalElm(idata);
-        oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-            data->GetOvalSerrElm(idata);
-        oval_res_serr[idata] = 1.0;
+        if( fabs( data->GetOvalSerrElm(idata) ) > DBL_EPSILON){
+            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
+                data->GetOvalSerrElm(idata);
+            oval_res_serr[idata] = 1.0;
+        } else {
+            oval_res[idata] = 0.0;
+            oval_res_serr[idata] = 0.0;
+        }
     }
     out->Init(ndata);
     out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
@@ -895,45 +917,6 @@ void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
     delete [] oval_res;
     delete [] oval_res_serr;
 }
- 
-
-void GraphData2dOpe::GetResChiGd2d(const GraphData2d* const data,
-                                   const MirFunc* const func,
-                                   const double* const par,
-                                   GraphDataTerr2d* const out)
-{
-    long ndata = data->GetNdata();
-    double* oval_res = new double[ndata];
-    double* oval_res_terr_plus  = new double[ndata];
-    double* oval_res_terr_minus = new double[ndata];
-    for(long idata = 0; idata < ndata; idata++){
-        double xval[1];
-        xval[0] = data->GetXvalElm(idata);
-        if( 0 <= data->GetOvalElm(idata) - func->Eval(xval, par) ){
-            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-                (-1 * data->GetOvalTerrMinusElm(idata));
-        } else {
-            oval_res[idata] = (data->GetOvalElm(idata) - func->Eval(xval, par)) /
-                data->GetOvalTerrPlusElm(idata);
-        }
-        oval_res_terr_plus[idata] = 1.0;
-        oval_res_terr_minus[idata] = -1.0;
-    }
-    
-    out->Init(ndata);
-    out->SetXvalArr(ndata, data->GetXvalArr()->GetVal());
-    out->SetXvalTerrArr(ndata,
-                        data->GetXvalArr()->GetValTerrPlus(),
-                        data->GetXvalArr()->GetValTerrMinus());
-    out->SetOvalArr(ndata, oval_res);
-    out->SetOvalTerrArr(ndata,
-                        oval_res_terr_plus,
-                        oval_res_terr_minus);
-    delete [] oval_res;
-    delete [] oval_res_terr_plus;
-    delete [] oval_res_terr_minus;
-}
-
 
 double GraphData2dOpe::GetIntegral(const GraphData2d* const gd2d,
                                    double xval_lo, double xval_up)
@@ -1068,7 +1051,7 @@ GraphDataSerr2d* const GraphData2dOpe::GenGd2dBinBySigVar(const GraphData2d* con
             double wmean_err = 0.0;
             long nsel = 0;
             int* mask_sel_arr = NULL;  
-            int ret = MirMath::GetChi2byConst(oval_vec_pre.size(),
+            int ret = MirMath::GenChi2byConst(oval_vec_pre.size(),
                                               oval_arr_pre,
                                               oval_serr_arr_pre,
                                               &wmean,
@@ -1098,7 +1081,7 @@ GraphDataSerr2d* const GraphData2dOpe::GenGd2dBinBySigVar(const GraphData2d* con
         long dof = 0;
         double chi2_red = 0.0;
         double prob = 0.0;
-        int ret = MirMath::GetChi2byConst(oval_vec.size(),
+        int ret = MirMath::GenChi2byConst(oval_vec.size(),
                                           oval_arr,
                                           oval_serr_arr,
                                           &wmean,
@@ -1257,7 +1240,7 @@ GraphDataSerr2d* const GraphData2dOpe::GenGd2dBinBySigDet(const GraphData2d* con
         double wmean_serr = 0.0;
         long nsel = 0;
         int* mask_sel_arr = NULL;
-        MirMath::GetWMean(oval_vec.size(),
+        MirMath::GenWMean(oval_vec.size(),
                           oval_arr,
                           oval_serr_arr,
                           &wmean, &wmean_serr,
@@ -1349,7 +1332,7 @@ void GraphData2dOpe::GetPoint2dSerrByBinning(long narr,
     double wmean_err = 0.0;
     long nsel = 0;
     int* mask_sel_arr = NULL;
-    MirMath::GetWMean(narr, oval_arr, oval_serr_arr,
+    MirMath::GenWMean(narr, oval_arr, oval_serr_arr,
                       &wmean, &wmean_err,
                       &nsel, &mask_sel_arr);
 

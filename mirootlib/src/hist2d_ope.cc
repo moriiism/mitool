@@ -1182,150 +1182,244 @@ double HistData2dOpe::FindMdYbyEdge(const HistDataNerr2d* const hd2d)
     return yval_md;
 }
 
-
-//void HistData2dOpe::FillRect(double x_lo, double x_up, double y_lo, double y_up,
-//                             HistDataNerr2d* const hist_res_out)
-//{
-//    long ibin_x_lo = hist_res_out->GetHi2d()->GetIbinXFromX(x_lo);
-//    long ibin_x_up = hist_res_out->GetHi2d()->GetIbinXFromX(x_up);
-//    long ibin_y_lo = hist_res_out->GetHi2d()->GetIbinYFromY(y_lo);
-//    long ibin_y_up = hist_res_out->GetHi2d()->GetIbinYFromY(y_up);
-//
-//    // width 
-//    if( (x_up - x_lo) < hist_res_out->GetHi2d()->GetBinWidthX() ){
-//        ratio_x = (x_up - x_lo) / hist_res_out->GetHi2d()->GetBinWidthX();
-//    } else {
-//        for(long ibin_x = ibin_x_lo; ibin_x <= ibin_x_up; ibin_x ++){
-//
-//
-//        }
-//    }
-//    
-//
-//
-//
-//
-//        
-//        for(long ibin_y = ibin_y_lo; ibin_y <= ibin_y_up; ibin_y ++){
-//
-//            
-//
-//            
-//
-//            
-//        }
-//    }
-//
-//    hist_res_out->FillByLarger(xval, yval, 1.0);
-//
-//
-//}
-//
-
-
-void HistData2dOpe::GenContMinFcn(const HistDataNerr2d* const hd2d,
-                                  double zval_min,
-                                  int nlevel,
-                                  const double* const delta_minfcn_arr,
-                                  MirCont*** const cont_arr_ptr,
-                                  MirRootTool* const root_tool,
-                                  double offset_xval,
-                                  double offset_yval)
+void HistData2dOpe::GetProjectX(const HistData2d* const in,
+                                long ibin_ylo, long ibin_yup,
+                                string calc_mode,
+                                HistDataNerr1d* const out)
 {
-    TH2D* th2d = hd2d->GenTH2D(offset_xval, offset_yval, 0.0);
-    double* cont_level = new double [nlevel];
-    for(int ilevel = 0; ilevel < nlevel; ilevel++){
-        cont_level[ilevel] = zval_min + delta_minfcn_arr[ilevel];
-    }
-    th2d->SetContour(nlevel, cont_level);
-
-
-    // http://root.cern.ch/root/html/tutorials/hist/ContourList.C.html
-    // Draw contours as filled regions, and Save points
-    th2d->Draw("CONT Z LIST");
-    root_tool->GetTCanvas()->Update();
-    // Needed to force the plotting and retrieve the contours in TGraphs
-
+    in->GetHi2d()->IsValidIbinY(ibin_ylo);
+    in->GetHi2d()->IsValidIbinY(ibin_yup);
     
-    // Get Contours
-    TObjArray* cont_tobj_arr = dynamic_cast<TObjArray*>(gROOT->GetListOfSpecials()->FindObject("contours"));
-    int ncont = 0;
-    if(NULL != cont_tobj_arr){
-        ncont = cont_tobj_arr->GetSize();
+    out->Init(in->GetNbinX(),
+              in->GetXvalLo(),
+              in->GetXvalUp());
+    for(long ibin_xval = 0; ibin_xval < in->GetNbinX(); ibin_xval++){
+        long nbin_tmp = ibin_yup - ibin_ylo + 1;
+        double* tmp_arr = new double [nbin_tmp];
+        long ibin_tmp = 0;
+        for(long ibin_yval = ibin_ylo; ibin_yval <= ibin_yup; ibin_yval++){
+            tmp_arr[ibin_tmp] = in->GetOvalElm(ibin_xval, ibin_yval);
+            ibin_tmp ++;
+        }
+        double val_proj = 0.0;
+        GetProject(nbin_tmp, tmp_arr,
+                   calc_mode, in->GetBinWidthY(),
+                   &val_proj);
+        delete [] tmp_arr;
+        out->SetOvalElm(ibin_xval, val_proj);
+    }
+}
+
+void HistData2dOpe::GetProjectX(const HistData2d* const in,
+                                long ibin_ylo, long ibin_yup,
+                                string calc_mode, string error_mode,
+                                HistDataSerr1d* const out)
+{
+    in->GetHi2d()->IsValidIbinY(ibin_ylo);
+    in->GetHi2d()->IsValidIbinY(ibin_yup);
+    out->Init(in->GetNbinX(),
+              in->GetXvalLo(),
+              in->GetXvalUp());
+    for(long ibin_xval = 0; ibin_xval < in->GetNbinX(); ibin_xval++){
+        long nbin_tmp = ibin_yup - ibin_ylo + 1;
+        double* tmp_arr = new double [nbin_tmp];
+        double* tmp_err_arr = new double [nbin_tmp];
+        long ibin_tmp = 0;
+        for(long ibin_yval = ibin_ylo; ibin_yval <= ibin_yup; ibin_yval++){
+            tmp_arr[ibin_tmp]     = in->GetOvalElm(ibin_xval, ibin_yval);
+            tmp_err_arr[ibin_tmp] = in->GetOvalSerrElm(ibin_xval, ibin_yval);
+            ibin_tmp ++;
+        }
+        double val_proj = 0.0;
+        double val_proj_err = 0.0;
+        GetProject(nbin_tmp,
+                   tmp_arr, tmp_err_arr,
+                   calc_mode, error_mode,
+                   in->GetBinWidthY(),
+                   &val_proj, &val_proj_err);
+        delete [] tmp_arr;
+        delete [] tmp_err_arr;
+        out->SetOvalElm(ibin_xval, val_proj);
+        out->SetOvalSerrElm(ibin_xval, val_proj_err);
+    }
+}
+
+void HistData2dOpe::GetProjectY(const HistData2d* const in,
+                                long ibin_xlo, long ibin_xup,
+                                string calc_mode,
+                                HistDataNerr1d* const out)
+{
+    in->GetHi2d()->IsValidIbinX(ibin_xlo);
+    in->GetHi2d()->IsValidIbinX(ibin_xup);
+    
+    out->Init(in->GetNbinY(),
+              in->GetYvalLo(),
+              in->GetYvalUp());
+    for(long ibin_yval = 0; ibin_yval < in->GetNbinY(); ibin_yval++){
+        long nbin_tmp = ibin_xup - ibin_xlo + 1;
+        double* tmp_arr = new double [nbin_tmp];
+        long ibin_tmp = 0;
+        for(long ibin_xval = ibin_xlo; ibin_xval <= ibin_xup; ibin_xval++){
+            tmp_arr[ibin_tmp] = in->GetOvalElm(ibin_xval, ibin_yval);
+            ibin_tmp ++;
+        }
+        double val_proj = 0.0;
+        GetProject(nbin_tmp, tmp_arr,
+                   calc_mode, in->GetBinWidthX(),
+                   &val_proj);
+        delete [] tmp_arr;
+        out->SetOvalElm(ibin_yval, val_proj);
+    }
+}
+
+void HistData2dOpe::GetProjectY(const HistData2d* const in,
+                                long ibin_xlo, long ibin_xup,
+                                string calc_mode, string error_mode,
+                                HistDataSerr1d* const out)
+{
+    in->GetHi2d()->IsValidIbinX(ibin_xlo);
+    in->GetHi2d()->IsValidIbinX(ibin_xup);
+    out->Init(in->GetNbinY(),
+              in->GetYvalLo(),
+              in->GetYvalUp());
+    for(long ibin_yval = 0; ibin_yval < in->GetNbinY(); ibin_yval++){
+        long nbin_tmp = ibin_xup - ibin_xlo + 1;
+        double* tmp_arr = new double [nbin_tmp];
+        double* tmp_err_arr = new double [nbin_tmp];
+        long ibin_tmp = 0;
+        for(long ibin_xval = ibin_xlo; ibin_xval <= ibin_xup; ibin_xval++){
+            tmp_arr[ibin_tmp]     = in->GetOvalElm(ibin_xval, ibin_yval);
+            tmp_err_arr[ibin_tmp] = in->GetOvalSerrElm(ibin_xval, ibin_yval);
+            ibin_tmp ++;
+        }
+        double val_proj = 0.0;
+        double val_proj_err = 0.0;
+        GetProject(nbin_tmp,
+                   tmp_arr, tmp_err_arr,
+                   calc_mode, error_mode,
+                   in->GetBinWidthX(),
+                   &val_proj, &val_proj_err);
+        delete [] tmp_arr;
+        delete [] tmp_err_arr;
+        out->SetOvalElm(ibin_yval, val_proj);
+        out->SetOvalSerrElm(ibin_yval, val_proj_err);
+    }
+}
+
+
+void HistData2dOpe::GetProject(long ndata,
+                               const double* const array,
+                               string calc_mode, double bin_width,
+                               double* const val_proj_ptr)
+{
+    double val_proj = 0.0;
+    if("add" == calc_mode){
+        val_proj = MirMath::GetSum(ndata, array);
+    } else if ("integral" == calc_mode){
+        val_proj = MirMath::GetSum(ndata, array) * bin_width;
+    } else if ("amean" == calc_mode){
+        val_proj = MirMath::GetAMean(ndata, array);
+    } else if ("min" == calc_mode){
+        val_proj = MirMath::GetMin(ndata, array);
+    } else if ("max" == calc_mode){
+        val_proj = MirMath::GetMax(ndata, array);
     } else {
-        printf("%s: error: No Contours Were Extracted!\n", __func__);
+        MPrintErr("bad calc_mode");
         abort();
     }
-    printf("ncont = %d\n", ncont);
-
-    MirCont** cont_arr = new MirCont* [nlevel];
-    for(int ilevel = 0; ilevel < nlevel; ilevel++){
-        cont_arr[ilevel] = new MirCont;
-    }
-  
-    for(int icont = 0; icont < ncont; icont++){
-        TList* list_graph = (TList*) cont_tobj_arr->At(icont);
-
-        int ngraph = list_graph->GetSize();
-        GraphDataNerr2d** g2d_arr = new GraphDataNerr2d* [ngraph];
-        for(int igraph = 0; igraph < ngraph; igraph++){
-            g2d_arr[igraph] = new GraphDataNerr2d;
-        }
-
-        for(int igraph = 0; igraph < ngraph; igraph++){
-            TGraph* graph_curve = (TGraph*) list_graph->At(igraph);
-            int npoint = graph_curve->GetN();
-            vector<double> xval, oval;
-            for(int ipoint = 0; ipoint < npoint; ipoint++){
-                double point_x, point_y;
-                graph_curve->GetPoint(ipoint, point_x, point_y);
-                xval.push_back(point_x);
-                oval.push_back(point_y);
-            }
-            g2d_arr[igraph]->Init(xval.size()); 
-            g2d_arr[igraph]->SetXvalArr(xval);
-            g2d_arr[igraph]->SetOvalArr(oval);
-        }
-        cont_arr[icont]->Init(ngraph);
-        cont_arr[icont]->SetGd2dArr(ngraph, g2d_arr);
-      
-        for(int igraph = 0; igraph < ngraph; igraph++){
-            delete g2d_arr[igraph];
-        }
-        delete [] g2d_arr;
-    }
-  
-    delete [] cont_level;
-    delete th2d;
-    *cont_arr_ptr = cont_arr;
+    *val_proj_ptr = val_proj;
 }
 
-
-void HistData2dOpe::GenContWithBestMinFcn(const HistDataNerr2d* const hd2d,
-                                          double zval_min, double xval_best, double yval_best,
-                                          int nlevel, const double* const delta_minfcn_arr,
-                                          MirContWithBest*** const cont_with_best_arr_ptr,
-                                          MirRootTool* const root_tool,
-                                          double offset_xval, double offset_yval)
+void HistData2dOpe::GetProject(long ndata,
+                               const double* const array,
+                               const double* const array_err,
+                               string calc_mode, string error_mode,
+                               double bin_width,
+                               double* const val_proj_ptr,
+                               double* const val_proj_err_ptr)
 {
-    MirCont** cont_arr = NULL;
-    GenContMinFcn(hd2d, zval_min, nlevel, delta_minfcn_arr,
-                  &cont_arr, root_tool, offset_xval, offset_yval);
+    double val_proj = 0.0;
+    double val_proj_err = 0.0;
+    if("add" == calc_mode || "integral" == calc_mode){
+        if("gauss" == error_mode){
+            MirMath::GetSum(ndata, array, array_err, &val_proj, &val_proj_err);
+        } else if("poisson" == error_mode){
+            val_proj = MirMath::GetSum(ndata, array);
+            val_proj_err = sqrt(val_proj);
+        } else if("zero" == error_mode){
+            val_proj = MirMath::GetSum(ndata, array);
+            val_proj_err = 0.0;
+        } else {
+            MPrintErr("bad error_mode");
+            abort();
+        }
+        if("integral" == calc_mode){
+            val_proj *= bin_width;
+            val_proj_err *= bin_width;
+        }
+    } else if ("amean" == calc_mode){
+        if("gauss" == error_mode){
+            MirMath::GetAMean(ndata, array, array_err, &val_proj, &val_proj_err);
+        } else if("poisson" == error_mode){
+            double val_add = MirMath::GetSum(ndata, array);
+            val_proj = val_add / ndata;
+            val_proj_err = sqrt(val_add) / ndata;
+        } else if("zero" == error_mode){
+            double val_add = MirMath::GetSum(ndata, array);
+            val_proj = val_add / ndata;
+            val_proj_err = 0.0;
+        } else {
+            MPrintErr("bad error_mode");
+            abort();
+        }
+    } else if ("wmean" == calc_mode){
+        if("gauss" == error_mode || "zero" == error_mode){
+            long nsel = 0;
+            int* mask_sel_arr = NULL;
+            MirMath::GenWMean(ndata, array, array_err,
+                              &val_proj, &val_proj_err,
+                              &nsel, &mask_sel_arr);
+            delete [] mask_sel_arr;
+            if("zero" == error_mode){
+                val_proj_err = 0.0;
+            }
+        } else {
+            MPrintErr("bad error_mode");
+            abort();
+        }
 
-    MirContWithBest** cont_with_best_arr = new MirContWithBest* [nlevel];
-    for(int ilevel = 0; ilevel < nlevel; ilevel++){
-        cont_with_best_arr[ilevel] = new MirContWithBest;
-        cont_with_best_arr[ilevel]->Init();
-        cont_with_best_arr[ilevel]->SetBest(xval_best, yval_best);
-        cont_with_best_arr[ilevel]->SetCont(cont_arr[ilevel]);
+    } else if ("min" == calc_mode){
+        long index = MirMath::GetLocMin(ndata, array);
+        val_proj = array[index];
+        if("gauss" == error_mode || "poisson" == error_mode){
+            val_proj_err = array_err[index];
+        } else if("zero" == error_mode) {
+            val_proj_err = 0.0;
+        } else {
+            MPrintErr("bad error_mode");
+            abort();
+        }
+    } else if ("max" == calc_mode){
+        long index = MirMath::GetLocMax(ndata, array);
+        val_proj = array[index];
+        if("gauss" == error_mode || "poisson" == error_mode){
+            val_proj_err = array_err[index];
+        } else if("zero" == error_mode) {
+            val_proj_err = 0.0;
+        } else {
+            MPrintErr("bad error_mode");
+            abort();
+        }
+    } else {
+        MPrintErr("bad calc_mode");
+        abort();
     }
-    for(int ilevel = 0; ilevel < nlevel; ilevel++){
-        delete cont_arr[ilevel]; cont_arr[ilevel] = NULL;
-    }
-    delete [] cont_arr; cont_arr = NULL;
-    
-    *cont_with_best_arr_ptr = cont_with_best_arr;
+
+    *val_proj_ptr = val_proj;
+    *val_proj_err_ptr = val_proj_err;
 }
+
+
 
 void HistData2dOpe::GetHd2dMaskWithMargin(const HistDataNerr2d* const hd2d_mask,
                                           double xval_margin, double yval_margin,

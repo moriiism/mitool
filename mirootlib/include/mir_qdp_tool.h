@@ -171,7 +171,8 @@ namespace MirQdpTool
                    string qdpout,
                    string format,
                    const MirPlotConf* const plot_conf);
-    
+
+    // graph_data, func
     void MkQdpDiff3Serr(const GraphData2d* const graph_data,
                         const MirFunc* const func, const double* const par,
                         int npoint_func,
@@ -182,7 +183,13 @@ namespace MirQdpTool
                         double offset_oval = 0.0,
                         string scale_xval = "lin",
                         string scale_oval = "lin");
-    void MkQdpDiff3Terr(const GraphData2d* const graph_data,
+    void MkQdpDiff3Serr(const GraphData2d* const graph_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        const MirPlotConf* const plot_conf);
+
+    void MkQdpDiff2Terr(const GraphData2d* const graph_data,
                         const MirFunc* const func, const double* const par,
                         int npoint_func,
                         string outdir, string qdpout_head,
@@ -192,47 +199,45 @@ namespace MirQdpTool
                         double offset_oval = 0.0,
                         string scale_xval = "lin",
                         string scale_oval = "lin");
+    void MkQdpDiff2Terr(const GraphData2d* const graph_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        const MirPlotConf* const plot_conf);
 
-    
-    
-    void MkQdpDiff3(const GraphData2d* const graph_data,
-                    const MirFunc* const func, const double* const par,
-                    int npoint_func,
-                    string outdir, string qdpout_head,
-                    const MirPlotConf* const plot_conf);
-    void MkQdpDiff3(const GraphData2d* const graph_data,
-                    const GraphData2d* const graph_model,
-                    string outdir, string qdpout_head,
-                    const MirPlotConf* const plot_conf);
-    
-    void MkQdpDiff3(const HistData1d* const hist_data,
-                    const MirFunc* const func, const double* const par,
-                    int npoint_func,
-                    string outdir, string qdpout_head,
-                    string title_xval = "",
-                    string title_oval = "",
-                    double offset_xval = 0.0,
-                    double offset_oval = 0.0,
-                    string scale_xval = "lin",
-                    string scale_oval = "lin");
-    void MkQdpDiff3(const HistData1d* const hist_data,
-                    const MirFunc* const func, const double* const par,
-                    int npoint_func,
-                    string outdir, string qdpout_head,
-                    const MirPlotConf* const plot_conf);
-    void MkQdpDiff3(const HistData1d* const hist_data,
-                    const HistData1d* const hist_model,
-                    string outdir, string qdpout_head,
-                    const MirPlotConf* const plot_conf);
+    // hist_data, func
+    void MkQdpDiff3Serr(const HistData1d* const hist_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        string title_xval = "",
+                        string title_oval = "",
+                        double offset_xval = 0.0,
+                        double offset_oval = 0.0,
+                        string scale_xval = "lin",
+                        string scale_oval = "lin");
+    void MkQdpDiff3Serr(const HistData1d* const hist_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        const MirPlotConf* const plot_conf);
 
-    void MkQdpMinFcn(const HistData1d* const hist_data,
-                     string outqdp,
-                     double xval_at_fcnmin,
-                     double xval_terr_minus,
-                     double xval_terr_plus,
-                     double fcnmin,
-                     string title_xval = "");
-    
+    void MkQdpDiff2Terr(const HistData1d* const hist_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        string title_xval = "",
+                        string title_oval = "",
+                        double offset_xval = 0.0,
+                        double offset_oval = 0.0,
+                        string scale_xval = "lin",
+                        string scale_oval = "lin");
+    void MkQdpDiff2Terr(const HistData1d* const hist_data,
+                        const MirFunc* const func, const double* const par,
+                        int npoint_func,
+                        string outdir, string qdpout_head,
+                        const MirPlotConf* const plot_conf);
+
     // plot N HistData in one qdp file
     void MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
                     string qdpout,
@@ -277,36 +282,6 @@ namespace MirQdpTool
                        string add_mode, string error_mode,
                        const MirPlotConf* const plot_conf_projx,
                        const MirPlotConf* const plot_conf_projy);
-    
-    void MkQdpCont(const HistData2d* const h2d,
-                   string qdpout, int ncont,
-                   string title_xval = "",
-                   string title_yval = "",
-                   string title_oval = "",
-                   double offset_xval = 0.0,
-                   double offset_yval = 0.0,
-                   double offset_oval = 0.0);
-
-    void MkQdpContMinFcn(const HistData2d* const h2d,
-                         string qdpout,
-                         string title_xval = "",
-                         string title_yval = "",
-                         string title_oval = "",
-                         double offset_xval = 0.0,
-                         double offset_yval = 0.0,
-                         double offset_oval = 0.0);
-
-    void MkQdpContMinFcnWithBest(const HistData2d* const h2d,
-                                 string qdpout,
-                                 double xval_best,
-                                 double yval_best,
-                                 double zval_best,
-                                 string title_xval = "",
-                                 string title_yval = "",
-                                 string title_oval = "",
-                                 double offset_xval = 0.0,
-                                 double offset_yval = 0.0,
-                                 double offset_oval = 0.0);
 }
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_QDP_TOOL_H_

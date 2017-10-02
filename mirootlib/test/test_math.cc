@@ -850,7 +850,7 @@ int main(int argc, char* argv[])
         double ans_err = 0.0;
         long nsel = 0;
         int* mask_sel_arr = NULL;
-        MirMath::GetWMean(narr, val_arr, val_err_arr, &ans, &ans_err,
+        MirMath::GenWMean(narr, val_arr, val_err_arr, &ans, &ans_err,
                           &nsel, &mask_sel_arr);
         printf("ans, ans_err = %e, %e\n", ans, ans_err);
         printf("nsel = %ld\n", nsel);
@@ -972,7 +972,7 @@ int main(int argc, char* argv[])
         double ans_err = 0.0;
         long nsel = 0;
         int* mask_sel_arr = NULL;
-        MirMath::GetWMeanWithMask(narr, val_arr, val_err_arr,
+        MirMath::GenWMeanWithMask(narr, val_arr, val_err_arr,
                                   mask_arr, &ans, &ans_err,
                                   &nsel, &mask_sel_arr);
         printf("ans, ans_err = %e, %e\n", ans, ans_err);
@@ -1024,7 +1024,7 @@ int main(int argc, char* argv[])
         long dof = 0;
         double chi2_red = 0.0;
         double prob = 0.0;
-        MirMath::GetChi2byConst(narr, val_arr, val_err_arr,
+        MirMath::GenChi2byConst(narr, val_arr, val_err_arr,
                                 &wmean, &wmean_err,
                                 &nsel, &mask_sel_arr,
                                 &chi2, &dof, &chi2_red, &prob);
@@ -1096,7 +1096,7 @@ int main(int argc, char* argv[])
         long dof = 0;
         double chi2_red = 0.0;
         double prob = 0.0;
-        MirMath::GetChi2byConst(narr, val_arr, val_err_arr, mask_arr,
+        MirMath::GenChi2byConst(narr, val_arr, val_err_arr, mask_arr,
                                 &wmean, &wmean_err,
                                 &nsel, &mask_sel_arr,
                                 &chi2, &dof, &chi2_red, &prob);

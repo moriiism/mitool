@@ -833,7 +833,7 @@ int HistData1dOpe::GetWMeanWithMask(const HistData1d* const* const in_arr,
 
 
 void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
-                                 const MirFunc* const func,
+                                  const MirFunc* const func,
                                   const double* const par,
                                   HistDataNerr1d* const out)
 {
@@ -869,6 +869,31 @@ void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
     out->SetOvalSerrArr(nbin, oval_res_serr);
     delete [] oval_res;
     delete [] oval_res_serr;
+}
+
+
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                  const MirFunc* const func,
+                                  const double* const par,
+                                  HistDataTerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_terr_plus  = new double[nbin];
+    double* oval_res_terr_minus = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->Eval(xval, par);
+        oval_res_terr_plus[ibin] = data->GetOvalTerrPlusElm(ibin);
+        oval_res_terr_minus[ibin] = data->GetOvalTerrMinusElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalTerrArr(nbin, oval_res_terr_plus, oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
 }
 
 
@@ -907,6 +932,28 @@ void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
     delete [] oval_res_serr;
 }
 
+void HistData1dOpe::GetResValHd1d(const HistData1d* const data,
+                                  const HistDataNerr1d* const func,
+                                  HistDataTerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_terr_plus = new double[nbin];
+    double* oval_res_terr_minus = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval = data->GetBinCenter(ibin);
+        long ibin_func = func->GetIbin(xval);
+        oval_res[ibin] = data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func);
+        oval_res_terr_plus[ibin] = data->GetOvalTerrPlusElm(ibin);
+        oval_res_terr_minus[ibin] = data->GetOvalTerrMinusElm(ibin);
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalTerrArr(nbin, oval_res_terr_plus, oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
 
 void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
                                     const MirFunc* const func,
@@ -918,7 +965,11 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
         xval[0] = data->GetBinCenter(ibin);
-        oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
+        } else {
+            oval_res[ibin] = 0.0;
+        }
     }
     out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
     out->SetOvalArr(nbin, oval_res);
@@ -937,7 +988,7 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
         xval[0] = data->GetBinCenter(ibin);
-        if( func->Eval(xval, par) > DBL_EPSILON){
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
             oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
             oval_res_serr[ibin] = fabs(data->GetOvalSerrElm(ibin) / func->Eval(xval, par));
         } else {
@@ -954,6 +1005,45 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     delete [] oval_res_serr;
 }
 
+
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const MirFunc* const func,
+                                    const double* const par,
+                                    HistDataTerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_terr_plus = new double[nbin];
+    double* oval_res_terr_minus = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval[1];
+        xval[0] = data->GetBinCenter(ibin);
+        if( fabs(func->Eval(xval, par)) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->Eval(xval, par)) / func->Eval(xval, par);
+            double terr1 = data->GetOvalTerrPlusElm(ibin) / func->Eval(xval, par);
+            double terr2 = data->GetOvalTerrMinusElm(ibin) / func->Eval(xval, par);
+            if(terr1 * terr2 <= 0.0){
+                oval_res_terr_plus[ibin]  = MirMath::GetMax(terr1, terr2);
+                oval_res_terr_minus[ibin] = MirMath::GetMin(terr1, terr2);
+            } else {
+                abort();
+            }
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_terr_plus[ibin]  = 0.0;
+            oval_res_terr_minus[ibin] = 0.0;
+        }
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalTerrArr(nbin, oval_res_terr_plus, oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
+
+
+
 void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
                                     const HistDataNerr1d* const func,
                                     HistDataNerr1d* const out)
@@ -961,8 +1051,12 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     long nbin = data->GetNbinX();
     double* oval_res = new double[nbin];
     for(long ibin = 0; ibin < nbin; ibin++){
-        oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin)) /
-            func->GetOvalElm(ibin);
+        if( fabs(func->GetOvalElm(ibin)) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin)) /
+                func->GetOvalElm(ibin);
+        } else {
+            oval_res[ibin] = 0.0;
+        }
     }
     out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
     out->SetOvalArr(nbin, oval_res);
@@ -979,7 +1073,7 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval = data->GetBinCenter(ibin);
         long ibin_func = func->GetIbin(xval);
-        if( func->GetOvalElm(ibin_func) > DBL_EPSILON){
+        if( fabs(func->GetOvalElm(ibin_func)) > DBL_EPSILON){
             oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
                 func->GetOvalElm(ibin_func);
             oval_res_serr[ibin] = fabs(data->GetOvalSerrElm(ibin) / func->GetOvalElm(ibin_func));
@@ -995,6 +1089,43 @@ void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
     delete [] oval_res_serr;
 }
 
+void HistData1dOpe::GetResRatioHd1d(const HistData1d* const data,
+                                    const HistDataNerr1d* const func,
+                                    HistDataTerr1d* const out)
+{
+    long nbin = data->GetNbinX();
+    double* oval_res = new double[nbin];
+    double* oval_res_terr_plus = new double[nbin];
+    double* oval_res_terr_minus = new double[nbin];
+    for(long ibin = 0; ibin < nbin; ibin++){
+        double xval = data->GetBinCenter(ibin);
+        long ibin_func = func->GetIbin(xval);
+        if( fabs(func->GetOvalElm(ibin_func)) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
+                func->GetOvalElm(ibin_func);
+            double terr1 = data->GetOvalTerrPlusElm(ibin) / func->GetOvalElm(ibin_func);
+            double terr2 = data->GetOvalTerrMinusElm(ibin) / func->GetOvalElm(ibin_func);
+            if(terr1 * terr2 <= 0.0){
+                oval_res_terr_plus[ibin]  = MirMath::GetMax(terr1, terr2);
+                oval_res_terr_minus[ibin] = MirMath::GetMin(terr1, terr2);
+            } else {
+                abort();
+            }
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_terr_plus[ibin]  = 0.0;
+            oval_res_terr_minus[ibin] = 0.0;            
+        }
+    }
+    out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
+    out->SetOvalArr(nbin, oval_res);
+    out->SetOvalTerrArr(nbin, oval_res_terr_plus, oval_res_terr_minus);
+    delete [] oval_res;
+    delete [] oval_res_terr_plus;
+    delete [] oval_res_terr_minus;
+}
+
+
 
 void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
                                   const MirFunc* const func,
@@ -1007,9 +1138,14 @@ void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval[1];
         xval[0] = data->GetBinCenter(ibin);
-        oval_res[ibin] = ( data->GetOvalElm(ibin) - func->Eval(xval, par) ) / 
-            data->GetOvalSerrElm(ibin);
-        oval_res_serr[ibin] = 1.0;
+        if( fabs( data->GetOvalSerrElm(ibin) ) > DBL_EPSILON){
+            oval_res[ibin] = ( data->GetOvalElm(ibin) - func->Eval(xval, par) ) / 
+                data->GetOvalSerrElm(ibin);
+            oval_res_serr[ibin] = 1.0;
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_serr[ibin] = 0.0;
+        }
     }
     out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
     out->SetOvalArr(nbin, oval_res);
@@ -1017,7 +1153,6 @@ void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
     delete [] oval_res;
     delete [] oval_res_serr;
 }
-
 
 void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
                                   const HistDataNerr1d* const func,
@@ -1029,9 +1164,14 @@ void HistData1dOpe::GetResChiHd1d(const HistData1d* const data,
     for(long ibin = 0; ibin < nbin; ibin++){
         double xval = data->GetBinCenter(ibin);
         long ibin_func = func->GetIbin(xval);
-        oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
-            data->GetOvalSerrElm(ibin);
-        oval_res_serr[ibin] = 1.0;
+        if( fabs( data->GetOvalSerrElm(ibin) ) > DBL_EPSILON){
+            oval_res[ibin] = (data->GetOvalElm(ibin) - func->GetOvalElm(ibin_func)) /
+                data->GetOvalSerrElm(ibin);
+            oval_res_serr[ibin] = 1.0;
+        } else {
+            oval_res[ibin] = 0.0;
+            oval_res_serr[ibin] = 0.0;
+        }
     }
     out->Init(nbin, data->GetXvalLo(), data->GetXvalUp());
     out->SetOvalArr(nbin, oval_res);

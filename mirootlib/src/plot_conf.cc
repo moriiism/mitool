@@ -116,6 +116,65 @@ void MirPlotConf::Print(FILE* fp) const
 // static
 //
 
+void MirPlotConf::GenPlotConf2(const MirPlotConf* const plot_conf,
+                               MirPlotConf** const plot_conf_val_ptr,
+                               MirPlotConf** const plot_conf_ratio_ptr)
+{
+    if(4 != plot_conf->GetNdim()){
+        MPrintErr("bad plot_conf (ndim of plot_conf is not 4)");
+        abort();
+    }
+    MirPlotConf* plot_conf_val = new MirPlotConf;
+    MirPlotConf* plot_conf_ratio = new MirPlotConf;
+    plot_conf_val->Init(3);
+    plot_conf_ratio->Init(3);
+
+    int idim = 0;
+    plot_conf_val->SetIdimElm(idim,
+                              plot_conf->GetLoStrElm(idim),
+                              plot_conf->GetUpStrElm(idim),
+                              plot_conf->GetOffsetTagElm(idim),
+                              plot_conf->GetScaleElm(idim),
+                              plot_conf->GetLabelElm(idim));
+    plot_conf_ratio->SetIdimElm(idim,
+                                plot_conf->GetLoStrElm(idim),
+                                plot_conf->GetUpStrElm(idim),
+                                plot_conf->GetOffsetTagElm(idim),
+                                plot_conf->GetScaleElm(idim),
+                                plot_conf->GetLabelElm(idim));
+    idim = 1;
+    plot_conf_val->SetIdimElm(idim,
+                              plot_conf->GetLoStrElm(idim),
+                              plot_conf->GetUpStrElm(idim),
+                              plot_conf->GetOffsetTagElm(idim),
+                              plot_conf->GetScaleElm(idim),
+                              plot_conf->GetLabelElm(idim));
+    plot_conf_ratio->SetIdimElm(idim,
+                                plot_conf->GetLoStrElm(idim),
+                                plot_conf->GetUpStrElm(idim),
+                                plot_conf->GetOffsetTagElm(idim),
+                                plot_conf->GetScaleElm(idim),
+                                plot_conf->GetLabelElm(idim));
+    idim = 2;
+    int idim_val = 2;
+    int idim_ratio = 3;
+    plot_conf_val->SetIdimElm(idim,
+                              plot_conf->GetLoStrElm(idim_val),
+                              plot_conf->GetUpStrElm(idim_val),
+                              plot_conf->GetOffsetTagElm(idim_val),
+                              plot_conf->GetScaleElm(idim_val),
+                              plot_conf->GetLabelElm(idim_val));
+    plot_conf_ratio->SetIdimElm(idim,
+                                plot_conf->GetLoStrElm(idim_ratio),
+                                plot_conf->GetUpStrElm(idim_ratio),
+                                plot_conf->GetOffsetTagElm(idim_ratio),
+                                plot_conf->GetScaleElm(idim_ratio),
+                                plot_conf->GetLabelElm(idim_ratio));
+
+    *plot_conf_val_ptr = plot_conf_val;
+    *plot_conf_ratio_ptr = plot_conf_ratio;    
+}
+
 void MirPlotConf::GenPlotConf3(const MirPlotConf* const plot_conf,
                                MirPlotConf** const plot_conf_val_ptr,
                                MirPlotConf** const plot_conf_chi_ptr,
