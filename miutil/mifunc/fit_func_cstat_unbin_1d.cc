@@ -9,7 +9,7 @@
 #include "mim_fitstat_hg.h"
 #include "mim_fitfunc.h"
 #include "mim_minfcn.h"
-#include "mir_func_gen.h"
+#include "mifc_gen.h"
 #include "mir_qdp_tool.h"
 
 #include "func_user.h"
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
     //
     // data
     //
-    DataArray1d* da1d = new DataArray1d;
+    DataArray1d* da1d = new DataArrayNerr1d;
     da1d->Load(argval->GetDataFile());
     da1d->Sort();
     MirQdpTool::MkQdpMode2(da1d,
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]){
     //
     // hist of mask
     //
-    HistData1d* hd1d_mask = new HistData1d;
+    HistData1d* hd1d_mask = new HistDataNerr1d;
     if("none" == argval->GetHistMask()){
         printf("not supported.\n");
         abort();
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]){
         HistInfo1d* hi1d = new HistInfo1d;
         hi1d->Load(hist_info_file);
         hd1d_mask->Init(hi1d);
-        hd1d_mask->SetOne();
+        hd1d_mask->SetConst(1.0);
         delete hi1d;
     } else {
         hd1d_mask->Load(argval->GetHistMask());
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]){
     //
     // extract data according to hd1d_mask
     //
-    DataArray1d* da1d_sel = new DataArray1d;
+    DataArray1d* da1d_sel = new DataArrayNerr1d;
     vector<double> da1d_sel_vec;
     for(long idata = 0; idata < da1d->GetNdata(); idata ++){
         double xval = da1d->GetValElm(idata);
@@ -92,7 +92,8 @@ int main(int argc, char* argv[]){
             da1d_sel_vec.push_back(xval);
         }
     }
-    da1d_sel->InitSetVal(da1d_sel_vec);
+    da1d_sel->Init(da1d_sel_vec.size());
+    da1d_sel->SetVal(da1d_sel_vec);
     MirQdpTool::MkQdpMode2(da1d_sel,
                             argval->GetOutdir() + "/" + argval->GetOutfileHead() + "_da1d_sel.qdp",
                             "", 0.0);
@@ -108,8 +109,8 @@ int main(int argc, char* argv[]){
         hd1d_evt_fill->Fill(da1d_sel->GetValElm(idata));
     }
     HistDataSerr1d* hd1d_evt_fill_rate = new HistDataSerr1d;
-    hd1d_evt_fill_rate->Scale(hd1d_evt_fill, 1./hd1d_evt_fill->GetBinWidth(), 0.0);
-
+    HistData1dOpe::GetScale(hd1d_evt_fill, 1./hd1d_evt_fill->GetXvalBinWidth(), 0.0,
+                            hd1d_evt_fill_rate);
     
     // count rate function (c/sec)
     MirFunc* func = FuncUser::GenFunc(argval->GetFuncName());
@@ -254,21 +255,21 @@ double GetGoodnessOfFit(const HistData1d* const hd1d_evt_fill,
     for(long ibin = 0; ibin < nbin_xval; ibin ++){
         double val_in[1];
         val_in[0] = xval_arr[ibin];
-        oval_gd2d_arr[ibin] = func_rate->Eval(val_in, par_arr) * hd1d_evt_fill->GetBinWidth();
+        oval_gd2d_arr[ibin] = func_rate->Eval(val_in, par_arr) * hd1d_evt_fill->GetXvalBinWidth();
     }
-    GraphData2d* gd2d_func = new GraphData2d;
-    gd2d_func->Init();
-    gd2d_func->SetXvalArrDbl(nbin_xval, xval_arr);
-    gd2d_func->SetOvalArrDbl(nbin_xval, oval_gd2d_arr);
+    GraphData2d* gd2d_func = new GraphDataNerr2d;
+    gd2d_func->Init(nbin_xval);
+    gd2d_func->SetXvalArr(nbin_xval, xval_arr);
+    gd2d_func->SetOvalArr(nbin_xval, oval_gd2d_arr);
     gd2d_func->SetFlagXvalSorted(1);
-    MirFunc* func_gd2d_for_count = new G2dFunc;
-    dynamic_cast<G2dFunc*>(func_gd2d_for_count)->InitSetGd2d(gd2d_func);
+    MirFunc* func_gd2d_for_count = new Gd2dFunc;
+    dynamic_cast<Gd2dFunc*>(func_gd2d_for_count)->InitSetGd2d(gd2d_func);
         
     MinFcn* minfcn_tmp = MinFcnOne::GenMinFcnOne("CstatDeltaPhysFcn1d", func_gd2d_for_count,
                                                  hd1d_evt_fill->GetNbinX(),
                                                  xval_arr,
                                                  NULL,
-                                                 hd1d_evt_fill->GetOvalArrDbl(),
+                                                 hd1d_evt_fill->GetOvalArr()->GetVal(),
                                                  NULL, NULL, NULL,
                                                  NULL, NULL);
     double fcn_min = minfcn_tmp->Eval(0, NULL);

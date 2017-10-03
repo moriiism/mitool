@@ -24,12 +24,22 @@ double MirFunc::Eval2d(double xval, double yval,
 }
 
 //
-// private
+// protected
 //
 
 void MirFunc::NullMirFunc()
 {
     npar_ = 0;
     ndim_ = 0;
+}
+
+
+void MirFunc::CopyMirFunc(const MirFunc* const org)
+{
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
+
+    SetNpar(org->GetNpar());
+    SetNdim(org->GetNdim());
 }
 

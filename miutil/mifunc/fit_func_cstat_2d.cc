@@ -88,8 +88,11 @@ int main(int argc, char* argv[]){
     if("CstatFcn2d" == argval->GetMinfcnName() ||
        "CstatPhysFcn2d" == argval->GetMinfcnName() ){
         minfcn = MinFcnOne::GenMinFcnOne(argval->GetMinfcnName(), func,
-                                         g3d->GetNdata(), g3d->GetXvalArrDbl(), g3d->GetYvalArrDbl(),
-                                         g3d->GetOvalArrDbl(), g3d->GetOvalSerrArrDbl(), NULL, NULL,
+                                         g3d->GetNdata(),
+                                         g3d->GetXvalArr()->GetVal(),
+                                         g3d->GetYvalArr()->GetVal(),
+                                         g3d->GetOvalArr()->GetVal(),
+                                         g3d->GetOvalArr()->GetValSerr(), NULL, NULL,
                                          NULL, NULL);
     } else {
         MPrintErr("bad minfcn\n");

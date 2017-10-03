@@ -11,7 +11,7 @@ void MimQdpTool::MkQdpMinFcn(const HistData1d* const hist_data,
     FILE *fp = fopen(outqdp.c_str(), "w");
     fprintf(fp, "skip sing \n");
     fprintf(fp, "\n");
-    hist_data->PrintData(fp, "x,y");
+    hist_data->PrintData(fp, "x,y", 0.0, 0.0);
     fprintf(fp, "\n");
     fprintf(fp, "csize 1.5\n");
     fprintf(fp, "line on \n");
@@ -19,15 +19,21 @@ void MimQdpTool::MkQdpMinFcn(const HistData1d* const hist_data,
     fprintf(fp, "view 0.2 0.1 0.95 0.95\n");
     fprintf(fp, "la pos y 4.0\n");
 
-    double x_lo, x_up;
-    hist_data->GetXRangeQdp(&x_lo, &x_up);
-    double y_lo, y_up;
-    hist_data->GetORangeQdp(&y_lo, &y_up);
+    double x_lo = 0.0;
+    double x_up = 0.0;
+    double y_lo = 0.0;
+    double y_up = 0.0;
+    MirQdpTool::GetRangeQdp(hist_data->GetXvalLo(),
+                            hist_data->GetXvalUp(),
+                            &x_lo, &x_up);
+    MirQdpTool::GetRangeQdp(hist_data->GetOvalArr()->GetValAndErrMin(),
+                            hist_data->GetOvalArr()->GetValAndErrMax(),
+                            &y_lo, &y_up);
     
-    double oval_1sigma   = fcnmin + Minfcn::GetUpMinfcn(1.0, "sigma", 1);
-    double oval_90cl1p   = fcnmin + Minfcn::GetUpMinfcn(0.90, "cl", 1);
-    double oval_99cl1p   = fcnmin + Minfcn::GetUpMinfcn(0.99, "cl", 1);
-
+    double oval_1sigma   = fcnmin + MinFcn::GetUpMinfcn(1.0, "sigma", 1);
+    double oval_90cl1p   = fcnmin + MinFcn::GetUpMinfcn(0.90, "cl", 1);
+    double oval_99cl1p   = fcnmin + MinFcn::GetUpMinfcn(0.99, "cl", 1);
+    
     int ilab = 1;
 
     // horizontal lines
@@ -218,7 +224,8 @@ void MimQdpTool::MkQdpContMinFcn(const HistData2d* const h2d,
 {
     double zval_best = h2d->GetOvalArr()->GetValMin();
     double xval_best, yval_best;
-    h2d->GetBinCenterXYFromIbin(h2d->GetOvalArr()->GetLocValMin(), &xval_best, &yval_best);
+    h2d->GetHi2d()->GetBinCenterXYFromIbin(h2d->GetOvalArr()->GetLocValMin(),
+                                           &xval_best, &yval_best);
     MkQdpContMinFcnWithBest(h2d, qdpout,
                             xval_best, yval_best, zval_best,
                             title_xval, title_yval, title_oval,
@@ -288,9 +295,9 @@ void MimQdpTool::MkQdpContMinFcnWithBest(const HistData2d* const h2d,
     double yval_at_zmin_new = yval_at_zmin - offset_yval;
     double zmin_new = zmin - offset_oval;
   
-    double cont_level_0 = zmin_new + Minfcn::GetUpMinfcn(1.0, "sigma", 1);
-    double cont_level_1 = zmin_new + Minfcn::GetUpMinfcn(0.900, "cl", 1);
-    double cont_level_2 = zmin_new + Minfcn::GetUpMinfcn(0.900, "cl", 2);
+    double cont_level_0 = zmin_new + MinFcn::GetUpMinfcn(1.0, "sigma", 1);
+    double cont_level_1 = zmin_new + MinFcn::GetUpMinfcn(0.900, "cl", 1);
+    double cont_level_2 = zmin_new + MinFcn::GetUpMinfcn(0.900, "cl", 2);
 
     fprintf(fp, "DG     1       1      1     %ld     %ld\n",  nbin_xval, nbin_yval);
     fprintf(fp, "CONT  1 LEVEL  %.5e   %.5e   %.5e\n",

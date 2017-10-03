@@ -31,7 +31,8 @@ public:
                   const double* const par) const;
 
 protected:
-    void NullMirFunc();    
+    void NullMirFunc();
+    void CopyMirFunc(const MirFunc* const org);
 private:
     int npar_;
     int ndim_;

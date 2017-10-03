@@ -17,6 +17,7 @@ void Hd1dFunc::Copy(const Hd1dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
     InitSetHd1d(org->GetHd1d());
 }
 
@@ -59,6 +60,7 @@ void Hd1dInvFunc::Copy(const Hd1dInvFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
     InitSetHd1d(org->GetHd1d());
 }
 

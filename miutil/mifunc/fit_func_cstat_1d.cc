@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
     // data
     //
     GraphData2d* g2d = NULL;
-    g2d = GraphData2d::GenGd2dByLoad(argval->GetDataFile(), argval->GetDataFmt());
+    g2d = GraphData2dOpe::GenGd2dByLoad(argval->GetDataFile(), argval->GetDataFmt());
 
     MirFunc* func = FuncUser::GenFunc(argval->GetFuncName());
     FitParam* fitparam = new FitParam;
@@ -95,8 +95,9 @@ int main(int argc, char* argv[]){
        "CstatDeltaFcn1d"        == argval->GetMinfcnName() ||
        "CstatDeltaPhysFcn1d"    == argval->GetMinfcnName() ) {
         minfcn = MinFcnOne::GenMinFcnOne(argval->GetMinfcnName(), func,
-                                         g2d->GetNdata(), g2d->GetXvalArrDbl(), NULL,
-                                         g2d->GetOvalArrDbl(), NULL, NULL, NULL,
+                                         g2d->GetNdata(),
+                                         g2d->GetXvalArr()->GetVal(), NULL,
+                                         g2d->GetOvalArr()->GetVal(), NULL, NULL, NULL,
                                          NULL, NULL);
     } else {
         MPrintErr("bad minfcn\n");

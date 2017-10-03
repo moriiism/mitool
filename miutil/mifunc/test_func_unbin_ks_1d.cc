@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
     //
     // data
     //
-    DataArray1d* da1d = new DataArray1d;
+    DataArray1d* da1d = new DataArrayNerr1d;
     da1d->Load(argval->GetDataFile());
     da1d->Sort();
     MirQdpTool::MkQdpMode2(da1d,
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
     //
     // hist of mask
     //
-    HistData1d* hd1d_mask = new HistData1d;
+    HistData1d* hd1d_mask = new HistDataNerr1d;
     if("none" == argval->GetHistMask()){
         printf("not supported.\n");
         abort();
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
         HistInfo1d* hi1d = new HistInfo1d;
         hi1d->Load(hist_info_file);
         hd1d_mask->Init(hi1d);
-        hd1d_mask->SetOne();
+        hd1d_mask->SetConst(1.0);
         delete hi1d;
     } else {
         hd1d_mask->Load(argval->GetHistMask());
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]){
     //
     // extract data according to hd1d_mask
     //
-    DataArray1d* da1d_sel = new DataArray1d;
+    DataArray1d* da1d_sel = new DataArrayNerr1d;
     vector<double> da1d_sel_vec;
     for(long idata = 0; idata < da1d->GetNdata(); idata ++){
         double xval = da1d->GetValElm(idata);
@@ -80,7 +80,8 @@ int main(int argc, char* argv[]){
             da1d_sel_vec.push_back(xval);
         }
     }
-    da1d_sel->InitSetVal(da1d_sel_vec);
+    da1d_sel->Init(da1d_sel_vec.size());
+    da1d_sel->SetVal(da1d_sel_vec);
     MirQdpTool::MkQdpMode2(da1d_sel,
                             argval->GetOutdir() + "/" + argval->GetOutfileHead() + "_da1d_sel.qdp",
                             "", 0.0);
@@ -96,41 +97,44 @@ int main(int argc, char* argv[]){
 
 
     // hist of function
-    HistData1d* hd1d_func = new HistData1d;
+    HistData1d* hd1d_func = new HistDataNerr1d;
     hd1d_func->Init(argval->GetNpointFunc(),
                     hd1d_mask->GetXvalLo(),
                     hd1d_mask->GetXvalUp());
     hd1d_func->SetByFunc(func, func_par->GetPar());
 
     // hist of function with mask
-    HistData1d* hd1d_func_with_mask = new HistData1d;
+    HistData1d* hd1d_func_with_mask = new HistDataNerr1d;
     hd1d_func_with_mask->Init(argval->GetNpointFunc(),
                               hd1d_mask->GetXvalLo(),
                               hd1d_mask->GetXvalUp());
     for(long ibin = 0; ibin < hd1d_func_with_mask->GetNbinX(); ibin ++){
         double val = hd1d_func->GetOvalElm(ibin) *
-            hd1d_mask->GetOvalElmAtX( hd1d_func_with_mask->GetBinCenterX(ibin) );
+            hd1d_mask->GetOvalElmAtX( hd1d_func_with_mask->GetBinCenter(ibin) );
         hd1d_func_with_mask->SetOvalElm(ibin, val);
     }
-    double integral = hd1d_func_with_mask->GetOvalArr()->GetSum()
-        * hd1d_func_with_mask->GetBinWidth();
+    double integral =
+        MirMath::GetSum(hd1d_func_with_mask->GetOvalArr()->GetNdata(),
+                        hd1d_func_with_mask->GetOvalArr()->GetVal())
+        * hd1d_func_with_mask->GetHi1d()->GetBinWidth();
 
     // hist of PDF
-    HistData1d* hd1d_pdf_with_mask = new HistData1d;
-    hd1d_pdf_with_mask->Scale(hd1d_func_with_mask, 1./integral, 0.0);
+    HistDataNerr1d* hd1d_pdf_with_mask = new HistDataNerr1d;
+    HistData1dOpe::GetScale(hd1d_func_with_mask, 1./integral, 0.0, hd1d_pdf_with_mask);
+    
     MirQdpTool::MkQdp(hd1d_pdf_with_mask,
                        argval->GetOutdir() + "/" + argval->GetOutfileHead() + "_pdf.qdp",
                        "x,y");
 
     // hist of CDF
-    HistData1d* hd1d_cdf = new HistData1d;
+    HistData1d* hd1d_cdf = new HistDataNerr1d;
     hd1d_cdf->Init(argval->GetNpointFunc(),
                    hd1d_mask->GetXvalLo(),
                    hd1d_mask->GetXvalUp());
     double sum = 0.0;
     for(long ibin = 0; ibin < hd1d_cdf->GetNbinX(); ibin ++){
         sum += hd1d_pdf_with_mask->GetOvalElm(ibin)
-            * hd1d_pdf_with_mask->GetBinWidth();
+            * hd1d_pdf_with_mask->GetHi1d()->GetBinWidth();
         hd1d_cdf->SetOvalElm(ibin, sum);
     }
     MirQdpTool::MkQdp(hd1d_cdf,
@@ -138,8 +142,7 @@ int main(int argc, char* argv[]){
                        "x,y");
 
     // K-S test
-    GraphData2d* gd2d_cdf_da1d = new GraphData2d;
-    gd2d_cdf_da1d->Init();
+    GraphData2d* gd2d_cdf_da1d = new GraphDataNerr2d;
     vector<double> cdf_da1d_xval_vec;
     vector<double> cdf_da1d_yval_vec;
     double diff_max = 0.0;
@@ -157,8 +160,9 @@ int main(int argc, char* argv[]){
         }
         val_cdf_da1d_pre = val_cdf_da1d;
     }
-    gd2d_cdf_da1d->SetXvalArrDbl(cdf_da1d_xval_vec);
-    gd2d_cdf_da1d->SetOvalArrDbl(cdf_da1d_yval_vec);
+    gd2d_cdf_da1d->Init(cdf_da1d_xval_vec.size());
+    gd2d_cdf_da1d->SetXvalArr(cdf_da1d_xval_vec);
+    gd2d_cdf_da1d->SetOvalArr(cdf_da1d_yval_vec);
 
     MirQdpTool::MkQdp(gd2d_cdf_da1d,
                        argval->GetOutdir() + "/" + argval->GetOutfileHead() + "_da1d_cdf.qdp",
@@ -175,11 +179,11 @@ int main(int argc, char* argv[]){
         (argval->GetOutdir() + "/" + argval->GetOutfileHead() + "_cdf_model+da1d.qdp").c_str(), "w");
     fprintf(fp_qdp_comp, "skip sing\n");
     fprintf(fp_qdp_comp, "\n");
-    gd2d_cdf_da1d->PrintData(fp_qdp_comp, "x,y");
+    gd2d_cdf_da1d->PrintData(fp_qdp_comp, "x,y", 0.0, 0.0);
     fprintf(fp_qdp_comp, "\n");
     fprintf(fp_qdp_comp, "no\n");
     fprintf(fp_qdp_comp, "\n");
-    hd1d_cdf->PrintData(fp_qdp_comp, "x,y");
+    hd1d_cdf->PrintData(fp_qdp_comp, "x,y", 0.0, 0.0);
     fprintf(fp_qdp_comp, "\n");
     fprintf(fp_qdp_comp, "la file\n");
     fprintf(fp_qdp_comp, "time off\n");

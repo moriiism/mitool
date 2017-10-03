@@ -370,14 +370,14 @@ void FitStatHG::MkOutParSearch1d(string outdir, string outfile_head, string flag
         //                         GetFitStat()->GetFitParam()->GetParTerrPlusElm(index_par),
         //                         GetFitStat()->GetFcnMin(),
         //                         par_name);
-//        MirQdpTool::MkQdpMinFcn(GetHistChi2ArrElm(ihist),
-//                                 outdir + "/" + outfile_head + "_" +
-//                                 "chi2_" + hist_char + ".qdp",
-//                                 GetFitParamBest()->GetParElm(index_par),
-//                                 GetFitParamBest()->GetParTerrMinusElm(index_par),
-//                                 GetFitParamBest()->GetParTerrPlusElm(index_par),
-//                                 GetFitStat()->GetFcnMin(),
-//                                 par_name);
+        MimQdpTool::MkQdpMinFcn(GetHistChi2ArrElm(ihist),
+                                 outdir + "/" + outfile_head + "_" +
+                                 "chi2_" + hist_char + ".qdp",
+                                 GetFitParamBest()->GetParElm(index_par),
+                                 GetFitParamBest()->GetParTerrMinusElm(index_par),
+                                 GetFitParamBest()->GetParTerrPlusElm(index_par),
+                                 GetFitStat()->GetFcnMin(),
+                                 par_name);
 
         
         MirQdpTool::MkQdp(GetHistValidArrElm(ihist),
@@ -467,14 +467,14 @@ void FitStatHG::MkOutParSearch2d(string outdir,
 //            GetFitStat()->GetFcnMin(),
 //            name_x, name_y);
 
-//        MirQdpTool::MkQdpContMinFcnWithBest(
-//            GetHistChi2ContArrElm(ihist),
-//            outdir + "/" + outfile_head + "_" +
-//            "chi2_cont_" + hist_char + ".qdp",
-//            GetFitParamBest()->GetParElm(index_x),
-//            GetFitParamBest()->GetParElm(index_y),
-//            GetFitStat()->GetFcnMin(),
-//            name_x, name_y);
+        MimQdpTool::MkQdpContMinFcnWithBest(
+            GetHistChi2ContArrElm(ihist),
+            outdir + "/" + outfile_head + "_" +
+            "chi2_cont_" + hist_char + ".qdp",
+            GetFitParamBest()->GetParElm(index_x),
+            GetFitParamBest()->GetParElm(index_y),
+            GetFitStat()->GetFcnMin(),
+            name_x, name_y);
         
         GetHistChi2ContArrElm(ihist)->Save(
             outdir + "/" + outfile_head + "_" +
@@ -635,11 +635,11 @@ void FitStatHG::MkOutFitPlot(const HistDataSerr2d* const h2d_data,
 {
     string add_mode = "amean";
     string error_mode = "gauss";
-    MirQdpTool::MkQdpDiffProj(h2d_data, func, par_arr,
-                               outdir, outfile_head,
-                               add_mode, error_mode,
-                               plot_conf_projx,
-                               plot_conf_projy);
+    MirQdpTool::MkQdpDiffProjSerr(h2d_data, func, par_arr,
+                                  outdir, outfile_head,
+                                  add_mode, error_mode,
+                                  plot_conf_projx,
+                                  plot_conf_projy);
 
     
 //    HistDataSerr2d* h2d_res = new HistDataSerr2d;
@@ -665,12 +665,12 @@ void FitStatHG::MkOutFitPlot(const HistDataSerr2d* const h2d_data,
     h2d_func->Init(nbin_func_x, xval_lo, xval_up,
                    nbin_func_y, yval_lo, yval_up);
     h2d_func->SetByFunc(func, par_arr);
-    MirQdpTool::MkQdpCont(h2d_func, outdir + "/" + outfile_head + "_func_best" + ".qdp", 3,
-                           plot_conf_projx->GetLabelElm(0),
-                           plot_conf_projy->GetLabelElm(0),
-                           plot_conf_projx->GetLabelElm(1),
-                           h2d_func->GetOffsetXFromTag(plot_conf_projx->GetOffsetTagElm(0)),
-                           h2d_func->GetOffsetYFromTag(plot_conf_projy->GetOffsetTagElm(0)));
+    MimQdpTool::MkQdpCont(h2d_func, outdir + "/" + outfile_head + "_func_best" + ".qdp", 3,
+                          plot_conf_projx->GetLabelElm(0),
+                          plot_conf_projy->GetLabelElm(0),
+                          plot_conf_projx->GetLabelElm(1),
+                          h2d_func->GetOffsetXFromTag(plot_conf_projx->GetOffsetTagElm(0)),
+                          h2d_func->GetOffsetYFromTag(plot_conf_projy->GetOffsetTagElm(0)));
 
     h2d_func->MkTH2Fig(outdir + "/" + outfile_head + "_func_best" + ".png",
                        root_tool,
@@ -694,10 +694,10 @@ void FitStatHG::MkOutFitPlot(const GraphDataSerr2d* const g2d_data,
                              string outfile_head,
                              const MirPlotConf* const plot_conf)
 {
-    MirQdpTool::MkQdpDiff3(g2d_data, func, par_arr,
-                            npoint_func,
-                            outdir, outfile_head,
-                            plot_conf);
+    MirQdpTool::MkQdpDiff3Serr(g2d_data, func, par_arr,
+                               npoint_func,
+                               outdir, outfile_head,
+                               plot_conf);
 }
 
 

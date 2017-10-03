@@ -22,6 +22,7 @@ void ParallelShiftFunc::Copy(const ParallelShiftFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
     
     Null();
     func_obj_ = dynamic_cast<MirFunc*>(org->GetFuncObj()->Clone());
@@ -52,7 +53,6 @@ double ParallelShiftFunc::Eval(const double* const xval,
   
     double ans = func_obj_->Eval(xval_org, par_org)
         + par[GetFuncObj()->GetNpar() + GetNdim()];
-    
     delete [] par_org;
     delete [] xval_org;
     return ans;
@@ -95,6 +95,7 @@ void RotationFunc::Copy(const RotationFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
     func_obj_ = dynamic_cast<MirFunc*>(org->GetFuncObj()->Clone());
@@ -168,6 +169,7 @@ void AddFunc::Copy(const AddFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
     func_obj1_ = dynamic_cast<MirFunc*>(org->GetFuncObj1()->Clone());
@@ -237,6 +239,7 @@ void AddNFunc::Copy(const AddNFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);    
 
     Null();
 
@@ -267,16 +270,9 @@ double AddNFunc::Eval(const double* const xval,
             ipar_tot ++;
         }
     }
-
-    printf("debug nfunc_ = %d\n", nfunc_);
-
-    
     double ans = 0.0;
     for(int ifunc = 0; ifunc < nfunc_; ifunc ++){
         ans += GetFuncObjArrElm(ifunc)->Eval(xval, par_arr[ifunc]);
-
-        printf("debug: ans = %e, par_arr[ifunc][0] = %e\n", ans, par_arr[ifunc][0]);
-        
     }
 
     for(int ifunc = 0; ifunc < nfunc_; ifunc ++){
@@ -327,6 +323,7 @@ void LinCombFunc::Copy(const LinCombFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
 

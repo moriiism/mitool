@@ -2,12 +2,12 @@
 
 double MirSolve::GetRootNewton(const MirFunc* const func, const double* const par_func,
                                const MirFunc* const func_prime, const double* const par_func_prime,
-                               double root_init)
+                               double root_init, double epsilon)
 {
     string func_name = "MirSolve::GetRootNewton()";
     int iterate = 0;
     double root = root_init;
-    while(fabs(func->Eval1d(root, par_func)) > DBL_EPSILON){
+    while(fabs(func->Eval1d(root, par_func)) > epsilon){
         root = root - func->Eval1d(root, par_func) / func_prime->Eval1d(root, par_func_prime);
         iterate ++;
     }
@@ -15,22 +15,21 @@ double MirSolve::GetRootNewton(const MirFunc* const func, const double* const pa
 }
 
 
-
 double MirSolve::GetRootSecant(const MirFunc* const func, const double* const par_func,
-                               double root_init0, double root_init1)
+                               double root_init0, double root_init1, double epsilon)
 {
     string func_name = "MirSolve::GetRootSecant()";
     int iterate = 0;
     double root = root_init0;
     double root_0 = root_init0;
     double root_1 = root_init1;
-    while(fabs(func->Eval1d(root, par_func)) > DBL_EPSILON){
+    while(fabs(func->Eval1d(root, par_func)) > epsilon){
         double yval_0 = fabs(func->Eval1d(root_0, par_func));
         double yval_1 = fabs(func->Eval1d(root_1, par_func));
         root = (root_0 * yval_1 - root_1 * yval_0) / (yval_1 - yval_0);
         root_0 = root_1;
         root_1 = root;
-        printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
+        // printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
         iterate ++;
     }
     return root;
@@ -38,31 +37,9 @@ double MirSolve::GetRootSecant(const MirFunc* const func, const double* const pa
 
 
 double MirSolve::GetRootSecantEqC(const MirFunc* const func, const double* const par_func,
-                                  double root_init0, double root_init1, double constant)
+                                  double root_init0, double root_init1, double constant, double epsilon)
 {
     string func_name = "MirSolve::GetRootSecantEqC()";
-    int iterate = 0;
-    double root = root_init0;
-    double root_0 = root_init0;
-    double root_1 = root_init1;
-    while(fabs(func->Eval1d(root, par_func) - constant) > DBL_EPSILON){
-        double yval_0 = fabs(func->Eval1d(root_0, par_func) - constant);
-        double yval_1 = fabs(func->Eval1d(root_1, par_func) - constant);
-        root = (root_0 * yval_1 - root_1 * yval_0) / (yval_1 - yval_0);
-        root_0 = root_1;
-        root_1 = root;
-        printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
-        iterate ++;
-    }
-    return root;
-}
-
-
-double MirSolve::GetRootSecantEqCEpsilon(const MirFunc* const func, const double* const par_func,
-                                         double root_init0, double root_init1, double constant,
-                                         double epsilon)
-{
-    string func_name = "MirSolve::GetRootSecantEqCEpsilon()";
     int iterate = 0;
     double root = root_init0;
     double root_0 = root_init0;
@@ -73,6 +50,7 @@ double MirSolve::GetRootSecantEqCEpsilon(const MirFunc* const func, const double
         root = (root_0 * yval_1 - root_1 * yval_0) / (yval_1 - yval_0);
         root_0 = root_1;
         root_1 = root;
+        // printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
         iterate ++;
     }
     return root;
@@ -107,7 +85,7 @@ double MirSolve::GetRootBisection(const MirFunc* const func, const double* const
         yval = func->Eval1d(root, par_func);
         iterate ++;
     }
-    printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
+    // printf("%s: %d: root = %e\n", func_name.c_str(), iterate, root);
     return root;
 }
 

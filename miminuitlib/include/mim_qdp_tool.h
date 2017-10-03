@@ -1,7 +1,17 @@
 #ifndef MORIIISM_MITOOL_MIMINUITLIB_QDP_TOOL_H_
 #define MORIIISM_MITOOL_MIMINUITLIB_QDP_TOOL_H_
 
+#include "mir_hist1d.h"
+#include "mir_hist1d_nerr.h"
+#include "mir_hist1d_serr.h"
+#include "mir_hist1d_terr.h"
+#include "mir_hist2d.h"
+#include "mir_hist2d_nerr.h"
+#include "mir_hist2d_serr.h"
+#include "mir_hist2d_terr.h"
 #include "mir_plot_conf.h"
+#include "mir_qdp_tool.h"
+#include "mim_minfcn.h"
 
 namespace MimQdpTool
 {

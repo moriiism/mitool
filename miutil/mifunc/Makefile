@@ -15,6 +15,7 @@ OBJ = func_user.o
 
 TARGET = eval_1d  eval_2d \
 	draw_func_1d  \
+	draw_func_2d  \
 	draw_func_list_1d  draw_func_list_2d \
 	draw_func_data_1d  \
 	draw_func_data_list_1d  \
@@ -31,10 +32,11 @@ TARGET = eval_1d  eval_2d \
 	fit_func_chi2_qp_1d \
 	sim_func_lincomb_rate_1d \
 	fit_func_cstat_unbin_qp_1d \
-	fit_func_cstat_unbin_qp_multi_1d \
 	fit_func_cstat_unbin_em_1d
 
-# draw_func_2d 
+#	fit_func_cstat_unbin_qp_multi_1d \
+
+
 
 ##test_func_unbin_ks_2d \
 

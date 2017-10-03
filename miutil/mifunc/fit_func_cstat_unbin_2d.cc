@@ -47,19 +47,18 @@ int main(int argc, char* argv[]){
     //
     // data
     //
-    GraphData2d* g2d = new GraphData2d;
+    GraphDataSerr2d* g2d = new GraphDataSerr2d;
     g2d->Load(argval->GetDataFile());
     HistInfo2d* hist_info = new HistInfo2d;
     hist_info->Load(argval->GetHistInfo());
     HistDataSerr2d* h2d_evt_fill = new HistDataSerr2d;
-    h2d_evt_fill->HistData2d::Init(hist_info);
+    h2d_evt_fill->Init(hist_info);
     for(long idata = 0; idata < g2d->GetNdata(); idata++){
         h2d_evt_fill->Fill(g2d->GetXvalElm(idata), g2d->GetOvalElm(idata));
     }
     HistDataSerr2d* h2d_evt_fill_rate = new HistDataSerr2d;
-    h2d_evt_fill_rate->Scale(h2d_evt_fill, 1./hist_info->GetBinArea(), 0.0);
-
-    HistData2d* h2d_mask = new HistData2d;
+    HistData2dOpe::GetScale(h2d_evt_fill, 1./hist_info->GetBinArea(), 0.0, h2d_evt_fill_rate);
+    HistData2d* h2d_mask = new HistDataNerr2d;
     h2d_mask->Load(argval->GetHistMask());
     
     // count rate function (c/sec)
@@ -101,7 +100,9 @@ int main(int argc, char* argv[]){
     if("CstatUnbinFcn2d" == argval->GetMinfcnName() ||
        "CstatUnbinPhysFcn2d" == argval->GetMinfcnName() ){
         minfcn = MinFcnOne::GenMinFcnOne(argval->GetMinfcnName(), func,
-                                         g2d->GetNdata(), g2d->GetXvalArrDbl(), g2d->GetOvalArrDbl(),
+                                         g2d->GetNdata(),
+                                         g2d->GetXvalArr()->GetVal(),
+                                         g2d->GetOvalArr()->GetVal(),
                                          NULL, NULL, NULL, NULL,
                                          NULL, h2d_mask);
     } else {

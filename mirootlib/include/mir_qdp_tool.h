@@ -263,25 +263,44 @@ namespace MirQdpTool
                    const MirPlotConf* const plot_conf_projx,
                    const MirPlotConf* const plot_conf_projy);
     
-    void MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-                       const MirFunc* const func, const double* const par,
-                       string outdir, string qdpout_head,
-                       string add_mode, string error_mode,
-                       string title_xval = "",
-                       string title_yval = "",
-                       string title_oval = "",                              
-                       double offset_xval = 0.0,
-                       double offset_yval = 0.0,
-                       double offset_oval = 0.0,
-                       string scale_xval = "lin",
-                       string scale_yval = "lin",
-                       string scale_oval = "lin");
-    void MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-                       const MirFunc* const func, const double* const par,
-                       string outdir, string qdpout_head,
-                       string add_mode, string error_mode,
-                       const MirPlotConf* const plot_conf_projx,
-                       const MirPlotConf* const plot_conf_projy);
+    void MkQdpDiffProjSerr(const HistData2d* const hist_data,
+                           const MirFunc* const func, const double* const par,
+                           string outdir, string qdpout_head,
+                           string add_mode, string error_mode,
+                           string title_xval = "",
+                           string title_yval = "",
+                           string title_oval = "",                              
+                           double offset_xval = 0.0,
+                           double offset_yval = 0.0,
+                           double offset_oval = 0.0,
+                           string scale_xval = "lin",
+                           string scale_yval = "lin",
+                           string scale_oval = "lin");
+    void MkQdpDiffProjSerr(const HistData2d* const hist_data,
+                           const MirFunc* const func, const double* const par,
+                           string outdir, string qdpout_head,
+                           string add_mode, string error_mode,
+                           const MirPlotConf* const plot_conf_projx,
+                           const MirPlotConf* const plot_conf_projy);
+    void MkQdpDiffProjTerr(const HistData2d* const hist_data,
+                           const MirFunc* const func, const double* const par,
+                           string outdir, string qdpout_head,
+                           string add_mode, string error_mode,
+                           string title_xval = "",
+                           string title_yval = "",
+                           string title_oval = "",                              
+                           double offset_xval = 0.0,
+                           double offset_yval = 0.0,
+                           double offset_oval = 0.0,
+                           string scale_xval = "lin",
+                           string scale_yval = "lin",
+                           string scale_oval = "lin");
+    void MkQdpDiffProjTerr(const HistData2d* const hist_data,
+                           const MirFunc* const func, const double* const par,
+                           string outdir, string qdpout_head,
+                           string add_mode, string error_mode,
+                           const MirPlotConf* const plot_conf_projx,
+                           const MirPlotConf* const plot_conf_projy);
 }
 
 #endif // MORIIISM_MITOOL_MIROOTLIB_QDP_TOOL_H_

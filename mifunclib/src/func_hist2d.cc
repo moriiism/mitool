@@ -17,6 +17,7 @@ void Hd2dFunc::Copy(const Hd2dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
     InitSetHd2d(org->GetHd2d());
 }
 

@@ -1471,12 +1471,12 @@ void MirQdpTool::MkQdpDiff3Serr(const HistData1d* const hist_data,
     MkQdpDiff(hist_data, hist_func, hist_res_chi, 
               outdir + "/" + qdpout_head + "_diff_chi.qdp",
               format,
-              plot_conf_val);
+              plot_conf_chi);
 
     MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
               outdir + "/" + qdpout_head + "_diff_ratio.qdp",
               format,
-              plot_conf_val);
+              plot_conf_ratio);
 
     delete hist_res_val;
     delete hist_res_chi;
@@ -1578,7 +1578,7 @@ void MirQdpTool::MkQdpDiff2Terr(const HistData1d* const hist_data,
     MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
               outdir + "/" + qdpout_head + "_diff_ratio.qdp",
               format,
-              plot_conf_val);
+              plot_conf_ratio);
 
     delete hist_res_val;
     delete hist_res_ratio;
@@ -1753,19 +1753,19 @@ void MirQdpTool::MkQdpProj(const MirFunc* const func, const double* const par,
 }
 
 
-void MirQdpTool::MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-                                const MirFunc* const func, const double* const par,
-                                string outdir, string qdpout_head,
-                                string add_mode, string error_mode,
-                                string title_xval,
-                                string title_yval,
-                                string title_oval,
-                                double offset_xval,
-                                double offset_yval,
-                                double offset_oval,
-                                string scale_xval,
-                                string scale_yval,
-                                string scale_oval)
+void MirQdpTool::MkQdpDiffProjSerr(const HistData2d* const hist_data,
+                                   const MirFunc* const func, const double* const par,
+                                   string outdir, string qdpout_head,
+                                   string add_mode, string error_mode,
+                                   string title_xval,
+                                   string title_yval,
+                                   string title_oval,
+                                   double offset_xval,
+                                   double offset_yval,
+                                   double offset_oval,
+                                   string scale_xval,
+                                   string scale_yval,
+                                   string scale_oval)
 {
     HistDataSerr1d* h1d_projx = new HistDataSerr1d;
     HistData2dOpe::GetProjectX(hist_data,
@@ -1877,12 +1877,12 @@ void MirQdpTool::MkQdpDiffProj(const HistDataSerr2d* const hist_data,
 
 
 
-void MirQdpTool::MkQdpDiffProj(const HistDataSerr2d* const hist_data,
-                                const MirFunc* const func, const double* const par,
-                                string outdir, string qdpout_head,
-                                string add_mode, string error_mode,
-                                const MirPlotConf* const plot_conf_projx,
-                                const MirPlotConf* const plot_conf_projy)
+void MirQdpTool::MkQdpDiffProjSerr(const HistData2d* const hist_data,
+                                   const MirFunc* const func, const double* const par,
+                                   string outdir, string qdpout_head,
+                                   string add_mode, string error_mode,
+                                   const MirPlotConf* const plot_conf_projx,
+                                   const MirPlotConf* const plot_conf_projy)
 {
     if(5 != plot_conf_projx->GetNdim()){
         char msg[kLineSize];

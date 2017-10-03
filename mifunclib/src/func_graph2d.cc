@@ -16,7 +16,7 @@ void Gd2dFunc::Copy(const Gd2dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
-    
+    CopyMirFunc(org);
     InitSetGd2d(org->GetGd2d());
 }
 

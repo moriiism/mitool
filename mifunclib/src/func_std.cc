@@ -10,6 +10,7 @@ void Gauss1dFunc::Copy(const Gauss1dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 Gauss1dFunc* const Gauss1dFunc::Clone() const
@@ -40,6 +41,7 @@ void Gauss1dPlusConstFunc::Copy(const Gauss1dPlusConstFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 Gauss1dPlusConstFunc* const Gauss1dPlusConstFunc::Clone() const
@@ -76,6 +78,7 @@ void Gauss1dAsymFunc::Copy(const Gauss1dAsymFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 Gauss1dAsymFunc* const Gauss1dAsymFunc::Clone() const
@@ -118,6 +121,7 @@ void Gauss2dFuncAtZero::Copy(const Gauss2dFuncAtZero* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 Gauss2dFuncAtZero* const Gauss2dFuncAtZero::Clone() const
@@ -163,6 +167,7 @@ void Gauss2dFunc::Copy(const Gauss2dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
     gauss2d_func_at_zero_ = org->GetGauss2dFuncAtZero()->Clone();
@@ -192,7 +197,6 @@ double Gauss2dFunc::Eval(const double* const xval,
     // par[6] :  shift_z
 
     double ans = parallel_shift_func_->Eval(xval, par);
-
     return ans;
 }
 
@@ -221,6 +225,7 @@ void Const1dFunc::Copy(const Const1dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -248,6 +253,7 @@ void Const2dFunc::Copy(const Const2dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -276,6 +282,7 @@ void LinFunc::Copy(const LinFunc* const org)
     if(NULL == org) {return;}
 
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -303,6 +310,7 @@ void LinMidFunc::Copy(const LinMidFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -330,6 +338,7 @@ void LinMidSlopeFunc::Copy(const LinMidSlopeFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -361,6 +370,7 @@ void LinMidSlopeErrFunc::Copy(const LinMidSlopeErrFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -403,6 +413,7 @@ void ParabolaFunc::Copy(const ParabolaFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 
@@ -430,6 +441,7 @@ void PowerlawFunc::Copy(const PowerlawFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 PowerlawFunc* const PowerlawFunc::Clone() const
@@ -462,6 +474,7 @@ void PowerlawPegFunc::Copy(const PowerlawPegFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
     xval_lo_ = org->GetXvalLo();

@@ -85,10 +85,10 @@ int main(int argc, char* argv[]){
     DataArray1d** da1d_arr = new DataArray1d* [nfile];
     HistData1d** hd1d_mask_arr = new HistData1d* [nfile];
     for(long ifile = 0; ifile < nfile; ifile ++){
-        da1d_arr[ifile] = new DataArray1d;
+        da1d_arr[ifile] = new DataArrayNerr1d;
         da1d_arr[ifile]->Load(file_arr[ifile]);
         da1d_arr[ifile]->Sort();
-        hd1d_mask_arr[ifile] = new HistData1d;
+        hd1d_mask_arr[ifile] = new HistDataNerr1d;
         hd1d_mask_arr[ifile]->Load(file_mask_arr[ifile]);
 
         char subdir[kLineSize];
@@ -113,7 +113,7 @@ int main(int argc, char* argv[]){
     //
     DataArray1d** da1d_sel_arr = new DataArray1d* [nfile];
     for(long ifile = 0; ifile < nfile; ifile ++){
-        da1d_sel_arr[ifile] = new DataArray1d;
+        da1d_sel_arr[ifile] = new DataArrayNerr1d;
 
         vector<double> da1d_sel_vec;
         for(long idata = 0; idata < da1d_arr[ifile]->GetNdata(); idata ++){
@@ -122,7 +122,8 @@ int main(int argc, char* argv[]){
                 da1d_sel_vec.push_back(xval);
             }
         }
-        da1d_sel_arr[ifile]->InitSetVal(da1d_sel_vec);
+        da1d_sel_arr[ifile]->Init(da1d_sel_vec.size());
+        da1d_sel_arr[ifile]->SetVal(da1d_sel_vec);
 
         char subdir[kLineSize];
         sprintf(subdir, "%s/%2.2ld", argval->GetOutdir().c_str(), ifile);
@@ -148,8 +149,9 @@ int main(int argc, char* argv[]){
             hd1d_evt_fill_arr[ifile]->Fill(da1d_sel_arr[ifile]->GetValElm(idata));
         }
         hd1d_evt_fill_rate_arr[ifile] = new HistDataSerr1d;
-        hd1d_evt_fill_rate_arr[ifile]->Scale(hd1d_evt_fill_arr[ifile],
-                                             1./hd1d_evt_fill_arr[ifile]->GetBinWidth(), 0.0);
+        HistData1dOpe::GetScale(hd1d_evt_fill_arr[ifile],
+                                1./hd1d_evt_fill_arr[ifile]->GetHi1d()->GetBinWidth(), 0.0,
+                                hd1d_evt_fill_rate_arr[ifile]);
     }
 
 
@@ -266,9 +268,9 @@ int main(int argc, char* argv[]){
         double* xval_arr_hd1d_evt_fill = NULL;
         hd1d_evt_fill_arr[ifile]->GenXvalArr(&xval_arr_hd1d_evt_fill,
                                              &nbin_hd1d_evt_fill);
-        gd2d_arr[ifile] = new GraphData2d;
-        gd2d_arr[ifile]->Init();
-        gd2d_arr[ifile]->SetXvalArrDbl(nbin_hd1d_evt_fill, xval_arr_hd1d_evt_fill);
+        gd2d_arr[ifile] = new GraphDataNerr2d;
+        gd2d_arr[ifile]->Init(nbin_hd1d_evt_fill);
+        gd2d_arr[ifile]->SetXvalArr(nbin_hd1d_evt_fill, xval_arr_hd1d_evt_fill);
         gd2d_arr[ifile]->SetOvalArr(hd1d_evt_fill_arr[ifile]->GetOvalArr());
         delete [] xval_arr_hd1d_evt_fill;
     }
@@ -301,7 +303,7 @@ int main(int argc, char* argv[]){
                                              &nbin_hd1d_evt_fill);
         MimLS::GenLeastSquarePoissonSvd(hd1d_evt_fill_arr[ifile]->GetNbinX(),
                                          xval_arr_hd1d_evt_fill,
-                                         hd1d_evt_fill_arr[ifile]->GetOvalArrDbl(),
+                                        hd1d_evt_fill_arr[ifile]->GetOvalArr()->GetVal(),
                                          nfunc_id_arr[ifile],
                                          func_arr[ifile],
                                          func_par_arr[ifile],
@@ -356,7 +358,7 @@ int main(int argc, char* argv[]){
             sprintf(func_par_name_this, "func%2.2d_%s_coeff",
                     func_id_this,
                     func_name_arr[func_id_this].c_str());
-            double coeff = par_arr_best_lsqp[ifile][ifunc] / hd1d_evt_fill_arr[ifile]->GetBinWidth();
+            double coeff = par_arr_best_lsqp[ifile][ifunc] / hd1d_evt_fill_arr[ifile]->GetHi1d()->GetBinWidth();
             func_lincomb_par_arr[ifile]->SetElm(ipar_tot,
                                                 func_par_name_this,
                                                 coeff);
@@ -395,7 +397,7 @@ int main(int argc, char* argv[]){
     // func_lincomb_par_index
     //
     
-    MirFuncLincombParIndex* func_lincomb_par_index = new MirFuncLincombParIndex;
+    MimFuncLincombParIndex* func_lincomb_par_index = new MimFuncLincombParIndex;
     func_lincomb_par_index->InitSet(nfile,
                                     func_lincomb_arr,
                                     mxkw_tie);

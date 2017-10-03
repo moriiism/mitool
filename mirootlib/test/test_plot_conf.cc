@@ -1,6 +1,7 @@
 #include "mi_iolib.h"
 #include "mir_plot_conf.h"
 #include "mir_root_tool.h"
+#include "mifc_std.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -28,7 +29,7 @@ int main(int argc, char* argv[])
     {
         printf("--- test Load\n");
         MirPlotConf* plot_conf = new MirPlotConf;
-        plot_conf->Load("data/test_plot_conf.dat");
+        plot_conf->Load("data/test_plot_conf3.dat");
         plot_conf->Print(stdout);
 
         delete plot_conf;
@@ -157,6 +158,32 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+//    static void GenPlotConf2(const MirPlotConf* const plot_conf,
+//                             MirPlotConf** const plot_conf_val_ptr,
+//                             MirPlotConf** const plot_conf_ratio_ptr);
+    {
+        printf("--- test GenPlotConf2\n");
+        MirPlotConf* plot_conf = new MirPlotConf;
+        plot_conf->Load("data/test_plot_conf2.dat");
+        plot_conf->Print(stdout);
+
+        MirPlotConf* plot_conf_val = NULL;
+        MirPlotConf* plot_conf_ratio = NULL;
+        MirPlotConf::GenPlotConf2(plot_conf,
+                                  &plot_conf_val,
+                                  &plot_conf_ratio);
+        printf("--- \n");        
+        plot_conf_val->Print(stdout);
+        printf("--- \n");        
+        plot_conf_ratio->Print(stdout);
+        
+        delete plot_conf;
+        delete plot_conf_val;
+        delete plot_conf_ratio;
+        
+        printf("=== \n");
+    }
+    
 //    static void GenPlotConf3(const MirPlotConf* const plot_conf,
 //                             MirPlotConf** const plot_conf_val_ptr,
 //                             MirPlotConf** const plot_conf_chi_ptr,
@@ -164,7 +191,7 @@ int main(int argc, char* argv[])
     {
         printf("--- test GenPlotConf3\n");
         MirPlotConf* plot_conf = new MirPlotConf;
-        plot_conf->Load("data/test_plot_conf.dat");
+        plot_conf->Load("data/test_plot_conf3.dat");
         plot_conf->Print(stdout);
 
         MirPlotConf* plot_conf_val = NULL;
@@ -189,33 +216,34 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
-////    static void CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1);
-//    {
-//        printf("--- test CopyPar\n");
-//        MirPlotConf* plot_conf = new MirPlotConf;
-//        plot_conf->Init(2);
-//        plot_conf->SetIdimElm(0, "0", "10", "no", "lin", "ttttt");
-//        plot_conf->SetIdimElm(1, "-100", "10000", "no", "lin", "yyyy");
-//        plot_conf->Print(stdout);
-//
-//        MirRootTool* root_tool = new MirRootTool;
-//        root_tool->InitTCanvas("pub");
-//        
-//        TF1 *tf1 = new TF1("func", "gaus+pol2(3)");
-//        tf1->SetParameter( 0, 4500 );
-//        tf1->SetParameter( 1, 1650 );
-//        tf1->SetParameter( 2,  100 );
-//        MirPlotConf::CopyPar(plot_conf, tf1);
-//
-//        tf1->Draw();
-//        root_tool->GetTCanvas()->Print("temp.png");
-//
-//        delete plot_conf;
-//        delete tf1;
-//        delete root_tool;
-//        
-//        printf("=== \n");
-//    }
+//    static void CopyPar(const MirPlotConf* const plot_conf, TF1* const tf1);
+    {
+        printf("--- test CopyPar\n");
+        MirPlotConf* plot_conf = new MirPlotConf;
+        plot_conf->Init(2);
+        plot_conf->SetIdimElm(0, "-10.0", "10.0", "no", "lin", "ttttt");
+        plot_conf->SetIdimElm(1, "-1", "10", "no", "lin", "yyyy");
+        plot_conf->Print(stdout);
+
+        MirRootTool* root_tool = new MirRootTool;
+        root_tool->InitTCanvas("pub");
+
+        Gauss1dFunc* func = new Gauss1dFunc;
+        TF1* tf1 = new TF1("title", func, &MirFunc::Eval,
+                           -10.0, 10.0, func->GetNpar(),
+                           func->GetClassName().c_str(), "Eval");
+        tf1->SetParameters(1, 1, 10);
+        MirPlotConf::CopyPar(plot_conf, tf1);
+
+        tf1->Draw();
+        root_tool->GetTCanvas()->Print("/home/morii/temp/plot_conf_copy_par.png");
+
+        delete plot_conf;
+        delete tf1;
+        delete root_tool;
+        
+        printf("=== \n");
+    }
     
     return status_prog;
 }

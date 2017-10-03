@@ -127,6 +127,7 @@ void BlackbodyFunc::Copy(const BlackbodyFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 BlackbodyFunc* const BlackbodyFunc::Clone() const
@@ -168,6 +169,7 @@ void StdAccDiskFunc::Copy(const StdAccDiskFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 StdAccDiskFunc* const StdAccDiskFunc::Clone() const
@@ -227,6 +229,7 @@ void DustDiskFunc::Copy(const DustDiskFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 DustDiskFunc* const DustDiskFunc::Clone() const
@@ -311,6 +314,7 @@ void DustDiskWangFunc::Copy(const DustDiskWangFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 DustDiskWangFunc* const DustDiskWangFunc::Clone() const
@@ -447,6 +451,7 @@ void PowerlawSpecFunc::Copy(const PowerlawSpecFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 }
 
 PowerlawSpecFunc* const PowerlawSpecFunc::Clone() const

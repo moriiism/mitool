@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
             MPrintErr("bad format");
             abort();
         } else if("x,y" == data_fmt_arr[ifile]){
-            gd2d_arr[ifile] = new GraphData2d;
+            gd2d_arr[ifile] = new GraphDataNerr2d;
         } else if("x,y,ye" == data_fmt_arr[ifile]){
             gd2d_arr[ifile] = new GraphDataSerr2d;        
         } else if("x,xe,y,ye" == data_fmt_arr[ifile]){
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]){
             abort();
         }
         gd2d_arr[ifile]->Load(files_arr[ifile], data_fmt_arr[ifile]);
-        tgraph_arr[ifile] = gd2d_arr[ifile]->GenTGraph();
+        tgraph_arr[ifile] = gd2d_arr[ifile]->GenTGraph(0.0, 0.0);
     }
 
     MirFunc* func = FuncUser::GenFunc(argval->GetFuncName());
@@ -138,9 +138,9 @@ int main(int argc, char* argv[]){
         minfcn_arr[iminfcn] = MinFcnOne::GenMinFcnOne("Chi2Fcn1d",
                                                       func,
                                                       gd2d_arr[iminfcn]->GetNdata(),
-                                                      gd2d_arr[iminfcn]->GetXvalArrDbl(), NULL,
-                                                      gd2d_arr[iminfcn]->GetOvalArrDbl(),
-                                                      gd2d_arr[iminfcn]->GetOvalSerrArrDbl(),
+                                                      gd2d_arr[iminfcn]->GetXvalArr()->GetVal(), NULL,
+                                                      gd2d_arr[iminfcn]->GetOvalArr()->GetVal(),
+                                                      gd2d_arr[iminfcn]->GetOvalArr()->GetValSerr(),
                                                       NULL, NULL,
                                                       NULL, NULL);
 

@@ -8,6 +8,7 @@
 #include "mir_hist2d_serr.h"
 #include "mir_qdp_tool.h"
 #include "mim_chi2plot.h"
+#include "mim_qdp_tool.h"
 
 // FitStat for Graph and Hist
 class FitStatHG : public MiObject{

@@ -17,6 +17,7 @@ void Gd3dFunc::Copy(const Gd3dFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
     InitSetGd3d(org->GetGd3d());
 }
 

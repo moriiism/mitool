@@ -2,6 +2,7 @@
 #include "mir_plot_conf.h"
 #include "mir_root_tool.h"
 #include "mifc_gen.h"
+#include "mir_graph2d_nerr.h"
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
 
@@ -124,7 +125,7 @@ int main(int argc, char* argv[]){
             MPrintErr("bad format");
             abort();
         } else if("x,y" == data_fmt_arr[ifile]){
-            g2d_arr[ifile] = new GraphData2d;
+            g2d_arr[ifile] = new GraphDataNerr2d;
         } else if("x,y,ye" == data_fmt_arr[ifile]){
             g2d_arr[ifile] = new GraphDataSerr2d;        
         } else if("x,xe,y,ye" == data_fmt_arr[ifile]){
@@ -142,7 +143,7 @@ int main(int argc, char* argv[]){
             abort();
         }
         g2d_arr[ifile]->Load(files_arr[ifile], data_fmt_arr[ifile]);
-        tgraph_arr[ifile] = g2d_arr[ifile]->GenTGraph();
+        tgraph_arr[ifile] = g2d_arr[ifile]->GenTGraph(0.0, 0.0);
     }
     
     //
@@ -175,7 +176,7 @@ int main(int argc, char* argv[]){
     for(int ifunc = 0; ifunc < nfunc; ifunc ++){
         printf("ifunc = %d\n", ifunc);
 
-        func_arr[ifunc] = MirFuncGen::GenFuncSpec(func_name_arr[ifunc]);
+        func_arr[ifunc] = MifcGen::GenFuncSpec(func_name_arr[ifunc]);
         MirFuncPar* func_par = new MirFuncPar;
         func_par->Load(par_file_arr[ifunc]);
         double func_range_lo = 0.0;

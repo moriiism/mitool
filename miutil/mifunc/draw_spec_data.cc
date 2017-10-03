@@ -47,10 +47,10 @@ int main(int argc, char* argv[]){
     gdata2d->Load(argval->GetDataFile(), argval->GetDataFmt());
 
     TGraph* tgraph = NULL;
-    tgraph = gdata2d->GenTGraph();
+    tgraph = gdata2d->GenTGraph(0.0, 0.0);
     tgraph->Draw("P");
 
-    FuncSpec* func = MirFuncGen::GenFuncSpec(argval->GetFuncName());
+    FuncSpec* func = MifcGen::GenFuncSpec(argval->GetFuncName());
     MirFuncPar* func_par = new MirFuncPar;
     func_par->Load(argval->GetParFile());
     func_par->Print(stdout);
