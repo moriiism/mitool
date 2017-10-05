@@ -1,5 +1,5 @@
-
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
@@ -8,12 +8,28 @@ INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
 LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
 	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
 
-TARGET = mklc
+TARGET = draw_lcpls  draw_lcpls_phflux  draw_lcpls_rate \
+	sim_lcpls_phflux  sim_lcpls_rate
 
 all: $(TARGET) 
 
-mklc: mklc.o  arg_mklc.o
+
+draw_lcpls: draw_lcpls.o  arg_draw_lcpls.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+draw_lcpls_phflux: draw_lcpls_phflux.o  arg_draw_lcpls_phflux.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+draw_lcpls_rate: draw_lcpls_rate.o  arg_draw_lcpls_rate.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+sim_lcpls_phflux: sim_lcpls_phflux.o  arg_sim_lcpls_phflux.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+sim_lcpls_rate: sim_lcpls_rate.o  arg_sim_lcpls_rate.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc

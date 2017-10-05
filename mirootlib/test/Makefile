@@ -43,9 +43,6 @@ test_func_par \
 test_root_tool
 
 
-
-
-
 TARGET := $(TARGET_PASS) $(TARGET_PASS_MANUAL) $(TARGET_PASS_ALMOST) $(TARGET_TESTING)
 
 

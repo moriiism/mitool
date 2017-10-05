@@ -14,8 +14,8 @@ OBJ := telescope.o   ephemeris.o  ephemeris_calc.o \
 	timeconv.o  folding.o  pulseprof_stat.o \
 	zn2.o  estimate.o \
 	gti.o lomb.o  gls.o \
-	binaryorb.o
-
+	binaryorb.o \
+	func_pls.o  func_maxiobs.o
 
 all: $(TARGET)
 

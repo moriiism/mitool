@@ -10,7 +10,7 @@ double PulseProfStat::GetChi2(const HistDataSerr1d* const h1d_pulse)
     long dof = 0;
     double chi2_red = 0.0;
     double prob = 0.0;
-    MirMath::GetChi2byConst(h1d_pulse->GetNbinX(),
+    MirMath::GenChi2byConst(h1d_pulse->GetNbinX(),
                             h1d_pulse->GetOvalArr()->GetVal(),
                             h1d_pulse->GetOvalArr()->GetValSerr(),
                             &wmean, &wmean_err,

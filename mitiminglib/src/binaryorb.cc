@@ -173,6 +173,7 @@ void BinaryOrb1::Copy(const BinaryOrb1* const org)
     if(NULL == org) {return;}
      
     CopyTitle(org);
+    
     period_     = org->period_;
     ax_sini_    = org->ax_sini_;
     ecc_        = org->ecc_;
@@ -216,11 +217,13 @@ void BinaryOrb1::PrintData(FILE *fp) const
 }
 
 // time_obj
-double BinaryOrb1::GetTimeObj(MirFunc* func_bin_orb_obs_time, double time_mjd_obs) const
+double BinaryOrb1::GetTimeObj(MirFunc* func_bin_orb_obs_time,
+                              double time_mjd_obs,
+                              double period)
 {
     double epsilon = 1.e-3 / kDayToSec;
-    double root_init0 = time_mjd_obs - period_/4.0;
-    double root_init1 = time_mjd_obs + period_/4.0;
+    double root_init0 = time_mjd_obs - period/4.0;
+    double root_init1 = time_mjd_obs + period/4.0;
     double time_mjd_obj = MirSolve::GetRootBisectionEqC(func_bin_orb_obs_time, NULL,
                                                         root_init0, root_init1, time_mjd_obs, epsilon);
     return time_mjd_obj;
@@ -278,6 +281,7 @@ void BinaryOrbObsTimeFunc::Copy(const BinaryOrbObsTimeFunc* const org)
     if(NULL == org) {return;}
     
     CopyTitle(org);
+    CopyMirFunc(org);
 
     Null();
     binorb_ = new BinaryOrb1;

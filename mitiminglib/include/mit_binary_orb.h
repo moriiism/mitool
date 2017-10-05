@@ -68,7 +68,9 @@ public:
     void Save(string file) const;
     void PrintData(FILE *fp) const;
     
-    double GetTimeObj(MirFunc* func_bin_orb_obs_time, double time_mjd_obs) const;
+    static double GetTimeObj(MirFunc* func_bin_orb_obs_time,
+                             double time_mjd_obs,
+                             double period);
     double GetDelayTime(double time_mjd) const;
     double GetDopplerNu(double time_mjd, double nu) const;
     
@@ -93,7 +95,7 @@ private:
     double ecc_;            // eccentricity of ellipse   (rishin-ritsu)
     double time_peri_;      // time of periastron (MJD)
     double angle_peri_;     // argument of periastron (deg)
-
+    
     void Null();    
 };
 

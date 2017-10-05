@@ -1,0 +1,14 @@
+#
+# miselcol.txt
+#
+
+infile=/home/morii/work/lc/data/lmcx4.dat
+selcol="0,1,2"
+outfile=/home/morii/temp/lmcx4_sel.dat
+
+${MITOOL}/miutil/miselcol/miselcol \
+${infile} \
+${selcol} \
+${outfile}
+
+

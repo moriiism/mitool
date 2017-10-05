@@ -1,0 +1,159 @@
+#
+# mklc.txt
+#
+
+# fake のlight curve を作成する。
+
+ana_dir=/nfs/home/morii/localhome/work/maxi/ana/mclc
+try_dir=try_13061600
+cd ${ana_dir}
+mkdir ${try_dir}
+cd ${try_dir}
+
+
+mklc_dir=/home/morii/work/maxi/mxkwtool/trunk/mxkwtiming/mklc
+
+
+# function としては、
+#  count rate (counts/sec) を計算するものを与える。
+
+
+#####################################################
+
+1) sine curve を 作る。
+
+4U 0142+61 の ephemeris を使って、fake の light curve を作る。
+
+Gavriil et al. 2011, ApJ, 736, 138 (Table 4)
+
+cat << EOF > pulse.eph
+# nu (err)
+0.1150920955
+0.0000000012
+
+# nu_dot (err)
+-2.661e-14
+ 0.009e-14
+
+# nu_dot2 (err)
+0.0
+0.0
+
+# nu_dot3 (err)
+0.0
+0.0
+
+# phase (err)
+0.0
+0.0
+
+# epoch (mjd)
+53809.185840
+
+# valid range of ephemeris 
+53481.268
+54235.319
+EOF
+
+
+cat << EOF > func_par.dat
+amplitude  10.0
+constant    1.0
+EOF
+
+
+func_name="SinePlusConstFunc"
+func_par_file=func_par.dat
+telescope=MAXI
+lc_tunit=sec
+tbinfwidth=0.5
+gti_file=none
+ephfile=pulse.eph
+time_mjd_st=55000
+time_mjd_ed=55000.01
+outdir=sine
+outfile_head=4u0142
+seed=0
+
+${mklc_dir}/mklc \
+${func_name} \
+${func_par_file} \
+${telescope} \
+${lc_tunit} \
+${tbinfwidth} \
+${gti_file} \
+${ephfile} \
+${time_mjd_st} \
+${time_mjd_ed} \
+${outdir} \
+${outfile_head} \
+${seed}
+
+
+
+#####################################################
+
+###  MAXI effective area (cm^2) のlight curve 
+###  を模擬した ものを作る。
+
+90 min 周期 for ISS orbit
+
+f = 1./(90 * 60) = 0.000185185185185185
+
+cat << EOF > p90m.eph
+# nu (err)
+0.000185185185185185
+0.0
+# nu_dot
+0.0
+0.0
+# nu_dot2
+0.0
+0.0
+# nu_dot3
+0.0
+0.0
+# phase
+0.0
+0.0
+
+# epoch
+55000
+# range
+55000
+55010
+EOF
+
+
+cat << EOF > func_par.dat
+# none
+EOF
+
+
+func_name="MaxiSankakuFunc"
+func_par_file=func_par.dat
+telescope=MAXI
+lc_tunit=sec
+tbinfwidth=1.0
+gti_file=none
+ephfile=p90m.eph
+time_mjd_st=55000
+time_mjd_ed=55010
+outdir=maxi_sankaku
+outfile_head=effarea
+seed=0
+
+${mklc_dir}/mklc \
+${func_name} \
+${func_par_file} \
+${telescope} \
+${lc_tunit} \
+${tbinfwidth} \
+${gti_file} \
+${ephfile} \
+${time_mjd_st} \
+${time_mjd_ed} \
+${outdir} \
+${outfile_head} \
+${seed}
+
