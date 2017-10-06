@@ -1,4 +1,5 @@
-ALL =  micsv2tree  milcinfo  minfold  milcwin  mifunc rad4d2img  miselcol
+ALL =  micsv2tree  milcinfo  minfold  milcwin  \
+	mifunc rad4d2img  miselcol  milcsim
 
 all:
 	for dir in $(ALL); do \

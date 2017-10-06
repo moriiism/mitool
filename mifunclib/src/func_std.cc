@@ -524,3 +524,30 @@ double PowerlawPegFunc::GetY0(double pl_index,
     return y0;
 }
 
+
+void SinePlusConstFunc::Copy(const SinePlusConstFunc* const org)
+{
+    if(this == org) {return;}
+    if(NULL == org) {return;}
+    
+    CopyTitle(org);
+    CopyMirFunc(org);
+}
+
+SinePlusConstFunc* const SinePlusConstFunc::Clone() const
+{
+    SinePlusConstFunc* obj_new = new SinePlusConstFunc;
+    obj_new->Copy(this);
+    return obj_new;
+}
+
+double SinePlusConstFunc::Eval(const double* const xval, const double* const par) const
+{
+    double time  = xval[0];
+    double freq  = par[0];
+    double phase = par[1];
+    double norm  = par[2];
+    double cons  = par[3];
+    double ans = norm * sin(2 * M_PI * freq * time - phase) + cons;
+    return ans;
+}

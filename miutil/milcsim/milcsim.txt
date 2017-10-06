@@ -1,0 +1,46 @@
+#
+# milcsim.txt
+#
+
+# light curve simulation
+
+source ~/work/github/moriiism/mitool/setup/setup.sh
+
+cat << EOF > data/gti.dat
+# t_st  t_ed
+0.0  10.0
+EOF
+
+cat << EOF > data/hist_info.dat
+# nbin lo up
+1000  0.0  10.0  none  none
+EOF
+
+cat << EOF > data/trig_func_info.dat
+# frequency [(unit time)^-1]  phase(0-1)  norm (=1.0)  cons(= 0.0)  norm
+1.0 0.0  1.0  0.0  3.0
+3.0 0.3  1.0  0.0  2.0
+5.0 0.2  1.0  0.0  1.0
+5.0 0.7  1.0  0.0  1.0
+1.0 0.0  0.0  1.0  10.0
+EOF
+
+gti_file="data/gti.dat"
+hist_info_file="data/hist_info.dat"
+trig_func_info_file="data/trig_func_info.dat"
+delta_time=1.0e-4
+seed=0
+outdir=sim
+outfile_head=temp
+
+${MITOOL}/miutil/milcsim/milcsim \
+${gti_file} \
+${hist_info_file} \
+${trig_func_info_file} \
+${delta_time} \
+${seed} \
+${outdir} \
+${outfile_head}
+
+
+

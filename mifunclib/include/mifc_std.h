@@ -284,6 +284,29 @@ private:
                  double norm_integral) const;
 };
 
+// -- sine function
+
+// par[0] = freq
+// par[1] = phase
+// par[3] = norm
+// par[4] = cons
+class SinePlusConstFunc : public MirFunc{
+public:
+    explicit SinePlusConstFunc(string title = "") :
+        MirFunc("SinePlusConstFunc", title)
+        {
+            SetNpar(4);
+            SetNdim(1);            
+        }
+    ~SinePlusConstFunc() {}
+
+    void Copy(const SinePlusConstFunc* const org);
+    SinePlusConstFunc* const Clone() const;
+    double Eval(const double* const xval, const double* const par) const;
+};
+
+
+
 #endif // MORIIISM_MITOOL_MIFUNCLIB_STD_H_
 
 
