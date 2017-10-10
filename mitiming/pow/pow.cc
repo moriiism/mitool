@@ -1,13 +1,13 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_search_par.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_nerr.h"
+#include "mir_hist1d_serr.h"
+#include "mim_search_par.h"
+#include "mir_qdp_tool.h"
 
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_func_pls.h"
+#include "mit_folding.h"
 #include "arg_pow.h"
 #include "sub.h"
 
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
  
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -33,13 +33,13 @@ int main(int argc, char* argv[]){
                     + argval->GetProgname() + ".log").c_str(), "w");
     argval->Print(fp_log);
 
-    MxkwRootTool* root_tool = new MxkwRootTool;
+    MirRootTool* root_tool = new MirRootTool;
     root_tool->InitTCanvas(argval->GetRootStyle());
 
     DataArray1d* data_arr = NULL;
     GraphDataSerr2d* g2d  = NULL;
     if("x" == argval->GetFormat()){
-        data_arr = new DataArray1d;
+        data_arr = new DataArrayNerr1d;
         data_arr->Load(argval->GetFile());
         data_arr->Sort();
     } else {
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
         g2d->Sort();
     }
 
-    MxkwSearchPar* plot_dat_par = new MxkwSearchPar;
+    MimSearchPar* plot_dat_par = new MimSearchPar;
     plot_dat_par->Load(argval->GetSearchDat());
     plot_dat_par->Print(stdout);
     plot_dat_par->Print(fp_log);
@@ -83,18 +83,18 @@ int main(int argc, char* argv[]){
                    &h1d_pow_amean,
                    &h1d_pow_num,
                    &g2d_pow_sel);
-            MxkwQdpTool::MkQdp(g2d_pow_sel, argval->GetOutdir() + "/"
+            MirQdpTool::MkQdp(g2d_pow_sel, argval->GetOutdir() + "/"
                                + argval->GetOutfileHead() + "_pow_sel.qdp",
                                "x,xe,y,ye");
             delete g2d_pow_sel;
         }
-        MxkwQdpTool::MkQdp(h1d_pow_max, argval->GetOutdir() + "/"
+        MirQdpTool::MkQdp(h1d_pow_max, argval->GetOutdir() + "/"
                            + argval->GetOutfileHead() + "_pow_max.qdp",
                            "x,xe,y,ye");
-        MxkwQdpTool::MkQdp(h1d_pow_amean, argval->GetOutdir() + "/"
+        MirQdpTool::MkQdp(h1d_pow_amean, argval->GetOutdir() + "/"
                            + argval->GetOutfileHead() + "_pow_amean.qdp",
                            "x,xe,y,ye");
-        MxkwQdpTool::MkQdp(h1d_pow_num, argval->GetOutdir() + "/"
+        MirQdpTool::MkQdp(h1d_pow_num, argval->GetOutdir() + "/"
                            + argval->GetOutfileHead() + "_pow_num.qdp",
                            "x,xe,y,ye");
 
@@ -137,7 +137,7 @@ int main(int argc, char* argv[]){
         h2d_pow_num->MkTH2Fig(argval->GetOutdir() + "/"
                               + argval->GetOutfileHead() + "_pow_num.png",
                               root_tool);
-        MxkwQdpTool::MkQdpNhist(h1d_pow_max_arr,
+        MirQdpTool::MkQdpNhist(h1d_pow_max_arr,
                                 plot_dat_par->GetNbinElm(1),
                                 argval->GetOutdir() + "/"
                                 + argval->GetOutfileHead() + "_nhist_pow_max.qdp",

@@ -1,0 +1,140 @@
+#
+# pow.txt
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/pow
+file=sim_lcpls_phflux/4u1626_evt.dat
+telescope=MAXI
+tunit=sec
+format="x"
+epoch_mjd=55320
+search_dat=setup/search.dat
+tbinfwidth=1.0
+powspec_type=Leahy
+outdir=powout
+outfile_head=pow
+
+cat << EOF > setup/search.dat
+#60  0.13024588  0.13024784  none none
+#60  5.622e-14   8.2592e-13  none  none
+60  0.130  0.131  none none
+60  0.5e-12  6.0e-12   none  none
+EOF
+
+$bindir/pow \
+$file \
+$telescope \
+$tunit \
+$format \
+$epoch_mjd \
+$search_dat \
+$tbinfwidth \
+$powspec_type \
+$outdir \
+$outfile_head
+
+#################################################
+#################################################
+#################################################
+#################################################
+
+以下は古い。
+
+
+ana_dir=/nfs/home/morii/localhome/work/maxi/ana/mclc
+try_dir=try_13061800
+cd ${ana_dir}
+mkdir ${try_dir}
+cd ${try_dir}
+
+pow_dir=/home/morii/work/maxi/mxkwtool/trunk/mxkwtiming/pow
+
+#####################################################
+
+telescope=MAXI
+lc_file=../try_13061600/pulse/pulse_evt.dat
+lc_tunit=sec
+lc_format="x"
+
+gti_file=none
+effarea_file=none
+
+epoch_mjd=55000
+search_dat=search.dat
+outdir=pow_search
+outfile_head=sim
+
+cat << EOF > search.dat
+# nbin  lo  up  unit
+11  -2.0e-6  2.0e-6  nu_dot/nu
+EOF
+
+${pow_dir}/pow_search \
+${telescope} \
+${lc_file} \
+${lc_tunit} \
+${lc_format} \
+${gti_file} \
+${effarea_file} \
+${epoch_mjd} \
+${search_dat} \
+${outdir} \
+${outfile_head}
+
+
+
+# nu = 1/3600. = 0.00027777777 Hz  = 2.7e-4 Hz
+# T  = 86400 sec
+
+
+df (for 1 pulse) = 2./ (T^2 * nu) = 2./ (86400**2 * 0.00027777777)
+                 = 9.65e-07
+
+
+###################################################
+
+#
+# takagi's light curve
+#
+
+if nu = 1./100. = 0.01 ,
+
+start = 3.190984750301862E+08
+stop = 3.236538788313930E+08
+stop - start = 4555403.80120683 sec
+
+df = 2./ 4555403.80120683 / 4555403.80120683 / 0.01
+   = 9.63776285572386e-12
+
+
+telescope=MAXI
+lc_file=/nfs/home/morii/localhome/work/temp_pls/4_mjd55230_55289_bc_1.5d_40_400.time
+lc_tunit=sec
+lc_format="x"
+
+gti_file=none
+effarea_file=none
+
+epoch_mjd=55230
+search_dat=search.dat
+outdir=pow_search
+outfile_head=sim
+
+cat << EOF > search.dat
+# nbin  lo  up  unit
+11  -2.0e-9  2.0e-9  nu_dot/nu
+EOF
+
+${pow_dir}/pow_search \
+${telescope} \
+${lc_file} \
+${lc_tunit} \
+${lc_format} \
+${gti_file} \
+${effarea_file} \
+${epoch_mjd} \
+${search_dat} \
+${outdir} \
+${outfile_head}
+
+

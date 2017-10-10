@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     {
         int ndat = 100;
         MiRand::Init(2);
-        FILE* fp = fopen("out.dat", "w");
+        FILE* fp = fopen("/home/morii/temp/rand_unif_out.dat", "w");
         for(int idat = 0; idat < ndat; idat ++){
             double rand = MiRand::Uniform();
             fprintf(fp, "%e\n", rand);
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         double sigma = 2.0;
         int ndat = 100;
         MiRand::Init(2);
-        FILE* fp = fopen("out.dat", "w");
+        FILE* fp = fopen("/home/morii/temp/rand_norm_out.dat", "w");
         for(int idat = 0; idat < ndat; idat ++){
             double rand = MiRand::Normal(mu, sigma);
             fprintf(fp, "%e\n", rand);

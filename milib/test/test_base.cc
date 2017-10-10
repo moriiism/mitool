@@ -5,16 +5,85 @@ int g_flag_debug = 0;
 int g_flag_help = 0;
 int g_flag_verbose = 0;
 
+class TestObject: public MiObject{
+public:
+    explicit TestObject(string title = "") :
+        MiObject("TestObject", title),
+        member_("") {}
+    ~TestObject() {
+        Null();
+    }
+    void Set(string member) {member_ = member;};
+    void Copy(const TestObject* const org);
+    TestObject* const Clone() const;
+    
+    string GetMember() const {return member_;};
+
+    void TestPrintErrWarnInfo() const;
+
+private:
+    string member_;
+    void Null();
+};
+
+void TestObject::Copy(const TestObject* const org)
+{
+    if(this == org) {abort();}
+    if(NULL == org) {abort();}
+
+    CopyTitle(org);
+    Null();
+    Set(org->GetMember());
+}
+
+TestObject* const TestObject::Clone() const
+{
+    TestObject* obj_new = new TestObject;
+    obj_new->Copy(this);
+    return obj_new;
+}
+
+void TestObject::TestPrintErrWarnInfo() const
+{
+    MPrintErrClass("aaa");
+    MPrintWarnClass("bbb");
+    MPrintInfoClass("ccc");
+}
+
+void TestObject::Null()
+{
+    member_ = "";
+}
+
+
 int main(int argc, char* argv[])
 {
     int status_prog = kRetNormal;
 
-    MPrintErr("aaa");
-    MPrintWarn("aaa");
-    MPrintInfo("aaa");
-    MPrintErrVFunc;
+   
+// MPrintErr(msg)
+// MPrintWarn(msg)
+// MPrintInfo(msg)
+// MPrintErrVFunc
+    {
+        printf("--- test MPrintErr, MPrintWarn, MPrintInfo, MPrintErrVFunc\n");
+        MPrintErr("aaa");
+        MPrintWarn("bbb");
+        MPrintInfo("ccc");
+        MPrintErrVFunc;
+        printf("=== \n");
+    }
 
-
+// MPrintErrClass(msg)
+// MPrintWarnClass(msg)
+// MPrintInfoClass(msg)
+    {
+        printf("--- test MPrintErrClass, MPrintWarnClass, MPrintInfoClass\n");
+        TestObject* test_obj = new TestObject("title");
+        test_obj->TestPrintErrWarnInfo();
+        printf("=== \n");
+    }
+    
 //    void IsValidArray(long narr, const int* const val_arr);
     {
         printf("--- test IsValidArray(long narr, const int* const val_arr)\n");

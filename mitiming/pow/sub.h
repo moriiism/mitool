@@ -1,13 +1,13 @@
-#ifndef MXKWTOOL_MXKWTIMING_POW_SUB_H_
-#define MXKWTOOL_MXKWTIMING_POW_SUB_H_
+#ifndef MORIIISM_MITOOL_MITIMING_POW_SUB_H_
+#define MORIIISM_MITOOL_MITIMING_POW_SUB_H_
 
-#include "mxkw_data.h"
-#include "mxkw_hist1d_ope.h"
-#include "mxkw_hist2d.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_timeconv.h"
-#include "mxkw_timing_pulseprof_stat.h"
-#include "mxkw_qdp_tool.h"
+#include "mir_data1d_nerr.h"
+#include "mir_hist1d_ope.h"
+#include "mir_hist2d_nerr.h"
+#include "mit_eph.h"
+#include "mit_timeconv.h"
+#include "mit_pulseprof_stat.h"
+#include "mir_qdp_tool.h"
 
 void GenPow(const DataArray1d* const data_arr, double mjdref, string tunit,
             double tbinfwidth, 
@@ -41,4 +41,4 @@ void GenPowRatio(const DataArray1d* const data_arr,
 
 
 
-#endif // MXKWTOOL_MXKWTIMING_POW_SUB_H_
+#endif // MORIIISM_MITOOL_MITIMING_POW_SUB_H_

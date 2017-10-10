@@ -13,16 +13,16 @@ void GenPow(const DataArray1d* const data_arr,
     
     double lc_time_lo = data_arr->GetValMin() - 0.5 * tbinfwidth;
     double lc_time_up = data_arr->GetValMax() + 0.5 * tbinfwidth;
-    long nbin_lc = MxkwMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
+    long nbin_lc = MirMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
     printf("nbin_lc = %ld\n", nbin_lc);
     
-    HistData1d* h1d_lcbin = new HistData1d;
+    HistDataNerr1d* h1d_lcbin = new HistDataNerr1d;
     h1d_lcbin->Init(nbin_lc, lc_time_lo, lc_time_up);
 
-    HistData1d* h1d_pow_max   = new HistData1d;
-    HistData1d* h1d_pow_amean = new HistData1d;
-    HistData1d* h1d_pow_num   = new HistData1d;
-    HistData1d* h1d_pow_sum   = new HistData1d;
+    HistDataNerr1d* h1d_pow_max   = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_amean = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_num   = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_sum   = new HistDataNerr1d;
     h1d_pow_max->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
     h1d_pow_amean->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
     h1d_pow_num->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
@@ -37,11 +37,12 @@ void GenPow(const DataArray1d* const data_arr,
         h1d_lcbin->Fill(time);
     }
     // powspec
-    HistData1d* h1d_powspec = new HistData1d;
+    HistDataNerr1d* h1d_powspec = new HistDataNerr1d;
     if("Press" == powspec_type){
-        HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
-    } else if("Leahy" == powspec_type){
-        HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
+        //HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
+        HistData1dOpe::GetPowSpecNonfft(h1d_lcbin, h1d_powspec);
+//    } else if("Leahy" == powspec_type){
+//        HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
     } else {
         MPrintErr("bad powspec_type");
         abort();
@@ -52,20 +53,23 @@ void GenPow(const DataArray1d* const data_arr,
     double freq_lo = h1d_powspec->GetXvalLo();
     double freq_up = h1d_powspec->GetXvalUp();
     double delta_freq = (freq_up - freq_lo) / nbin_freq;
-    long ibin_st = MxkwMath::GetNbin(freq_lo, nu_plot_lo, delta_freq, "floor") -1;
-    long ibin_ed = MxkwMath::GetNbin(freq_lo, nu_plot_up, delta_freq, "ceil") +1;
+    long ibin_st = MirMath::GetNbin(freq_lo, nu_plot_lo, delta_freq, "floor") -1;
+    long ibin_ed = MirMath::GetNbin(freq_lo, nu_plot_up, delta_freq, "ceil") +1;
     for(long ibin = ibin_st; ibin < ibin_ed; ibin ++){
-        if(nu_plot_lo < h1d_powspec->GetBinCenterX(ibin) &&
-           h1d_powspec->GetBinCenterX(ibin) < nu_plot_up){
-            h1d_pow_sum->Fill(h1d_powspec->GetBinCenterX(ibin),
+        if(nu_plot_lo < h1d_powspec->GetHi1d()->GetBinCenter(ibin) &&
+           h1d_powspec->GetHi1d()->GetBinCenter(ibin) < nu_plot_up){
+            h1d_pow_sum->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin),
                               h1d_powspec->GetOvalElm(ibin));
-            h1d_pow_num->Fill(h1d_powspec->GetBinCenterX(ibin));
-            h1d_pow_max->FillByMax(h1d_powspec->GetBinCenterX(ibin),
+            h1d_pow_num->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin));
+            h1d_pow_max->FillByLarger(h1d_powspec->GetHi1d()->GetBinCenter(ibin),
                                    h1d_powspec->GetOvalElm(ibin));
         }
     }
     vector<long> index_bad_vec;
-    h1d_pow_amean->Div(h1d_pow_sum, h1d_pow_num, &index_bad_vec);
+    HistDataNerr1d* hd1d_mask_sel = new HistDataNerr1d;
+    HistData1dOpe::GetDiv(h1d_pow_sum, h1d_pow_num,
+                          hd1d_mask_sel, h1d_pow_amean);
+    delete hd1d_mask_sel;
     delete h1d_lcbin;
     delete h1d_powspec;
     delete h1d_pow_sum;
@@ -89,16 +93,16 @@ void GenPow(const GraphData2d* const g2d, double mjdref, string tunit,
     
     double lc_time_lo = g2d->GetXvalArr()->GetValMin() - 0.5 * tbinfwidth;
     double lc_time_up = g2d->GetXvalArr()->GetValMax() + 0.5 * tbinfwidth;
-    long nbin_lc = MxkwMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
+    long nbin_lc = MirMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
     printf("nbin_lc = %ld\n", nbin_lc);
     
-    HistData1d* h1d_lcbin = new HistData1d;
+    HistDataNerr1d* h1d_lcbin = new HistDataNerr1d;
     h1d_lcbin->Init(nbin_lc, lc_time_lo, lc_time_up);
 
-    HistData1d* h1d_pow_max   = new HistData1d;
-    HistData1d* h1d_pow_amean = new HistData1d;
-    HistData1d* h1d_pow_num   = new HistData1d;
-    HistData1d* h1d_pow_sum   = new HistData1d;
+    HistDataNerr1d* h1d_pow_max   = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_amean = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_num   = new HistDataNerr1d;
+    HistDataNerr1d* h1d_pow_sum   = new HistDataNerr1d;
     h1d_pow_max->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
     h1d_pow_amean->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
     h1d_pow_num->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
@@ -114,11 +118,12 @@ void GenPow(const GraphData2d* const g2d, double mjdref, string tunit,
     }
     
     // powspec
-    HistData1d* h1d_powspec = new HistData1d;
+    HistDataNerr1d* h1d_powspec = new HistDataNerr1d;
     if("Press" == powspec_type){
-        HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
-    } else if("Leahy" == powspec_type){
-        HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
+        // HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
+        HistData1dOpe::GetPowSpecNonfft(h1d_lcbin, h1d_powspec);
+//    } else if("Leahy" == powspec_type){
+//        HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
     } else {
         MPrintErr("bad powspec_type");
         abort();
@@ -129,33 +134,36 @@ void GenPow(const GraphData2d* const g2d, double mjdref, string tunit,
     double freq_lo = h1d_powspec->GetXvalLo();
     double freq_up = h1d_powspec->GetXvalUp();
     double delta_freq = (freq_up - freq_lo) / nbin_freq;
-    long ibin_st = MxkwMath::GetNbin(freq_lo, nu_plot_lo, delta_freq, "floor") -1;
-    long ibin_ed = MxkwMath::GetNbin(freq_lo, nu_plot_up, delta_freq, "ceil") +1;
+    long ibin_st = MirMath::GetNbin(freq_lo, nu_plot_lo, delta_freq, "floor") -1;
+    long ibin_ed = MirMath::GetNbin(freq_lo, nu_plot_up, delta_freq, "ceil") +1;
     
-    GraphData2d* g2d_pow_sel = new GraphData2d;
+    GraphDataNerr2d* g2d_pow_sel = new GraphDataNerr2d;
     vector<double> pow_xval_sel_vec;
     vector<double> pow_oval_sel_vec;
     for(long ibin = ibin_st; ibin < ibin_ed; ibin ++){
-        if(nu_plot_lo < h1d_powspec->GetBinCenterX(ibin) &&
-           h1d_powspec->GetBinCenterX(ibin) < nu_plot_up){
-            h1d_pow_sum->Fill(h1d_powspec->GetBinCenterX(ibin),
+        if(nu_plot_lo < h1d_powspec->GetHi1d()->GetBinCenter(ibin) &&
+           h1d_powspec->GetHi1d()->GetBinCenter(ibin) < nu_plot_up){
+            h1d_pow_sum->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin),
                               h1d_powspec->GetOvalElm(ibin));
-            h1d_pow_num->Fill(h1d_powspec->GetBinCenterX(ibin));
-            h1d_pow_max->FillByMax(h1d_powspec->GetBinCenterX(ibin),
-                                   h1d_powspec->GetOvalElm(ibin));
-            pow_xval_sel_vec.push_back(h1d_powspec->GetBinCenterX(ibin));
+            h1d_pow_num->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin));
+            h1d_pow_max->FillByLarger(h1d_powspec->GetHi1d()->GetBinCenter(ibin),
+                                      h1d_powspec->GetOvalElm(ibin));
+            pow_xval_sel_vec.push_back(h1d_powspec->GetHi1d()->GetBinCenter(ibin));
             pow_oval_sel_vec.push_back(h1d_powspec->GetOvalElm(ibin));
         }
     }
     vector<long> index_bad_vec;
-    h1d_pow_amean->Div(h1d_pow_sum, h1d_pow_num, &index_bad_vec);
+    HistDataNerr1d* hd1d_mask_sel = new HistDataNerr1d;
+    HistData1dOpe::GetDiv(h1d_pow_sum, h1d_pow_num,
+                          hd1d_mask_sel, h1d_pow_amean);
+    delete hd1d_mask_sel;
     delete h1d_lcbin;
     delete h1d_powspec;
     delete h1d_pow_sum;
 
-    g2d_pow_sel->Init();
-    g2d_pow_sel->SetXvalArrDbl(pow_xval_sel_vec);
-    g2d_pow_sel->SetOvalArrDbl(pow_oval_sel_vec);
+    g2d_pow_sel->Init(pow_xval_sel_vec.size());
+    g2d_pow_sel->SetXvalArr(pow_xval_sel_vec);
+    g2d_pow_sel->SetOvalArr(pow_oval_sel_vec);
 
     *h1d_pow_max_ptr = h1d_pow_max;
     *h1d_pow_amean_ptr = h1d_pow_amean;
@@ -199,15 +207,15 @@ void GenPowRatio(const DataArray1d* const data_arr,
     time_shift_end_arr[3] = data_arr->GetValMax() + ratio_up / 2.0
         * pow(data_arr->GetValMax() - time_epoch, 2);
 
-    double lc_time_lo = MxkwMath::GetMin(4, time_shift_end_arr) - 0.5 * tbinfwidth;
-    double lc_time_up = MxkwMath::GetMax(4, time_shift_end_arr) + 0.5 * tbinfwidth;
-    long nbin_lc = MxkwMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
+    double lc_time_lo = MirMath::GetMin(4, time_shift_end_arr) - 0.5 * tbinfwidth;
+    double lc_time_up = MirMath::GetMax(4, time_shift_end_arr) + 0.5 * tbinfwidth;
+    long nbin_lc = MirMath::GetNbinEven(lc_time_lo, lc_time_up, tbinfwidth);
     printf("nbin_lc = %ld\n", nbin_lc);
     
-    HistData2d* h2d_pow_max = new HistData2d;
-    HistData2d* h2d_pow_amean = new HistData2d;
-    HistData2d* h2d_pow_num = new HistData2d;
-    HistData2d* h2d_pow_sum = new HistData2d;
+    HistDataNerr2d* h2d_pow_max = new HistDataNerr2d;
+    HistDataNerr2d* h2d_pow_amean = new HistDataNerr2d;
+    HistDataNerr2d* h2d_pow_num = new HistDataNerr2d;
+    HistDataNerr2d* h2d_pow_sum = new HistDataNerr2d;
     h2d_pow_max->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up,
                       nbin_ratio, ratio_lo, ratio_up);
     h2d_pow_amean->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up,
@@ -219,7 +227,7 @@ void GenPowRatio(const DataArray1d* const data_arr,
     
     HistData1d** h1d_pow_max_arr = new HistData1d* [nbin_ratio];
     for(long iratio = 0; iratio < nbin_ratio; iratio++){
-        h1d_pow_max_arr[iratio] = new HistData1d;
+        h1d_pow_max_arr[iratio] = new HistDataNerr1d;
         h1d_pow_max_arr[iratio]->Init(nbin_nu_plot, nu_plot_lo, nu_plot_up);
     }
 
@@ -228,13 +236,13 @@ void GenPowRatio(const DataArray1d* const data_arr,
     printf("%s: delta_ratio    = %e\n",
             __func__, delta_ratio);
 
-    HistData1d* h1d_lcbin = new HistData1d;
+    HistData1d* h1d_lcbin = new HistDataNerr1d;
     h1d_lcbin->Init(nbin_lc, lc_time_lo, lc_time_up);
     for(long iratio = 0; iratio < nbin_ratio; iratio ++){
         double ratio = ratio_lo + (iratio + 0.5) * delta_ratio;
         printf("iratio = %ld, ratio = %e\n", iratio, ratio);
         
-        h1d_lcbin->SetZero();
+        h1d_lcbin->SetConst(0.0);
         for(long idata = 0; idata < data_arr->GetNdata(); idata ++){
             double time = data_arr->GetValElm(idata);
             double time_shift = time + ratio / 2.0 * pow(time - time_epoch, 2);
@@ -242,11 +250,12 @@ void GenPowRatio(const DataArray1d* const data_arr,
         }
 
         // powspec
-        HistData1d* h1d_powspec = new HistData1d;
+        HistDataNerr1d* h1d_powspec = new HistDataNerr1d;
         if("Press" == powspec_type){
-            HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
-        } else if("Leahy" == powspec_type){
-            HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
+            // HistData1dOpe::GetPowSpec(h1d_lcbin, h1d_powspec);
+            HistData1dOpe::GetPowSpecNonfft(h1d_lcbin, h1d_powspec);
+//        } else if("Leahy" == powspec_type){
+//            HistData1dOpe::GetPowSpecLeahyNorm(h1d_lcbin, h1d_powspec);
         } else {
             MPrintErr("bad powspec_type");
             abort();
@@ -257,28 +266,31 @@ void GenPowRatio(const DataArray1d* const data_arr,
         double freq_lo = h1d_powspec->GetXvalLo();
         double freq_up = h1d_powspec->GetXvalUp();
         double delta_freq = (freq_up - freq_lo) / nbin_freq;
-        long ibin_st = MxkwMath::GetNbin(freq_lo, nu_plot_lo,
+        long ibin_st = MirMath::GetNbin(freq_lo, nu_plot_lo,
                                          delta_freq, "floor") -1;
-        long ibin_ed = MxkwMath::GetNbin(freq_lo, nu_plot_up, delta_freq,
+        long ibin_ed = MirMath::GetNbin(freq_lo, nu_plot_up, delta_freq,
                                          "ceil") +1;
         for(long ibin = ibin_st; ibin < ibin_ed; ibin ++){
-            if(nu_plot_lo < h1d_powspec->GetBinCenterX(ibin) &&
-               h1d_powspec->GetBinCenterX(ibin) < nu_plot_up){
+            if(nu_plot_lo < h1d_powspec->GetHi1d()->GetBinCenter(ibin) &&
+               h1d_powspec->GetHi1d()->GetBinCenter(ibin) < nu_plot_up){
 
-                h2d_pow_sum->Fill(h1d_powspec->GetBinCenterX(ibin), ratio,
+                h2d_pow_sum->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin), ratio,
                                   h1d_powspec->GetOvalElm(ibin));
-                h2d_pow_num->Fill(h1d_powspec->GetBinCenterX(ibin), ratio);
-                h2d_pow_max->FillByMax(h1d_powspec->GetBinCenterX(ibin), ratio,
-                                       h1d_powspec->GetOvalElm(ibin));
-                h1d_pow_max_arr[iratio]->FillByMax(h1d_powspec->GetBinCenterX(ibin),
-                                                   h1d_powspec->GetOvalElm(ibin));
+                h2d_pow_num->Fill(h1d_powspec->GetHi1d()->GetBinCenter(ibin), ratio);
+                h2d_pow_max->FillByLarger(h1d_powspec->GetHi1d()->GetBinCenter(ibin), ratio,
+                                          h1d_powspec->GetOvalElm(ibin));
+                h1d_pow_max_arr[iratio]->FillByLarger(h1d_powspec->GetHi1d()->GetBinCenter(ibin),
+                                                      h1d_powspec->GetOvalElm(ibin));
             }
         }
         delete h1d_powspec;
     } // for(long iratio = 0; iratio < nbin_ratio; iratio ++){
 
     vector<long> index_bad_vec;
-    h2d_pow_amean->Div(h2d_pow_sum, h2d_pow_num, &index_bad_vec);
+    HistDataNerr2d* hd2d_mask_sel = new HistDataNerr2d;
+    HistData2dOpe::GetDiv(h2d_pow_sum, h2d_pow_num,
+                          hd2d_mask_sel, h2d_pow_amean);
+    delete hd2d_mask_sel;    
     delete h1d_lcbin;
     delete h2d_pow_sum;
 
