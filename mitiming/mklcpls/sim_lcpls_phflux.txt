@@ -1,0 +1,274 @@
+#
+# sim_lcpls_phflux.txt
+#
+
+photon flux (counts/sec/cm^2) の値を返す周期的関数を与えて
+light curve をsimulateする。
+作成した light curve の 全体、または一部を表すグラフも作成する。
+
+#
+# argument
+#
+
+    func_name
+    par_file
+    hist_info
+    telescope
+    tunit
+    ephfile
+    gtifile
+        = none: hist_info の最初と最後の間を gti に設定する。
+    effarea_file
+    plot_conf_file
+    outdir
+    outfile_head
+    sim_mode
+         sim_mode="evt" : event file (時刻だけのfile) を出力する。
+                          さらに、そのevent を binning したlight curve を出力する。
+         sim_mode="bin" : binned light curve を出力する。
+    rand_seed
+         rand_seed = 0  : 実行する度に異なるseed を使うので、
+                          同じ結果が得られることはない。
+         rand_seed != 0 : 何度実行しても、同じ結果が得られる。
+
+#
+# option
+#
+
+  --help (0)
+  --verbose (0)
+  --debug (0)
+  --plotmode
+  --printmode
+  --root_style
+
+########################################################
+
+#
+# example
+#
+
+sine curve のpulse profile を持ったpulsar の波形を描く。
+
+# maxit6
+cd /home/morii/work/maxi/mxkwtool/try/14041400
+
+source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
+
+#
+# preparation 
+#
+
+#
+# make ephemeris file (pulsar 4u1626)
+# 
+# period = 7.677728 sec
+# p-dot  = -2.6e-11 (s/s)
+# epoch_mjd=55320
+# duration = 55290 -- 55349
+
+mkdir setup
+
+bindir=${MXKWTOOL}/mxkwtiming/eph
+
+period=7.677728
+p_dot=-2.6e-11
+epoch_mjd=55320
+start_mjd=55290
+end_mjd=55349
+ephfile_out=setup/eph_4u1626.dat
+
+${bindir}/mkeph \
+-- \
+$period  \
+$p_dot  \
+$epoch_mjd  \
+$start_mjd  \
+$end_mjd  \
+$ephfile_out
+
+
+#
+# make hist_info
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/hist_info
+start_mjd=55290
+end_mjd=55349
+delta_time=1.0
+delta_time_unit=sec
+telescope_out=MAXI
+tunit_out=sec
+hist_info_out=setup/hist_info_maxi.dat
+
+${bindir}/mk_hist_info \
+-- \
+$start_mjd \
+$end_mjd \
+$delta_time \
+$delta_time_unit \
+$telescope_out \
+$tunit_out \
+$hist_info_out
+
+#####################################
+
+#
+# make effective area file
+#
+
+#
+# make ephemeris file (ISS orbital period: 90 min)
+# 
+# period = 90 * 60 (sec)
+# p-dot  = 0.0     (sec/sec)
+# epoch_mjd=55320
+# duration = 55290 -- 55349
+
+mkdir setup_effarea
+
+bindir=${MXKWTOOL}/mxkwtiming/eph
+
+period=5400.0
+p_dot=0.0
+epoch_mjd=55320
+start_mjd=55290
+end_mjd=55349
+ephfile_out=setup_effarea/eph_iss.dat
+
+${bindir}/mkeph \
+-- \
+$period  \
+$p_dot  \
+$epoch_mjd  \
+$start_mjd  \
+$end_mjd  \
+$ephfile_out
+
+
+#
+# make hist_info
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/hist_info
+start_mjd=55290
+end_mjd=55349
+delta_time=1.0
+delta_time_unit=sec
+telescope_out=MAXI
+tunit_out=sec
+hist_info_out=setup_effarea/hist_info_maxi.dat
+
+${bindir}/mk_hist_info \
+-- \
+$start_mjd \
+$end_mjd \
+$delta_time \
+$delta_time_unit \
+$telescope_out \
+$tunit_out \
+$hist_info_out
+
+
+#
+# draw_lcpls
+#
+
+
+bindir=${MXKWTOOL}/mxkwtiming/mklcpls
+func_name="MaxiSankakuFunc"
+par_file=setup_effarea/par.dat
+hist_info=setup_effarea/hist_info_maxi.dat
+telescope=MAXI
+tunit=sec
+ephfile=setup_effarea/eph_iss.dat
+gtifile=none
+plot_conf_file=none
+outdir=setup_effarea
+outfile_head=effarea
+
+cat << EOF > setup_effarea/par.dat
+# par_name  par
+EOF
+
+$bindir/draw_lcpls \
+$func_name \
+$par_file \
+$hist_info \
+$telescope \
+$tunit \
+$ephfile \
+$gtifile \
+$plot_conf_file \
+$outdir \
+$outfile_head
+
+#
+# make GTI by effective area threshold
+#
+
+
+bindir=${MXKWTOOL}/mxkwtiming/gti
+file=setup_effarea/effarea.dat
+format="x,xe,y,ye"
+threshold=0.5
+hist_info=setup_effarea/hist_info_maxi.dat
+gtiout=setup_effarea/effarea_gti.dat
+outdir=setup_effarea
+outfile_head=gti_lcthr_hist
+offset_tag="st"
+
+${bindir}/gti_lcthr_hist \
+$file \
+$format \
+$threshold \
+$hist_info \
+$gtiout \
+$outdir \
+$outfile_head \
+$offset_tag
+
+
+#########################################
+
+#
+# sim_lcpls_phflux
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/mklcpls
+func_name="SinePlusConstFunc"
+par_file=setup/par.dat
+hist_info=setup/hist_info_maxi.dat
+telescope=MAXI
+tunit=sec
+ephfile=setup/eph_4u1626.dat
+gtifile=setup_effarea/effarea_gti.dat
+effarea_file=setup_effarea/effarea.dat
+plot_conf_file=none
+outdir=sim_lcpls_phflux
+outfile_head=4u1626
+sim_mode="evt"
+rand_seed=1
+
+cat << EOF > setup/par.dat
+# par_name  par
+amplitude   0.1
+cons        0.01
+EOF
+
+$bindir/sim_lcpls_phflux \
+$func_name \
+$par_file \
+$hist_info \
+$telescope \
+$tunit \
+$ephfile \
+$gtifile \
+$effarea_file \
+$plot_conf_file \
+$outdir \
+$outfile_head \
+$sim_mode \
+$rand_seed
+
+

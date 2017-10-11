@@ -1,0 +1,240 @@
+#
+# draw_lcpls.txt
+#
+
+ある値を返す周期的関数のlight curve を作成する。
+作成した light curve の 全体、または一部を表すグラフも作成する。
+
+例えば、MAXI の effective area (cm^2) の値を返す関数。
+90分毎に三角山を繰り返す。
+
+#
+# argument
+#
+
+    func_name
+    par_file
+    hist_info
+    telescope
+    tunit
+    ephfile
+    plot_conf_file
+    outdir
+    outfile_head
+
+#
+# option
+#
+
+  --debug
+  --help
+  --verbose
+  --plotmode
+  --printmode
+  --root_style
+
+###############################################################
+
+#
+# example 1
+#
+
+sine curve のpulse profile を持ったpulsar の波形を描く。
+
+# maxit6
+cd /home/morii/work/maxi/mxkwtool/try/14041400
+
+source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
+
+#
+# preparation
+#
+
+#
+# make ephemeris file (pulsar 4u1626)
+# 
+# period = 7.677728 sec
+# p-dot  = -2.6e-11 (s/s)
+# epoch_mjd=55320
+# duration = 55290 -- 55349
+
+mkdir setup
+
+bindir=${MXKWTOOL}/mxkwtiming/eph
+
+period=7.677728
+p_dot=-2.6e-11
+epoch_mjd=55320
+start_mjd=55290
+end_mjd=55349
+ephfile_out=setup/eph_4u1626.dat
+
+${bindir}/mkeph \
+-- \
+$period  \
+$p_dot  \
+$epoch_mjd  \
+$start_mjd  \
+$end_mjd  \
+$ephfile_out
+
+
+#
+# make hist_info
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/hist_info
+start_mjd=55290
+end_mjd=55349
+delta_time=1.0
+delta_time_unit=sec
+telescope_out=MAXI
+tunit_out=sec
+hist_info_out=setup/hist_info_maxi.dat
+
+${bindir}/mk_hist_info \
+-- \
+$start_mjd \
+$end_mjd \
+$delta_time \
+$delta_time_unit \
+$telescope_out \
+$tunit_out \
+$hist_info_out
+
+#
+# draw_lcpls
+#
+
+mkdir setup
+
+bindir=${MXKWTOOL}/mxkwtiming/mklcpls
+func_name="SinePlusConstFunc"
+par_file=setup/par.dat
+hist_info=setup/hist_info_maxi.dat
+telescope=MAXI
+tunit=sec
+ephfile=setup/eph_4u1626.dat
+plot_conf_file=none
+outdir=draw_lcpls
+outfile_head=pls
+
+cat << EOF > setup/par.dat
+# par_name  par
+amplitude   1.0
+cons        10.0
+EOF
+
+$bindir/draw_lcpls \
+$func_name \
+$par_file \
+$hist_info \
+$telescope \
+$tunit \
+$ephfile \
+$plot_conf_file \
+$outdir \
+$outfile_head
+
+###############################################################
+
+#
+# example 2
+#
+
+MAXI effective area (cm^2) のlight curve 
+を模擬した ものを作る。
+
+# maxit6
+cd /home/morii/work/maxi/mxkwtool/try/14041400
+
+source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
+
+#
+# preparation
+#
+
+#
+# make ephemeris file (ISS orbital period: 90 min)
+# 
+# period = 90 * 60 (sec)
+# p-dot  = 0.0     (sec/sec)
+# epoch_mjd=55320
+# duration = 55290 -- 55349
+
+mkdir setup
+
+bindir=${MXKWTOOL}/mxkwtiming/eph
+
+period=5400.0
+p_dot=0.0
+epoch_mjd=55320
+start_mjd=55290
+end_mjd=55349
+ephfile_out=setup/eph_iss.dat
+
+${bindir}/mkeph \
+-- \
+$period  \
+$p_dot  \
+$epoch_mjd  \
+$start_mjd  \
+$end_mjd  \
+$ephfile_out
+
+
+#
+# make hist_info
+#
+
+bindir=${MXKWTOOL}/mxkwtiming/hist_info
+start_mjd=55290
+end_mjd=55349
+delta_time=1.0
+delta_time_unit=sec
+telescope_out=MAXI
+tunit_out=sec
+hist_info_out=setup/hist_info_maxi.dat
+
+${bindir}/mk_hist_info \
+-- \
+$start_mjd \
+$end_mjd \
+$delta_time \
+$delta_time_unit \
+$telescope_out \
+$tunit_out \
+$hist_info_out
+
+
+#
+# draw_lcpls
+#
+
+mkdir setup
+
+bindir=${MXKWTOOL}/mxkwtiming/mklcpls
+func_name="MaxiSankakuFunc"
+par_file=setup/par.dat
+hist_info=setup/hist_info_maxi.dat
+telescope=MAXI
+tunit=sec
+ephfile=setup/eph_iss.dat
+plot_conf_file=none
+outdir=draw_lcpls_effarea
+outfile_head=effarea
+
+cat << EOF > setup/par.dat
+# par_name  par
+EOF
+
+$bindir/draw_lcpls \
+$func_name \
+$par_file \
+$hist_info \
+$telescope \
+$tunit \
+$ephfile \
+$plot_conf_file \
+$outdir \
+$outfile_head
