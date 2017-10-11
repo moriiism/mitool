@@ -131,6 +131,7 @@ public:
     void LoadA(string file);
     void LoadP(string file);
 
+    void Copy(const BinaryOrb2* const org);
     BinaryOrb2* const Clone() const;
     
     double GetSemimajorAxis() const {return semimajor_axis_;};

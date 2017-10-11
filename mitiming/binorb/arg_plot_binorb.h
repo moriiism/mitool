@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_BINORB_ARG_PLOT_BINORB_H_
-#define MXKWTOOL_MXKWTIMING_BINORB_ARG_PLOT_BINORB_H_
+#ifndef MORIIISM_MITOOL_MITIMING_BINORB_ARG_PLOT_BINORB_H_
+#define MORIIISM_MITOOL_MITIMING_BINORB_ARG_PLOT_BINORB_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValPlotBinorb : public MxkwArgBase{
+class ArgValPlotBinorb : public MiArgBase{
 public:
-    explicit ArgValPlotBinorb(string title = "") :
-        MxkwArgBase("ArgValPlotBinorb", title),
+    ArgValPlotBinorb() :
+        MiArgBase(),
         progname_(""),
         mode_(""),
         binorb_file_(""),
@@ -42,4 +42,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_BINORB_ARG_PLOT_BINORB_H_
+#endif // MORIIISM_MITOOL_MITIMING_BINORB_ARG_PLOT_BINORB_H_

@@ -1,10 +1,10 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_serr.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_func_pls.h"
+#include "mit_folding.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_draw_lcpls_rate.h"
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
     FILE* fp_log = fopen(logfile, "w");
     argval->Print(fp_log);
 
-    MxkwPlotConf* plot_conf = new MxkwPlotConf;
+    MirPlotConf* plot_conf = new MirPlotConf;
     plot_conf->Load(argval->GetPlotConfFile());
     
     Ephemeris* eph = new Ephemeris;
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
     //
     // count rate (c/s) function
     //
-    HistData1d* hist_pls = new HistData1d;
+    HistDataNerr1d* hist_pls = new HistDataNerr1d;
     hist_pls->Load(argval->GetHistPls());
 
     HistPlsFunc* func = new HistPlsFunc;
@@ -59,13 +59,13 @@ int main(int argc, char* argv[]){
     hist_info->Load(argval->GetHistInfo());
 
     // hist function
-    HistData1d* h1d_func = new HistData1d;
+    HistDataNerr1d* h1d_func = new HistDataNerr1d;
     h1d_func->Init(hist_info);
     h1d_func->SetByFunc(func, NULL);
     h1d_func->Save(argval->GetOutdir() + "/"
                    + argval->GetOutfileHead() + ".dat",
                    "x,xe,y,ye");
-    MxkwQdpTool::MkQdp(h1d_func, argval->GetOutdir() + "/"
+    MirQdpTool::MkQdp(h1d_func, argval->GetOutdir() + "/"
                        + argval->GetOutfileHead() + ".qdp", "x,xe,y,ye",
                        plot_conf);
 

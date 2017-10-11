@@ -29,8 +29,9 @@ int main(int argc, char* argv[]){
     g2d->Load(argval->GetFile(), argval->GetFormat());
     g2d->Sort();
 
-    HistData1d* h1d = new HistDataNerr1d;
-    h1d->InitSetByGraphData2d(g2d);
+    HistDataNerr1d* h1d = new HistDataNerr1d;
+    HistData1dOpe::FillByGd2d(g2d, h1d);
+    
     Interval* gti = h1d->GenIntervalAboveThreshold(argval->GetThreshold());
 
     double offset = gti->GetOffsetFromTag(argval->GetOffsetTag());

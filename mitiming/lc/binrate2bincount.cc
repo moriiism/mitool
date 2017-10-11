@@ -1,6 +1,6 @@
-#include "mi_graph2d_serr.h"
+#include "mir_graph2d_serr.h"
 #include "mit_telescope.h"
-#include "arg.h"
+#include "arg_binrate2bincount.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -19,9 +19,9 @@ int main(int argc, char* argv[]){
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
     }
-    FILE* fp_log;
-    fp_log = fopen((argval->GetOutdir() + "/"
-                    + argval->GetProgname() + ".log").c_str(), "w");
+    //FILE* fp_log = NULL;
+    //fp_log = fopen((argval->GetOutdir() + "/"
+    //                + argval->GetProgname() + ".log").c_str(), "w");
     
     GraphDataSerr2d* g2d_count = NULL;
     if("x,y,ye" == argval->GetLcFormat()){
@@ -51,10 +51,10 @@ int main(int argc, char* argv[]){
         
     string outqdp = argval->GetOutdir() + "/" + argval->GetOutfileHead()
         + "_bin-count.qdp";
-    g2d_count->MkQdp(outqdp);
+    // g2d_count->MkQdp(outqdp);
     string outfile = argval->GetOutdir() + "/" + argval->GetOutfileHead()
         + "_bin-count.dat";
-    g2d_count->Save(outfile);
+    // g2d_count->Save(outfile);
     
     // cleaning
     delete argval;

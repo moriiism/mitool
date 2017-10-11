@@ -26,11 +26,11 @@ int main(int argc, char* argv[]){
     Interval* gti = new Interval;
     gti->Load(argval->GetGtiFile());
 
-    DataArray1d* data_arr = new DataArray1d;
+    DataArrayNerr1d* data_arr = new DataArrayNerr1d;
     data_arr->Load(argval->GetLcFile());
     data_arr->Sort();
 
-    DataArray1d* data_sel_arr = new DataArray1d;
+    DataArrayNerr1d* data_sel_arr = new DataArrayNerr1d;
     DataArray1dOpe::GetSelectDa1dByInterval(data_arr, gti,
                                             data_sel_arr);
 

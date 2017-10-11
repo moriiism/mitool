@@ -46,8 +46,8 @@ void HistDataSerr1d::SetOvalSerrElm(long ibin, double oval_serr)
 }
 
 void HistDataSerr1d::FillByLarger(double xval,
-                               double oval,
-                               double oval_serr)
+                                  double oval,
+                                  double oval_serr)
 {
     IsOvalArrNotNull();
     long ibin = GetIbin(xval);
@@ -94,14 +94,31 @@ void HistDataSerr1d::Load(string file)
         MPrintErrClass(msg);
         abort();
     }
-    GraphDataSerr2d* gdata2d = new GraphDataSerr2d;
-    gdata2d->Load(file, format);
-    for(long idata = 0; idata < gdata2d->GetNdata(); idata++){
-        long ibin = GetIbin(gdata2d->GetXvalElm(idata));
-        SetOvalElm(ibin, gdata2d->GetOvalElm(idata) );
-        SetOvalSerrElm(ibin, gdata2d->GetOvalSerrElm(idata) );
+    string* line_arr = NULL;
+    long nline = 0;
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    if(nline != nbin_xval){
+        char msg[kLineSize];
+        sprintf(msg, "nline != nbin_xval");
+        MPrintErrClass(msg);
+        abort();
     }
-    delete gdata2d;
+    double xval = 0.0;
+    double oval = 0.0;
+    double oval_serr = 0.0; 
+    for(long iline = 0; iline < nline; iline ++){
+        int ncolumn = MiStr::GetNcolumn(line_arr[iline]);
+        if(3 != ncolumn){
+            MPrintErrClass("ncolumn != 3");
+            abort();
+        }
+        istringstream iss(line_arr[iline]);
+        iss >> xval >> oval >> oval_serr;
+        long ibin = GetIbin(xval);
+        SetOvalElm(ibin, oval);
+        SetOvalSerrElm(ibin, oval_serr);
+    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 
@@ -229,25 +246,6 @@ HistDataSerr1d* const HistDataSerr1d::GenHd1MaxInBin(long nbin_new) const
     }
 
     return h1d_new;
-}
-
-GraphDataSerr2d* const HistDataSerr1d::GenGraph2d() const
-{
-    long nbin_xval = 0;
-    double* xval_arr = NULL;
-    double* xval_serr_arr = NULL;
-    GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
-    GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
-    GraphDataSerr2d* g2d = new GraphDataSerr2d;
-    g2d->Init(nbin_xval);
-    g2d->SetXvalArr(nbin_xval, xval_arr);
-    g2d->SetXvalSerrArr(nbin_xval, xval_serr_arr);
-    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
-    g2d->SetOvalSerrArr(nbin_xval, GetOvalArr()->GetValSerr());
-    g2d->SetFlagXvalSorted(1);
-    delete [] xval_arr;
-    delete [] xval_serr_arr;
-    return g2d;
 }
 
 TH1D* const HistDataSerr1d::GenTH1D(double offset_xval,

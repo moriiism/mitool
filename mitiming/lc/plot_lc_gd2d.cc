@@ -1,7 +1,6 @@
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
 #include "mir_qdp_tool.h"
-
 #include "arg_plot_lc_gd2d.h"
 
 // global variable 
@@ -16,7 +15,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-    GraphData2d* gd2d = GraphData2d::GenGd2dByLoad(
+    GraphData2d* gd2d = GraphData2dOpe::GenGd2dByLoad(
         argval->GetFileIn(), argval->GetFormat() );
     gd2d->Sort();
 

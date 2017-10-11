@@ -1,10 +1,11 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_serr.h"
+#include "mit_eph.h"
+#include "mir_func_par.h"
+#include "mit_telescope.h"
+#include "mit_func_pls.h"
+#include "mit_folding.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_draw_lcpls_rate.h"
 
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-     if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+     if(MiIolib::TestFileExist(argval->GetOutdir())){
          char cmd[kLineSize];
          sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
          system(cmd);
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]){
      func->InitSet(argval->GetTunit(),
                    Telescope::GetMjdref(argval->GetTelescope()),
                    eph, NULL);
-     MxkwFuncPar* func_par = new MxkwFuncPar;
+     MirFuncPar* func_par = new MirFuncPar;
      func_par->Load(argval->GetParFile());
      func_par->Print(stdout);
 
@@ -55,15 +56,15 @@ int main(int argc, char* argv[]){
      hist_info->Load(argval->GetHistInfo());
 
      // hist (rate function)
-     HistData1d* h1d_func_rate = new HistData1d;
+     HistDataNerr1d* h1d_func_rate = new HistDataNerr1d;
      h1d_func_rate->Init(hist_info);
      h1d_func_rate->SetByFunc(func, func_par->GetPar());
 
      // hist (count function)
-     HistData1d* h1d_func_count = new HistData1d;
-     h1d_func_count->Scale(h1d_func_rate,
-                           hist_info->GetBinWidth(),
-                           0.0);
+     HistDataNerr1d* h1d_func_count = new HistDataNerr1d;
+     HistData1dOpe::GetScale(h1d_func_rate,
+                             hist_info->GetBinWidth(),
+                             0.0, h1d_func_count);
      h1d_func_rate->Save(argval->GetOutdir() + "/"
                          + argval->GetOutfileHead() + "_rate.dat",
                          "x,xe,y,ye");

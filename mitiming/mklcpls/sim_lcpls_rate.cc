@@ -1,10 +1,11 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_serr.h"
+#include "mit_eph.h"
+#include "mir_func_par.h"
+#include "mit_telescope.h"
+#include "mit_func_pls.h"
+#include "mit_folding.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_sim_lcpls_rate.h"
 
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-     if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+     if(MiIolib::TestFileExist(argval->GetOutdir())){
          char cmd[kLineSize];
          sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
          system(cmd);
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]){
      func->InitSet(argval->GetTunit(),
                    Telescope::GetMjdref(argval->GetTelescope()),
                    eph, NULL);
-     MxkwFuncPar* func_par = new MxkwFuncPar;
+     MirFuncPar* func_par = new MirFuncPar;
      func_par->Load(argval->GetParFile());
      func_par->Print(stdout);
 
@@ -55,16 +56,15 @@ int main(int argc, char* argv[]){
      hist_info->Load(argval->GetHistInfo());
 
      // hist (rate function)
-     HistData1d* h1d_func_rate = new HistData1d;
+     HistDataNerr1d* h1d_func_rate = new HistDataNerr1d;
      h1d_func_rate->Init(hist_info);
      h1d_func_rate->SetByFunc(func, func_par->GetPar());
 
      // hist (count function)
-     HistData1d* h1d_func_count = new HistData1d;
-     h1d_func_count->Scale(h1d_func_rate,
-                           h1d_func_rate->GetBinWidth(),
-                           0.0);
-
+     HistDataNerr1d* h1d_func_count = new HistDataNerr1d;
+     HistData1dOpe::GetScale(h1d_func_rate,
+                             h1d_func_rate->GetHi1d()->GetBinWidth(),
+                             0.0, h1d_func_count);
      if("bin" == argval->GetSimMode()){
          // hist (count function random)
          HistDataSerr1d* h1d_bin_count = new HistDataSerr1d;
@@ -75,12 +75,13 @@ int main(int argc, char* argv[]){
                              "x,xe,y,ye");
          // hist (rate)
          HistDataSerr1d* h1d_bin_count_rate = new HistDataSerr1d;
-         h1d_bin_count_rate->Scale(h1d_bin_count,
-                                   1./h1d_bin_count->GetBinWidth(),
-                                   0.0);
-         MxkwQdpTool::MkQdpDiff3(h1d_bin_count_rate, func, func_par->GetPar(),
-                                 argval->GetNpointFunc(),
-                                 argval->GetOutdir(), argval->GetOutfileHead() + "_bin_rate");
+         HistData1dOpe::GetScale(h1d_bin_count,
+                                 1./h1d_bin_count->GetHi1d()->GetBinWidth(),
+                                 0.0, h1d_bin_count_rate);
+         MirQdpTool::MkQdpDiff3Serr(h1d_bin_count_rate, func, func_par->GetPar(),
+                                    argval->GetNpointFunc(),
+                                    argval->GetOutdir(),
+                                    argval->GetOutfileHead() + "_bin_rate");
          h1d_bin_count_rate->Save(argval->GetOutdir() + "/"
                                   + argval->GetOutfileHead() + "_bin_rate.dat",
                                   "x,xe,y,ye");
@@ -101,15 +102,17 @@ int main(int argc, char* argv[]){
                             "x,xe,y,ye");
 
          HistDataSerr1d* h1d_evt_fill_rate = new HistDataSerr1d;
-         h1d_evt_fill_rate->Scale(h1d_evt_fill, 1./h1d_evt_fill->GetBinWidth(), 0.0);
+         HistData1dOpe::GetScale(h1d_evt_fill,
+                                 1./h1d_evt_fill->GetHi1d()->GetBinWidth(),
+                                 0.0, h1d_evt_fill_rate);
          h1d_evt_fill_rate->Save(argval->GetOutdir() + "/"
                                  + argval->GetOutfileHead() + "_evt_fill_rate.dat",
                                  "x,xe,y,ye");
     
-         MxkwQdpTool::MkQdpDiff3(h1d_evt_fill_rate, func, func_par->GetPar(),
-                                 argval->GetNpointFunc(),
-                                 argval->GetOutdir(),
-                                 argval->GetOutfileHead() + "_evt_fill_rate");
+         MirQdpTool::MkQdpDiff3Serr(h1d_evt_fill_rate, func, func_par->GetPar(),
+                                    argval->GetNpointFunc(),
+                                    argval->GetOutdir(),
+                                    argval->GetOutfileHead() + "_evt_fill_rate");
          delete h1d_evt_fill;
          delete h1d_evt_fill_rate;        
          delete data1d_evt;

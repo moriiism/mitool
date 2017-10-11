@@ -2,7 +2,7 @@
 #define MORIIISM_MITOOL_MIROOTLIB_HIST1D_TERR_H_
 
 #include "mir_hist1d.h"
-#include "mir_graph2d_terr.h"
+
 
 class HistDataTerr1d : public HistData1d{
 public:
@@ -52,7 +52,6 @@ public:
                    double offset_oval) const;
 
     HistDataTerr1d* const GenHd1MaxInBin(long nbin_new) const;
-    GraphDataTerr2d* const GenGraph2d() const;
     TH1D* const GenTH1D(double offset_xval,
                         double offset_oval) const;
     void MkTH1Fig(string outfig,

@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_BINORB_ARG_T90_TO_TPERI_H_
-#define MXKWTOOL_MXKWTIMING_BINORB_ARG_T90_TO_TPERI_H_
+#ifndef MORIIISM_MITOOL_MITIMING_BINORB_ARG_T90_TO_TPERI_H_
+#define MORIIISM_MITOOL_MITIMING_BINORB_ARG_T90_TO_TPERI_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValT90ToTperi : public MxkwArgBase{
+class ArgValT90ToTperi : public MiArgBase{
 public:
-    explicit ArgValT90ToTperi(string title = "") :
-        MxkwArgBase("ArgValT90ToTperi", title),
+    ArgValT90ToTperi() :
+        MiArgBase(),
         progname_(""),
         time_90_(0.0),
         period_(0.0) {}
@@ -30,4 +30,6 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_BINORB_ARG_T90_TO_TPERI_H_
+#endif // MORIIISM_MITOOL_MITIMING_BINORB_ARG_T90_TO_TPERI_H_
+
+

@@ -86,7 +86,7 @@ void ArgValSimLcplsPhflux::Null()
 void ArgValSimLcplsPhflux::SetOption(int argc, char* argv[], option* long_options)
 {
     if(0 < g_flag_verbose){
-        MPrintInfoClass("start...");
+        MPrintInfo("start...");
     }
     // option default
     g_flag_debug   = 0;
@@ -101,11 +101,11 @@ void ArgValSimLcplsPhflux::SetOption(int argc, char* argv[], option* long_option
         switch (retopt) {
         case 0:
             // long option
-            if("plotmode" == long_options[option_index].name){
+            if(0 == strcmp("plotmode", long_options[option_index].name) ){
                 plotmode_  = optarg;
-            } else if ("printmode" == long_options[option_index].name){
+            } else if (0 == strcmp("printmode", long_options[option_index].name) ){
                 printmode_ = optarg;
-            } else if ("root_style" == long_options[option_index].name){
+            } else if (0 == strcmp("root_style", long_options[option_index].name) ){
                root_style_ = optarg;
             }
             break;
@@ -135,7 +135,7 @@ void ArgValSimLcplsPhflux::SetOption(int argc, char* argv[], option* long_option
         }
     }
     if(0 < g_flag_verbose){
-        MPrintInfoClass("done.");
+        MPrintInfo("done.");
     }
 }
 

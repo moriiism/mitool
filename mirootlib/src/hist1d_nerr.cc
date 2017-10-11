@@ -51,13 +51,29 @@ void HistDataNerr1d::Load(string file)
         MPrintErrClass(msg);
         abort();
     }
-    GraphDataNerr2d* gdata2d = new GraphDataNerr2d;
-    gdata2d->Load(file, format);
-    for(long idata = 0; idata < gdata2d->GetNdata(); idata++){
-        long ibin = GetIbin(gdata2d->GetXvalElm(idata));
-        SetOvalElm(ibin, gdata2d->GetOvalElm(idata) );
+    string* line_arr = NULL;
+    long nline = 0;
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    if(nline != nbin_xval){
+        char msg[kLineSize];
+        sprintf(msg, "nline != nbin_xval");
+        MPrintErrClass(msg);
+        abort();
     }
-    delete gdata2d;
+    double xval = 0.0;
+    double oval = 0.0;
+    for(long iline = 0; iline < nline; iline ++){
+        int ncolumn = MiStr::GetNcolumn(line_arr[iline]);
+        if(2 != ncolumn){
+            MPrintErrClass("ncolumn != 2");
+            abort();
+        }
+        istringstream iss(line_arr[iline]);
+        iss >> xval >> oval;
+        long ibin = GetIbin(xval);
+        SetOvalElm(ibin, oval);
+    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 const DataArrayNerr1d* const HistDataNerr1d::GetOvalArr() const
@@ -161,20 +177,6 @@ HistDataNerr1d* const HistDataNerr1d::GenHd1MaxInBin(long nbin_new) const
     }
 
     return h1d_new;
-}
-
-GraphDataNerr2d* const HistDataNerr1d::GenGraph2d() const
-{
-    long nbin_xval = 0;
-    double* xval_arr = NULL;
-    GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
-    GraphDataNerr2d* g2d = new GraphDataNerr2d;
-    g2d->Init(nbin_xval);
-    g2d->SetXvalArr(nbin_xval, xval_arr);
-    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
-    g2d->SetFlagXvalSorted(1);
-    delete [] xval_arr;
-    return g2d;
 }
 
 TH1D* const HistDataNerr1d::GenTH1D(double offset_xval,

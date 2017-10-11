@@ -25,7 +25,6 @@ public:
     void InitSet(string tunit, double mjdref,
                  const Ephemeris* const eph,
                  const BinaryOrb1* const binorb);
-
     string GetTunit() const {return tunit_;};
     double GetMjdref() const {return mjdref_;};
     Ephemeris* const GetEph() const {return eph_;};

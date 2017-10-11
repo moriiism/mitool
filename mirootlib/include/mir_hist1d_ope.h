@@ -7,10 +7,12 @@
 #include "TPaletteAxis.h"
 
 #include "mir_data1d_ope.h"
+#include "mir_graph2d_nerr.h"
+#include "mir_graph2d_serr.h"
+#include "mir_graph2d_terr.h"
 #include "mir_hist1d_nerr.h"
 #include "mir_hist1d_serr.h"
 #include "mir_hist1d_terr.h"
-#include "mir_graph2d.h"
 
 namespace HistData1dOpe
 {
@@ -258,10 +260,7 @@ namespace HistData1dOpe
                        const HistDataNerr1d* const func,
                        HistDataSerr1d* const out);
 
-    void FillGd1d(const GraphDataNerr2d* const gd2d,
-                  HistDataNerr1d* const out);
-
-    
+   
     // power spectrum
     void GetPowSpec(const HistData1d* const in,
                     HistDataNerr1d* const out);
@@ -279,6 +278,31 @@ namespace HistData1dOpe
     void GetCrossCorr(const HistData1d* const in1,
                       const HistData1d* const in2,
                       HistDataNerr1d* const out);
+
+
+    // graph
+    void GetGd2d(const HistData1d* const in,
+                 GraphDataNerr2d* const out);
+    void GetGd2d(const HistData1d* const in,
+                 GraphDataSerr2d* const out);
+    void GetGd2d(const HistData1d* const in,
+                 GraphDataTerr2d* const out);
+
+
+    // Init & Set by graph2d, only if xval_arr of graph2d is equally-spaced.
+    void FillByGd2d(const GraphData2d* const in,
+                    HistDataNerr1d* const out);
+    // Init & Set by graph2d, by amean of graph2d.
+    void FillByGd2d(const HistInfo1d* const hi1d,
+                    const GraphData2d* const in,
+                    HistDataNerr1d* const out);
+
+    
+//    // Init & Set by graph2d_serr,
+//    // only if xval_arr of graph2d_serr is equally-spaced and
+//    // appropriate errors.
+//    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
+    
     
     // Init & Set by graph2d, only if xval_arr of graph2d is the same as hist_info
     HistData1d* const GenHd1dByHistInfoAndGraphData2d(const HistInfo1d* const hist_info,

@@ -1,8 +1,7 @@
 #include "mir_hist1d_serr.h"
 #include "mit_telescope.h"
 #include "mit_gti.h"
-
-#include "arg.h"
+#include "arg_split_by_gti.h"
 
 // global variable 
 int g_flag_debug = 0;

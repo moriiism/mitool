@@ -1,6 +1,5 @@
-#include "mi_data1d_ope.h"
-#include "mi_hist1d_ope.h"
-
+#include "mir_data1d_ope.h"
+#include "mir_hist1d_ope.h"
 #include "arg_binning.h"
 
 // global variable 
@@ -24,7 +23,7 @@ int main(int argc, char* argv[]){
     fp_log = fopen((argval->GetOutdir() + "/"
                     + argval->GetProgname() + ".log").c_str(), "w");
     
-    DataArray1d* data_arr = new DataArray1d;
+    DataArrayNerr1d* data_arr = new DataArrayNerr1d;
     data_arr->Load(argval->GetFile());
     data_arr->Sort();
 
@@ -55,7 +54,8 @@ int main(int argc, char* argv[]){
     //
 
     HistDataSerr1d* hd1d_rate = new HistDataSerr1d;
-    hd1d_rate->Scale(hd1d_count, 1./hd1d_count->GetBinWidth(), 0.0);
+    HistData1dOpe::GetScale(hd1d_count, 1./hd1d_count->GetHi1d()->GetBinWidth(),
+                            0.0, hd1d_rate);
 
     string outdat_rate = argval->GetOutdir() + "/"
         + argval->GetOutfileHead() + "_rate.dat";

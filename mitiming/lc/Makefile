@@ -9,9 +9,11 @@ INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
 LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
 	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
 
-TARGET =  plot_lc_da1d  plot_lc_hd1d  plot_lc_gd2d  \
+TARGET =  plot_lc  plot_lc_da1d  plot_lc_hd1d  plot_lc_gd2d  \
         select_da1d_by_gti  \
-        binning
+        binning  binrate2bincount \
+	split_by_gti  \
+	tconv
 
 all: $(TARGET) 
 
@@ -36,15 +38,14 @@ plot_lc_hd1d: plot_lc_hd1d.o  arg_plot_lc_hd1d.o
 plot_lc_gd2d: plot_lc_gd2d.o  arg_plot_lc_gd2d.o
 	$(CXXN) $@.o  arg_$@.o  ${LDLIBS} -o $@
 
+tconv: tconv.o  arg_tconv.o
+	$(CXXN) $@.o  arg_$@.o  ${LDLIBS} -o $@
 
-tconv: tconv.o ${OBJ}
-	$(CXXN) $@.o ${OBJ} ${LDLIBS} -o $@
+binrate2bincount: binrate2bincount.o  arg_binrate2bincount.o
+	$(CXXN) $@.o  arg_$@.o  ${LDLIBS} -o $@
 
-binrate2bincount: binrate2bincount.o ${OBJ}
-	$(CXXN) $@.o ${OBJ} ${LDLIBS} -o $@
-
-split_by_gti: split_by_gti.o ${OBJ}
-	$(CXXN) $@.o ${OBJ} ${LDLIBS} -o $@
+split_by_gti: split_by_gti.o  arg_split_by_gti.o
+	$(CXXN) $@.o  arg_$@.o  ${LDLIBS} -o $@
 
 
 .SUFFIXES:

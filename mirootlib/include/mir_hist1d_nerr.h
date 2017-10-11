@@ -2,7 +2,6 @@
 #define MORIIISM_MITOOL_MIROOTLIB_HIST1D_NERR_H_
 
 #include "mir_hist1d.h"
-#include "mir_graph2d_nerr.h"
 
 class HistDataNerr1d : public HistData1d{
 public:
@@ -23,7 +22,6 @@ public:
                    double offset_xval,
                    double offset_oval) const;
     HistDataNerr1d* const GenHd1MaxInBin(long nbin_new) const;
-    GraphDataNerr2d* const GenGraph2d() const;
     TH1D* const GenTH1D(double offset_xval,
                         double offset_oval) const;
     void MkTH1Fig(string outfig,

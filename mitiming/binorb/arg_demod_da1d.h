@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_BINORB_ARG_DEMOD_DA1D_H_
-#define MXKWTOOL_MXKWTIMING_BINORB_ARG_DEMOD_DA1D_H_
+#ifndef MORIIISM_MITOOL_MITIMING_BINORB_ARG_DEMOD_DA1D_H_
+#define MORIIISM_MITOOL_MITIMING_BINORB_ARG_DEMOD_DA1D_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValDemodDa1d : public MxkwArgBase{
+class ArgValDemodDa1d : public MiArgBase{
 public:
-    explicit ArgValDemodDa1d(string title = "") :
-        MxkwArgBase("ArgValDemodDa1d", title),
+    ArgValDemodDa1d() :
+        MiArgBase(),
         progname_(""),
         telescope_(""),
         lc_file_(""),
@@ -51,4 +51,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_BINORB_ARG_DEMOD_DA1D_H_
+#endif // MORIIISM_MITOOL_MITIMING_BINORB_ARG_DEMOD_DA1D_H_

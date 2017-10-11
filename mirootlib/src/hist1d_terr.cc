@@ -132,15 +132,33 @@ void HistDataTerr1d::Load(string file)
         MPrintErrClass(msg);
         abort();
     }
-    GraphDataTerr2d* gdata2d = new GraphDataTerr2d;
-    gdata2d->Load(file, format);
-    for(long idata = 0; idata < gdata2d->GetNdata(); idata++){
-        long ibin = GetIbin(gdata2d->GetXvalElm(idata));
-        SetOvalElm(ibin, gdata2d->GetOvalElm(idata) );
-        SetOvalTerrPlusElm(ibin, gdata2d->GetOvalTerrPlusElm(idata) );
-        SetOvalTerrMinusElm(ibin, gdata2d->GetOvalTerrMinusElm(idata) );        
+    string* line_arr = NULL;
+    long nline = 0;
+    MiIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    if(nline != nbin_xval){
+        char msg[kLineSize];
+        sprintf(msg, "nline != nbin_xval");
+        MPrintErrClass(msg);
+        abort();
     }
-    delete gdata2d;
+    double xval = 0.0;
+    double oval = 0.0;
+    double oval_terr_plus = 0.0;
+    double oval_terr_minus = 0.0; 
+    for(long iline = 0; iline < nline; iline ++){
+        int ncolumn = MiStr::GetNcolumn(line_arr[iline]);
+        if(4 != ncolumn){
+            MPrintErrClass("ncolumn != 4");
+            abort();
+        }
+        istringstream iss(line_arr[iline]);
+        iss >> xval >> oval >> oval_terr_plus >> oval_terr_minus;
+        long ibin = GetIbin(xval);
+        SetOvalElm(ibin, oval);
+        SetOvalTerrPlusElm(ibin, oval_terr_plus);
+        SetOvalTerrMinusElm(ibin, oval_terr_minus);
+    }
+    MiIolib::DelReadFile(line_arr);
 }
 
 const DataArrayTerr1d* const HistDataTerr1d::GetOvalArr() const
@@ -306,27 +324,6 @@ HistDataTerr1d* const HistDataTerr1d::GenHd1MaxInBin(long nbin_new) const
                               GetOvalTerrMinusElm(ibin));
     }
     return h1d_new;
-}
-
-GraphDataTerr2d* const HistDataTerr1d::GenGraph2d() const
-{
-    long nbin_xval = 0;
-    double* xval_arr = NULL;
-    double* xval_serr_arr = NULL;
-    GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
-    GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
-    GraphDataTerr2d* g2d = new GraphDataTerr2d;
-    g2d->Init(nbin_xval);
-    g2d->SetXvalArr(nbin_xval, xval_arr);
-    g2d->SetXvalTerrArr(nbin_xval, xval_serr_arr);
-    g2d->SetOvalArr(nbin_xval, GetOvalArr()->GetVal());
-    g2d->SetOvalTerrArr(nbin_xval,
-                        GetOvalArr()->GetValTerrPlus(),
-                        GetOvalArr()->GetValTerrMinus());
-    g2d->SetFlagXvalSorted(1);
-    delete [] xval_arr;
-    delete [] xval_serr_arr;
-    return g2d;
 }
 
 TH1D* const HistDataTerr1d::GenTH1D(double offset_xval,

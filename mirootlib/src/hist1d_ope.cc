@@ -1225,6 +1225,108 @@ void HistData1dOpe::GetPowSpecNonfft(const HistData1d* const in,
     delete [] power;
 }
 
+// graph
+
+void HistData1dOpe::GetGd2d(const HistData1d* const in,
+                            GraphDataNerr2d* const out)
+{
+    long nbin_xval = 0;
+    double* xval_arr = NULL;
+    in->GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
+    out->Init(nbin_xval);
+    out->SetXvalArr(nbin_xval, xval_arr);
+    out->SetOvalArr(nbin_xval, in->GetOvalArr()->GetVal());
+    out->SetFlagXvalSorted(1);
+    delete [] xval_arr;
+}
+
+void HistData1dOpe::GetGd2d(const HistData1d* const in,
+                            GraphDataSerr2d* const out)
+{
+    long nbin_xval = 0;
+    double* xval_arr = NULL;
+    double* xval_serr_arr = NULL;
+    in->GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
+    in->GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
+    out->Init(nbin_xval);
+    out->SetXvalArr(nbin_xval, xval_arr);
+    out->SetXvalSerrArr(nbin_xval, xval_serr_arr);
+    out->SetOvalArr(nbin_xval, in->GetOvalArr()->GetVal());
+    out->SetOvalSerrArr(nbin_xval, in->GetOvalArr()->GetValSerr());
+    out->SetFlagXvalSorted(1);
+    delete [] xval_arr;
+    delete [] xval_serr_arr;
+}
+
+
+void HistData1dOpe::GetGd2d(const HistData1d* const in,
+                            GraphDataTerr2d* const out)
+{
+    long nbin_xval = 0;
+    double* xval_arr = NULL;
+    double* xval_serr_arr = NULL;
+    in->GetHi1d()->GenValArr(&xval_arr, &nbin_xval);
+    in->GetHi1d()->GenValSerrArr(&xval_serr_arr, &nbin_xval);
+    out->Init(nbin_xval);
+    out->SetXvalArr(nbin_xval, xval_arr);
+    out->SetXvalTerrArr(nbin_xval, xval_serr_arr);
+    out->SetOvalArr(nbin_xval, in->GetOvalArr()->GetVal());
+    out->SetOvalTerrArr(nbin_xval,
+                        in->GetOvalArr()->GetValTerrPlus(),
+                        in->GetOvalArr()->GetValTerrMinus());
+    out->SetFlagXvalSorted(1);
+    delete [] xval_arr;
+    delete [] xval_serr_arr;
+}
+
+void HistData1dOpe::FillByGd2d(const GraphData2d* const in,
+                               HistDataNerr1d* const out)
+{
+    if(1 != in->GetFlagXvalSorted()){
+        MPrintErr("Not soted.");
+        abort();
+    }
+    if(1 != in->IsEqualSpaceX()){
+        MPrintErr("Not equally-spaced.");
+        abort();
+    }
+    long npoint = in->GetNdata();
+    if(npoint < 2){
+        MPrintErr("npoint < 2.");
+        abort();
+    }
+
+    long nbin_xval = npoint;
+    double xval_min = in->GetXvalArr()->GetValMin();
+    double xval_max = in->GetXvalArr()->GetValMax();
+    double delta_xval = (xval_max - xval_min) / (npoint - 1);
+    double xval_lo = xval_min - 0.5 * delta_xval;
+    double xval_up = xval_max + 0.5 * delta_xval;
+    out->Init(nbin_xval, xval_lo, xval_up);
+    out->SetOvalArr(in->GetOvalArr());
+}
+
+void HistData1dOpe::FillByGd2d(const HistInfo1d* const hi1d,
+                               const GraphData2d* const in,
+                               HistDataNerr1d* const out)
+{
+    HistDataNerr1d* hd1d_sum = new HistDataNerr1d;
+    hd1d_sum->Init(hi1d);
+    HistDataNerr1d* hd1d_num = new HistDataNerr1d;
+    hd1d_num->Init(hi1d);
+    for(long idata = 0; idata < in->GetNdata(); idata ++){
+        hd1d_sum->Fill(in->GetXvalElm(idata), in->GetOvalElm(idata));
+        hd1d_num->Fill(in->GetXvalElm(idata));
+    }
+
+    out->Init(hi1d);
+    HistDataNerr1d* hd1d_mask_sel = new HistDataNerr1d;
+    GetDiv(hd1d_sum, hd1d_num, hd1d_mask_sel, out);
+    delete hd1d_sum;
+    delete hd1d_num;
+    delete hd1d_mask_sel;
+}
+
 
 // Init & Set by graph2d, only if xval_arr of graph2d is the same as hist_info
 HistData1d* const HistData1dOpe::GenHd1dByHistInfoAndGraphData2d(const HistInfo1d* const hist_info,

@@ -418,6 +418,31 @@ void BinaryOrb2::LoadP(string file)
          radius_companion);
 }
 
+void BinaryOrb2::Copy(const BinaryOrb2* const org)
+{
+    if(this == org) {return;}
+    if(NULL == org) {return;}
+     
+    CopyTitle(org);
+
+    semimajor_axis_ = org->semimajor_axis_;
+    ecc_            = org->ecc_;
+    time_peri_      = org->time_peri_;
+    angle_inc_      = org->angle_inc_;
+    angle_lan_      = org->angle_lan_;
+    angle_peri_     = org->angle_peri_;
+    period_         = org->period_;
+    mass_companion_ = org->mass_companion_;
+    mass_compact_   = org->mass_compact_;
+    radius_companion_ = org->radius_companion_;
+}
+
+BinaryOrb2* const BinaryOrb2::Clone() const
+{
+    BinaryOrb2* obj_new = new BinaryOrb2;
+    obj_new->Copy(this);
+    return obj_new;
+}
 
 void BinaryOrb2::Print(FILE *fp) const
 {

@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_
-#define MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_
+#ifndef MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_
+#define MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValSimLcplsPhflux : public MxkwArgBase{
+class ArgValSimLcplsPhflux : public MiArgBase{
 public:
-    explicit ArgValSimLcplsPhflux(string title = "") :
-        MxkwArgBase("ArgValSimLcplsPhflux", title),
+    ArgValSimLcplsPhflux() :
+        MiArgBase(),
         progname_(""),
         func_name_(""),
         par_file_(""),
@@ -75,4 +75,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_
+#endif // MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_SIM_LCPLS_PHFLUX_H_

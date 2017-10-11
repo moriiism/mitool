@@ -33,10 +33,9 @@ int main(int argc, char* argv[]){
     HistInfo1d* hist_info = new HistInfo1d;
     hist_info->Load(argval->GetHistInfo());
     
-    HistData1d* h1d = new HistDataNerr1d;
-    h1d->Init(hist_info);
-    h1d->SetByGraphData2d(g2d);
-    
+    HistDataNerr1d* h1d = new HistDataNerr1d;
+    HistData1dOpe::FillByGd2d(hist_info,
+                              g2d, h1d);
     Interval* gti = h1d->GenIntervalAboveThreshold(argval->GetThreshold());
 
     double offset = gti->GetOffsetFromTag(argval->GetOffsetTag());

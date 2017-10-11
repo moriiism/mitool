@@ -1,5 +1,4 @@
-#include "mxkw_timing_binary_orb.h"
-
+#include "mit_binary_orb.h"
 #include "arg_plot_binorb.h"
 
 // global variable 
@@ -23,14 +22,14 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
  
-    if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+    if(MiIolib::TestFileExist(argval->GetOutdir())){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
         system(cmd);
     }
-    FILE* fp_log;
-    fp_log = fopen((argval->GetOutdir() + "/"
-                    + argval->GetProgname() + ".log").c_str(), "w");
+//    FILE* fp_log = NULL;
+//    fp_log = fopen((argval->GetOutdir() + "/"
+//                    + argval->GetProgname() + ".log").c_str(), "w");
 
     BinaryOrb2* binorb2 = new BinaryOrb2;
     if("A" == argval->GetMode()){

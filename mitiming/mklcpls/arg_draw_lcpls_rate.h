@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_
-#define MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_
+#ifndef MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_
+#define MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValDrawLcplsRate : public MxkwArgBase{
+class ArgValDrawLcplsRate : public MiArgBase{
 public:
-    explicit ArgValDrawLcplsRate(string title = "") :
-        MxkwArgBase("ArgValDrawLcplsRate", title),
+    ArgValDrawLcplsRate() :
+        MiArgBase(),
         progname_(""),
         func_name_(""),
         par_file_(""),
@@ -63,4 +63,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_
+#endif // MORIIISM_MITOOL_MITIMING_MKLCPLS_ARG_DRAW_LCPLS_RATE_H_

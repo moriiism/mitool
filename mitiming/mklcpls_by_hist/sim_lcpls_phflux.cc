@@ -1,10 +1,10 @@
-#include "mxkw_iolib.h"
-#include "mxkw_hist1d_serr.h"
-#include "mxkw_timing_eph.h"
-#include "mxkw_timing_telescope.h"
-#include "mxkw_timing_func_pls.h"
-#include "mxkw_timing_folding.h"
-#include "mxkw_qdp_tool.h"
+#include "mi_iolib.h"
+#include "mir_hist1d_serr.h"
+#include "mit_eph.h"
+#include "mit_telescope.h"
+#include "mit_func_pls.h"
+#include "mit_folding.h"
+#include "mir_qdp_tool.h"
 
 #include "arg_sim_lcpls_phflux.h"
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
     argval->Init(argc, argv);
     argval->Print(stdout);
 
-     if(MxkwIolib::TestFileExist(argval->GetOutdir())){
+     if(MiIolib::TestFileExist(argval->GetOutdir())){
          char cmd[kLineSize];
          sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
          system(cmd);
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
      //
      // photon flux (c/s/cm2) function
      //
-     HistData1d* hist_pls = new HistData1d;
+     HistDataNerr1d* hist_pls = new HistDataNerr1d;
      hist_pls->Load(argval->GetHistPls());
 
      HistPlsFunc* func = new HistPlsFunc;
@@ -57,26 +57,26 @@ int main(int argc, char* argv[]){
      hist_info->Load(argval->GetHistInfo());
 
      // hist (phflux function)
-     HistData1d* h1d_func_phflux = new HistData1d;
+     HistDataNerr1d* h1d_func_phflux = new HistDataNerr1d;
      h1d_func_phflux->Init(hist_info);
      h1d_func_phflux->SetByFunc(func, NULL);
 
      // hist (effarea file)
-     HistData1d* h1d_effarea = new HistData1d;
-     h1d_effarea->Init(hist_info);
-     GraphData2d* g2d_effarea = new GraphData2d;
+     GraphDataNerr2d* g2d_effarea = new GraphDataNerr2d;
      g2d_effarea->Load(argval->GetEffareaFile(), "x,y");
-     h1d_effarea->SetByGraphData2d(g2d_effarea);
+     HistDataNerr1d* h1d_effarea = new HistDataNerr1d;
+     HistData1dOpe::FillByGd2d(hist_info, g2d_effarea, h1d_effarea);
 
      // hist (rate function)
-     HistData1d* h1d_func_rate = new HistData1d;
-     h1d_func_rate->Mul(h1d_func_phflux, h1d_effarea);
+     HistDataNerr1d* h1d_func_rate = new HistDataNerr1d;
+     HistData1dOpe::GetMul(h1d_func_phflux, h1d_effarea,
+                           h1d_func_rate);
 
      // hist (count function)
-     HistData1d* h1d_func_count = new HistData1d;
-     h1d_func_count->Scale(h1d_func_rate,
-                           h1d_func_rate->GetBinWidth(),
-                           0.0);
+     HistDataNerr1d* h1d_func_count = new HistDataNerr1d;
+     HistData1dOpe::GetScale(h1d_func_rate,
+                             h1d_func_rate->GetHi1d()->GetBinWidth(),
+                             0.0, h1d_func_count);
 
      if("bin" == argval->GetSimMode()){
          // hist (count function random)
@@ -88,18 +88,19 @@ int main(int argc, char* argv[]){
                              "x,xe,y,ye");
          // hist (rate)
          HistDataSerr1d* h1d_bin_count_rate = new HistDataSerr1d;
-         h1d_bin_count_rate->Scale(h1d_bin_count,
-                                   1./h1d_bin_count->GetBinWidth(),
-                                   0.0);
-
+         HistData1dOpe::GetScale(h1d_bin_count,
+                                 1./h1d_bin_count->GetHi1d()->GetBinWidth(),
+                                 0.0, h1d_bin_count_rate);
          // hist (phflux)
          HistDataSerr1d* h1d_bin_count_phflux = new HistDataSerr1d;
          vector<long> index_bad_vec;
-         h1d_bin_count_phflux->Div(h1d_bin_count_rate, h1d_effarea, &index_bad_vec);
+         HistDataNerr1d* hd1d_mask_sel = new HistDataNerr1d;
+         HistData1dOpe::GetDiv(h1d_bin_count_rate, h1d_effarea,
+                               hd1d_mask_sel, h1d_bin_count_phflux);
          h1d_bin_count_phflux->Save(argval->GetOutdir() + "/"
                                     + argval->GetOutfileHead() + "_bin_phflux.dat",
                                     "x,xe,y,ye");         
-         //MxkwQdpTool::MkQdpDiff3(h1d_bin_count_phflux, func, func_par,
+         //MiQdpTool::MkQdpDiff3(h1d_bin_count_phflux, func, func_par,
          //                        argval->GetOutdir(), argval->GetOutfileHead() + "_bin_phflux");
 
          delete h1d_bin_count;
@@ -120,16 +121,17 @@ int main(int argc, char* argv[]){
                             "x,xe,y,ye");
 
          HistDataSerr1d* h1d_evt_fill_rate = new HistDataSerr1d;
-         h1d_evt_fill_rate->Scale(h1d_evt_fill,
-                                  1./h1d_evt_fill->GetBinWidth(),
-                                  0.0);
+         HistData1dOpe::GetScale(h1d_evt_fill,
+                                 1./h1d_evt_fill->GetHi1d()->GetBinWidth(),
+                                 0.0, h1d_evt_fill_rate);
          HistDataSerr1d* h1d_evt_fill_phflux = new HistDataSerr1d;
-         vector<long> index_bad_vec;
-         h1d_evt_fill_phflux->Div(h1d_evt_fill_rate, h1d_effarea, &index_bad_vec);
+         HistDataNerr1d* hd1d_mask_sel = new HistDataNerr1d;
+         HistData1dOpe::GetDiv(h1d_evt_fill_rate, h1d_effarea,
+                               hd1d_mask_sel, h1d_evt_fill_phflux);
          h1d_evt_fill_phflux->Save(argval->GetOutdir() + "/"
                                    + argval->GetOutfileHead() + "_evt_fill_phflux.dat",
                                    "x,xe,y,ye");   
-         //MxkwQdpTool::MkQdpDiff3(h1d_evt_fill_phflux, func, func_par,
+         //MirQdpTool::MkQdpDiff3(h1d_evt_fill_phflux, func, func_par,
          //                        argval->GetOutdir(),
          //                        argval->GetOutfileHead() + "_evt_fill_phflux");
 

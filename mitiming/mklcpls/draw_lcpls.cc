@@ -1,5 +1,6 @@
 #include "mi_iolib.h"
 #include "mir_hist1d_serr.h"
+#include "mir_func_par.h"
 #include "mit_eph.h"
 #include "mit_telescope.h"
 #include "mit_func_pls.h"
@@ -53,9 +54,9 @@ int main(int argc, char* argv[]){
     // HistInfo1d
     HistInfo1d* hist_info = new HistInfo1d;
     hist_info->Load(argval->GetHistInfo());
-
+    
     // hist function
-    HistData1d* h1d_func = new HistData1d;
+    HistDataNerr1d* h1d_func = new HistDataNerr1d;
     h1d_func->Init(hist_info);
     h1d_func->SetByFunc(func, func_par->GetPar());
     h1d_func->Save(argval->GetOutdir() + "/"

@@ -1,6 +1,5 @@
 #include "mir_hist1d_serr.h"
 #include "mir_qdp_tool.h"
-
 #include "arg_plot_lc_da1d.h"
 
 // global variable 
@@ -39,7 +38,9 @@ int main(int argc, char* argv[]){
     }
 
     HistDataSerr1d* hd1d_rate = new HistDataSerr1d;
-    hd1d_rate->Scale(hd1d_count, 1./hd1d_count->GetBinWidth(), 0.0);
+    HistData1dOpe::GetScale(hd1d_count, 1./hd1d_count->GetHi1d()->GetBinWidth(),
+                            0.0,
+                            hd1d_rate);
 
     string outqdp_count = argval->GetOutdir() + "/"
         + argval->GetOutfileHead() + "_count.qdp";

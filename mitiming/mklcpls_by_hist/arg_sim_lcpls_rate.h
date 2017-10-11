@@ -1,12 +1,12 @@
-#ifndef MXKWTOOL_MXKWTIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_
-#define MXKWTOOL_MXKWTIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_
+#ifndef MORIIISM_MITOOL_MITIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_
+#define MORIIISM_MITOOL_MITIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_
 
-#include "mxkw_base.h"
+#include "mi_base.h"
 
-class ArgValSimLcplsRate : public MxkwArgBase{
+class ArgValSimLcplsRate : public MiArgBase{
 public:
-    explicit ArgValSimLcplsRate(string title = "") :
-        MxkwArgBase("ArgValSimLcplsRate", title),
+    ArgValSimLcplsRate() :
+        MiArgBase(),
         progname_(""),
         hist_pls_(""),
         hist_info_(""),
@@ -66,4 +66,4 @@ private:
     void SetOption(int argc, char* argv[], option* long_options);
 };
 
-#endif // MXKWTOOL_MXKWTIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_
+#endif // MORIIISM_MITOOL_MITIMING_MKLCPLS_BY_HIST_ARG_SIM_LCPLS_RATE_H_

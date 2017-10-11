@@ -1,6 +1,6 @@
-ALL = binorb efs eph est fcs \
+ALL = binorb efs eph est \
 	fold gls gti hist_info \
-	lasso lc lomb mklc mklcpls \
+	lc lomb mklcpls \
 	mklcpls_by_hist pow time zn2
 
 all:

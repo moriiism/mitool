@@ -49,6 +49,15 @@ void FuncPls::NullFuncPls()
     if(NULL != func_bin_orb_obs_time_) {delete func_bin_orb_obs_time_; func_bin_orb_obs_time_ = NULL;}
 }
 
+void FuncPls::CopyFuncPls(const FuncPls* const org)
+{
+    NullFuncPls();
+    InitSet(org->GetTunit(),
+            org->GetMjdref(),
+            org->GetEph(),
+            org->GetBinorb());
+}
+
 //
 // pulse profile
 //

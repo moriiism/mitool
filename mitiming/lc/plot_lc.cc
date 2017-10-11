@@ -1,7 +1,6 @@
-#include "mi_hist1d_serr.h"
+#include "mir_hist1d_serr.h"
 #include "mit_telescope.h"
-
-#include "arg.h"
+#include "arg_plot_lc.h"
 
 // global variable 
 int g_flag_debug = 0;

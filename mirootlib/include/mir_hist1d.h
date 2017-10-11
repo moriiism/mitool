@@ -4,9 +4,12 @@
 #include "TH1D.h"
 #include "TPaletteAxis.h"
 #include "TRandom3.h"
-
-#include "mir_graph2d.h"
+#include "mir_interval.h"
+#include "mir_data1d_nerr.h"
+#include "mir_data1d_serr.h"
+#include "mir_data1d_terr.h"
 #include "mir_hist_info.h"
+#include "mir_func.h"
 #include "mir_root_tool.h"
 
 class HistDataNerr1d;
@@ -87,17 +90,6 @@ public:
     
     void SetByFunc(const MirFunc* const func, const double* const par);
 
-    // set by amean of graph data
-    void SetByGraphData2d(const GraphData2d* const g2d);
-    
-    // Init & Set by graph2d, only if xval_arr of graph2d is equally-spaced.
-    void InitSetByGraphData2d(const GraphData2d* const g2d);
-    
-    // Init & Set by graph2d_serr,
-    // only if xval_arr of graph2d_serr is equally-spaced and
-    // appropriate errors.
-    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
-
     void Copy(const HistData1d* const org);
     virtual void Load(string file) = 0;
 
@@ -176,7 +168,6 @@ public:
                   double offset_oval = 0.0) const;
 
     virtual HistData1d* const GenHd1MaxInBin(long nbin_new) const = 0;
-    virtual GraphData2d* const GenGraph2d() const = 0;
     virtual TH1D* const GenTH1D(double offset_xval,
                                 double offset_oval) const = 0;
     virtual void MkTH1Fig(string outfig,

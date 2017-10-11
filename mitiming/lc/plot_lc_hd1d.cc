@@ -1,6 +1,5 @@
 #include "mir_hist1d_serr.h"
 #include "mir_qdp_tool.h"
-
 #include "arg_plot_lc_hd1d.h"
 
 // global variable 
@@ -19,7 +18,7 @@ int main(int argc, char* argv[]){
     plot_conf->Load(argval->GetPlotConfFile());
     plot_conf->Print(stdout);
 
-    HistData1d* hd1d = HistData1d::GenHd1dByLoad(argval->GetFileIn());
+    HistData1d* hd1d = HistData1dOpe::GenHd1dByLoad(argval->GetFileIn());
     MirQdpTool::MkQdp(hd1d, argval->GetFileOut(),
                        argval->GetFormat(), plot_conf);
 
