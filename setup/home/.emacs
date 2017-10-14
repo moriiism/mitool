@@ -48,3 +48,11 @@
 ;(setq matlab-shell-command "matlab")
 
 
+;; ------ memo ------------
+
+; open again by utf8
+;C-x RET c utf-8-unix RET M-x revert-buffer
+
+; open again by euc
+;C-x RET c euc-jp-unix RET M-x revert-buffer
+

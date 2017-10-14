@@ -41,6 +41,11 @@ ROOT::Minuit2::FunctionMinimum FitFunc::GenExecFit(MinFcn* const minfcn,
     minfcn->SetErrorDef(up_minfcn);
     int strategy = 1;
 
+//    TMinuit* minuit = new TMinuit;
+//    minuit->SetFCN( minfcn->MinFcn::Eval );
+//    minuit->Migrad();
+
+    
     // std::cout << upar << std::endl;
     ROOT::Minuit2::MnMigrad migrad(*minfcn, upar, strategy);
     ROOT::Minuit2::FunctionMinimum function_minimum = migrad(maxfcn, tolerance);

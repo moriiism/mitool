@@ -50,10 +50,9 @@ light curve をsimulateする。
 
 sine curve のpulse profile を持ったpulsar の波形を描く。
 
-# maxit6
-cd /home/morii/work/maxi/mxkwtool/try/14041400
+cd ~/temp
 
-source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
+source ~/work/github/moriiism/mitool/setup/setup.sh 
 
 #
 # preparation
@@ -69,7 +68,7 @@ source ~/localhome/work/maxi/mxkwtool/trunk/setup/setup_mxkwtool.sh
 
 mkdir setup
 
-bindir=${MXKWTOOL}/mxkwtiming/eph
+bindir=${MITOOL}/mitiming/eph
 
 period=7.677728
 p_dot=-2.6e-11
@@ -92,7 +91,7 @@ $ephfile_out
 # make hist_info
 #
 
-bindir=${MXKWTOOL}/mxkwtiming/hist_info
+bindir=${MITOOL}/mitiming/hist_info
 start_mjd=55290
 end_mjd=55349
 delta_time=1.0
@@ -117,7 +116,7 @@ $hist_info_out
 
 mkdir setup
 
-bindir=${MXKWTOOL}/mxkwtiming/mklcpls
+bindir=${MITOOL}/mitiming/mklcpls
 func_name="SinePlusConstFunc"
 par_file=setup/par.dat
 hist_info=setup/hist_info_maxi.dat

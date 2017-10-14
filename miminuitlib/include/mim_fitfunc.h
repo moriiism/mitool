@@ -11,7 +11,10 @@
 #include "Minuit2/MnScan.h"
 #include "Minuit2/MnSimplex.h"
 #include "Minuit2/MnFumiliMinimize.h"
-#include "Minuit2/Minuit2Minimizer.h"
+//#include "Minuit2/Minuit2Minimizer.h"
+
+
+
 
 #include "mim_fitstat_hg.h"
 
