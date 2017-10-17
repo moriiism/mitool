@@ -2338,7 +2338,7 @@ double CstatPhysFcn2d::Eval(int npar, const double* const par_arr) const
         double func_val = GetFunc()->Eval(val_in, par_arr);
 
         if(func_val >1.0){
-            printf("func_val = %e\n", func_val);
+            // printf("func_val = %e\n", func_val);
         }
         
         if( 0 == GetFlagBadArrElm(idata) ){
@@ -2354,15 +2354,12 @@ double CstatPhysFcn2d::Eval(int npar, const double* const par_arr) const
     }
     cstat *= -2.0;
 
-    printf("cstat_before = %e\n", cstat);
+    // printf("cstat_before = %e\n", cstat);
     
     if(1 == GetFlagBadNeg()){
         cstat += GetRepulsion(func_val_min);
-
-        printf("debug: aaaaaa\n");
-        
     }
-    printf("cstat_after = %e\n", cstat);
+    // printf("cstat_after = %e\n", cstat);
     
     return cstat;
 }

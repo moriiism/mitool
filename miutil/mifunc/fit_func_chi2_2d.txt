@@ -105,7 +105,9 @@ cd ~/temp
 mkdir data
 
 bindir=$MITOOL/miutil/mifunc
-data_file=sim_func_rate_2d/Gauss2dFunc_evt_fill_rate.dat
+# data_file=sim_func_rate_2d/Gauss2dFunc_evt_fill_rate.dat
+# data_file=sim_func_rate_2d/try1_evt_fill_rate.dat
+data_file=sim_func_2d/try1_evt_fill_count.dat
 data_fmt="x,xe,y,ye,z,ze"
 func_name="Gauss2dFunc"
 fitpar=data/fitpar.dat
@@ -114,7 +116,8 @@ chi2par=data/chi2par.dat
 
 #chi2par=none
 chi2cont_par=none
-
+plot_conf_projx_file=data/plot_conf_projx.dat
+plot_conf_projy_file=data/plot_conf_projy.dat
 outdir=fit_func_chi2_2d
 outfile_head=$func_name
 
@@ -122,10 +125,10 @@ cat << EOF > data/fitpar.dat
 #  par_name      init      err         lo           up      flag_calc_terr   index_comp
 sigma_xp         1.0      -0.01       none         none          1                0
 sigma_yp         1.0      -0.01       none         none          1                0
-norm             0.0      -0.01       none         none          1                0
+norm           500.0       0.01       none         none          1                0
 rot_angle        0.0      -0.01       none         none          1                0
-mu_xp            5.0      -0.01       none         none          1                0
-mu_yp            5.0      -0.01       none         none          1                0
+mu_xp            0.0      -0.01       none         none          1                0
+mu_yp            0.0      -0.01       none         none          1                0
 shift_z        100.0       0.01       none         none          1                0
 EOF
 
@@ -133,17 +136,36 @@ cat << EOF > data/chi2par.dat
 # index  nstep    lo      up   sigma     index1
 #0         50    none    none    3      others_free
 #1         50    none    none    3      others_free
-#2         50      0      5000   none     others_free
+2         50      0      1000   none     others_free
 #3         50    none    none    3      others_free
 #4         50    none    none    3      others_free
 #5         50    none    none    3      others_free
-6         50      0      50     none    others_free
+#6         50      0      50     none    others_free
 EOF
 
 cat << EOF > data/chi2cont_par.dat
 # index0  nstep0  lo0     up0   sigma0    index1  nstep1   lo1    up1   sigma1    index2
-0          50     none    none    3        1      50       none   none   3      others_free
+#0          50     none    none    3        1      50       none   none   3      others_free
 EOF
+
+cat << EOF > data/plot_conf_projx.dat
+# lo_str  up_str   offset_tag   scale  !  label
+none      none      no          lin    !   xval
+none      none      no          lin    !   oval
+none      none      no          lin    !   val
+none      none      no          lin    !   chi
+none      none      no          lin    !   ratio
+EOF
+
+cat << EOF > data/plot_conf_projy.dat
+# lo_str  up_str   offset_tag   scale  !  label
+none      none      no          lin    !   yval
+none      none      no          lin    !   oval
+none      none      no          lin    !   val
+none      none      no          lin    !   chi
+none      none      no          lin    !   ratio
+EOF
+
 
 $bindir/fit_func_chi2_2d \
 $data_file \
@@ -152,6 +174,8 @@ $func_name \
 $fitpar \
 $chi2par \
 $chi2cont_par \
+$plot_conf_projx_file \
+$plot_conf_projy_file \
 $outdir \
 $outfile_head
 

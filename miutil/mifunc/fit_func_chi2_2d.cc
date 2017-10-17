@@ -60,7 +60,7 @@ int main(int argc, char* argv[]){
     MirPlotConf* plot_conf_projy = new MirPlotConf;
     plot_conf_projx->Load(argval->GetPlotConfProjxFile());
     plot_conf_projy->Load(argval->GetPlotConfProjyFile());
-
+    
     //
     // chi2, chi2cont
     //

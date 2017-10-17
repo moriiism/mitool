@@ -24,7 +24,7 @@ void ArgValFitFuncChi22d::Init(int argc, char* argv[])
     SetOption(argc, argv, long_options);
     
     printf("ArgVal::Init: # of arg = %d\n", argc - optind);
-    int narg = 8;
+    int narg = 10;
     if (argc - optind != narg){
         printf("# of arguments must be %d.\n", narg);
         Usage(stdout);
@@ -33,7 +33,6 @@ void ArgValFitFuncChi22d::Init(int argc, char* argv[])
     data_file_      = argv[iarg]; iarg++;
     data_fmt_       = argv[iarg]; iarg++;
     func_name_      = argv[iarg]; iarg++;
-
     fitpar_         = argv[iarg]; iarg++;
     chi2par_        = argv[iarg]; iarg++;
     chi2cont_par_   = argv[iarg]; iarg++;
