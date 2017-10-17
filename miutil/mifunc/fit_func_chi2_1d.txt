@@ -105,11 +105,7 @@ cd ~/temp
 mkdir data
 
 bindir=$MITOOL/miutil/mifunc
-<<<<<<< HEAD
 # data_file=sim_func_rate_1d/Gauss1dPlusConstFunc_evt_fill_rate.dat
-=======
-#  data_file=sim_func_rate_1d/Gauss1dPlusConstFunc_evt_fill_rate.dat
->>>>>>> 48c9309aed30e511adb1e474da0723fed144be8c
 data_file=sim_func_rate_1d/try1_evt_fill_rate.dat
 data_fmt="x,xe,y,ye"
 func_name="Gauss1dPlusConstFunc"
@@ -147,19 +143,11 @@ EOF
 
 cat << EOF > data/plot_conf.dat
 # lo_str  up_str   offset_tag   scale  !  label
-<<<<<<< HEAD
-none  none   no    lin  ! temp
-none  none   no    lin  ! temp
-none  none   no    lin  ! temp
-none  none   no    lin  ! temp
-none  none   no    lin  ! temp
-=======
 none    none       no            lin   !  temp
 none    none       no            lin   !  temp
 none    none       no            lin   !  temp
 none    none       no            lin   !  temp
 none    none       no            lin   !  temp
->>>>>>> 48c9309aed30e511adb1e474da0723fed144be8c
 EOF
 
 
@@ -173,7 +161,3 @@ $chi2cont_par \
 $plot_conf_file \
 $outdir \
 $outfile_head
-
-
-
-_ZN4ROOT7Minuit214MinimumBuilderC2Ev
