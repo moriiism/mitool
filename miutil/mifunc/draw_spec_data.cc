@@ -4,7 +4,9 @@
 #include "mifc_gen.h"
 #include "mir_graph2d_serr.h"
 #include "mir_graph2d_terr.h"
+#include "mir_qdp_tool.h"
 #include "func_user.h"
+
 #include "arg_draw_spec_data.h"
 
 // global variable 
@@ -81,10 +83,13 @@ int main(int argc, char* argv[]){
             argval->GetSpecType().c_str());
     root_tool->GetTCanvas()->Update();
     root_tool->GetTCanvas()->Print(outfig);
-    
-    
-//    MirQdpTool::MkQdpDiff3(gdata2d, func, func_par,
-//                            argval->GetOutdir(), argval->GetOutfileHead());
+
+    int npoint_func = 1000;
+    MirQdpTool::MkQdpDiff3Serr(gdata2d, func, func_par->GetPar(),
+                               npoint_func,
+                               argval->GetOutdir(),
+                               argval->GetOutfileHead(),
+                               plot_conf);
 
     
     return status;

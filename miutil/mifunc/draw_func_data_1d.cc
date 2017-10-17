@@ -51,10 +51,10 @@ int main(int argc, char* argv[]){
     plot_conf->Print(stdout);
     root_tool->SetPlotConf(plot_conf);
 
-//    MirQdpTool::MkQdpDiff3(gdata2d, func, func_par->GetPar(),
-//                            argval->GetNpointFunc(),
-//                            argval->GetOutdir(), argval->GetOutfileHead(),
-//                            plot_conf);
+    MirQdpTool::MkQdpDiff3Serr(gdata2d, func, func_par->GetPar(),
+                               argval->GetNpointFunc(),
+                               argval->GetOutdir(), argval->GetOutfileHead(),
+                               plot_conf);
 
     //
     // plot by root

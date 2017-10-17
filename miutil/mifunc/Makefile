@@ -1,15 +1,13 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../miminuitlib/Makefile.in
 include ../../mifunclib/Makefile.in
 
-
 INCLUDE = ${FFTW_INC} $(HEADAS_INC) $(ROOT_INC) \
-	$(MIMINUITLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) 
-LDLIBS  = $(MIMINUITLIB_LIB) $(MIFUNCLIB_LIB)  $(MIROOTLIB_LIB) $(MILIB_LIB) \
-	$(HEADAS_LIB) $(ROOT_ALLLIBS) ${FFTW_LIB} $(LIB)
+	$(MIMINUITLIB_INC) $(MINUIT_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) 
+LDLIBS  = $(MIMINUITLIB_LIB) $(MINUIT_LIB) $(MIFUNCLIB_LIB)  $(MIROOTLIB_LIB) $(MILIB_LIB) \
+	$(HEADAS_LIB) $(ROOT_ALLLIBS) ${FFTW_LIB} $(LIB) -L/usr/lib/gcc/x86_64-redhat-linux/4.4.4 -lgomp
 
 OBJ = func_user.o
 

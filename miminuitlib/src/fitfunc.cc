@@ -40,17 +40,12 @@ ROOT::Minuit2::FunctionMinimum FitFunc::GenExecFit(MinFcn* const minfcn,
                                            as_npar);
     minfcn->SetErrorDef(up_minfcn);
     int strategy = 1;
+    std::cout << upar << std::endl;
 
-//    TMinuit* minuit = new TMinuit;
-//    minuit->SetFCN( minfcn->MinFcn::Eval );
-//    minuit->Migrad();
-
-    
-    // std::cout << upar << std::endl;
     ROOT::Minuit2::MnMigrad migrad(*minfcn, upar, strategy);
     ROOT::Minuit2::FunctionMinimum function_minimum = migrad(maxfcn, tolerance);
     ROOT::Minuit2::MnUserParameters upar_out = migrad.Parameters();
-
+    
     //
     // check best par whether it is pegged or not
     //

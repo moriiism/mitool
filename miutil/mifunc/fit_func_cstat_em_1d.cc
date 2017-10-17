@@ -86,16 +86,6 @@ int main(int argc, char* argv[])
         func_par_arr[ifunc]->Load(par_file_arr[ifunc]);
     }
 
-
-    
-
-
-
-
-    
-
-
-    
     //
     // fit result
     //

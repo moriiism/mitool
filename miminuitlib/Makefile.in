@@ -6,3 +6,7 @@
 MIMINUITLIB_DIR := ${MITOOL_DIR}/miminuitlib
 MIMINUITLIB_INC := -I$(MIMINUITLIB_DIR)/include
 MIMINUITLIB_LIB := -L$(MIMINUITLIB_DIR)/lib -lmiminuitlib
+
+MINUIT_DIR := /soft/minuit2/5.34.14
+MINUIT_INC := -I${MINUIT_DIR}/include
+MINUIT_LIB := -L${MINUIT_DIR}/lib -lMinuit2
