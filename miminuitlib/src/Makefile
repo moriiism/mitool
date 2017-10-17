@@ -1,14 +1,13 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 include ../../miminuitlib/Makefile.in
 
-INCLUDE := $(MIMINUITLIB_INC) $(MIFUNCLIB_INC) \
+INCLUDE := $(MIMINUITLIB_INC) $(MINUIT_INC) $(MIFUNCLIB_INC) \
 	$(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC) $(MT_INC)
 
-TARGET := libmiminuitlib.a
+TARGET := libmiminuitlib.so
 
 OBJ := func_par_index.o \
 	chi2plot.o  fitfunc.o \

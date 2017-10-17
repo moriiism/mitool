@@ -16,7 +16,7 @@
 ##
 
 export MITOOL=/home/morii/work/github/moriiism/mitool
-export LD_LIBRARY_PATH=/soft/root/6.08.02/lib:/soft/gsl/2.3/lib:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/soft/minuit2/5.34.14/lib:/soft/root/6.08.02/lib:/soft/gsl/2.3/lib:/usr/lib/gcc/x86_64-redhat-linux/4.4.4:${LD_LIBRARY_PATH}
 export PATH=/soft/root/6.08.02/bin:${PATH}
 
 alias root="root -l"
@@ -29,6 +29,12 @@ HEADAS_VER=6.16
 export HEADAS=/soft/heasoft/heasoft-${HEADAS_VER}/x86_64-unknown-linux-gnu-libc2.12
 source $HEADAS/headas-init.sh
 export PGPLOT_TYPE=/xw
+
+
+# debug
+# export LD_LIBRARY_PATH=/soft/minuit2/5.34.14/lib:${LD_LIBRARY_PATH}
+
+
 
 ################################################################
 ################################################################
