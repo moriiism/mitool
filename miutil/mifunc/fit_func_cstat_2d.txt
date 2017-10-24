@@ -107,7 +107,9 @@ cd ~/temp
 mkdir data
 
 bindir=$MITOOL/miutil/mifunc
-data_file=sim_func_rate_2d/Gauss2dFunc_evt_fill_count.dat
+# data_file=sim_func_rate_2d/Gauss2dFunc_evt_fill_count.dat
+# data_file=sim_func_rate_2d/try1_evt_fill_count.dat
+data_file=sim_func_2d/try1_evt_fill_count.dat
 data_fmt="x,xe,y,ye,z,ze"
 func_name="Gauss2dFunc"
 fitpar=data/fitpar.dat
@@ -116,8 +118,9 @@ chi2par=data/chi2par.dat
 
 # chi2par=none
 chi2cont_par=none
-
 minfcn_name="CstatPhysFcn2d"
+plot_conf_projx_file=data/plot_conf_projx.dat
+plot_conf_projy_file=data/plot_conf_projy.dat
 outdir=fit_func_cstat_2d
 outfile_head=$func_name
 
@@ -127,8 +130,8 @@ sigma_xp         1.0      -0.01       none         none          1              
 sigma_yp         1.0      -0.01       none         none          1                0
 norm          1000.0       0.01       0            1e5          1                0
 rot_angle        0.0      -0.01       none         none          1                0
-mu_xp            5.0      -0.01       none         none          1                0
-mu_yp            5.0      -0.01       none         none          1                0
+mu_xp            0.0      -0.01       none         none          1                0
+mu_yp            0.0      -0.01       none         none          1                0
 shift_z         10.0       0.01       0            1e5          1                0
 EOF
 
@@ -148,6 +151,24 @@ cat << EOF > data/chi2cont_par.dat
 0          50     none    none    3        1      50       none   none   3      others_free
 EOF
 
+cat << EOF > data/plot_conf_projx.dat
+# lo_str  up_str   offset_tag   scale  !  label
+none      none      no          lin    !   xval
+none      none      no          lin    !   oval
+none      none      no          lin    !   val
+none      none      no          lin    !   chi
+none      none      no          lin    !   ratio
+EOF
+
+cat << EOF > data/plot_conf_projy.dat
+# lo_str  up_str   offset_tag   scale  !  label
+none      none      no          lin    !   yval
+none      none      no          lin    !   oval
+none      none      no          lin    !   val
+none      none      no          lin    !   chi
+none      none      no          lin    !   ratio
+EOF
+
 
 $bindir/fit_func_cstat_2d \
 $data_file \
@@ -157,6 +178,8 @@ $fitpar \
 $chi2par \
 $chi2cont_par \
 $minfcn_name \
+$plot_conf_projx_file \
+$plot_conf_projy_file \
 $outdir \
 $outfile_head
 

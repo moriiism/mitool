@@ -196,8 +196,9 @@ https://root.cern.ch/
 % mkdir builddir
 % cd builddir
 % cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
-  -Dgsl_shared=ON -Dmathmore=ON -Dminuit2=ON -Drpath=ON -DGSL_DIR=/soft/gsl/2.3
+  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON -Dminuit2=ON -Drpath=ON -DGSL_DIR=/soft/gsl/2.3
 % cmake --build . 
+( or % make -j 6)
 % cmake --build . --target install
 
 % su root

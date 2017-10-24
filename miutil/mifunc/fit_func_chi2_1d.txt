@@ -162,7 +162,3 @@ $chi2cont_par \
 $plot_conf_file \
 $outdir \
 $outfile_head
-
-
-
-_ZN4ROOT7Minuit214MinimumBuilderC2Ev

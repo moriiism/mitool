@@ -61,11 +61,11 @@ cat << EOF > setup/par.dat
 # par_name  par
 sigma_xp  1.0
 sigma_yp  1.0
-norm       100.0
+norm       5000.0
 rot_angle  0.0
 mu_xp      0.0
 mu_yp      0.0
-shift_z    10.0
+shift_z    100.0
 EOF
 
 

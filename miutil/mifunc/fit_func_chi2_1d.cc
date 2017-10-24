@@ -13,10 +13,6 @@
 #include "func_user.h"
 #include "arg_fit_func_chi2_1d.h"
 
-//#include "Math/Minimizer.h"
-//#include "Math/Factory.h"
-//#include "Math/Functor.h"
-
 // global variable 
 int g_flag_debug = 0;
 int g_flag_help = 0;
@@ -47,8 +43,6 @@ int main(int argc, char* argv[]){
     MiIolib::Printf2(fp_log, "-----------------------------\n");
     argval->Print(fp_log);
 
-    printf("debug\n");
-    
     //
     // data
     //
