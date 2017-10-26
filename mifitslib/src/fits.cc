@@ -427,7 +427,6 @@ int MifFits::InFits4dD(string infile,
                      inc, NULL, data_arr, NULL, &status);
     fits_close_file(fptr_in, &status);
     fits_report_error(stderr, status);
-    
     for(long iarr = 0; iarr < npix_sub_vec; iarr++){
         if(isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;

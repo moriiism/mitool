@@ -2,6 +2,13 @@
 # Makefile.in
 #
 
+#### blas
+BLAS_LIB = -L/soft/blas/3.7.0/lib -lblas
+
+#### lapack
+LAPACK_LIB = -L/soft/lapack/3.7.0/lib -llapack -ltmglib -lgfortran
+
+
 ### gsl
 GSL_DIR := /soft/gsl/2.3
 GSL_INC := -I$(GSL_DIR)/include

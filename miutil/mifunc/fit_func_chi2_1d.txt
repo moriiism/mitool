@@ -98,16 +98,14 @@ chi2 で fit する。
 # example
 #
 
-# sim_func_rate_1d.txt で 作成した データを fitする。
+# sim_func_1d.txt で 作成した データを fitする。
 
 cd ~/temp
 
 mkdir data
 
 bindir=$MITOOL/miutil/mifunc
-# data_file=sim_func_rate_1d/Gauss1dPlusConstFunc_evt_fill_rate.dat
-# data_file=sim_func_rate_1d/Gauss1dPlusConstFunc_evt_fill_rate.dat
-data_file=sim_func_rate_1d/try1_evt_fill_rate.dat
+data_file=sim_func_1d/try1_evt_fill_count.dat
 data_fmt="x,xe,y,ye"
 func_name="Gauss1dPlusConstFunc"
 fitpar=data/fitpar.dat
