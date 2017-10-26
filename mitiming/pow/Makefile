@@ -1,14 +1,12 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
-include ../../miminuitlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MIMINUITLIB_INC) $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
-	$(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MIMINUITLIB_LIB) $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
-	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
+INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+        $(HEADAS_INC) $(ROOT_INC) $(MT_INC)
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) \
+        $(HEADAS_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
 TARGET = pow
 
@@ -31,10 +29,6 @@ pow: pow.o  arg_pow.o  sub.o
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

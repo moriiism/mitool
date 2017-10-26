@@ -150,10 +150,6 @@ test_solve: test_solve.o
 .cc.o:
 	${CXXN} -c $<
 
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
-
 clean:
 	-rm -f *.o
 

@@ -1,12 +1,11 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(MIFUNCLIB_INC) \
-	$(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC) $(MT_INC)
+INCLUDE := $(MITIMINGLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+	$(HEADAS_INC) $(ROOT_INC) $(MT_INC)
 
 TARGET := libmitiminglib.a
 
@@ -46,10 +45,6 @@ libmitiminglib.so: ${OBJ}
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o *.a *.so

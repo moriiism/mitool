@@ -1,4 +1,3 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 
@@ -37,10 +36,6 @@ libmilib.so: ${OBJ}
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o *.a *.so

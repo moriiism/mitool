@@ -1,15 +1,5 @@
 ALL = 
 
-all:
-	for dir in $(ALL); do \
-	(cd $$dir; ${MAKE} all); \
-	done
-
-install: all
-	for dir in $(ALL); do \
-	(cd $$dir; ${MAKE} install); \
-	done
-
 clean:
 	for dir in $(ALL); do \
 	(cd $$dir; ${MAKE} clean); \

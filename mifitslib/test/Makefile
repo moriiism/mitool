@@ -5,15 +5,13 @@ include ../../mifitslib/Makefile.in
 INCLUDE := $(MIFITSLIB_INC) $(MILIB_INC) $(MT_INC)
 LDLIBS  := $(MIFITSLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(LIB)
 
-# test passed using assert
-TARGET_PASS := 
-
-TARGET := $(TARGET_PASS)
+TARGET =
 
 all: $(TARGET)
 
-#test_vect: test_vect.o
-#	$(CXXN) $@.o ${LDLIBS} -o $@
+#test_base: test_base.o
+#       $(CXXN) $@.o ${LDLIBS} -o $@
+
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc
@@ -29,10 +27,6 @@ all: $(TARGET)
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

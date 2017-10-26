@@ -5,14 +5,11 @@ include ../../miblaslib/Makefile.in
 INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
 LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(LIB)
 
-# test passed using assert
-TARGET_PASS := 
+TARGET = 
 
-TARGET := $(TARGET_PASS)
+all: $(TARGET) 
 
-all: $(TARGET)
-
-#test_vect: test_vect.o
+#test_base: test_base.o
 #	$(CXXN) $@.o ${LDLIBS} -o $@
 
 .SUFFIXES:
@@ -29,10 +26,6 @@ all: $(TARGET)
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

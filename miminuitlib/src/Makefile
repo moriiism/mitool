@@ -4,8 +4,8 @@ include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 include ../../miminuitlib/Makefile.in
 
-INCLUDE := $(MIMINUITLIB_INC) $(MINUIT_INC) $(MIFUNCLIB_INC) \
-	$(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC) $(MT_INC)
+INCLUDE := $(MIMINUITLIB_INC) $(MIFUNCLIB_INC) \
+	$(MIROOTLIB_INC) $(MILIB_INC) $(ROOT_INC) $(MT_INC)
 
 TARGET := libmiminuitlib.a
 
@@ -46,10 +46,6 @@ libmiminuitlib.so: ${OBJ}
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o *.a *.so

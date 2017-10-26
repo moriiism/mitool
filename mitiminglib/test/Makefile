@@ -1,14 +1,15 @@
 include ../../Makefile.in
 include ../../milib/Makefile.in
-include ../../miblaslib/Makefile.in
+include ../../mirootlib/Makefile.in
+include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(LIB)
+INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+	$(HEADAS_INC) $(ROOT_INC) $(MT_INC)
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) \
+	$(HEADAS_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
-# test passed using assert
-TARGET_PASS := 
 
-TARGET := $(TARGET_PASS)
+TARGET := 
 
 all: $(TARGET)
 
@@ -29,10 +30,6 @@ all: $(TARGET)
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

@@ -1,18 +1,21 @@
-
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
-	$(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
-	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
+INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+        $(HEADAS_INC) $(ROOT_INC) $(MT_INC)
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) \
+        $(HEADAS_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
-TARGET = mklc
+TARGET = zn2  zn2_orbmod
 
 all: $(TARGET) 
 
-mklc: mklc.o  arg_mklc.o
+zn2: zn2.o  arg_zn2.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+zn2_orbmod: zn2_orbmod.o  arg_zn2_orbmod.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
 
 .SUFFIXES:
@@ -29,10 +32,6 @@ mklc: mklc.o  arg_mklc.o
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

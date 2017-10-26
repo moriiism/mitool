@@ -1,11 +1,10 @@
-
 include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 
-INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(ROOT_INC) \
-	$(MILIB_INC) $(MT_INC)
+INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) \
+	$(MILIB_INC) $(ROOT_INC) $(MT_INC)
 
 TARGET := libmifunclib.a
 
@@ -42,10 +41,6 @@ libmifunclib.so: ${OBJ}
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o *.a *.so

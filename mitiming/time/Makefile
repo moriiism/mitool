@@ -1,18 +1,27 @@
-
 include ../../Makefile.in
+include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(HEADAS_INC) $(ROOT_INC) \
-	$(MIROOTLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MITIMINGLIB_LIB) $(HEADAS_LIB) $(ROOT_ALLLIBS) \
-	$(MIROOTLIB_LIB) $(MILIB_LIB) $(LIB)
+INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+        $(HEADAS_INC) $(ROOT_INC) $(MT_INC)
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) \
+        $(HEADAS_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
-TARGET = mklc
+TARGET = tconv  tconv_da1d  tconv_gd2d  tconv_hd1d
 
 all: $(TARGET) 
 
-mklc: mklc.o  arg_mklc.o
+tconv: tconv.o  arg_tconv.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+tconv_da1d: tconv_da1d.o  arg_tconv_da1d.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+tconv_gd2d: tconv_gd2d.o  arg_tconv_gd2d.o
+	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
+
+tconv_hd1d: tconv_hd1d.o  arg_tconv_hd1d.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
 
 .SUFFIXES:
@@ -29,10 +38,6 @@ mklc: mklc.o  arg_mklc.o
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o

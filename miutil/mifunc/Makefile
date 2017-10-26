@@ -4,10 +4,8 @@ include ../../mirootlib/Makefile.in
 include ../../miminuitlib/Makefile.in
 include ../../mifunclib/Makefile.in
 
-INCLUDE = ${FFTW_INC} $(HEADAS_INC) $(ROOT_INC) \
-	$(MIMINUITLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) 
-LDLIBS  = $(MIMINUITLIB_LIB) $(MIFUNCLIB_LIB)  $(MIROOTLIB_LIB) $(MILIB_LIB) \
-	$(HEADAS_LIB) $(ROOT_ALLLIBS) ${FFTW_LIB} $(LIB)
+INCLUDE := $(MIMINUITLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) $(ROOT_INC) $(MT_INC)
+LDLIBS  := $(MIMINUITLIB_LIB) $(MIFUNCLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
 OBJ = func_user.o
 
@@ -32,11 +30,8 @@ TARGET = eval_1d  eval_2d \
 	fit_func_cstat_unbin_qp_1d \
 	fit_func_cstat_unbin_em_1d
 
-#	fit_func_cstat_unbin_qp_multi_1d \
-
-
-
-##test_func_unbin_ks_2d \
+## fit_func_cstat_unbin_qp_multi_1d \
+## test_func_unbin_ks_2d \
 
 
 all: $(TARGET) 
@@ -158,10 +153,6 @@ fit_func_chi2_qp_1d: fit_func_chi2_qp_1d.o  arg_fit_func_chi2_qp_1d.o ${OBJ}
 
 .cc.o:
 	${CXXN} -c $<
-
-install: all
-	if [ ! -d $(INST_BIN_DIR) ]; then mkdir $(INST_BIN_DIR); fi
-	install ${TARGET} ${INST_BIN_DIR}
 
 clean:
 	-rm -f *.o
