@@ -34,7 +34,9 @@ tail -f make_install.log
 (By root)
 # chown -R root /soft/cfitsio/3410
 
-
+If you have already installed HEASOFT in your PC through source compile,
+you need not install cfitsio in this step.
+You can link the cfitsio library included in HEASOFT.
 
 2. blas library
 
