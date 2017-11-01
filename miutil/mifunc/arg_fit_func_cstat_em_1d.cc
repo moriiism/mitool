@@ -26,21 +26,14 @@ void ArgValFitFuncCstatEm1d::Init(int argc, char* argv[])
     SetOption(argc, argv, long_options);
     
     printf("ArgVal::Init: # of arg = %d\n", argc - optind);
-    int narg = 10;
+    int narg = 5;
     if (argc - optind != narg){
         printf("# of arguments must be %d.\n", narg);
         Usage(stdout);
     }
     int iarg = optind;
     data_file_      = argv[iarg]; iarg++;
-    data_fmt_       = argv[iarg]; iarg++;
-    func_name_      = argv[iarg]; iarg++;
-
-    fitpar_         = argv[iarg]; iarg++;
-    chi2par_        = argv[iarg]; iarg++;
-    chi2cont_par_   = argv[iarg]; iarg++;
-    minfcn_name_    = argv[iarg]; iarg++;
-
+    func_par_list_  = argv[iarg]; iarg++;
     plot_conf_file_ = argv[iarg]; iarg++;
     outdir_         = argv[iarg]; iarg++;
     outfile_head_   = argv[iarg]; iarg++;
@@ -54,14 +47,7 @@ void ArgValFitFuncCstatEm1d::Print(FILE* fp) const
 
     fprintf(fp, "%s: progname_     : %s\n", __func__, progname_.c_str());
     fprintf(fp, "%s: data_file_    : %s\n", __func__, data_file_.c_str());
-    fprintf(fp, "%s: data_fmt_     : %s\n", __func__, data_fmt_.c_str());
-    fprintf(fp, "%s: func_name_    : %s\n", __func__, func_name_.c_str());
-
-    fprintf(fp, "%s: fitpar_       : %s\n", __func__, fitpar_.c_str());
-    fprintf(fp, "%s: chi2par_      : %s\n", __func__, chi2par_.c_str());
-    fprintf(fp, "%s: chi2cont_par_ : %s\n", __func__, chi2cont_par_.c_str());
-    fprintf(fp, "%s: minfcn_name_  : %s\n", __func__, minfcn_name_.c_str());
-
+    fprintf(fp, "%s: func_par_list_ : %s\n", __func__, func_par_list_.c_str());
     fprintf(fp, "%s: plot_conf_file_  : %s\n", __func__, plot_conf_file_.c_str());
     fprintf(fp, "%s: outdir_       : %s\n", __func__, outdir_.c_str());
     fprintf(fp, "%s: outfile_head_ : %s\n", __func__, outfile_head_.c_str());
@@ -78,13 +64,7 @@ void ArgValFitFuncCstatEm1d::Null()
 {
     progname_ = "";
     data_file_ = "";
-    data_fmt_ = "";
-    func_name_ = "";
-
-    fitpar_ = "";
-    chi2par_ = "";
-    chi2cont_par_ = "";
-    minfcn_name_ = "";
+    func_par_list_ = "";
     plot_conf_file_ = "";
     outdir_ = "";
     outfile_head_ = "";
@@ -160,7 +140,7 @@ void ArgValFitFuncCstatEm1d::Usage(FILE* fp) const
             "usage: %s [--help (0)] [--verbose (0)] [--debug (0)] "
             "[--plotmode (on)/off] [--printmode (on)/off] [--root_style (def)/std/pub/detail] "
             "[--npoint_func (500)] "
-            "data_file  data_fmt  func_name  fitpar  chi2par  chi2cont_par  minfcn_name "
+            "data_file  func_par_list "
             "plot_conf_file  outdir  outfile_head\n",
             progname_.c_str());
     abort();

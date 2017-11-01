@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     // data
     //
     GraphData2d* g2d = NULL;
-    g2d = GraphData2d::GenGd2dByLoad(argval->GetDataFile(), argval->GetDataFmt());
+    g2d = GraphData2dOpe::GenGd2dByLoad(argval->GetDataFile(), argval->GetDataFmt());
 
     //
     // function & parfile

@@ -8,6 +8,7 @@ mifunc
 
 <h1> mifunc </h1>
 
+
 <h2> 単純に関数の値を返す（値をEvaluateする）</h2>
 <a href="eval_1d.txt"> eval_1d.txt </a> (done: 2014.02.23) <br>
 <a href="eval_2d.txt"> eval_2d.txt </a> (done: 2014.02.23) <br>
@@ -48,7 +49,11 @@ mifunc
 <a href="sim_func_rate_2d.txt"> sim_func_rate_2d.txt </a>
 (count rate function, 2 dim) (done: 2014.02.27, 2014.09.27) <br>
 
-<h2> データを関数でfit する </h2>
+<br>
+<a href="sim_func_lincomb_rate_1d.txt"> sim_func_lincomb_rate_1d.txt </a>
+(count rate function, linear combination of functions, 1 dim) <br>
+
+<h2> データを関数でfit する  (By Minuit) </h2>
 
 <h3> 1データを1関数でfit する </h3>
 
@@ -90,6 +95,48 @@ mifunc
 <a href="fit_func_cstat_unbin_multi_2d.txt"> fit_func_cstat_unbin_multi_2d.txt </a>
 (c-stat, unbinned, 2 dim) <br>
 
+<h2> データを関数でfit する  (By EM) </h2>
+
+<h3> 1データを1関数でfit する </h3>
+
+<a href="fit_func_cstat_em_1d.txt"> fit_func_cstat_em_1d.txt </a>
+(c-stat, binned, 1 dim) <br>
+<a href="fit_func_cstat_em_2d.txt"> fit_func_cstat_em_2d.txt </a>
+(c-stat, binned, 2 dim) <br>
+<a href="fit_func_cstat_unbin_em_1d.txt"> fit_func_cstat_unbin_em_1d.txt </a> 
+(c-stat, unbinned, 1 dim) <br>
+<a href="fit_func_cstat_unbin_em_2d.txt"> fit_func_cstat_unbin_em_2d.txt </a> 
+(c-stat, unbinned, 2 dim) <br>
+
+<h3> NデータをN関数で同時 fit する (parameter共通) </h3>
+
+<a href="fit_func_cstat_em_multi_1d.txt"> fit_func_cstat_em_multi_1d.txt </a>
+(c-stat, binned, 1 dim) <br>
+<a href="fit_func_cstat_em_multi_2d.txt"> fit_func_cstat_em_multi_2d.txt </a>
+(c-stat, binned, 2 dim) <br>
+<a href="fit_func_cstat_unbin_em_multi_1d.txt"> fit_func_cstat_unbin_em_multi_1d.txt </a>
+(c-stat, unbinned, 1 dim) <br>
+<a href="fit_func_cstat_unbin_em_multi_2d.txt"> fit_func_cstat_unbin_em_multi_2d.txt </a>
+(c-stat, unbinned, 2 dim) <br>
+
+
+<h2> データを関数でfit する  (By QP) </h2>
+
+<h3> 1データを1関数でfit する </h3>
+
+<a href="fit_func_chi2_qp_1d.txt"> fit_func_chi2_qp_1d.txt </a>
+(chi2, binned, 1 dim) <br>
+<a href="fit_func_chi2_qp_2d.txt"> fit_func_chi2_qp_2d.txt </a>
+(chi2, binned, 2 dim) <br>
+
+<h3> NデータをN関数で同時 fit する (parameter共通) </h3>
+
+<a href="fit_func_chi2_qp_multi_1d.txt"> fit_func_chi2_qp_multi_1d.txt </a>
+(chi2, binned, 1 dim) <br>
+<a href="fit_func_chi2_qp_multi_2d.txt"> fit_func_chi2_qp_multi_2d.txt </a>
+(chi2, binned, 2 dim) <br>
+
+
 <h2> KS-test </h2>
 
 <a href="test_func_unbin_ks_1d.txt"> test_func_unbin_ks_1d.txt </a>
@@ -118,6 +165,11 @@ mifunc
 simulation のときは、error を考える必要があるから
 count rate function と count function を区別する必要がある。
 一方、draw するときには、区別する必要はない。
+
+<br>
+fit_func_chi2_svd_1d.cc <br>
+fit_func_cstat_unbin_qp_1d.cc  <br>
+fit_func_cstat_unbin_qp_multi_1d.cc <br>
 
 </body>
 </html>

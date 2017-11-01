@@ -227,6 +227,9 @@ source setup/setup.sh
 make > make.log 2>&1 &
 tail -f make.log
 
+make test > make_test.log 2>&1 &
+tail -f make_test.log
+
 # Check make.log and remove compile errors and warnings
 # If you find bugs, please contact with Mikio Morii.
 

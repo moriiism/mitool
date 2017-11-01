@@ -28,7 +28,8 @@ TARGET = eval_1d  eval_2d \
 	fit_func_chi2_qp_1d \
 	sim_func_lincomb_rate_1d \
 	fit_func_cstat_unbin_qp_1d \
-	fit_func_cstat_unbin_em_1d
+	fit_func_cstat_unbin_em_1d \
+	fit_func_cstat_em_1d
 
 ## fit_func_cstat_unbin_qp_multi_1d \
 ## test_func_unbin_ks_2d \
@@ -96,6 +97,8 @@ fit_func_chi2_asym_2d: fit_func_chi2_asym_2d.o  arg_fit_func_chi2_asym_2d.o ${OB
 fit_func_cstat_1d: fit_func_cstat_1d.o  arg_fit_func_cstat_1d.o ${OBJ}
 	$(CXXN) $@.o arg_$@.o ${OBJ} ${LDLIBS} -o $@
 
+fit_func_cstat_em_1d: fit_func_cstat_em_1d.o  arg_fit_func_cstat_em_1d.o ${OBJ}
+	$(CXXN) $@.o arg_$@.o ${OBJ} ${LDLIBS} -o $@
 
 fit_func_cstat_2d: fit_func_cstat_2d.o  arg_fit_func_cstat_2d.o ${OBJ}
 	$(CXXN) $@.o arg_$@.o ${OBJ} ${LDLIBS} -o $@
