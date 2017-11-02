@@ -273,7 +273,7 @@ namespace HistData2dOpe
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
     double FindMdYbyEdge(const HistDataNerr2d* const hd2d);
 
-    // calc_mode : "add", "integral", "amean", "min", "max"
+    // calc_mode : "add", "integral", "amean", "min", "max",  "stddev"
     // error_mode: gauss, poisson, zero    
     void GetProjectX(const HistData2d* const in,
                      long ibin_ylo, long ibin_yup,
@@ -293,7 +293,7 @@ namespace HistData2dOpe
                      string calc_mode, string error_mode,
                      HistDataSerr1d* const out);
 
-    // calc_mode: "add", "integral", "amean", "min", "max"
+    // calc_mode: "add", "integral", "amean", "min", "max", "stddev"
     // error_mode: gauss, poisson, zero    
     void GetProject(long ndata,
                     const double* const array,

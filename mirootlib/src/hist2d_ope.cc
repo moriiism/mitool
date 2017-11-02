@@ -1323,6 +1323,8 @@ void HistData2dOpe::GetProject(long ndata,
         val_proj = MirMath::GetMin(ndata, array);
     } else if ("max" == calc_mode){
         val_proj = MirMath::GetMax(ndata, array);
+    } else if ("stddev" == calc_mode){
+        val_proj = MirMath::GetStddev(ndata, array);
     } else {
         MPrintErr("bad calc_mode");
         abort();

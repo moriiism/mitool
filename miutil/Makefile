@@ -1,5 +1,6 @@
 BINS =  micsv2tree  milcinfo  minfold  milcwin  \
-	mifunc rad4d2img  miselcol  milcsim  miselimgline
+	mifunc rad4d2img  miselcol  milcsim  miselimgline \
+	migetsigda1d  miselimg_zeroline
 
 SUBDIR = $(BINS)
 
