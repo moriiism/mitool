@@ -1,0 +1,25 @@
+#
+# miselimgline.txt
+#
+
+Select lines from a fits image
+
+### example
+
+source ~/work/github/moriiism/mitool/setup/setup.sh 
+
+infile=../17103001/out/test/hz6/source_spw2_20km/r050/n1.0e+06/out_L_V.fits
+row_or_col="row"
+line_st=0
+line_ed=4
+outdir=imgline/test/hz6/source_spw2_20km/r050/n1.0e+06/out_L_V
+outfile_head=out
+
+/home/morii/work/github/moriiism/mitool/miutil/miselimgline/miselimgline \
+${infile} \
+${row_or_col} \
+${line_st} \
+${line_ed} \
+${outdir} \
+${outfile_head}
+

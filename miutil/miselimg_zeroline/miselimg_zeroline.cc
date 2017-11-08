@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     double* X_mat = NULL;
     int bitpix = 0;
     MifFits::InFitsImageD(argval->GetInfile(),
-                        img_info, &bitpix, &X_mat);
+                          img_info, &bitpix, &X_mat);
 
     HistDataNerr2d* hd2d = new HistDataNerr2d;
     hd2d->Init(dimx, 0, dimx, dimy, 0, dimy);
@@ -131,6 +131,8 @@ int main(int argc, char* argv[])
         abort();
     }
 
+
+    // make png
     char outfig_mask2d[kLineSize];
     sprintf(outfig_mask2d, "%s/%s_mask2d.png",
             argval->GetOutdir().c_str(),
@@ -150,7 +152,7 @@ int main(int argc, char* argv[])
             argval->GetRowOrCol().c_str());
     hd1d_stddev->MkTH1Fig(outfig_stddev, root_tool, 0.0, 0.0);
 
-
+    // data
     char out_mask1d[kLineSize];
     sprintf(out_mask1d, "%s/%s_mask1d.dat",
             argval->GetOutdir().c_str(),
@@ -162,6 +164,20 @@ int main(int argc, char* argv[])
             argval->GetOutdir().c_str(),
             argval->GetOutfileHead().c_str());
     hd1d_mask->GetOvalArr()->Save(out_mask1d_da1d, 1, 0.0);
+
+    char out_mask2d[kLineSize];
+    sprintf(out_mask2d, "%s/%s_mask2d.dat",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    hd2d_mask->Save(out_mask2d, "x,y,z");
+
+    MifFits::OutFitsImageD(argval->GetOutdir(),
+                           argval->GetOutfileHead(),
+                           "mask2d",
+                           naxis,
+                           bitpix,
+                           img_info->GetNaxesArr(),
+                           hd2d_mask->GetOvalArr()->GetVal());
     
     return status_prog;
 }
