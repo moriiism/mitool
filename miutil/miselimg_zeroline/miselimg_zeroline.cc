@@ -165,6 +165,12 @@ int main(int argc, char* argv[])
             argval->GetOutfileHead().c_str());
     hd1d_mask->GetOvalArr()->Save(out_mask1d_da1d, 1, 0.0);
 
+    char out_mask1d_hd1d[kLineSize];
+    sprintf(out_mask1d_hd1d, "%s/%s_mask1d_hd1d.dat",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    hd1d_mask->Save(out_mask1d_hd1d, "x,y", 0.0);
+    
     char out_mask2d[kLineSize];
     sprintf(out_mask2d, "%s/%s_mask2d.dat",
             argval->GetOutdir().c_str(),

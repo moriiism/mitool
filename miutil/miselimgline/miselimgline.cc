@@ -4,6 +4,7 @@
 #include "mif_fits.h"
 #include "mif_img_info.h"
 #include "mir_root_tool.h"
+#include "mir_hist1d_nerr.h"
 #include "mir_hist2d_nerr.h"
 #include "arg_miselimgline.h"
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
     double* X_mat = NULL;
     int bitpix = 0;
     MifFits::InFitsImageD(argval->GetInfile(),
-                        img_info, &bitpix, &X_mat);
+                          img_info, &bitpix, &X_mat);
 
     HistDataNerr2d* hd2d = new HistDataNerr2d;
     hd2d->Init(dimx, 0, dimx, dimy, 0, dimy);
@@ -67,13 +68,17 @@ int main(int argc, char* argv[])
 
     int nline = argval->GetLineEd() - argval->GetLineSt() + 1;
     DataArrayNerr1d** da1d_arr = new DataArrayNerr1d* [nline];
+    HistDataNerr1d** hd1d_arr = new HistDataNerr1d* [nline];
     if("row" == argval->GetRowOrCol()){
         for(long iline = 0; iline < nline; iline++){
             long ibiny = argval->GetLineSt() + iline;
             da1d_arr[iline] = new DataArrayNerr1d;
             da1d_arr[iline]->Init(dimx);
+            hd1d_arr[iline] = new HistDataNerr1d;
+            hd1d_arr[iline]->Init(dimx, 0, dimx);
             for(long ibinx = 0; ibinx < dimx; ibinx ++){
                 da1d_arr[iline]->SetValElm(ibinx, hd2d->GetOvalElm(ibinx, ibiny));
+                hd1d_arr[iline]->SetOvalElm(ibinx, hd2d->GetOvalElm(ibinx, ibiny));
             }
         }
     } else if("col" == argval->GetRowOrCol()){
@@ -81,8 +86,11 @@ int main(int argc, char* argv[])
             long ibinx = argval->GetLineSt() + iline;
             da1d_arr[iline] = new DataArrayNerr1d;
             da1d_arr[iline]->Init(dimy);
+            hd1d_arr[iline] = new HistDataNerr1d;
+            hd1d_arr[iline]->Init(dimy, 0, dimy);
             for(long ibiny = 0; ibiny < dimy; ibiny ++){
                 da1d_arr[iline]->SetValElm(ibiny, hd2d->GetOvalElm(ibinx, ibiny));
+                hd1d_arr[iline]->SetOvalElm(ibiny, hd2d->GetOvalElm(ibinx, ibiny));
             }
         }
     } else {
@@ -92,13 +100,22 @@ int main(int argc, char* argv[])
 
     for(int iline = 0; iline < nline; iline ++){
         char outfile[kLineSize];
-        sprintf(outfile, "%s/%s_%s_%3.3d.dat",
+        sprintf(outfile, "%s/%s_%s_da1d_%3.3d.dat",
                 argval->GetOutdir().c_str(),
                 argval->GetOutfileHead().c_str(),
                 argval->GetRowOrCol().c_str(),
                 iline);
         printf("%s\n", outfile);
         da1d_arr[iline]->Save(outfile, 1, 0.0);
+
+        char outfile_hist[kLineSize];
+        sprintf(outfile_hist, "%s/%s_%s_hd1d_%3.3d.dat",
+                argval->GetOutdir().c_str(),
+                argval->GetOutfileHead().c_str(),
+                argval->GetRowOrCol().c_str(),
+                iline);
+        printf("%s\n", outfile_hist);
+        hd1d_arr[iline]->Save(outfile_hist, "x,y");
     }
     
     return status_prog;

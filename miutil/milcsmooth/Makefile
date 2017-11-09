@@ -2,15 +2,16 @@ include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mifitslib/Makefile.in
 include ../../mirootlib/Makefile.in
+include ../../mifunclib/Makefile.in
 
-INCLUDE := $(MIROOTLIB_INC) $(MIFITSLIB_INC) $(MILIB_INC) $(ROOT_INC) $(CFITSIO_INC) $(MT_INC)
-LDLIBS  := $(MIROOTLIB_LIB) $(MIFITSLIB_LIB) $(MILIB_LIB) $(ROOT_ALLLIBS) $(CFITSIO_LIB) $(MT_LIB) $(LIB)
+INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MIFITSLIB_INC) $(MILIB_INC) $(ROOT_INC) $(CFITSIO_INC) $(MT_INC)
+LDLIBS  := $(MIFUNCLIB_LIB) $(MIROOTLIB_LIB) $(MIFITSLIB_LIB) $(MILIB_LIB) $(ROOT_ALLLIBS) $(CFITSIO_LIB) $(MT_LIB) $(LIB)
 
-TARGET = migetsigimg
+TARGET = milcsmooth
 
 all: $(TARGET) 
 
-migetsigimg: migetsigimg.o  arg_migetsigimg.o
+milcsmooth: milcsmooth.o  arg_milcsmooth.o
 	$(CXXN) $@.o arg_$@.o ${LDLIBS} -o $@
 
 .SUFFIXES:

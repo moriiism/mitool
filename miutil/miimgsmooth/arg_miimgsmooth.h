@@ -1,20 +1,21 @@
-#ifndef MORIIISM_MITOOL_MIUTIL_MIGETSIGIMG_ARG_MIGETSIGIMG_H_
-#define MORIIISM_MITOOL_MIUTIL_MIGETSIGIMG_ARG_MIGETSIGIMG_H_
+#ifndef MORIIISM_MITOOL_MIUTIL_MIIMGSMOOTH_ARG_MIIMGSMOOTH_H_
+#define MORIIISM_MITOOL_MIUTIL_MIIMGSMOOTH_ARG_MIIMGSMOOTH_H_
 
 #include "mi_base.h"
 
-class ArgValMigetsigimg : public MiArgBase{
+class ArgValMiimgsmooth : public MiArgBase{
 public:
-    ArgValMigetsigimg() :
+    ArgValMiimgsmooth() :
         MiArgBase(),
         progname_(""),
         infile_(""),
         infile_mask_(""),
-        significance_(0.0),
-        radius_(0.0),
+        func_(""),
+        par_file_(""),
+        nbin_kernel_half_(0),
         outdir_(""),
         outfile_head_("") {}
-    ~ArgValMigetsigimg(){
+    ~ArgValMiimgsmooth(){
         Null();
     }
     void Init(int argc, char* argv[]);
@@ -23,8 +24,9 @@ public:
     string GetProgname() const {return progname_;};
     string GetInfile()   const {return infile_;};
     string GetInfileMask()   const {return infile_mask_;};
-    double GetSignificance() const {return significance_;};
-    double GetRadius() const {return radius_;};
+    string GetFunc()   const {return func_;};
+    string GetParFile()   const {return par_file_;};    
+    int    GetNbinKernelHalf() const {return nbin_kernel_half_;};
     string GetOutdir() const {return outdir_;};
     string GetOutfileHead()   const {return outfile_head_;};
 
@@ -32,8 +34,9 @@ private:
     string progname_;
     string infile_;
     string infile_mask_;
-    double significance_;
-    double radius_;
+    string func_;
+    string par_file_;
+    int    nbin_kernel_half_;
     string outdir_;
     string outfile_head_;
 
@@ -42,4 +45,4 @@ private:
     void Usage(FILE* fp) const;
 };
 
-#endif // MORIIISM_MITOOL_MIUTIL_MIGETSIGIMG_ARG_MIGETSIGIMG_H_
+#endif // MORIIISM_MITOOL_MIUTIL_MIIMGSMOOTH_ARG_MIIMGSMOOTH_H_
