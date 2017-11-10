@@ -15,7 +15,7 @@ int g_flag_verbose = 0;
 
 int main(int argc, char* argv[]){
     int status = kRetNormal;
-  
+
     ArgValMigetsigimg* argval = new ArgValMigetsigimg;
     argval->Init(argc, argv);
 
@@ -173,6 +173,12 @@ int main(int argc, char* argv[]){
                            hd2d_sig->GetOvalArr()->GetVal());
 
     // numbering
+    char detsrcfile[kLineSize];
+    sprintf(detsrcfile, "%s/%s_src.txt",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    FILE* fp_src = fopen(detsrcfile, "w");
+    
     int niter = 10;
     HistDataNerr2d* hd2d_sig_with_mask = new HistDataNerr2d;
     hd2d_sig_with_mask->Copy(hd2d_sig);
@@ -185,13 +191,48 @@ int main(int argc, char* argv[]){
         if(sig_most < argval->GetSignificance()){
             break;
         }
-        MiIolib::Printf2(fp_log, "%3d: %e sigma src @ (%e, %e) \n", iiter, sig_most, xval_most_sig, yval_most_sig);        
+        MiIolib::Printf2(fp_log, "%3d: %e sigma src @ (%e, %e) \n",
+                         iiter, sig_most, xval_most_sig, yval_most_sig);
+        fprintf(fp_src, "%3d: %e sigma src @ (%e, %e) in %s\n",
+                iiter, sig_most, xval_most_sig, yval_most_sig, argval->GetInfile().c_str());
+
+        // calc radius
+        HistDataNerr1d* hd1d_rad = new HistDataNerr1d;
+        long nbin_rad = (long) MirMath::GetMin(hd2d->GetXvalFullWidth(), hd2d->GetYvalFullWidth()) / 2.;
+        double rad_lo = 0.0;
+        double rad_up = (double) nbin_rad;
+        hd1d_rad->Init(nbin_rad, rad_lo, rad_up);
+        for(long ibin = 0; ibin < hd2d_sig_with_mask->GetNbin(); ibin++){
+            if(hd2d_mask_src->GetOvalArr()->GetValElm(ibin) > 0){
+                double xval = hd2d_sig_with_mask->GetHi2d()->GetBinCenterXFromIbin(ibin);
+                double yval = hd2d_sig_with_mask->GetHi2d()->GetBinCenterYFromIbin(ibin);
+                double rad = sqrt( pow(xval - xval_most_sig, 2) +
+                                   pow(yval - yval_most_sig, 2) );
+                if(fabs(hd2d_sig_with_mask->GetOvalArr()->GetValElm(ibin) - mean)
+                   > argval->GetSignificance()){
+                    if(rad_lo <= rad && rad <= rad_up){
+                        hd1d_rad->Fill(rad);
+                    }
+                }
+            }
+        }
+        double radius = 0.0;
+        for(long ibin_rad = 0; ibin_rad < nbin_rad; ibin_rad ++){
+            if(hd1d_rad->GetOvalElm(ibin_rad) < 1){
+                break;
+            }
+            radius = (ibin_rad + 1) * 1.0;
+        }
+        delete hd1d_rad;
+
+        printf("radius = %e\n", radius);
+        
         // mask circle area around this src
         for(long ibin = 0; ibin < hd2d_mask_src->GetNbin(); ibin++){
             double xval = hd2d_mask_src->GetHi2d()->GetBinCenterXFromIbin(ibin);
             double yval = hd2d_mask_src->GetHi2d()->GetBinCenterYFromIbin(ibin);
-            if(argval->GetRadius() > sqrt( pow(xval - xval_most_sig, 2) +
-                                           pow(yval - yval_most_sig, 2) ) ){
+            if(radius > sqrt( pow(xval - xval_most_sig, 2) +
+                              pow(yval - yval_most_sig, 2) ) ){
                 hd2d_mask_src->SetOvalElm(hd2d_mask_src->GetHi2d()->GetIbinX(ibin),
                                           hd2d_mask_src->GetHi2d()->GetIbinY(ibin),
                                           0);
@@ -201,6 +242,8 @@ int main(int argc, char* argv[]){
             }
         }
     }
+    fclose(fp_src);
+    
 
     MifFits::OutFitsImageD(argval->GetOutdir(),
                            argval->GetOutfileHead(),

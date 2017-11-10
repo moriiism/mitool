@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
         naxes[0] = dimx;
         naxes[1] = dimy;
         char tag[kLineSize];
-        sprintf(tag, "frame_%3.3d", index_frame);
+        sprintf(tag, "frame_%3.3d", iframe);
         MifFits::OutFitsImageD(argval->GetOutdir(),
                                argval->GetOutfileHead(),
                                tag, 2, bitpix,
