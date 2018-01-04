@@ -164,6 +164,18 @@ int main(int argc, char* argv[]){
         }
     }
 
+    HistDataNerr2d* hd2d_sig_signed = new HistDataNerr2d;
+    hd2d_sig_signed->Init(dimx, 0, dimx, dimy, 0, dimy);
+    for(long ibin = 0; ibin < hd2d_sig_signed->GetNbin(); ibin++){
+        if( hd2d_mask->GetOvalArr()->GetValElm(ibin) > 0){
+            double sig = ( hd2d->GetOvalArr()->GetValElm(ibin) - mean) / stddev;
+            hd2d_sig_signed->SetOvalElm(hd2d_sig->GetHi2d()->GetIbinX(ibin),
+                                        hd2d_sig->GetHi2d()->GetIbinY(ibin),
+                                        sig);
+        }
+    }
+
+    
     MifFits::OutFitsImageD(argval->GetOutdir(),
                            argval->GetOutfileHead(),
                            "sigmap",
@@ -172,12 +184,28 @@ int main(int argc, char* argv[]){
                            img_info->GetNaxesArr(),
                            hd2d_sig->GetOvalArr()->GetVal());
 
+    MifFits::OutFitsImageD(argval->GetOutdir(),
+                           argval->GetOutfileHead(),
+                           "sigmap_signed",
+                           naxis,
+                           bitpix,
+                           img_info->GetNaxesArr(),
+                           hd2d_sig_signed->GetOvalArr()->GetVal());
+
+    
     // numbering
     char detsrcfile[kLineSize];
     sprintf(detsrcfile, "%s/%s_src.txt",
             argval->GetOutdir().c_str(),
             argval->GetOutfileHead().c_str());
     FILE* fp_src = fopen(detsrcfile, "w");
+
+    char detsrcfile_signed[kLineSize];
+    sprintf(detsrcfile_signed, "%s/%s_src_signed.txt",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    FILE* fp_src_signed = fopen(detsrcfile_signed, "w");
+
     
     int niter = 10;
     HistDataNerr2d* hd2d_sig_with_mask = new HistDataNerr2d;
@@ -188,6 +216,8 @@ int main(int argc, char* argv[]){
         double sig_most = hd2d_sig_with_mask->GetOvalArr()->GetValMax();
         double xval_most_sig = hd2d_sig_with_mask->GetXvalAtOvalMax();
         double yval_most_sig = hd2d_sig_with_mask->GetYvalAtOvalMax();
+        double sig_most_signed = hd2d_sig_signed->GetOvalElmAtXY(xval_most_sig, yval_most_sig);
+        
         if(sig_most < argval->GetSignificance()){
             break;
         }
@@ -195,6 +225,8 @@ int main(int argc, char* argv[]){
                          iiter, sig_most, xval_most_sig, yval_most_sig);
         fprintf(fp_src, "%3d: %e sigma src @ (%e, %e) in %s\n",
                 iiter, sig_most, xval_most_sig, yval_most_sig, argval->GetInfile().c_str());
+        fprintf(fp_src_signed, "%3d: %e sigma src @ (%e, %e) in %s\n",
+                iiter, sig_most_signed, xval_most_sig, yval_most_sig, argval->GetInfile().c_str());
 
         // calc radius
         HistDataNerr1d* hd1d_rad = new HistDataNerr1d;
@@ -208,7 +240,7 @@ int main(int argc, char* argv[]){
                 double yval = hd2d_sig_with_mask->GetHi2d()->GetBinCenterYFromIbin(ibin);
                 double rad = sqrt( pow(xval - xval_most_sig, 2) +
                                    pow(yval - yval_most_sig, 2) );
-                if(fabs(hd2d_sig_with_mask->GetOvalArr()->GetValElm(ibin) - mean)
+                if(fabs(hd2d_sig_with_mask->GetOvalArr()->GetValElm(ibin))
                    > argval->GetSignificance()){
                     if(rad_lo <= rad && rad <= rad_up){
                         hd1d_rad->Fill(rad);
@@ -243,6 +275,7 @@ int main(int argc, char* argv[]){
         }
     }
     fclose(fp_src);
+    fclose(fp_src_signed);
     
 
     MifFits::OutFitsImageD(argval->GetOutdir(),

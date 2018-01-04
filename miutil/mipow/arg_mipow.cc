@@ -1,10 +1,10 @@
-#include "arg_migetsighd1d.h"
+#include "arg_mipow.h"
 
 // public
 
-void ArgValMigetsighd1d::Init(int argc, char* argv[])
+void ArgValMipow::Init(int argc, char* argv[])
 {
-    progname_ = "migetsighd1d";
+    progname_ = "mipow";
 
     option long_options[] = {
         {"debug",      required_argument, NULL, 'd'},
@@ -19,22 +19,19 @@ void ArgValMigetsighd1d::Init(int argc, char* argv[])
     if(0 < g_flag_verbose){
         printf("ArgVal::Init: # of arg = %d\n", argc - optind);
     }
-    int narg = 7;
+    int narg = 4;
     if (argc - optind != narg){
         printf("# of arguments must be %d.\n", narg);
         Usage(stdout);
     }
     int iarg = optind;
     infile_       = argv[iarg]; iarg++;
-    infile_mask_  = argv[iarg]; iarg++;
-    significance_ = atof(argv[iarg]); iarg++;
-    nclip_        = atoi(argv[iarg]); iarg++;
-    half_width_   = atof(argv[iarg]); iarg++;
+    format_       = argv[iarg]; iarg++;
     outdir_       = argv[iarg]; iarg++;
     outfile_head_ = argv[iarg]; iarg++;    
 }
 
-void ArgValMigetsighd1d::Print(FILE* fp) const
+void ArgValMipow::Print(FILE* fp) const
 {
     fprintf(fp, "%s: g_flag_debug   : %d\n", __func__, g_flag_debug);
     fprintf(fp, "%s: g_flag_help    : %d\n", __func__, g_flag_help);
@@ -42,27 +39,21 @@ void ArgValMigetsighd1d::Print(FILE* fp) const
     
     fprintf(fp, "%s: progname_      : %s\n", __func__, progname_.c_str());
     fprintf(fp, "%s: infile_        : %s\n", __func__, infile_.c_str());
-    fprintf(fp, "%s: infile_mask_   : %s\n", __func__, infile_mask_.c_str());    
-    fprintf(fp, "%s: significance_  : %e\n", __func__, significance_);
-    fprintf(fp, "%s: nclip_         : %d\n", __func__, nclip_);
-    fprintf(fp, "%s: half_width_    : %e\n", __func__, half_width_);
+    fprintf(fp, "%s: format_        : %s\n", __func__, format_.c_str());
     fprintf(fp, "%s: outdir_        : %s\n", __func__, outdir_.c_str());
     fprintf(fp, "%s: outfile_head_  : %s\n", __func__, outfile_head_.c_str());    
 }
 
-void ArgValMigetsighd1d::Null()
+void ArgValMipow::Null()
 {
     progname_     = "";
     infile_       = "";
-    infile_mask_  = "";    
-    significance_ = 0.0;
-    nclip_        = 0;
-    half_width_   = 0.0;
+    format_       = "";
     outdir_       = "";
     outfile_head_ = "";    
 }
 
-void ArgValMigetsighd1d::SetOption(int argc, char* argv[], option* long_options)
+void ArgValMipow::SetOption(int argc, char* argv[], option* long_options)
 {
     if(0 < g_flag_verbose){
         MPrintInfo("start...");
@@ -113,11 +104,11 @@ void ArgValMigetsighd1d::SetOption(int argc, char* argv[], option* long_options)
     }
 }
 
-void ArgValMigetsighd1d::Usage(FILE* fp) const
+void ArgValMipow::Usage(FILE* fp) const
 {
     fprintf(fp,
             "usage: %s [--help (0)] [--verbose (0)] [--debug (0)] "
-            "infile  infile_mask  significance  nclip  half_width  outdir  outfile_head \n",
+            "infile  format  outdir  outfile_head \n",
             progname_.c_str());
     exit(1);
 }

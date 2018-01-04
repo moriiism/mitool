@@ -102,18 +102,39 @@ int main(int argc, char* argv[]){
         }
     }
 
+    HistDataNerr1d* hd1d_sig_signed = new HistDataNerr1d;
+    hd1d_sig_signed->Init(hd1d->GetHi1d());
+    for(long ibin = 0; ibin < hd1d_sig_signed->GetNbinX(); ibin++){
+        if( hd1d_mask->GetOvalArr()->GetValElm(ibin) > 0){
+            double sig = (hd1d->GetOvalArr()->GetValElm(ibin) - mean) / stddev;
+            hd1d_sig_signed->SetOvalElm(ibin, sig);
+        }
+    }
+
     char outfile_sig[kLineSize];
     sprintf(outfile_sig, "%s/%s_sig.dat",
             argval->GetOutdir().c_str(),
             argval->GetOutfileHead().c_str());
     hd1d_sig->Save(outfile_sig, "x,y");
 
+    char outfile_sig_signed[kLineSize];
+    sprintf(outfile_sig_signed, "%s/%s_sig_signed.dat",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    hd1d_sig_signed->Save(outfile_sig_signed, "x,y");
+    
     // numbering
     char detsrcfile[kLineSize];
     sprintf(detsrcfile, "%s/%s_src.txt",
             argval->GetOutdir().c_str(),
             argval->GetOutfileHead().c_str());
     FILE* fp_src = fopen(detsrcfile, "w");
+
+    char detsrcfile_signed[kLineSize];
+    sprintf(detsrcfile_signed, "%s/%s_src_signed.txt",
+            argval->GetOutdir().c_str(),
+            argval->GetOutfileHead().c_str());
+    FILE* fp_src_signed = fopen(detsrcfile_signed, "w");
     
     int niter = 10;
     HistDataNerr1d* hd1d_sig_with_mask = new HistDataNerr1d;
@@ -123,6 +144,7 @@ int main(int argc, char* argv[]){
     for(int iiter = 0; iiter < niter; iiter++){
         double sig_most = hd1d_sig_with_mask->GetOvalArr()->GetValMax();
         double xval_most_sig = hd1d_sig_with_mask->GetXvalAtOvalMax();
+        double sig_most_signed = hd1d_sig_signed->GetOvalElmAtX(xval_most_sig);
         if(sig_most < argval->GetSignificanceSrc()){
             break;
         }
@@ -130,7 +152,9 @@ int main(int argc, char* argv[]){
                          iiter, sig_most, xval_most_sig);
         fprintf(fp_src, "%3d: %e sigma src @ %e in %s\n",
                 iiter, sig_most, xval_most_sig, argval->GetInfile().c_str());
-
+        fprintf(fp_src_signed, "%3d: %e sigma src @ %e in %s\n",
+                iiter, sig_most_signed, xval_most_sig, argval->GetInfile().c_str());
+        
         // calc half width
         HistDataNerr1d* hd1d_hwidth = new HistDataNerr1d;
         long nbin_hwidth = (long) hd1d->GetXvalFullWidth() / 2.;
@@ -141,7 +165,7 @@ int main(int argc, char* argv[]){
             if(hd1d_mask_src->GetOvalElm(ibin) > 0){
                 double xval = hd1d_sig_with_mask->GetHi1d()->GetBinCenter(ibin);
                 double hwidth = fabs(xval - xval_most_sig);
-                if(fabs(hd1d_sig_with_mask->GetOvalElm(ibin) - mean)
+                if(fabs(hd1d_sig_with_mask->GetOvalElm(ibin))
                    > argval->GetSignificanceSrc()){
                     if(hwidth_lo <= hwidth && hwidth <= hwidth_up){
                         hd1d_hwidth->Fill(hwidth);
@@ -158,8 +182,6 @@ int main(int argc, char* argv[]){
         }
         delete hd1d_hwidth;
 
-        printf("hwidth = %e\n", hwidth);
-        
         // mask half width area around this src
         for(long ibin = 0; ibin < hd1d_mask_src->GetNbinX(); ibin++){
             double xval = hd1d_mask_src->GetHi1d()->GetBinCenter(ibin);
@@ -170,6 +192,7 @@ int main(int argc, char* argv[]){
         }
     }
     fclose(fp_src);
+    fclose(fp_src_signed);
 
     char outfile_mask_src[kLineSize];
     sprintf(outfile_mask_src, "%s/%s_mask_src.dat",

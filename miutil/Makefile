@@ -2,7 +2,8 @@ BINS =  micsv2tree  milcinfo  minfold  milcwin  \
 	mifunc rad4d2img  miselcol  milcsim  miselimgline \
 	migetsigda1d  migetsigimg  miselimg_zeroline \
 	mimkimg_enmask  miselcubeframe  miimgsmooth \
-	milcsmooth
+	milcsmooth  migetsighd1d  mipow
+
 
 SUBDIR = $(BINS)
 

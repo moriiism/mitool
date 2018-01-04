@@ -2,10 +2,11 @@ include ../../Makefile.in
 include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mitiminglib/Makefile.in
+include ../../miminuitlib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
+INCLUDE := $(MITIMINGLIB_INC) $(MIMINUITLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
         $(HEADAS_INC) $(ROOT_INC) $(MT_INC)
-LDLIBS  := $(MITIMINGLIB_LIB) $(MIROOTLIB_LIB) $(MILIB_LIB) \
+LDLIBS  := $(MITIMINGLIB_LIB) $(MIMINUITLIB_LIB)  $(MIROOTLIB_LIB) $(MILIB_LIB) \
         $(HEADAS_LIB) $(ROOT_ALLLIBS) $(MT_LIB) $(LIB)
 
 TARGET = pow

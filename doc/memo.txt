@@ -1,2 +1,19 @@
 git push origin master
 find ./ -type f -print | xargs grep '<<<<'
+
+
+int NCont = 8;
+double stops[5] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
+double red[5]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
+double green[5] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
+double blue[5]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+TColor::CreateGradientColorTable(5, stops, red, green, blue, NCont);
+gStyle->SetNumberContours(NCont);
+
+TF2* f1 = new TF2("f1", "[0]+[1]*exp(-(x-[2])*(x-[2])/2/([4]*[4])-(y-[3])*(y-[3])/2/([5]*[5]))", 100., 200., 100., 200.);
+f1->SetParameters(100., 500., 150., 150., 30., 30.);
+TH2D* h = (TH2D*) f1->GetHistogram();
+h->Draw("colz");
+
+double levels[9] =  {-1.79e308, 150, 200, 250, 300, 350, 400, 550, 1.79e308};
+h->SetContour(9, levels);

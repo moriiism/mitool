@@ -49,22 +49,17 @@ int main(int argc, char* argv[])
                     rms, median, wmean, wmean_err, num_bad_wmean, 
                     amean_of_err,
                     ndf, chi2, chi2_red, prob_chi2);
-        stat1d->Print(stdout);
-        
-        printf("--- test Copy\n");
-        Stat1dim* stat1d_new = new Stat1dim;
-        stat1d_new->Copy(stat1d);
-        stat1d_new->Print(stdout);
-
-        printf("--- test Clone\n");
-        Stat1dim* stat1d_clone = stat1d->Clone();
-        stat1d_clone->Print(stdout);
 
         printf("--- \n");
-//    long GetNdata() const {return ndata_;};
+        //    long GetNdata() const {return ndata_;};
         printf("GetNdata() = %ld\n", stat1d->GetNdata());
-//    double GetMin() const {return min_;};
+        assert(stat1d->GetNdata() == ndata);
+
+        //    double GetMin() const {return min_;};
         printf("GetMin() = %e\n", stat1d->GetMin());
+        assert(stat1d->stat1d->GetMin() == min);
+        
+        
 //    double GetMax() const {return max_;};
         printf("GetMax() = %e\n", stat1d->GetMax());
 //    double GetSum() const {return sum_;};
@@ -101,6 +96,31 @@ int main(int argc, char* argv[])
         printf("GetChi2Red() = %e\n", stat1d->GetChi2Red());
 //    double GetProbChi2() const {return prob_chi2_;};
         printf("GetProbChi2() = %e\n", stat1d->GetProbChi2());
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        stat1d->Print(stdout);
+        
+        printf("--- test Copy\n");
+        Stat1dim* stat1d_new = new Stat1dim;
+        stat1d_new->Copy(stat1d);
+        stat1d_new->Print(stdout);
+
+        printf("--- test Clone\n");
+        Stat1dim* stat1d_clone = stat1d->Clone();
+        stat1d_clone->Print(stdout);
+
 
         printf("--- \n");
 //    void Print(FILE* fp) const;
