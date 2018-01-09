@@ -221,11 +221,11 @@ int main(int argc, char* argv[]){
         if(sig_most < argval->GetSignificance()){
             break;
         }
-        MiIolib::Printf2(fp_log, "%3d: %e sigma src @ (%e, %e) \n",
+        MiIolib::Printf2(fp_log, "%3d %e sigma src @ (%e, %e) \n",
                          iiter, sig_most, xval_most_sig, yval_most_sig);
-        fprintf(fp_src, "%3d: %e sigma src @ (%e, %e) in %s\n",
+        fprintf(fp_src, "%3d %e sigma src @ (%e, %e) in %s\n",
                 iiter, sig_most, xval_most_sig, yval_most_sig, argval->GetInfile().c_str());
-        fprintf(fp_src_signed, "%3d: %e sigma src @ (%e, %e) in %s\n",
+        fprintf(fp_src_signed, "%3d %e sigma src @ (%e, %e) in %s\n",
                 iiter, sig_most_signed, xval_most_sig, yval_most_sig, argval->GetInfile().c_str());
 
         // calc radius
