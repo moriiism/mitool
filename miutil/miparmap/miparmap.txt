@@ -1,0 +1,32 @@
+#
+# miparmap.txt
+#
+
+data with 2-d param and 1d value
+
+alpha,  beta,  value
+
+
+---> draw by 2d hist
+
+
+cat << EOF > setup/hist_info.dat
+# nbin  lo  up  delta-bin  mode
+3     -5     1    none  none
+3   -0.25  +1.25  none  none
+EOF
+
+
+infile="cv/double_star_off_029_031_cv_1e+03/cv_mu_plus.dat"
+hist_info_file="setup/hist_info.dat"
+outdir=temp
+outfile_head=temp
+
+~/work/github/moriiism/mitool/miutil/miparmap/miparmap \
+${infile} \
+${hist_info_file} \
+${outdir} \
+${outfile_head}
+
+
+

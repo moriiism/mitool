@@ -1,0 +1,34 @@
+#include "mi_iolib.h"
+#include "mir_root_tool.h"
+#include "mir_hist2d_nerr.h"
+#include "mir_qdp_tool.h"
+#include "arg_miparmap.h"
+
+// global variable 
+int g_flag_debug = 0;
+int g_flag_help = 0;
+int g_flag_verbose = 0;
+
+int main(int argc, char* argv[]){
+    int status = kRetNormal;
+  
+    ArgValMiparmap* argval = new ArgValMiparmap;
+    argval->Init(argc, argv);
+
+    MirRootTool* root_tool = new MirRootTool;
+    root_tool->InitTCanvas("pub");
+    if( MiIolib::TestFileExist(argval->GetOutdir()) ){
+        char cmd[kLineSize];
+        sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
+        system(cmd);
+    }
+
+    HistInfo2d* hi2d = new HistInfo2d;
+    hi2d->Load(argval->GetHistInfoFile());
+    
+    delete argval;
+    
+    return status;
+}
+
+
