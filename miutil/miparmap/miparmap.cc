@@ -3,6 +3,7 @@
 #include "mir_hist2d_nerr.h"
 #include "mir_qdp_tool.h"
 #include "arg_miparmap.h"
+#include "TColor.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -52,14 +53,37 @@ int main(int argc, char* argv[]){
     for(long iline = 0; iline < nline; iline ++){
         hd2d->Fill(mu_arr[iline], beta_arr[iline], ave_arr[iline]);
     }
+
+    double zrange_lo = 2.27e-2;
+    double zrange_up = 2.30e-2;
+    
+    TH2D* th2d = hd2d->GenTH2D(0, 0, 0);
+    th2d->SetAxisRange(zrange_lo, zrange_up, "Z");
+    gStyle->SetPalette(53);
+    // TColor::InvertPalette();
+    th2d->Draw("COLZ");
+    
+    
+    gPad->Update();
+    // TPaletteAxis* palette = (TPaletteAxis*) th2d->GetListOfFunctions()->FindObject("palette");
+//    palette->SetX1NDC(0.86);
+//    palette->SetX2NDC(0.89);
+    th2d->GetXaxis()->SetTitleSize(0.05);
+    th2d->GetYaxis()->SetTitleSize(0.05);
+    th2d->GetXaxis()->SetLabelSize(0.05);
+    th2d->GetYaxis()->SetLabelSize(0.05);
+
     char outfig[kLineSize];
     sprintf(outfig, "%s/%s.png",
             argval->GetOutdir().c_str(),
             argval->GetOutfileHead().c_str());
-    hd2d->MkTH2FigZrange(outfig, root_tool,
-                         7.2e-2, 7.4e-2,
-                         0.0, 0.0, 0.0,
-                         "mu", "beta", "ave");
+//    hd2d->MkTH2FigZrange(outfig, root_tool,
+//                         2.27e-2, 2.300e-2,
+//                         //7.2e-2, 7.3e-2,
+//                         0.0, 0.0, 0.0,
+//                         "mu", "beta", "ave");
+
+    root_tool->GetTCanvas()->Print(outfig);
     
     delete argval;
     
