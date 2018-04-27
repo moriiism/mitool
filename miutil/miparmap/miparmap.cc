@@ -54,8 +54,12 @@ int main(int argc, char* argv[]){
         hd2d->Fill(mu_arr[iline], beta_arr[iline], ave_arr[iline]);
     }
 
-    double zrange_lo = 2.27e-2;
-    double zrange_up = 2.30e-2;
+    printf("min at (%e, %e)\n",
+           hd2d->GetXvalAtOvalMin(),
+           hd2d->GetYvalAtOvalMin());
+    
+    double zrange_lo = argval->GetZrangeLo();
+    double zrange_up = argval->GetZrangeUp();
     
     TH2D* th2d = hd2d->GenTH2D(0, 0, 0);
     th2d->SetAxisRange(zrange_lo, zrange_up, "Z");

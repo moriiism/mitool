@@ -16,6 +16,13 @@ extern "C" {
                 const double& ALPHA, double* A, const int& LDA,
                 double* B, const int& LDB,
                 const double& BETA, double* C, const int& LDC);
+    void dgemv_(char* TRANS, const int& M, const int& N,
+		const double& ALPHA, double* A, const int& LDA,
+		double* X, const int& INCX,
+		const double& BETA,
+		double* Y, const int& INCY);
+    double ddot_(const int& N, double* DX, const int& INCX,
+                 double* DY, const int& INCY);
 
 #ifdef __cplusplus
 }
