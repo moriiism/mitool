@@ -154,5 +154,7 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+    printf("=== end ===\n");
+
     return status_prog;
 }

@@ -171,7 +171,8 @@ int main(int argc, char* argv[])
         delete vect_new;
         printf("=== \n");
     }
-    
+
+    printf("=== end ===\n");
     
     return status_prog;
 }

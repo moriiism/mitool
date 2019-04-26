@@ -398,6 +398,40 @@ DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
     return data_arr;
 }
 
+//// generate events from a probability distribution
+//DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt, int rand_seed) const
+//{
+//    long nbin = GetOvalArr()->GetNdata();
+//    double sum = MirMath::GetSum(nbin, GetOvalArr()->GetVal());
+//
+//    // normalize
+//    double* data_norm = new double [nbin];
+//    for(long ibin = 0; ibin < nbin; ibin ++){
+//        data_norm[ibin] = GetOvalArr()->GetValElm(ibin) / sum;
+//    }
+//    // cumulative dist
+//    double* cum_arr = new double [nbin];
+//    double cum = 0.0;
+//    for(long ibin = 0; ibin < nbin; ibin ++){
+//        cum += data_norm[ibin];
+//        cum_arr[ibin] = cum;
+//    }
+//
+//    long* index_arr = new long [nbin];
+//    TRandom3* trand = new TRandom3(rand_seed);
+//    for(int ievt = 0; ievt < nevt; ievt++){
+//        double rand = trand->Rndm();
+//        long ibin_find = MiSort::BinarySearch(nbin, cum_arr, rand);
+//        index_arr[ibin_find] ++;
+//    }
+//    
+//    
+//    delete trand;
+//    return data_arr;
+//}
+
+
+
 Interval* const HistData1d::GenIntervalAboveThreshold(double threshold) const
 {
     vector<double> tstart_vec;

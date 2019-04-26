@@ -45,18 +45,29 @@ int main(int argc, char* argv[]){
 
         printf("%e %e %e\n", mu_arr[iline], beta_arr[iline], ave_arr[iline]);
     }
-    
+
+    double ave_min = 1.0e10;
+    double mu_min  = 0.0;
+    double beta_min  = 0.0;
     HistInfo2d* hi2d = new HistInfo2d;
     hi2d->Load(argval->GetHistInfoFile());
     HistDataNerr2d* hd2d = new HistDataNerr2d;
     hd2d->Init(hi2d);
     for(long iline = 0; iline < nline; iline ++){
         hd2d->Fill(mu_arr[iline], beta_arr[iline], ave_arr[iline]);
+
+        if(ave_arr[iline] < ave_min){
+            ave_min = ave_arr[iline];
+            mu_min = mu_arr[iline];
+            beta_min = beta_arr[iline];
+        }
+        
     }
 
-    printf("min at (%e, %e)\n",
-           hd2d->GetXvalAtOvalMin(),
-           hd2d->GetYvalAtOvalMin());
+    //printf("min at (%e, %e)\n",
+    //       hd2d->GetXvalAtOvalMin(),
+    //       hd2d->GetYvalAtOvalMin());
+    printf("min at (mu, beta) = (%e, %e)\n", mu_min, beta_min);
     
     double zrange_lo = argval->GetZrangeLo();
     double zrange_up = argval->GetZrangeUp();

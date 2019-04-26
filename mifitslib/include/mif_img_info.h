@@ -17,6 +17,8 @@
 //   fpixel[0] fpixel[1] fpixel[2]  fpixel[3]
 //   lpixel[0] lpixel[1] lpixel[2]  lpixel[3]
 
+//   index: 1, 2, 3 ...
+
 class MifImgInfo : public MiObject{
 public:
     explicit MifImgInfo(string title = "") :

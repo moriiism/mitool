@@ -6,7 +6,7 @@ INCLUDE := $(MIROOTLIB_INC) $(MILIB_INC) $(ROOT_INC) $(MT_INC)
 
 TARGET := libmirootlib.a
 
-OBJ := math.o  interval.o  stat1d.o  vect.o  geom.o \
+OBJ := math.o  math_util.o  interval.o  stat1d.o  vect.o  geom.o \
 	func.o  func_par.o \
 	plot_conf.o  root_tool.o \
 	data1d.o  data1d_nerr.o  data1d_serr.o  data1d_terr.o  \
@@ -18,7 +18,7 @@ OBJ := math.o  interval.o  stat1d.o  vect.o  geom.o \
 	data1d_ope.o  graph2d_ope.o  hist1d_ope.o  hist2d_ope.o \
 	hist_info_ope.o \
 	qdp_tool.o  cont.o \
-	solve.o  func_ope.o
+	solve.o  func_ope.o  binning.o
 
 all: $(TARGET)
 

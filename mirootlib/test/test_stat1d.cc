@@ -57,58 +57,79 @@ int main(int argc, char* argv[])
 
         //    double GetMin() const {return min_;};
         printf("GetMin() = %e\n", stat1d->GetMin());
-        assert(stat1d->stat1d->GetMin() == min);
+        assert(stat1d->GetMin() == min);
         
-        
-//    double GetMax() const {return max_;};
+        //    double GetMax() const {return max_;};
         printf("GetMax() = %e\n", stat1d->GetMax());
-//    double GetSum() const {return sum_;};
+        assert(stat1d->GetMax() == max);
+        
+        //    double GetSum() const {return sum_;};
         printf("GetSum() = %e\n", stat1d->GetSum());
-//    double GetSumErr() const {return sum_err_;};
+        assert(stat1d->GetSum() == sum);
+        
+        //    double GetSumErr() const {return sum_err_;};
         printf("GetSumErr() = %e\n", stat1d->GetSumErr());
-//    double GetAmean() const {return amean_;};
+        assert(stat1d->GetSumErr() == sum_err);
+        
+        //    double GetAmean() const {return amean_;};
         printf("GetAmean() = %e\n", stat1d->GetAmean());
-//    double GetVariance() const {return variance_;};
+        assert(stat1d->GetAmean() == amean);
+
+        //    double GetVariance() const {return variance_;};
         printf("GetVariance() = %e\n", stat1d->GetVariance());
-//    double GetStddev() const {return stddev_;};
+        assert(stat1d->GetVariance() == variance);
+        
+        //    double GetStddev() const {return stddev_;};
         printf("GetStddev() = %e\n", stat1d->GetStddev());
-//    double GetUnbiasedVariance() const {return unbiased_variance_;};
+        assert(stat1d->GetStddev() == stddev);
+        
+        //    double GetUnbiasedVariance() const {return unbiased_variance_;};
         printf("GetUnbiasedVariance() = %e\n", stat1d->GetUnbiasedVariance());
-//    double GetSqrtOfUnbiasedVariance() const {return sqrt_of_unbiased_variance_;};
+        assert(stat1d->GetUnbiasedVariance() == unbiased_variance);
+        
+        //    double GetSqrtOfUnbiasedVariance() const {return sqrt_of_unbiased_variance_;};
         printf("GetSqrtOfUnbiasedVariance() = %e\n", stat1d->GetSqrtOfUnbiasedVariance());
-//    double GetRms() const {return rms_;};
+        assert(stat1d->GetSqrtOfUnbiasedVariance() == sqrt_of_unbiased_variance);
+        
+        //    double GetRms() const {return rms_;};
         printf("GetRms() = %e\n", stat1d->GetRms());
-//    double GetMedian() const {return median_;};
+        assert(stat1d->GetRms() == rms);
+        
+        //    double GetMedian() const {return median_;};
         printf("GetMedian() = %e\n", stat1d->GetMedian());
-//    double GetWmean() const {return wmean_;};
+        assert(stat1d->GetMedian() == median);
+        
+        //    double GetWmean() const {return wmean_;};
         printf("GetWmean() = %e\n", stat1d->GetWmean());
-//    double GetWmeanErr() const {return wmean_err_;};
+        assert(stat1d->GetWmean() == wmean);
+        
+        //    double GetWmeanErr() const {return wmean_err_;};
         printf("GetWmeanErr() = %e\n", stat1d->GetWmeanErr());
-//    long GetNumBadWmean() const {return num_bad_wmean_;};
+        assert(stat1d->GetWmeanErr() == wmean_err);
+        
+        //    long GetNumBadWmean() const {return num_bad_wmean_;};
         printf("GetNumBadWmean() = %ld\n", stat1d->GetNumBadWmean());
-//    double GetAmeanOfErr() const {return amean_of_err_;};
+        assert(stat1d->GetNumBadWmean() == num_bad_wmean);
+        
+        //    double GetAmeanOfErr() const {return amean_of_err_;};
         printf("GetAmeanOfErr() = %e\n", stat1d->GetAmeanOfErr());
-//    int GetNdf() const {return ndf_;};
+        assert(stat1d->GetAmeanOfErr() == amean_of_err);
+        
+        //    int GetNdf() const {return ndf_;};
         printf("GetNdf() = %d\n", stat1d->GetNdf());
-//    double GetChi2() const {return chi2_;};
+        assert(stat1d->GetNdf() == ndf);
+        
+        //    double GetChi2() const {return chi2_;};
         printf("GetChi2() = %e\n", stat1d->GetChi2());
-//    double GetChi2Red() const {return chi2_red_;};
+        assert(stat1d->GetChi2() == chi2);
+        
+        //    double GetChi2Red() const {return chi2_red_;};
         printf("GetChi2Red() = %e\n", stat1d->GetChi2Red());
-//    double GetProbChi2() const {return prob_chi2_;};
+        assert(stat1d->GetChi2Red() == chi2_red);
+        
+        //    double GetProbChi2() const {return prob_chi2_;};
         printf("GetProbChi2() = %e\n", stat1d->GetProbChi2());
-
-
-
-
-
-
-
-
-
-
-
-
-
+        assert(stat1d->GetProbChi2() == prob_chi2);
         
         stat1d->Print(stdout);
         
@@ -123,7 +144,7 @@ int main(int argc, char* argv[])
 
 
         printf("--- \n");
-//    void Print(FILE* fp) const;
+        //    void Print(FILE* fp) const;
         stat1d->Print(stdout);
         
         delete stat1d;
@@ -132,6 +153,8 @@ int main(int argc, char* argv[])
         
         printf("=== \n");
     }
+
+    printf("=== end === \n");
 
     return status_prog;
 }

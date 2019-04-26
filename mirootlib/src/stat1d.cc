@@ -69,26 +69,26 @@ Stat1dim* const Stat1dim::Clone() const
 
 void Stat1dim::Print(FILE* fp) const
 {
-    fprintf(fp, "ndata_     = %ld\n", ndata_);
-    fprintf(fp, "min_       = %e\n", min_);
-    fprintf(fp, "max_       = %e\n", max_);
-    fprintf(fp, "sum_       = %e\n", sum_);
-    fprintf(fp, "sum_err_   = %e\n", sum_err_);
-    fprintf(fp, "amean_     = %e\n", amean_);
-    fprintf(fp, "variance_  = %e\n", variance_);
-    fprintf(fp, "stddev_    = %e\n", stddev_);
-    fprintf(fp, "unbiased_variance_         = %e\n", unbiased_variance_);
-    fprintf(fp, "sqrt_of_unbiased_variance_ = %e\n", sqrt_of_unbiased_variance_);
-    fprintf(fp, "rms_             = %e\n", rms_);
-    fprintf(fp, "median_          = %e\n", median_);
-    fprintf(fp, "wmean_           = %e\n", wmean_);
-    fprintf(fp, "wmean_err_       = %e\n", wmean_err_);
-    fprintf(fp, "num_bad_wmean_   = %ld\n", num_bad_wmean_);
-    fprintf(fp, "amean_of_err_    = %e\n", amean_of_err_);
-    fprintf(fp, "fit by constant: ndf_             = %d\n", ndf_);
-    fprintf(fp, "fit by constant: chi2_            = %e\n", chi2_);
-    fprintf(fp, "fit by constant: chi2_red_        = %e\n", chi2_red_);
-    fprintf(fp, "fit by constant: prob_chi2_       = %e\n", prob_chi2_);
+    fprintf(fp, "ndata_                      = %ld\n", ndata_);
+    fprintf(fp, "min_                        = %e\n", min_);
+    fprintf(fp, "max_                        = %e\n", max_);
+    fprintf(fp, "sum_                        = %e\n", sum_);
+    fprintf(fp, "sum_err_                    = %e\n", sum_err_);
+    fprintf(fp, "amean_                      = %e\n", amean_);
+    fprintf(fp, "variance_                   = %e\n", variance_);
+    fprintf(fp, "stddev_                     = %e\n", stddev_);
+    fprintf(fp, "unbiased_variance_          = %e\n", unbiased_variance_);
+    fprintf(fp, "sqrt_of_unbiased_variance_  = %e\n", sqrt_of_unbiased_variance_);
+    fprintf(fp, "rms_                        = %e\n", rms_);
+    fprintf(fp, "median_                     = %e\n", median_);
+    fprintf(fp, "wmean_                      = %e\n", wmean_);
+    fprintf(fp, "wmean_err_                  = %e\n", wmean_err_);
+    fprintf(fp, "num_bad_wmean_              = %ld\n", num_bad_wmean_);
+    fprintf(fp, "amean_of_err_               = %e\n", amean_of_err_);
+    fprintf(fp, "fit by constant: ndf_       = %d\n", ndf_);
+    fprintf(fp, "fit by constant: chi2_      = %e\n", chi2_);
+    fprintf(fp, "fit by constant: chi2_red_  = %e\n", chi2_red_);
+    fprintf(fp, "fit by constant: prob_chi2_ = %e\n", prob_chi2_);
 }
 
 // private

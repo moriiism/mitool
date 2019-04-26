@@ -115,16 +115,16 @@ int MifFits::InFitsImageD(string infile,
                    iomode, &status);
     int hdunum = 0;
     fits_get_num_hdus(fptr_in, &hdunum, &status);
-    printf("hdunum = %d\n", hdunum);
+    // printf("hdunum = %d\n", hdunum);
 
     int keysexist = 0;
     int morekeys = 0;
     fits_get_hdrspace(fptr_in, &keysexist, &morekeys, &status);
-    printf("keysexist = %d\n", keysexist);
+    // printf("keysexist = %d\n", keysexist);
 
     int naxis = 0;
     fits_get_img_dim(fptr_in, &naxis, &status);
-    printf("naxis = %d\n", naxis);
+    // printf("naxis = %d\n", naxis);
     if(2 != naxis){
         printf("bad naxis (= %d)\n", naxis);
         abort();
@@ -133,13 +133,13 @@ int MifFits::InFitsImageD(string infile,
     int maxdim = naxis;
     fits_get_img_size(fptr_in, maxdim, naxes, &status);
     for(int idim = 0; idim < naxis; idim ++){
-        printf("naxes[%d] = %ld\n", idim, naxes[idim]);
+        // printf("naxes[%d] = %ld\n", idim, naxes[idim]);
     }
     delete [] naxes;
 
     int bitpix = 0;
     fits_get_img_type(fptr_in, &bitpix, &status);
-    printf("bitpix = %d\n", bitpix);
+    // printf("bitpix = %d\n", bitpix);
     
     // vectorized 2D image for sub image
     long naxes_sub[2];

@@ -7,10 +7,10 @@ INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(ROOT_INC) $(MILIB_INC)  $(MT_INC)
 LDLIBS  := $(MIFUNCLIB_LIB) $(MIROOTLIB_LIB) $(ROOT_ALLLIBS)  $(MILIB_LIB) $(MT_LIB) $(LIB)
 
 # test passed using assert
-TARGET_PASS := test_geom  test_vect
+TARGET_PASS := test_geom  test_vect  test_stat1d
 
 # test passed (manual check)
-TARGET_PASS_MANUAL := test_stat1d \
+TARGET_PASS_MANUAL := \
 	test_data1d   test_data1d_copy \
 	test_data1d_nerr  test_data1d_serr  test_data1d_terr \
 	test_graph2d  test_graph2d_nerr  test_graph2d_serr  test_graph2d_terr \
