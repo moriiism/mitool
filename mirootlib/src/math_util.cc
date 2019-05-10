@@ -67,6 +67,7 @@ void MirMathUtil::Uniq(long narr, const double* const val_arr,
     }
     vector<double> val_vec;
     double val_mark = val_sort_arr[0];
+    val_vec.push_back( val_sort_arr[0] );
     for(long iarr = 0; iarr < narr; iarr ++){
         if( fabs(val_mark - val_sort_arr[iarr]) > epsilon ){
             val_mark = val_sort_arr[iarr];
