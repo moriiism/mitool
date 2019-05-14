@@ -49,10 +49,15 @@ namespace MiIolib
                                      vector<long> sel_row_list_vec,
                                      string** const lines_ptr,
                                      long* const nline_ptr);
-    
 
     void DelReadFile(double* val_arr);
     void DelReadFile(string* line_arr);
+
+    // read file containing one row
+    int GenReadFileOfHeadLine(string file,
+                              string** const str_arr_ptr,
+                              int* const nstr_ptr,
+                              const char* const delim = " \t");
 
     int TestFileExist(string fname);
 

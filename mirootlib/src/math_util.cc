@@ -103,3 +103,39 @@ void MirMathUtil::GetQuantile(long narr, const double* const val_arr,
     delete [] index_arr;
     *quantile_arr_ptr = quantile_arr; 
 }
+
+
+double MirMathUtil::GetAMeanLog10(double aval, double bval)
+{
+    if(aval <= 0){
+        abort();
+    }
+    if(bval <= 0){
+        abort();
+    }
+    double log_val = (log10(aval) + log10(bval)) / 2.0;
+    double ans = pow(10, log_val);
+    return ans;
+}
+
+double MirMathUtil::GetAMeanLog10(long narr, const double* const val_arr)
+{
+    double* log_val_arr = new double [narr];
+    for(long iarr = 0; iarr < narr; iarr ++){
+        log_val_arr[iarr] = log10(val_arr[iarr]);
+    }
+    double log_val = MirMath::GetAMean(narr, log_val_arr);
+    double ans = pow(10, log_val);
+    delete [] log_val_arr;
+    return ans;
+}
+
+double MirMathUtil::GetAMeanLog10(vector<double> vec)
+{
+    long narr = 0;
+    double* val_arr = NULL;
+    MiBase::GenArray(vec, &narr, &val_arr);
+    double ans = GetAMeanLog10(narr, val_arr);
+    MiBase::DelArray(val_arr);
+    return ans;
+}

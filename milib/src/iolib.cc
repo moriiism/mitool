@@ -246,6 +246,36 @@ void MiIolib::DelReadFile(string* line_arr)
 }
 
 
+int MiIolib::GenReadFileOfHeadLine(string file,
+                                   string** const str_arr_ptr,
+                                   int* const nstr_ptr,
+                                   const char* const delim)
+{
+    int ret = kRetNormal;
+    string buf;
+    vector<string> buf_vec;
+
+    ifstream ifs(file.c_str());
+    while(ifs && getline(ifs, buf)){
+        buf_vec.push_back(buf);
+    }
+    ifs.close();
+
+    long nline = buf_vec.size();
+    if(nline <= 0){
+        ret = kRetError;
+        abort();
+    }
+    int nsplit = 0;
+    string* split_arr = NULL;
+    MiStr::GenSplit(buf_vec[0], &nsplit, &split_arr, delim);
+
+    *nstr_ptr = nsplit;
+    *str_arr_ptr = split_arr;
+    return(ret);
+}
+
+
 int MiIolib::TestFileExist(string fname)
 {
     // if not exist, return 1

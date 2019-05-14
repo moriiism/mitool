@@ -24,6 +24,10 @@ namespace MirMathUtil
     void GetQuantile(long narr, const double* const val_arr,
                      long nquantile,
                      double** const quantile_arr_ptr);
+
+    double GetAMeanLog10(double aval, double bval);
+    double GetAMeanLog10(long narr, const double* const val_arr);
+    double GetAMeanLog10(vector<double> vec);
     
 } //  namespace MirMathUtil
 
