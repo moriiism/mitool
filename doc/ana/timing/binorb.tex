@@ -1,0 +1,338 @@
+%\documentstyle[psfig,11pt]{article} 
+\documentstyle[11pt]{jarticle} 
+%\documentclass[letter,12pt]{article}
+%\documentclass[letter,11pt]{jarticle}
+
+%\usepackage[dvips]{graphicx}
+
+%\nonstopmode
+
+\textwidth=17.8cm
+%\textheight=26cm
+%\topmargin=-2.5cm
+\oddsidemargin=-1.1cm
+\evensidemargin=-1.1cm
+%\parindent 10pt
+%
+\def\Ltsim{\mathrel{\vbox to 0pt{\hbox{$\sim$}}\llap{$<$}}}
+\def\Gtsim{\mathrel{\vbox to 0pt{\hbox{$\sim$}}\llap{$>$}}}
+
+\title{Orbital motion}
+\author{Mikio Morii}
+ 
+\begin{document}
+\maketitle
+%\medskip
+\begin{abstract}
+I summarize about Kepler motion.
+\end{abstract}
+
+\section{Definition}
+
+現代の天文学シリーズ「天体の位置と運動」に従って、軌道運動について考える。
+
+可視光を放射する星(1)とX線を放射するCompact 天体(2)との連星系を考える。
+それぞれの座標を${\bf r}_1$、${\bf r}_2$ とおく。
+また、それぞれの質量を$m_1$、$m_2$ とおく。
+このとき、星1から測ったCompact天体の相対位置は、
+\begin{equation}
+{\bf r} = {\bf r}_2 - {\bf r}_1
+\end{equation}
+である。
+重心の座標は、
+\begin{equation}
+{\bf r}_{\rm G} = \frac{m_1 {\bf r}_1 + m_2 {\bf r}_2}{m_1 + m_2}
+\end{equation}
+である。
+逆に、相対位置${\bf r}$と重心位置${\bf r}_{\rm G}$を用いて、
+${\bf r}_1$、${\bf r}_2$ を表すと
+\begin{equation}
+  {\bf r}_1 = {\bf r}_{\rm G} - \frac{m_2}{m_1 + m_2} {\bf r},
+\end{equation}
+\begin{equation}
+  {\bf r}_2 = {\bf r}_{\rm G} + \frac{m_1}{m_1 + m_2} {\bf r},
+\end{equation}
+となる。
+
+運動方程式は、
+\begin{equation}
+m_1 \frac{d^2 {\bf r}_1}{d t^2} = - \frac{G m_1 m_2}{r^3}
+({\bf r}_1 - {\bf r}_2),
+\end{equation}
+\begin{equation}
+m_2 \frac{d^2 {\bf r}_2}{d t^2} = - \frac{G m_1 m_2}{r^3}
+({\bf r}_2 - {\bf r}_1)
+\end{equation}
+となる。
+これらを引き算すると、
+\begin{equation}
+\frac{d^2 {\bf r}}{d t^2} = - \frac{\mu}{r^3} {\bf r}
+\end{equation}
+となる。但し、$\mu = G (m_1 + m_2)$。
+
+Doppler Shift の観測では、重心から測った位置が重要になるので、
+\begin{equation}
+  {\bf r}_{\rm x} = {\bf r}_2 - {\bf r}_G
+  = \frac{m_1}{m_1 + m_2} {\bf r}
+\end{equation}
+とおく。X線の観測で推定するのは、この${\bf r}_{\rm x}$ である。
+
+\section{..}
+
+これからしばらく、相対運動のベクトル${\bf r}$について考える。
+我々観測者から天体を見たときの視線方向を$z_s$軸とする。我々から遠ざかる方向を
+プラスとする。天球に接する接平面を$x_s-y_s$平面とする。
+また、連星の軌道面を$x-y$平面とする。
+連星の軌道面に垂直なベクトル$z$軸と、$z_s$軸との成す角を
+$i$ (inclination angle)とおく。
+
+軌道が$x_s-y_s$平面を下($z_s<0$)から上($z_s>0$)に横切る点を昇交点($N$)と呼ぶ。
+昇交点の$x_s$軸からの角を昇交点経度$\Omega$とおく。
+この値を観測から求めることはできない。
+
+軌道面($x-y$平面)上で、近点(pericenter)の方向を$x$軸とする。
+近点の昇交点からの角度を$\omega$とおき、
+近点引数(argument of pericenter)と呼ぶ。
+
+離心近点角(eccentric anomaly)$u$, 軌道長半径$a$,
+離心率(eccentricity)$e$ を用いて天体$2$の位置を表すと、
+p148 (4.48) より、
+\begin{equation}
+{\bf r} = 
+\left( \begin{array}{c}
+x \\
+y \\
+\end{array}
+\right)
+= a 
+\left( \begin{array}{c}
+\cos u - e \\
+\sqrt{1 - e^2} \sin u \\
+\end{array}
+\right)
+\end{equation}
+と表せる。これを時刻で微分し(4.56) を用いると速度が得られる。
+\begin{equation}
+{\bf v} = 
+\left( \begin{array}{c}
+v_x \\
+v_y \\
+\end{array}
+\right)
+= \frac{n a}{1 - e \cos u} 
+\left( \begin{array}{c}
+-\sin u \\
+\sqrt{1 - e^2} \cos u \\
+\end{array}
+\right).
+\end{equation}
+
+また、
+\begin{equation}
+  a_{\rm x} = \frac{m_1}{m_1 + m_2} a
+\end{equation}
+とおくと、
+\begin{equation}
+{\bf r}_{\rm x} = 
+\left( \begin{array}{c}
+x_{\rm x} \\
+y_{\rm x} \\
+\end{array}
+\right)
+= a_{\rm x}
+\left( \begin{array}{c}
+\cos u - e \\
+\sqrt{1 - e^2} \sin u \\
+\end{array}
+\right),
+\end{equation}
+\begin{equation}
+{\bf v}_{\rm x} = 
+\left( \begin{array}{c}
+{v_x}_{\rm x} \\
+{v_y}_{\rm x} \\
+\end{array}
+\right)
+= \frac{n a_{\rm x}}{1 - e \cos u} 
+\left( \begin{array}{c}
+-\sin u \\
+\sqrt{1 - e^2} \cos u \\
+\end{array}
+\right).
+\end{equation}
+
+
+p150より、
+近日点通過時刻(time of pericenter passage)を$t_0$ とおくと、
+\begin{equation}
+  u - e \sin u = n (t - t_0) = l
+\end{equation}
+と書ける。ここで、$n$は、平均運動(mean motion)で、
+\begin{equation}
+  n = \sqrt{ \frac{\mu}{a^3} }
+\end{equation} 
+であり、2体問題では一定の値になる。
+$l$は、平均近点角(mean anomaly) と呼ばれる。
+mean anomaly は、記号$M$ で表現されることもある。
+公転周期$P$は、
+\begin{equation}
+  P = \frac{2 \pi}{n} = 2 \pi \sqrt{\frac{a^3}{\mu}}
+\end{equation}
+となる。
+
+p146の図4.4を見て、$x_s-y_s-z_s$空間から$x-y-z$空間への変換を考える。
+これは、座標系の変換を3回繰り返すことで得られる。
+(B.55) - (B.57) は、 座標系の回転行列なので、これを用いると、
+\begin{equation}
+\left( \begin{array}{c}
+x \\
+y \\
+z \\
+\end{array}
+\right)
+= R_3(\omega) R_1(i) R_3(\Omega)
+\left( \begin{array}{c}
+x_s \\
+y_s \\
+z_s \\
+\end{array}
+\right)
+\end{equation}
+と書ける。
+今、求めたいのは、$x_s-y_s-z_s$空間での値なので、これを変形すると、
+\begin{equation}
+\left( \begin{array}{c}
+x_s \\
+y_s \\
+z_s \\
+\end{array}
+\right)
+= R_3(-\Omega) R_1(-i) R_3(-\omega) 
+\left( \begin{array}{c}
+x \\
+y \\
+z \\
+\end{array}
+\right)
+\end{equation}
+となる。
+
+$\Omega$は観測不能なので、ゼロとおけばよい。
+$R_1(-i) R_3(-\omega)$ を計算して、
+$({x_s}_{\rm x}, {y_s}_{\rm x}, {z_s}_{\rm x})^{\rm T}$、
+$({v_x}_{s \rm x}, {v_y}_{s \rm x}, {v_z}_{s \rm x})^{\rm T}$
+を求めることにする。
+
+\begin{equation}
+R_1(-i) R_3(-\omega) =
+\left( \begin{array}{ccc}
+\cos(- \omega) &  \sin(- \omega) & 0 \\
+-\cos(-i) \sin(- \omega) &  \cos(-i) \cos(-\omega) & \sin(-i) \\
+\sin(-i) \sin(-\omega) & - \sin(-i) \cos(-\omega) & \cos(-i) \\
+\end{array}
+\right)
+\end{equation}
+より、
+%
+\begin{equation}
+{x_s}_{\rm x} = a_{\rm x} 
+\left[ \cos \omega (\cos u - e)
+ - \sin \omega \sqrt{1 - e^2} \sin u
+\right],
+\end{equation}
+%
+\begin{equation}
+{y_s}_{\rm x} = a_{\rm x} \cos i
+\left[ \sin \omega (\cos u - e)
+ + \cos \omega \sqrt{1 - e^2} \sin u
+\right],
+\end{equation}
+%
+\begin{equation}
+{z_s}_{\rm x} = a_{\rm x} \sin i 
+\left[ \sin \omega (\cos u - e)
+ + \cos \omega \sqrt{1 - e^2} \sin u
+\right].
+\end{equation}
+%
+また、
+\begin{equation}
+v_{z_{s \rm x}} = \frac{a_{\rm x} n \sin i}{1 - e \cos u}
+\left[ - \sin \omega \sin u
+ + \cos \omega \sqrt{1 - e^2} \cos u
+\right].
+\end{equation}
+
+\section{Eclipse}
+
+Mean Longitude ($L$)の定義は、
+\begin{equation}
+L = \Omega + \omega + l.
+\end{equation}
+ここで、$\Omega$ と($\omega$, $l$)は、異なる平面内での角度である。
+それらを大きさだけで足しているので、変な定義である。
+Doppler Shift の観測では、$\Omega$は観測できないので、ゼロと置いてよい。
+
+$T_{90}$、$T_{\omega}$という時刻は、それぞれMean Longitude 
+が90度になる時刻、$\omega$になる時刻である。
+$T_{90}$の時には、compact 星(2)はおおよそ、可視光を放射する星(1)の
+背後に位置することになるので、inclination が大きければX線のEclipse が
+起こりそうでである。しかし、Eclipse はこの時刻ではない。
+$T_{\omega}$ は、近点通過の時刻なので、$t_0$に等しい。
+
+Eclipse は、
+\begin{equation}
+  \omega + f = 90 {\rm deg}
+\end{equation}
+になるときである。ここで$f$は、真近点角(true anomaly)である。
+
+
+さて、
+\begin{equation}
+L = n(t - t_0) + \omega
+\end{equation}
+より、
+\begin{equation}
+t = \frac{L - \omega}{n} + t_0
+\end{equation}
+なので、
+\begin{equation}
+T_{90} - T_{0} = \frac{90^\circ - \omega}{n} + t_0 -
+(- \frac{\omega}{n} + t_0) = \frac{90^\circ}{n} = \frac{P}{4}
+\end{equation}
+の関係が成り立つ。
+
+
+\section{時刻補正}
+
+compact星がパルサーの場合、パルスを検出したいとする。
+太陽系のbarycenter で 観測されたphotonの到来時刻
+($t_{\rm obs}^{\rm (solar-bary)}$)を
+パルサーから放出された時刻($t_{\rm obj}$)に変換しないといけない。
+まず、太陽系のbarycenter と binary system の重心との距離は観測中は
+不変と考える。その距離をphotonは移動してきたわけだが、
+その値は観測中一定なので、無視してゼロと置く。
+つまり、
+$t_{\rm obs}^{\rm (solar-bary)} = t_{\rm obs}^{\rm (binary-bary)}$。
+以降、これらを簡単に$t_{\rm obs}$と表記することにする。
+
+binary system の重心からパルサーまでの視線方向の奥行きは、
+${z_s}_{\rm x}$である。$t_{\rm obj}$の時刻に放出されたphotonは、
+${z_s}_{\rm x}/c$だけの時間をかけて、$t_{\rm obs}$ の時刻に、
+binary system の重心に到達する。
+つまり、$t_{\rm obs} = t_{\rm obj} + {z_s}_{\rm x}/c$である。
+ただし、${z_s}_{\rm x}$は、時刻$t_{\rm obj}$の関数である。
+従って、
+\begin{equation}
+t_{\rm obs} = t_{\rm obj} + \frac{{z_s}_{\rm x}(t_{\rm obj})}{c}.
+\end{equation}
+ここで、
+$t_{\rm obs} \neq t_{\rm obj} + \frac{{z_s}_{\rm x}(t_{\rm obs})}{c}$
+であることに注意しないといけない。
+$t_{\rm obj}$を得るには、
+$f(t_{\rm obj}; t_{\rm obs}) =
+t_{\rm obj} + \frac{{z_s}_{\rm x}(t_{\rm obj})}{c} - t_{\rm obs}$
+と置いて、方程式$f(t_{\rm obj}; t_{\rm obs}) = 0$の根を求める必要がある。
+
+\end{document}
+

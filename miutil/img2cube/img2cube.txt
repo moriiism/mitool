@@ -1,0 +1,35 @@
+#
+# img2cube.txt
+#
+
+cd /mnt/s8tb1/work/morokuma/ana/18092800
+
+source /home/morii/work/github/moriiism/mitool/setup/setup.sh
+
+mkdir setup
+
+cat << EOF > setup/img.list
+../../data/180831/clean_0180059_3_tr.fits
+../../data/180831/clean_0180060_3_tr.fits
+../../data/180831/clean_0180062_3_tr.fits
+../../data/180831/clean_0180064_3_tr.fits
+EOF
+
+cat << EOF > setup/subimg.dat
+#  x(pixel)  y(pixel)
+50    50
+400  400
+EOF
+
+in_list=setup/img.list
+subimg_dat=setup/subimg.dat
+outdir=temp
+outfile_head=temp
+
+/home/morii/work/github/moriiism/mitool/miutil/img2cube/img2cube \
+${in_list} \
+${subimg_dat} \
+${outdir} \
+${outfile_head}
+
+
