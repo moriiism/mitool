@@ -8,34 +8,60 @@ The downloaded files will be stored in the sub-directory
 under "/home/morii/admin", and these files will be
 installed in the sub-directory of "/soft".
 
+#
+# screen
+#
 
-# gcc source compile
+It takes too much time to build a root library. 
+So, use "screen" as follows.
 
-# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-12.1.0/gcc-12.1.0.tar.gz
-# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-12.1.0/sha512.sum
+% screen
+# detach
+Ctrl+a d
+
+# list session
+% screen -ls
+
+# re-attach
+% screen -r <session name>
 
 
-# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/gcc-11.3.0.tar.gz
-# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/sha512.sum
+#
+# install some library by using yum
+#
 
-# sha512sum --check sha512.sum
---> gcc-11.3.0.tar.gz: OK
+yum install openssl-devel
+yum install libX11-devel
+yum install libXpm-devel
+yum install libXft-devel
+yum install libXext-devel
+yum install git make cmake3 gcc-c++ gcc binutils \
+libX11-devel libXpm-devel libXft-devel \
+libXext-devel python openssl-devel
+yum install gcc-gfortran libgfortran
 
+yum install screen
 
-% mkdir build
-% cd build
-% ../gcc-11.3.0/configure --enable-languages=c,c++ \
-  --disable-bootstrap --disable-multilib
+#
+# install cmake
+#
+
+(By root)
+# mkdir -p /soft/cmake/3.23.1
+# chown -R morii /soft/cmake/3.23.1
+
+% cd /home/morii/admin/cmake/cmake-3.23.1
+% ./configure --prefix=/soft/cmake/3.23.1
 % make
 % make install
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
-export PATH=/soft/gcc/11.3.0/bin:$PATH
+---> .bashrc , alias 
+alias cmake='/soft/cmake/3.23.1/bin/cmake'
 
 
-0. install library
 
-yum install gcc-gfortran libgfortran
+
+
 
 
 
@@ -144,179 +170,78 @@ ranlib /soft/lapack/3.10.1/lib/libtmglib.a
 (By root)
 # chown -R root /soft/lapack/3.10.1
 
-
-4. MersenneTwister
-
-http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html
-http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt64.html
-download --> 
-/home/morii/admin/MersenneTwister/mt19937-64.tgz
-
-(By root)
-# mkdir -p /soft/MersenneTwister/mt19937-64/lib
-# mkdir -p /soft/MersenneTwister/mt19937-64/include
-# chown -R morii /soft/MersenneTwister/mt19937-64
-
-(By morii)
-cd /home/morii/admin/MersenneTwister
-tar xvfz mt19937-64.tgz
-cd /home/morii/admin/MersenneTwister/mt19937-64
-
-g++ -c mt19937-64.c
-g++ -c mt19937-64test.c
-g++ mt19937-64test.o mt19937-64.o -o mt19937-64test
-./mt19937-64test > temp.dat
-
-diff mt19937-64.out.txt  temp.dat
-# If nothing is output, it is OK.
-
-ar -rv libmt19937-64.a mt19937-64.o
-ranlib libmt19937-64.a
-
-cd /home/morii/admin/MersenneTwister/mt19937-64
-cp libmt19937-64.a /soft/MersenneTwister/mt19937-64/lib
-cp mt64.h /soft/MersenneTwister/mt19937-64/include
-
-(By root)
-# chown -R root /soft/MersenneTwister
-
-
-5. Installation of GSL
-
-Follow the instruction at https://www.gnu.org/software/gsl/ .
-Memo for Cent OS 7 is shown below for an example.
-
-# Memo for CentOS 7
-
-Download gsl-2.3.tar.gz to
-/home/morii/admin/gsl/gsl-2.3.tar.gz
-
-% cd /home/morii/admin/gsl
-% tar xvfz gsl-2.3.tar.gz
----> gsl-2.3
-
-% su root
-# mkdir -p /soft/gsl/2.3
-# chown morii /soft/gsl/2.3
-# exit
-
-% cd /home/morii/admin/gsl/gsl-2.3
-% ./configure --prefix=/soft/gsl/2.3
-% make
-% make install
-
-% su root
-# chown -R root /soft/gsl/2.3
-# exit
-
-
-6. Installation of cern/root
-
-Follow the instruction at https://root.cern.ch/ .
-For an example, memo for Cent OS 7 is shown below.
-
-
-https://root.cern/download/
-
-# Memo for CentOS 7
-
-Download root_v6.08.02.source.tar.gz from 
-https://root.cern.ch/
----> /home/morii/admin/root/root_v6.26.02.source.tar.gz
-
-% cd /home/morii/admin/root
-% tar xvfz root_v6.26.02.source.tar.gz
----> root-6.26.02
-
-% su root
-# mkdir -p /soft/root/6.26.02
-# chown morii /soft/root/6.26.02
-# exit
-
-% cd /home/morii/admin/root/
-% mkdir builddir
-% cd builddir
-% cmake ../root-6.26.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.26.02 \
-  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
-  -Dbuiltin_gsl=ON -Dgminimal=ON -Droot7=ON -DCMAKE_CXX_STANDARD=17
-
-
-# root-6.24.06
-
-% cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
-  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
-  -Dbuiltin_gsl=ON -Dgminimal=ON \
-  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
-  -Dminuit2=ON -Drpath=ON
-% cmake --build . 
-( or % make -j 6)
-% cmake --build . --target install
-
-
-
-###  root-6.26.02
-
-% export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
-% export PATH=/soft/gcc/11.3.0/bin:$PATH
-% cd /home/morii/admin/root/
-% mkdir builddir_6.26.02
-% cd builddir_6.26.02
-% cmake ../root-6.26.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.26.02 \
-  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
-  -Dbuiltin_gsl=ON -Dminimal=ON \
-  -DCMAKE_CXX_STANDARD=17 \
-  -DCMAKE_CXX_COMPILER=/soft/gcc/11.3.0/bin/gcc \
-  -DCMAKE_C_COMPILER=/soft/gcc/11.3.0/bin/gcc
-
-
--Dgminimal=ON \
-
-export LD_LIBRARY_PATH=/soft/gcc/11.3.0/lib64
-
-
-
-
-
-
-
-  -Dminuit2=ON -Drpath=ON 
-  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
-
-
-% cmake --build . 
-( or % make -j 6)
-% cmake --build . --target install
-
-
-Error: 
-interpreter/llvm/src/bin/clang-tblgen 
-
-
-
-
-
-builtin_gsl
-
-
-% cmake --build . 
-( or % make -j 6)
-% cmake --build . --target install
-
-% su root
-# chown -R root /soft/root/6.08.02
-# exit
-
+#####################################
 
 # xrootd 
-
-
-
 cd ~/admin/xrootd
 mkdir build
 cd build
 cmake ../xrootd-5.4.2 -DCMAKE_INSTALL_PREFIX=/soft/xrootd/5.4.2 -DENABLE_PERL=FALSE
 make
 make install
+
+
+
+## 
+## Installation of cern/root
+##
+
+Follow the instruction at https://root.cern.ch/ .
+For an example, memo for Cent OS 7 is shown below.
+
+To download source code of root, let's check the file list at
+https://root.cern/download/
+For example, on 2022/05/10, I found the newest version, 
+root_v6.26.02.source.tar.gz, but there is no corresponding centos7
+binary package. On the other hand, for the version 6.24.06,
+a centos7 binary package is listed.
+It means that installing version 6.26.02 to centos7 is difficult,
+but version 6.24.06 is possible.
+So, let's install version 6.24.06 in centos7.
+Struggle to install the newest version is a waste of time.
+
+# Memo for CentOS 7
+
+Download root_v6.24.06.source.tar.gz from 
+https://root.cern/download/root_v6.24.06.source.tar.gz
+---> /home/morii/admin/root/root_v6.24.06.source.tar.gz
+
+% cd /home/morii/admin/root
+% tar xvfz root_v6.24.06.source.tar.gz
+---> root-6.24.06
+
+% su root
+# mkdir -p /soft/root/6.24.06
+# chown morii /soft/root/6.24.06
+# exit
+
+% cd /home/morii/admin/root/
+% mkdir builddir_6.24.06
+% cd builddir_6.24.06
+
+% cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
+  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
+  -Dbuiltin_gsl=ON -Dgminimal=ON \
+  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
+  -Dminuit2=ON -Drpath=ON
+
+% cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
+  -Dbuiltin_gsl=ON -Dgminimal=ON \
+  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
+  -Dminuit2=ON
+
+
+% cmake --build .
+( or % make -j 4)
+# At first, use the command "make -j <# of cores>",
+# then you can find some errors soon,
+# if your setup of compilation is incomplete.
+
+% cmake --build . --target install
+
+% su root
+# chown -R root /soft/root/6.24.06
+# exit
 
 
 
@@ -409,28 +334,3 @@ make install
 scl enable devtoolset-2 bash
 
 
-#  install cmake
-
-# yum install openssl-devel
-
-(By root)
-# mkdir -p /soft/cmake/3.23.1
-# chown -R morii /soft/cmake/3.23.1
-
-% cd /home/morii/admin/cmake/cmake-3.23.1
-% ./configure --prefix=/soft/cmake/3.23.1
-% make
-% make install
-
----> .bashrc , alias 
-alias cmake='/soft/cmake/3.23.1/bin/cmake'
-
-yum install libX11-devel
-yum install libXpm-devel
-yum install libXft-devel
-yum install libXext-devel
-
-
-yum install git make cmake3 gcc-c++ gcc binutils \
-libX11-devel libXpm-devel libXft-devel \
-libXext-devel python openssl-devel

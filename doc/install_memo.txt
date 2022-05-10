@@ -1,0 +1,122 @@
+#
+# install_memo.txt
+#
+
+# some struggles for installation
+
+### gcc source compile
+
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/gcc-11.3.0.tar.gz
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/sha512.sum
+
+# sha512sum --check sha512.sum
+--> gcc-11.3.0.tar.gz: OK
+
+
+% mkdir build
+% cd build
+% ../gcc-11.3.0/configure --enable-languages=c,c++ \
+  --disable-bootstrap --disable-multilib
+% make
+% make install
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
+export PATH=/soft/gcc/11.3.0/bin:$PATH
+
+
+### MersenneTwister
+
+# Now, MersenneTwister is supported by TRandom3() of cern/root.
+# So, the independent installation of MersenneTwister is not necessary.
+
+
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt64.html
+download --> 
+/home/morii/admin/MersenneTwister/mt19937-64.tgz
+
+(By root)
+# mkdir -p /soft/MersenneTwister/mt19937-64/lib
+# mkdir -p /soft/MersenneTwister/mt19937-64/include
+# chown -R morii /soft/MersenneTwister/mt19937-64
+
+(By morii)
+cd /home/morii/admin/MersenneTwister
+tar xvfz mt19937-64.tgz
+cd /home/morii/admin/MersenneTwister/mt19937-64
+
+g++ -c mt19937-64.c
+g++ -c mt19937-64test.c
+g++ mt19937-64test.o mt19937-64.o -o mt19937-64test
+./mt19937-64test > temp.dat
+
+diff mt19937-64.out.txt  temp.dat
+# If nothing is output, it is OK.
+
+ar -rv libmt19937-64.a mt19937-64.o
+ranlib libmt19937-64.a
+
+cd /home/morii/admin/MersenneTwister/mt19937-64
+cp libmt19937-64.a /soft/MersenneTwister/mt19937-64/lib
+cp mt64.h /soft/MersenneTwister/mt19937-64/include
+
+(By root)
+# chown -R root /soft/MersenneTwister
+
+
+### Installation of GSL
+
+# Now, GSL can be included in cern/root by using 
+# -Dbuiltin_gsl=ON flag at cmake.
+
+Follow the instruction at https://www.gnu.org/software/gsl/ .
+Memo for Cent OS 7 is shown below for an example.
+
+# Memo for CentOS 7
+
+Download gsl-2.3.tar.gz to
+/home/morii/admin/gsl/gsl-2.3.tar.gz
+
+% cd /home/morii/admin/gsl
+% tar xvfz gsl-2.3.tar.gz
+---> gsl-2.3
+
+% su root
+# mkdir -p /soft/gsl/2.3
+# chown morii /soft/gsl/2.3
+# exit
+
+% cd /home/morii/admin/gsl/gsl-2.3
+% ./configure --prefix=/soft/gsl/2.3
+% make
+% make install
+
+% su root
+# chown -R root /soft/gsl/2.3
+# exit
+
+
+### root
+
+# root-6.26.02
+
+% export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
+% export PATH=/soft/gcc/11.3.0/bin:$PATH
+% cd /home/morii/admin/root/
+% mkdir builddir_6.26.02
+% cd builddir_6.26.02
+% cmake ../root-6.26.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.26.02 \
+  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
+  -Dbuiltin_gsl=ON -Dgminimal=ON \
+  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_COMPILER=/soft/gcc/11.3.0/bin/gcc \
+  -DCMAKE_C_COMPILER=/soft/gcc/11.3.0/bin/gcc
+
+
+Error: interpreter/llvm/src/bin/clang-tblgen
+
+
+
+
+
+
