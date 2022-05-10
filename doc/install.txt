@@ -9,11 +9,45 @@ under "/home/morii/admin", and these files will be
 installed in the sub-directory of "/soft".
 
 
+# gcc source compile
+
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-12.1.0/gcc-12.1.0.tar.gz
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-12.1.0/sha512.sum
+
+
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/gcc-11.3.0.tar.gz
+# curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-11.3.0/sha512.sum
+
+# sha512sum --check sha512.sum
+--> gcc-11.3.0.tar.gz: OK
+
+
+% mkdir build
+% cd build
+% ../gcc-11.3.0/configure --enable-languages=c,c++ \
+  --disable-bootstrap --disable-multilib
+% make
+% make install
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
+export PATH=/soft/gcc/11.3.0/bin:$PATH
+
+
+0. install library
+
+yum install gcc-gfortran libgfortran
+
+
+
 1. fitsio library
 
 http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html
 download --> 
 /home/morii/admin/cfitsio/cfitsio3410.tar.gz
+
+for example:
+  wget https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio3410.tar.gz \
+  --no-check-certificate
 
 (By root)
 # mkdir -p /soft/cfitsio/3410
@@ -41,13 +75,14 @@ You can link the cfitsio library included in HEASOFT.
 2. blas library
 
 http://www.netlib.org/blas/
-REFERENCE BLAS Version 3.7.0
+# REFERENCE BLAS Version 3.7.0
+REFERENCE BLAS Version 3.10.0
 download -->
-/home/morii/admin/blas/blas-3.7.0.tgz
+/home/morii/admin/blas/blas-3.10.0.tgz
 
 (By root)
-# mkdir -p /soft/blas/3.7.0/lib
-# chown -R morii /soft/blas/3.7.0
+# mkdir -p /soft/blas/3.10.0/lib
+# chown -R morii /soft/blas/3.10.0
 
 (By morii)
 cd /home/morii/admin/blas
@@ -71,15 +106,16 @@ ranlib /soft/blas/3.7.0/lib/libblas.a
 http://www.netlib.org/lapack/
 download ---> 
 /home/morii/admin/lapack/lapack-3.7.0.tgz
+/home/morii/admin/lapack/lapack-3.10.1.tgz
 
 (By root)
-# mkdir -p /soft/lapack/3.7.0/lib
-# chown -R morii /soft/lapack/3.7.0
+# mkdir -p /soft/lapack/3.10.1/lib
+# chown -R morii /soft/lapack/3.10.1
 
 (By morii)
 cd /home/morii/admin/lapack
-tar xvfz lapack-3.7.0.tgz 
-cd /home/morii/admin/lapack/lapack-3.7.0
+tar xvfz lapack-3.10.1.tgz 
+cd /home/morii/admin/lapack/lapack-3.10.1
 cp make.inc.example make.inc
 
 Edit make.inc as follows:
@@ -87,7 +123,7 @@ emacs make.inc &
 
 ## BLASLIB      = ../../librefblas.a
 -->
-BLASLIB      =  /soft/blas/3.7.0/lib/libblas.a
+BLASLIB      =  /soft/blas/3.10.0/lib/libblas.a
 
 make > make.log 2>&1 & 
 
@@ -96,17 +132,17 @@ make > make.log 2>&1 &
 # and make again.
 
 output --->
-/home/morii/admin/lapack/lapack-3.7.0/
+/home/morii/admin/lapack/lapack-3.10.1/
 liblapack.a  libtmglib.a
 
-cp /home/morii/admin/lapack/lapack-3.7.0/liblapack.a \
-   /home/morii/admin/lapack/lapack-3.7.0/libtmglib.a \
-   /soft/lapack/3.7.0/lib
-ranlib /soft/lapack/3.7.0/lib/liblapack.a
-ranlib /soft/lapack/3.7.0/lib/libtmglib.a
+cp /home/morii/admin/lapack/lapack-3.10.1/liblapack.a \
+   /home/morii/admin/lapack/lapack-3.10.1/libtmglib.a \
+   /soft/lapack/3.10.1/lib
+ranlib /soft/lapack/3.10.1/lib/liblapack.a
+ranlib /soft/lapack/3.10.1/lib/libtmglib.a
 
 (By root)
-# chown -R root /soft/lapack/3.7.0
+# chown -R root /soft/lapack/3.10.1
 
 
 4. MersenneTwister
@@ -179,26 +215,89 @@ Download gsl-2.3.tar.gz to
 Follow the instruction at https://root.cern.ch/ .
 For an example, memo for Cent OS 7 is shown below.
 
+
+https://root.cern/download/
+
 # Memo for CentOS 7
 
 Download root_v6.08.02.source.tar.gz from 
 https://root.cern.ch/
----> /home/morii/admin/root/root_v6.08.02.source.tar.gz
+---> /home/morii/admin/root/root_v6.26.02.source.tar.gz
 
 % cd /home/morii/admin/root
-% tar xvfz root_v6.08.02.source.tar.gz
----> root-6.08.02
+% tar xvfz root_v6.26.02.source.tar.gz
+---> root-6.26.02
 
 % su root
-# mkdir -p /soft/root/6.08.02
-# chown morii /soft/root/6.08.02
+# mkdir -p /soft/root/6.26.02
+# chown morii /soft/root/6.26.02
 # exit
 
 % cd /home/morii/admin/root/
 % mkdir builddir
 % cd builddir
-% cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
-  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON -Dminuit2=ON -Drpath=ON -DGSL_DIR=/soft/gsl/2.3
+% cmake ../root-6.26.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.26.02 \
+  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
+  -Dbuiltin_gsl=ON -Dgminimal=ON -Droot7=ON -DCMAKE_CXX_STANDARD=17
+
+
+# root-6.24.06
+
+% cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
+  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
+  -Dbuiltin_gsl=ON -Dgminimal=ON \
+  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
+  -Dminuit2=ON -Drpath=ON
+% cmake --build . 
+( or % make -j 6)
+% cmake --build . --target install
+
+
+
+###  root-6.26.02
+
+% export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
+% export PATH=/soft/gcc/11.3.0/bin:$PATH
+% cd /home/morii/admin/root/
+% mkdir builddir_6.26.02
+% cd builddir_6.26.02
+% cmake ../root-6.26.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.26.02 \
+  -Dbuiltin_xrootd=OFF -DXROOTD_ROOT_DIR=/soft/xrootd/5.4.2 \
+  -Dbuiltin_gsl=ON -Dminimal=ON \
+  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_COMPILER=/soft/gcc/11.3.0/bin/gcc \
+  -DCMAKE_C_COMPILER=/soft/gcc/11.3.0/bin/gcc
+
+
+-Dgminimal=ON \
+
+export LD_LIBRARY_PATH=/soft/gcc/11.3.0/lib64
+
+
+
+
+
+
+
+  -Dminuit2=ON -Drpath=ON 
+  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
+
+
+% cmake --build . 
+( or % make -j 6)
+% cmake --build . --target install
+
+
+Error: 
+interpreter/llvm/src/bin/clang-tblgen 
+
+
+
+
+
+builtin_gsl
+
+
 % cmake --build . 
 ( or % make -j 6)
 % cmake --build . --target install
@@ -206,6 +305,19 @@ https://root.cern.ch/
 % su root
 # chown -R root /soft/root/6.08.02
 # exit
+
+
+# xrootd 
+
+
+
+cd ~/admin/xrootd
+mkdir build
+cd build
+cmake ../xrootd-5.4.2 -DCMAKE_INSTALL_PREFIX=/soft/xrootd/5.4.2 -DENABLE_PERL=FALSE
+make
+make install
+
 
 
 7. Installation of mitool
@@ -299,12 +411,19 @@ scl enable devtoolset-2 bash
 
 #  install cmake
 
-% cd /home/morii/admin/cmake/cmake-3.7.2
-% ./configure --prefix=/soft/cmake/3.7.2
+# yum install openssl-devel
+
+(By root)
+# mkdir -p /soft/cmake/3.23.1
+# chown -R morii /soft/cmake/3.23.1
+
+% cd /home/morii/admin/cmake/cmake-3.23.1
+% ./configure --prefix=/soft/cmake/3.23.1
 % make
 % make install
 
 ---> .bashrc , alias 
+alias cmake='/soft/cmake/3.23.1/bin/cmake'
 
 yum install libX11-devel
 yum install libXpm-devel
@@ -312,4 +431,6 @@ yum install libXft-devel
 yum install libXext-devel
 
 
-
+yum install git make cmake3 gcc-c++ gcc binutils \
+libX11-devel libXpm-devel libXft-devel \
+libXext-devel python openssl-devel
