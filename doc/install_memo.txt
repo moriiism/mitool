@@ -116,7 +116,48 @@ Download gsl-2.3.tar.gz to
 Error: interpreter/llvm/src/bin/clang-tblgen
 
 
+# xrootd 
+cd ~/admin/xrootd
+mkdir build
+cd build
+cmake ../xrootd-5.4.2 -DCMAKE_INSTALL_PREFIX=/soft/xrootd/5.4.2 -DENABLE_PERL=FALSE
+make
+make install
 
 
+
+
+
+##
+## etc
+##
+
+If you encounter some compilation errors, when you compile cern/root,
+the following memos may help you.
+
+
+cd  /etc/yum.repos.d/
+wget http://people.centos.org/tru/devtools-2/devtools-2.repo
+yum install devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
+# echo 'source /opt/rh/devtoolset-2/enable' >> /etc/profile.d/devtools.sh
+
+cmake ../root-6.08.02 -DCMAKE_INSTALL_PREFIX=/soft/root/6.08.02 \
+-Dgnuinstall=ON \
+-DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
+-DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
+-DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
+-DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
+-DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
+-DGCC_INSTALL_PREFIX=/opt/rh/devtoolset-2/root/usr
+
+-DPYTHON_INCLUDE_DIR=/soft/python/2.7.9/include/python2.7 \
+-DPYTHON_EXECUTABLE=/soft/python/2.7.9/bin/python \
+-DPYTHON_LIBRARY=/soft/python/2.7.9/lib/libpython2.7.so \
+-DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/gfortran \
+-DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-2/root/usr/bin/x86_64-redhat-linux-c++
+
+make
+make install
+scl enable devtoolset-2 bash
 
 
