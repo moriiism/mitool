@@ -3,9 +3,9 @@
 #
 
 ### MersenneTwister
-MT_DIR := /soft/MersenneTwister/mt19937-64
-MT_INC := -I$(MT_DIR)/include
-MT_LIB := -L$(MT_DIR)/lib -lmt19937-64
+#MT_DIR := /soft/MersenneTwister/mt19937-64
+#MT_INC := -I$(MT_DIR)/include
+#MT_LIB := -L$(MT_DIR)/lib -lmt19937-64
 
 ### milib
 MILIB_DIR := ${MITOOL_DIR}/milib

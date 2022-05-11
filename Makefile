@@ -1,5 +1,8 @@
-LIBS = milib  miblaslib  mifitslib  mirootlib \
+LIBS = milib  mifitslib  mirootlib \
 	mifunclib  miminuitlib  mitiminglib
+#LIBS = milib  miblaslib  mifitslib  mirootlib \
+#	mifunclib  miminuitlib  mitiminglib
+
 BINS = mitiming  miutil
 
 SUBDIR = $(LIBS) $(BINS) script  setup  doc  try

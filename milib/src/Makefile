@@ -1,11 +1,12 @@
 include ../../Makefile.in
 include ../../milib/Makefile.in
 
-INCLUDE := $(MILIB_INC) $(MT_INC)
+INCLUDE := $(MILIB_INC)
+# $(MT_INC)
 
 TARGET := libmilib.a
 
-OBJ := base.o  str.o  iolib.o  time.o  rand.o
+OBJ := base.o  str.o  iolib.o  time.o
  
 all: $(TARGET)
 

@@ -5,7 +5,6 @@ INCLUDE = $(MILIB_INC) $(MT_INC)
 LDLIBS  = $(MILIB_LIB) $(MT_LIB) $(LIB)
 
 TARGET = test_base  test_iolib \
-	test_rand \
 	test_sort  test_str  test_time
 
 all: $(TARGET) 
@@ -13,8 +12,6 @@ all: $(TARGET)
 test_base: test_base.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_iolib: test_iolib.o
-	$(CXXN) $@.o ${LDLIBS} -o $@
-test_rand: test_rand.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 test_sort: test_sort.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
