@@ -16,7 +16,11 @@
 ##
 
 export MITOOL=/home/morii/work/github/moriiism/mitool
-export LD_LIBRARY_PATH=/soft/root/6.24.06/lib:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=/soft/cfitsio/3410/lib:\
+/soft/blas/3.10.0/lib:\
+/soft/lapack/3.10.1/lib:\
+/soft/gsl/2.7.1/lib:\
+/soft/root/6.24.06/lib/root:${LD_LIBRARY_PATH}
 export PATH=/soft/root/6.24.06/bin:${PATH}
 
 alias root="root -l"

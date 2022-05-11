@@ -4,17 +4,18 @@ include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC) \
-	$(HEADAS_INC) $(ROOT_INC) $(MT_INC)
+INCLUDE := $(MITIMINGLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC)
+	$(MILIB_INC) $(HEADAS_INC) 
 
 TARGET := libmitiminglib.a
 
 OBJ := telescope.o   ephemeris.o  ephemeris_calc.o \
 	timeconv.o  folding.o  pulseprof_stat.o \
 	zn2.o  estimate.o \
-	gti.o lomb.o  gls.o \
-	binaryorb.o \
-	func_pls.o  func_maxiobs.o
+	gti.o lomb.o  gls.o
+#  func_maxiobs.o
+# func_pls.o
+#	binaryorb.o \
 
 all: $(TARGET)
 

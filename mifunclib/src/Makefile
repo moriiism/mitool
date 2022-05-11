@@ -3,8 +3,7 @@ include ../../milib/Makefile.in
 include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 
-INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) \
-	$(MILIB_INC) $(ROOT_INC) $(MT_INC)
+INCLUDE := $(MIFUNCLIB_INC) $(MIROOTLIB_INC) $(MILIB_INC)
 
 TARGET := libmifunclib.a
 

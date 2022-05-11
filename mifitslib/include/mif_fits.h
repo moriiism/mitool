@@ -4,7 +4,7 @@
 #include "fitsio.h"
 #include "mi_str.h"
 #include "mi_iolib.h"
-#include "mi_rand.h"
+//#include "mi_rand.h"
 #include "mi_sort.h"
 #include "mif_img_info.h"
 

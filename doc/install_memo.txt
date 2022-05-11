@@ -64,38 +64,6 @@ cp mt64.h /soft/MersenneTwister/mt19937-64/include
 # chown -R root /soft/MersenneTwister
 
 
-### Installation of GSL
-
-# Now, GSL can be included in cern/root by using 
-# -Dbuiltin_gsl=ON flag at cmake.
-
-Follow the instruction at https://www.gnu.org/software/gsl/ .
-Memo for Cent OS 7 is shown below for an example.
-
-# Memo for CentOS 7
-
-Download gsl-2.3.tar.gz to
-/home/morii/admin/gsl/gsl-2.3.tar.gz
-
-% cd /home/morii/admin/gsl
-% tar xvfz gsl-2.3.tar.gz
----> gsl-2.3
-
-% su root
-# mkdir -p /soft/gsl/2.3
-# chown morii /soft/gsl/2.3
-# exit
-
-% cd /home/morii/admin/gsl/gsl-2.3
-% ./configure --prefix=/soft/gsl/2.3
-% make
-% make install
-
-% su root
-# chown -R root /soft/gsl/2.3
-# exit
-
-
 ### root
 
 # root-6.26.02

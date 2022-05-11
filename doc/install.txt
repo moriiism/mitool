@@ -98,6 +98,7 @@ If you have already installed HEASOFT in your PC through source compile,
 you need not install cfitsio in this step.
 You can link the cfitsio library included in HEASOFT.
 
+
 # 
 # Installation of cern/root
 #
@@ -150,6 +151,110 @@ https://root.cern/download/root_v6.24.06.source.tar.gz
 (By root)
 # chown -R root /soft/root/6.24.06
 
+#
+# Installation of GSL
+#
+
+# GSL is already included in cern/root by using 
+# -Dbuiltin_gsl=ON flag at the cmake step of the root installation.
+# However, it is difficult to use GSL functions contained
+# in the root library.
+# Here, GSL is installed directly.
+
+Follow the instruction at https://www.gnu.org/software/gsl/ .
+gsl-latest.tar.gz
+(download) --> /home/morii/admin/gsl/gsl-latest.tar.gz
+
+(By morii)
+% cd /home/morii/admin/gsl
+% tar xvfz gsl-latest.tar.gz
+---> gsl-2.7.1
+
+(By root)
+# mkdir -p /soft/gsl/2.7.1
+# chown morii /soft/gsl/2.7.1
+
+(By morii)
+% cd /home/morii/admin/gsl/gsl-2.7.1
+% ./configure --prefix=/soft/gsl/2.7.1
+% make
+% make install
+
+(By root)
+# chown -R root /soft/gsl/2.7.1
+
+
+#
+# blas library
+#
+
+blas is already included in GSL.
+But, here we use blas functions directly.
+
+http://www.netlib.org/blas/
+REFERENCE BLAS Version 3.10.0
+download -->
+/home/morii/admin/blas/blas-3.10.0.tgz
+
+(By root)
+# mkdir -p /soft/blas/3.10.0/lib
+# chown -R morii /soft/blas/3.10.0
+
+(By morii)
+cd /home/morii/admin/blas
+tar xvfz blas-3.7.0.tgz
+cd /home/morii/admin/blas/BLAS-3.10.0
+make > make.log 2>&1 & 
+output --->
+/home/morii/admin/blas/BLAS-3.10.0/blas_LINUX.a
+
+cp /home/morii/admin/blas/BLAS-3.10.0/blas_LINUX.a \
+/soft/blas/3.10.0/lib/libblas.a
+ranlib /soft/blas/3.10.0/lib/libblas.a
+
+(By root)
+# chown -R root /soft/blas/3.10.0
+
+
+#
+# lapack library
+#
+
+http://www.netlib.org/lapack/
+(download) ---> 
+/home/morii/admin/lapack/lapack-3.10.1.tar.gz
+
+(By root)
+# mkdir -p /soft/lapack/3.10.1/lib
+# chown -R morii /soft/lapack/3.10.1
+
+(By morii)
+cd /home/morii/admin/lapack
+tar xvfz lapack-3.10.1.tar.gz
+cd /home/morii/admin/lapack/lapack-3.10.1
+cp make.inc.example make.inc
+
+make > make.log 2>&1 & 
+
+# If you have errors in Testing step, set as follows:
+# ulimit -s 65000
+# and make again.
+
+output --->
+/home/morii/admin/lapack/lapack-3.10.1/
+liblapack.a  libtmglib.a  librefblas.a
+
+cp /home/morii/admin/lapack/lapack-3.10.1/liblapack.a \
+   /home/morii/admin/lapack/lapack-3.10.1/libtmglib.a \
+   /home/morii/admin/lapack/lapack-3.10.1/librefblas.a \
+   /soft/lapack/3.10.1/lib
+ranlib /soft/lapack/3.10.1/lib/liblapack.a
+ranlib /soft/lapack/3.10.1/lib/libtmglib.a
+ranlib /soft/lapack/3.10.1/lib/librefblas.a
+
+(By root)
+# chown -R root /soft/lapack/3.10.1
+
 
 #
 # Installation of mitool
@@ -185,79 +290,6 @@ tail -f make_test.log
 # Optional steps
 #
 
-#
-# blas library
-#
-
-http://www.netlib.org/blas/
-# REFERENCE BLAS Version 3.7.0
-REFERENCE BLAS Version 3.10.0
-download -->
-/home/morii/admin/blas/blas-3.10.0.tgz
-
-(By root)
-# mkdir -p /soft/blas/3.10.0/lib
-# chown -R morii /soft/blas/3.10.0
-
-(By morii)
-cd /home/morii/admin/blas
-tar xvfz blas-3.7.0.tgz
-cd /home/morii/admin/blas/BLAS-3.7.0
-make > make.log 2>&1 & 
-output --->
-/home/morii/admin/blas/BLAS-3.7.0/blas_LINUX.a
-
-cp /home/morii/admin/blas/BLAS-3.7.0/blas_LINUX.a \
-/soft/blas/3.7.0/lib/libblas.a
-ranlib /soft/blas/3.7.0/lib/libblas.a
-
-(By root)
-# chown -R root /soft/blas/3.7.0
-
-#
-# lapack library
-#
-
-http://www.netlib.org/lapack/
-download ---> 
-/home/morii/admin/lapack/lapack-3.7.0.tgz
-/home/morii/admin/lapack/lapack-3.10.1.tgz
-
-(By root)
-# mkdir -p /soft/lapack/3.10.1/lib
-# chown -R morii /soft/lapack/3.10.1
-
-(By morii)
-cd /home/morii/admin/lapack
-tar xvfz lapack-3.10.1.tgz 
-cd /home/morii/admin/lapack/lapack-3.10.1
-cp make.inc.example make.inc
-
-Edit make.inc as follows:
-emacs make.inc &
-
-## BLASLIB      = ../../librefblas.a
--->
-BLASLIB      =  /soft/blas/3.10.0/lib/libblas.a
-
-make > make.log 2>&1 & 
-
-# If you have errors in Testing step, set as follows:
-# ulimit -s 65000
-# and make again.
-
-output --->
-/home/morii/admin/lapack/lapack-3.10.1/
-liblapack.a  libtmglib.a
-
-cp /home/morii/admin/lapack/lapack-3.10.1/liblapack.a \
-   /home/morii/admin/lapack/lapack-3.10.1/libtmglib.a \
-   /soft/lapack/3.10.1/lib
-ranlib /soft/lapack/3.10.1/lib/liblapack.a
-ranlib /soft/lapack/3.10.1/lib/libtmglib.a
-
-(By root)
-# chown -R root /soft/lapack/3.10.1
 
 #
 # OpenBLAS library

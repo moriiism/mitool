@@ -5,7 +5,7 @@ include ../../mifunclib/Makefile.in
 include ../../miminuitlib/Makefile.in
 
 INCLUDE := $(MIMINUITLIB_INC) $(MIFUNCLIB_INC) \
-	$(MIROOTLIB_INC) $(MILIB_INC) $(ROOT_INC) $(MT_INC)
+	$(MIROOTLIB_INC) $(MILIB_INC)
 
 TARGET := libmiminuitlib.a
 
