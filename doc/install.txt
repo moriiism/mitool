@@ -44,6 +44,7 @@ yum install git make cmake
 yum install gcc-c++ gcc
 yum install gcc-gfortran libgfortran
 yum install binutils python 
+yum install perl-devel
 
 #
 # install cmake
@@ -313,6 +314,7 @@ https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
 # use new compiler, use screen
 % screen
 % export PATH=/soft/gcc/11.3.0/bin:$PATH
+% export LD_LIBRARY_PATH=/soft/gcc/11.3.0/lib64
 
 % cd /home/morii/admin/heasoft/heasoft-6.30.1/BUILD_DIR
 % ./configure --prefix=/soft/heasoft/6.30.1 > config.txt 2>&1 &
