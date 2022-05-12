@@ -38,6 +38,8 @@ yum install libX11-devel
 yum install libXpm-devel
 yum install libXft-devel
 yum install libXext-devel
+yum install libXt-devel
+yum install ncurses-devel
 yum install git make cmake 
 yum install gcc-c++ gcc
 yum install gcc-gfortran libgfortran
@@ -289,6 +291,37 @@ tail -f make_test.log
 #
 # Optional steps
 #
+
+#
+# heasoft
+#
+
+
+https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
+# select mission: MAXI and Suzaku
+# qdp is included in XANADU package.
+(download) --> /home/morii/admin/heasoft/heasoft-6.30.1src.tar.gz
+
+% cd /home/morii/admin/heasoft/
+% tar xvfz heasoft-6.30.1src.tar.gz
+
+(By root)
+# mkdir -p /soft/heasoft/6.30.1
+# chown -R morii /soft/heasoft/6.30.1
+
+(By morii)
+# use new compiler, use screen
+% screen
+% export PATH=/soft/gcc/11.3.0/bin:$PATH
+
+% cd /home/morii/admin/heasoft/heasoft-6.30.1/BUILD_DIR
+% ./configure --prefix=/soft/heasoft/6.30.1 > config.txt 2>&1 &
+% make > build.log 2>&1 &
+% make install > install.log 2>&1
+
+
+
+
 
 
 #

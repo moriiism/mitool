@@ -15,7 +15,9 @@
 
 % mkdir build
 % cd build
-% ../gcc-11.3.0/configure --enable-languages=c,c++ \
+% ../gcc-11.3.0/configure \
+  --prefix=/soft/gcc/11.3.0 \
+  --enable-languages=c,c++,fortran \
   --disable-bootstrap --disable-multilib
 % make
 % make install
