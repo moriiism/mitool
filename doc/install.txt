@@ -297,7 +297,6 @@ tail -f make_test.log
 # heasoft
 #
 
-
 https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
 # select mission: MAXI and Suzaku
 # qdp is included in XANADU package.
@@ -313,17 +312,14 @@ https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
 (By morii)
 # use new compiler, use screen
 % screen
-% export PATH=/soft/gcc/11.3.0/bin:$PATH
-% export LD_LIBRARY_PATH=/soft/gcc/11.3.0/lib64
+
+export PATH=/soft/gcc/9.4.0/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/9.4.0/lib64
 
 % cd /home/morii/admin/heasoft/heasoft-6.30.1/BUILD_DIR
 % ./configure --prefix=/soft/heasoft/6.30.1 > config.txt 2>&1 &
 % make > build.log 2>&1 &
 % make install > install.log 2>&1
-
-
-
-
 
 
 #

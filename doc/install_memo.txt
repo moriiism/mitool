@@ -25,6 +25,34 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/11.3.0/lib64
 export PATH=/soft/gcc/11.3.0/bin:$PATH
 
+### gcc source compile version 9
+
+curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-9.4.0/gcc-9.4.0.tar.gz
+curl -LO http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-9.4.0/sha512.sum
+
+# sha512sum --check sha512.sum
+--> gcc-9.4.0.tar.gz: OK
+
+
+% mkdir build_9.4.0
+% cd build_9.4.0
+% ../gcc-9.4.0/configure \
+  --prefix=/soft/gcc/9.4.0 \
+  --enable-languages=c,c++,fortran \
+  --disable-bootstrap --disable-multilib
+% make
+% make install
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/9.4.0/lib64
+export PATH=/soft/gcc/9.4.0/bin:$PATH
+
+
+
+
+
+
+
+
 
 ### MersenneTwister
 

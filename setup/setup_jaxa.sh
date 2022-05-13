@@ -16,7 +16,8 @@
 ##
 
 export MITOOL=/home/morii/work/github/moriiism/mitool
-export LD_LIBRARY_PATH=/soft/cfitsio/3410/lib:\
+export LD_LIBRARY_PATH=/soft/gcc/9.4.0/lib64:\
+/soft/cfitsio/3410/lib:\
 /soft/blas/3.10.0/lib:\
 /soft/lapack/3.10.1/lib:\
 /soft/gsl/2.7.1/lib:\
@@ -25,15 +26,14 @@ export PATH=/soft/root/6.24.06/bin:${PATH}
 
 alias root="root -l"
 
-##
-## HEADAS
-##
 #
-#HEADAS_VER=6.16
-## export HEADAS=/soft/heasoft/heasoft-${HEADAS_VER}/x86_64-unknown-linux-gnu-libc2.12
-#export HEADAS=/soft/heasoft/${HEADAS_VER}/x86_64-unknown-linux-gnu-libc2.17
-#source $HEADAS/headas-init.sh
-#export PGPLOT_TYPE=/xw
+# HEADAS
+#
+
+HEADAS_VER=6.30.1
+export HEADAS=/soft/heasoft/${HEADAS_VER}/x86_64-pc-linux-gnu-libc2.17
+source $HEADAS/headas-init.sh
+export PGPLOT_TYPE=/xw
 
 ################################################################
 ################################################################
