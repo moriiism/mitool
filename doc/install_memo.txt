@@ -52,8 +52,6 @@ export PATH=/soft/gcc/9.4.0/bin:$PATH
 
 
 
-
-
 ### MersenneTwister
 
 # Now, MersenneTwister is supported by TRandom3() of cern/root.

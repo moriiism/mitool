@@ -18,7 +18,7 @@
 export MITOOL=/home/morii/work/github/moriiism/mitool
 export LD_LIBRARY_PATH=/soft/gcc/9.4.0/lib64:\
 /soft/cfitsio/3410/lib:\
-/soft/blas/3.10.0/lib:\
+/soft/OpenBLAS/0.3.20/lib:\
 /soft/lapack/3.10.1/lib:\
 /soft/gsl/2.7.1/lib:\
 /soft/root/6.24.06/lib/root:${LD_LIBRARY_PATH}

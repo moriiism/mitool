@@ -7,7 +7,7 @@ INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC)
 
 TARGET := libmiblaslib.a
 
-OBJ := linalg.o
+OBJ := linalg.o blas.o
 
 all: $(TARGET)
 

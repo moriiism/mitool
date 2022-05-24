@@ -3,14 +3,15 @@ include ../../milib/Makefile.in
 include ../../miblaslib/Makefile.in
 
 INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
-LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(LIB)
+LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(OPENBLAS_LIB) $(LIB) -lgfortran
+# LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(BLAS_LIB) $(LIB) -lgfortran
 
-TARGET = 
+TARGET = elm_wise_mul
 
 all: $(TARGET) 
 
-#test_base: test_base.o
-#	$(CXXN) $@.o ${LDLIBS} -o $@
+elm_wise_mul: elm_wise_mul.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
 
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc

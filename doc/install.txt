@@ -113,7 +113,7 @@ For example, on 2022/05/10, I found the newest version,
 root_v6.26.02.source.tar.gz, but there is no corresponding centos7
 binary package. On the other hand, for the version 6.24.06,
 a centos7 binary package is listed.
-It suggests that installing version 6.26.02 to centos7 is difficult,
+It suggests that installing that of version 6.26.02 to centos7 is difficult,
 but version 6.24.06 is possible.
 So, let's install version 6.24.06 in centos7.
 Struggle to install the newest version is a waste of time.
@@ -138,10 +138,24 @@ https://root.cern/download/root_v6.24.06.source.tar.gz
 % cd builddir_6.24.06
 
 % cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
-  -Dbuiltin_gsl=ON -Dgminimal=ON \
-  -Dgnuinstall=ON -Dgsl_shared=ON -Dmathmore=ON \
-  -Dminuit2=ON
+  -Dbuiltin_fftw3=ON -Dbuiltin_gsl=ON -Dmemstat=ON -Dminuit2=ON \
+  -Dgnuinstall=OFF -Drpath=ON
 
+# If rpath is set to OFF, errors something like below will happen, 
+# when linking root library to your own program.
+#   /usr/bin/ld: warning: libtbb.so.2, needed by /soft/root/6.24.06/lib/libImt.so, 
+#   not found (try using -rpath or -rpath-link)
+#   /usr/bin/ld: warning: libvdt.so, needed by /soft/root/6.24.06/lib/libROOTVecOps.so,
+#   not found (try using -rpath or -rpath-link)
+#   /soft/root/6.24.06/lib/libImt.so: undefined reference to 
+#   `tbb::task::note_affinity(unsigned short)'
+#   ....
+# -Dgnuinstall=OFF: location independent installation
+
+
+#-Dmathmore=ON
+#-Dgsl_shared=ON 
+#-Dgminimal=ON
 
 % cmake --build .
 ( or % make -j 4)
@@ -257,6 +271,7 @@ ranlib /soft/lapack/3.10.1/lib/librefblas.a
 
 (By root)
 # chown -R root /soft/lapack/3.10.1
+
 
 
 #
