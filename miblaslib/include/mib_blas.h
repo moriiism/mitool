@@ -7,6 +7,7 @@
 extern "C" {
 #endif
     double dnrm2_(const int& N, double* X, const int& INCX);
+    // daxpy_: y <-- ax + y
     void daxpy_(const int& N, const double& DA, double* DX,
                 const int& INCX, double* DY, const int& INCY);
     void dscal_(const int& N, const double& DA, double* DX,
@@ -18,6 +19,7 @@ extern "C" {
                 const double& ALPHA, double* A, const int& LDA,
                 double* B, const int& LDB,
                 const double& BETA, double* C, const int& LDC);
+    // dgemv_: y <-- alpha A x + beta y
     void dgemv_(char* TRANS, const int& M, const int& N,
 		const double& ALPHA, double* A, const int& LDA,
 		double* X, const int& INCX,

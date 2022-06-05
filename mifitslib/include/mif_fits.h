@@ -47,22 +47,44 @@ namespace MifFits
                       int bitpix,
                       const long* const naxes,
                       const float* const data_arr);
+    int OutFitsImageF(string outfile,
+                      int naxis,
+                      int bitpix,
+                      const long* const naxes,
+                      const float* const data_arr);
+    
     int OutFitsImageD(string outdir, string outfile_head, string tag,
                       int naxis,
                       int bitpix,
                       const long* const naxes,
                       const double* const data_arr);
+    int OutFitsImageD(string outfile,
+                      int naxis,
+                      int bitpix,
+                      const long* const naxes,
+                      const double* const data_arr);    
     
     int OutFitsCubeF(string outdir, string outfile_head, string tag,
                      int naxis,
                      int bitpix,
                      const long* const naxes,
                      const float* const data_arr);
+    int OutFitsCubeF(string outfile,
+                     int naxis,
+                     int bitpix,
+                     const long* const naxes,
+                     const float* const data_arr);
+    
     int OutFitsCubeD(string outdir, string outfile_head, string tag,
                      int naxis,
                      int bitpix,
                      const long* const naxes,
-                     const double* const data_arr);    
+                     const double* const data_arr);
+    int OutFitsCubeD(string outfile,
+                     int naxis,
+                     int bitpix,
+                     const long* const naxes,
+                     const double* const data_arr);        
     
 }  // namespace MifFits
 

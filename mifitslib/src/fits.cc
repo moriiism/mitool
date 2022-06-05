@@ -470,6 +470,33 @@ int MifFits::OutFitsImageF(string outdir, string outfile_head, string tag,
     return status;
 }
 
+int MifFits::OutFitsImageF(string outfile,
+                           int naxis,
+                           int bitpix,
+                           const long* const naxes,
+                           const float* const data_arr)
+{
+    int status = 0;
+    if(2 != naxis){
+        abort();
+    }
+    long npix_image = naxes[0] * naxes[1];
+    char outfile_tmp[kLineSize];
+    sprintf(outfile_tmp, "!%s", outfile.c_str());
+    fitsfile* fptr_out = NULL;
+    fits_create_file(&fptr_out, outfile_tmp, &status);
+    fits_create_img(fptr_out, bitpix, naxis, const_cast<long*>(naxes), &status);
+
+    long firstpix[2] = {1,1};
+    fits_write_pix(fptr_out, TFLOAT, firstpix,
+                   npix_image, const_cast<float*>(data_arr), &status);
+    fits_close_file(fptr_out, &status);
+    fits_report_error(stderr, status);
+
+    return status;
+}
+
+
 int MifFits::OutFitsImageD(string outdir, string outfile_head, string tag,
                            int naxis,
                            int bitpix,
@@ -499,6 +526,31 @@ int MifFits::OutFitsImageD(string outdir, string outfile_head, string tag,
     return status;
 }
 
+int MifFits::OutFitsImageD(string outfile,
+                           int naxis,
+                           int bitpix,
+                           const long* const naxes,
+                           const double* const data_arr)
+{
+    int status = 0;
+    if(2 != naxis){
+        abort();
+    }
+    long npix_image = naxes[0] * naxes[1];
+    char outfile_tmp[kLineSize];
+    sprintf(outfile_tmp, "!%s", outfile.c_str());
+    fitsfile* fptr_out = NULL;
+    fits_create_file(&fptr_out, outfile_tmp, &status);
+    fits_create_img(fptr_out, bitpix, naxis, const_cast<long*>(naxes), &status);
+
+    long firstpix[2] = {1,1};
+    fits_write_pix(fptr_out, TDOUBLE, firstpix,
+                   npix_image, const_cast<double*>(data_arr), &status);
+    fits_close_file(fptr_out, &status);
+    fits_report_error(stderr, status);
+
+    return status;
+}
 
 int MifFits::OutFitsCubeF(string outdir, string outfile_head, string tag,
                           int naxis,
@@ -529,6 +581,32 @@ int MifFits::OutFitsCubeF(string outdir, string outfile_head, string tag,
     return status;
 }
 
+int MifFits::OutFitsCubeF(string outfile,
+                          int naxis,
+                          int bitpix,
+                          const long* const naxes,
+                          const float* const data_arr)
+{
+    int status = 0;
+    if(3 != naxis){
+        abort();
+    }
+    long npix_cube = naxes[0] * naxes[1] * naxes[2];
+    char outfile_tmp[kLineSize];
+    sprintf(outfile_tmp, "!%s", outfile.c_str());
+    fitsfile* fptr_out = NULL;
+    fits_create_file(&fptr_out, outfile_tmp, &status);
+    fits_create_img(fptr_out, bitpix, naxis, const_cast<long*>(naxes), &status);
+
+    long firstpix[3] = {1,1,1};
+    fits_write_pix(fptr_out, TFLOAT, firstpix,
+                   npix_cube, const_cast<float*>(data_arr), &status);
+    fits_close_file(fptr_out, &status);
+    fits_report_error(stderr, status);
+
+    return status;
+}
+
 
 int MifFits::OutFitsCubeD(string outdir, string outfile_head, string tag,
                           int naxis,
@@ -548,6 +626,32 @@ int MifFits::OutFitsCubeD(string outdir, string outfile_head, string tag,
             tag.c_str());
     fitsfile* fptr_out = NULL;
     fits_create_file(&fptr_out, outfile, &status);
+    fits_create_img(fptr_out, bitpix, naxis, const_cast<long*>(naxes), &status);
+
+    long firstpix[3] = {1,1,1};
+    fits_write_pix(fptr_out, TDOUBLE, firstpix,
+                   npix_cube, const_cast<double*>(data_arr), &status);
+    fits_close_file(fptr_out, &status);
+    fits_report_error(stderr, status);
+
+    return status;
+}
+
+int MifFits::OutFitsCubeD(string outfile,
+                          int naxis,
+                          int bitpix,
+                          const long* const naxes,
+                          const double* const data_arr)
+{
+    int status = 0;
+    if(3 != naxis){
+        abort();
+    }
+    long npix_cube = naxes[0] * naxes[1] * naxes[2];
+    char outfile_tmp[kLineSize];
+    sprintf(outfile_tmp, "!%s", outfile.c_str());
+    fitsfile* fptr_out = NULL;
+    fits_create_file(&fptr_out, outfile_tmp, &status);
     fits_create_img(fptr_out, bitpix, naxis, const_cast<long*>(naxes), &status);
 
     long firstpix[3] = {1,1,1};
