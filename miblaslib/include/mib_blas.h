@@ -58,6 +58,17 @@ extern "C" {
 
 namespace MibBlas
 {
+    // addition: vec1_arr + vec2_arr
+    void Add(const double* const vec1_arr,
+             const double* const vec2_arr,
+             int nelm,
+             double* const add_arr);
+    // subtraction: vec1_arr - vec2_arr
+    void Sub(const double* const vec1_arr,
+             const double* const vec2_arr,
+             int nelm,
+             double* const sub_arr);
+
     double Sum(const double* const arr, int narr);
 
     // element-wise multiplication of two vectors

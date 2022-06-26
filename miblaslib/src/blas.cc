@@ -6,6 +6,26 @@
 
 #include "mib_blas.h"
 
+// addition: vec1_arr + vec2_arr
+void MibBlas::Add(const double* const vec1_arr,
+                  const double* const vec2_arr,
+                  int nelm,
+                  double* const add_arr)
+{
+    dcopy_(nelm, const_cast<double*>(vec1_arr), 1, add_arr, 1);
+    daxpy_(nelm, 1.0, const_cast<double*>(vec2_arr), 1, add_arr, 1);
+}
+
+// subtraction: vec1_arr - vec2_arr
+void MibBlas::Sub(const double* const vec1_arr,
+                  const double* const vec2_arr,
+                  int nelm,
+                  double* const sub_arr)
+{
+    dcopy_(nelm, const_cast<double*>(vec1_arr), 1, sub_arr, 1);
+    daxpy_(nelm, -1.0, const_cast<double*>(vec2_arr), 1, sub_arr, 1);
+}
+
 double MibBlas::Sum(const double* const arr, int narr)
 {
     //double* dummy_arr = new double[1];
