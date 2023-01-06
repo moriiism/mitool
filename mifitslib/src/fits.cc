@@ -89,7 +89,7 @@ int MifFits::InFitsImageF(string infile,
     fits_report_error(stderr, status);
 
     for(long iarr = 0; iarr < npix_image_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
@@ -156,7 +156,7 @@ int MifFits::InFitsImageD(string infile,
     fits_report_error(stderr, status);
 
     for(long iarr = 0; iarr < npix_image_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
@@ -225,7 +225,7 @@ int MifFits::InFitsCubeF(string infile,
     fits_report_error(stderr, status);
 
     for(long iarr = 0; iarr < npix_cube_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
@@ -294,7 +294,7 @@ int MifFits::InFitsCubeD(string infile,
     fits_report_error(stderr, status);
 
     for(long iarr = 0; iarr < npix_cube_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
@@ -363,7 +363,7 @@ int MifFits::InFits4dF(string infile,
     fits_report_error(stderr, status);
     
     for(long iarr = 0; iarr < npix_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
@@ -428,7 +428,7 @@ int MifFits::InFits4dD(string infile,
     fits_close_file(fptr_in, &status);
     fits_report_error(stderr, status);
     for(long iarr = 0; iarr < npix_sub_vec; iarr++){
-        if(isnan(data_arr[iarr])){
+        if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
         if(isinf(data_arr[iarr])){
