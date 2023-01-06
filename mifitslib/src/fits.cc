@@ -92,7 +92,7 @@ int MifFits::InFitsImageF(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
@@ -159,7 +159,7 @@ int MifFits::InFitsImageD(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
@@ -228,7 +228,7 @@ int MifFits::InFitsCubeF(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
@@ -297,7 +297,7 @@ int MifFits::InFitsCubeD(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
@@ -366,7 +366,7 @@ int MifFits::InFits4dF(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
@@ -431,7 +431,7 @@ int MifFits::InFits4dD(string infile,
         if(std::isnan(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }
-        if(isinf(data_arr[iarr])){
+        if(std::isinf(data_arr[iarr])){
             data_arr[iarr] = 0.0;
         }        
     }
