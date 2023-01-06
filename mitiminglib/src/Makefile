@@ -4,8 +4,8 @@ include ../../mirootlib/Makefile.in
 include ../../mifunclib/Makefile.in
 include ../../mitiminglib/Makefile.in
 
-INCLUDE := $(MITIMINGLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC)
-	$(MILIB_INC) $(HEADAS_INC) 
+INCLUDE := $(MITIMINGLIB_INC) $(MIFUNCLIB_INC) $(MIROOTLIB_INC) \
+	$(MILIB_INC) $(HEADAS_INC)
 
 TARGET := libmitiminglib.a
 
