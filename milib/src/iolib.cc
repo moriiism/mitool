@@ -319,6 +319,7 @@ int MiIolib::Printf2(FILE* fp_log, const char* const format, ...)
 void MiIolib::Qstop()
 {
     int idummy;
-    scanf("%d", &idummy);
+    int ret = scanf("%d", &idummy);
+    (void) ret;
 }
 
