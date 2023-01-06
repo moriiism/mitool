@@ -28,7 +28,8 @@ int main(int argc, char* argv[]){
     if( MiIolib::TestFileExist(argval->GetOutdir()) ){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
-        system(cmd);
+        int ret = system(cmd);
+        (void) ret;
     }
     sprintf(logfile, "%s/%s_%s.log",
             argval->GetOutdir().c_str(),

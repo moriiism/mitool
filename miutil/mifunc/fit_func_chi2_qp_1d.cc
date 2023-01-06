@@ -45,7 +45,8 @@ int main(int argc, char* argv[]){
     if( MiIolib::TestFileExist(argval->GetOutdir()) ){
         char cmd[kLineSize];
         sprintf(cmd, "mkdir -p %s", argval->GetOutdir().c_str());
-        system(cmd);
+        int ret = system(cmd);
+        (void) ret;
     }
     sprintf(logfile, "%s/%s_%s.log",
             argval->GetOutdir().c_str(),
@@ -246,6 +247,7 @@ int main(int argc, char* argv[]){
 
     TGondzioSolver* s = new TGondzioSolver(qp, prob);
     int ret = s->Solve(prob, vars, resid);
+    (void) ret;
     TVectorD weight = vars->fX;
 
     printf("---- QP --- \n");
