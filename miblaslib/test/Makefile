@@ -6,11 +6,14 @@ INCLUDE := $(MIBLASLIB_INC) $(MILIB_INC) $(MT_INC)
 LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(OPENBLAS_LIB) $(LIB) -lgfortran
 # LDLIBS  := $(MIBLASLIB_LIB) $(MILIB_LIB) $(MT_LIB) $(BLAS_LIB) $(LIB) -lgfortran
 
-TARGET = elm_wise_mul
+TARGET = elm_wise_mul  init
 
 all: $(TARGET) 
 
 elm_wise_mul: elm_wise_mul.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+
+init: init.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 
 .SUFFIXES:

@@ -44,7 +44,7 @@ void MibBlas::ElmWiseMul(int narr,
                          const double* const y_arr,
                          double* const out_arr)
 {
-    char uplo[1];
+    char uplo[2];
     strcpy(uplo, "U");
     int k = 0; // diagonal matrix; 0 super-diagonal bands
     int lda = 1;
