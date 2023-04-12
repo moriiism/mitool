@@ -6,6 +6,15 @@
 
 #include "mib_blas.h"
 
+// set constant value
+void MibBlas::SetConstVal(int nelm, double value,
+                          double* const vec_arr)
+{
+    double dummy_arr[1];
+    dummy_arr[0] = value;
+    dcopy_(nelm, dummy_arr, 0, vec_arr, 1);
+}
+
 // addition: vec1_arr + vec2_arr
 void MibBlas::Add(const double* const vec1_arr,
                   const double* const vec2_arr,

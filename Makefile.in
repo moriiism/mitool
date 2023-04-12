@@ -13,13 +13,16 @@ FC := f77
 CC := gcc
 CXX := g++
 LD := gcc
+NVCC := nvcc
 
 FFLAGS   := -Wall -g -O2 -fPIC
 CFLAGS   := -Wall -g -O2 -fPIC
 CXXFLAGS := -Wall -g -O3 -fPIC
 LDFLAGS  := -g -O2
+NVCCFLAGS := 
 
 FCN     = $(FC) $(FFLAGS) $(INCLUDE)
 CCN     = $(CC) $(CFLAGS) $(INCLUDE)
 CXXN    = $(CXX) $(CXXFLAGS) $(INCLUDE)
 CXXN_OPENBLAS = $(CXX) $(CXXFLAGS) $(INCLUDE_OPENBLAS)
+NVCCN    = $(NVCC) $(NVCCFLAGS) $(INCLUDE)

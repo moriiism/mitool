@@ -7,7 +7,8 @@ BLAS_LIB = -L/soft/blas/3.10.0/lib -lblas
 OPENBLAS_LIB = -L/soft/OpenBLAS/0.3.20/lib -lopenblas -lpthread -lgfortran
 
 #### lapack
-LAPACK_LIB = -L/soft/lapack/3.10.1/lib -llapack -ltmglib -lgfortran
+# LAPACK_LIB = -L/soft/lapack/3.10.1/lib -llapack -ltmglib -lgfortran
+LAPACK_LIB = -L/soft/lapack/lapack-3.11.0/lib -llapack -ltmglib -lgfortran
 
 ### gsl
 GSL_DIR := /soft/gsl/2.7.1

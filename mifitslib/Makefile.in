@@ -3,19 +3,18 @@
 #
 
 ### cfitsio
-CFITSIO_DIR := /soft/cfitsio/3410
-CFITSIO_INC := -I$(CFITSIO_DIR)/include
-CFITSIO_LIB := -L$(CFITSIO_DIR)/lib -lcfitsio
+#CFITSIO_DIR := /soft/cfitsio/3410
+#CFITSIO_INC := -I$(CFITSIO_DIR)/include
+#CFITSIO_LIB := -L$(CFITSIO_DIR)/lib -lcfitsio
 
 #### cfitsio in heasoft
-##CFITSIO_INC := -I/soft/heasoft/6.16/ftools/x86_64-unknown-linux-gnu-libc2.17/include \
-##	-I/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/include
-##CFITSIO_LIB := -L/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/lib -lcfitsio_3.37
-#
-#CFITSIO_INC := -I/soft/heasoft/heasoft-6.16/ftools/x86_64-unknown-linux-gnu-libc2.12/include \
-#	-I/soft/heasoft/heasoft-6.16/x86_64-unknown-linux-gnu-libc2.12/include
-#
-#CFITSIO_LIB := -L/soft/heasoft/heasoft-6.16/x86_64-unknown-linux-gnu-libc2.12/lib -lcfitsio_3.37
+#CFITSIO_INC := -I/soft/heasoft/6.16/ftools/x86_64-unknown-linux-gnu-libc2.17/include \
+#	-I/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/include
+#CFITSIO_LIB := -L/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/lib -lcfitsio_3.37
+
+CFITSIO_INC := -I/soft/heasoft/heasoft-6.30.1/x86_64-pc-linux-gnu-libc2.31/include
+
+CFITSIO_LIB := -L/soft/heasoft/heasoft-6.30.1/x86_64-pc-linux-gnu-libc2.31/lib -lcfitsio
 
 ### mifitslib
 MIFITSLIB_DIR := ${MITOOL_DIR}/mifitslib

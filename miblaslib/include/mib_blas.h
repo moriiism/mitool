@@ -58,6 +58,10 @@ extern "C" {
 
 namespace MibBlas
 {
+    // set constant value
+    void SetConstVal(int nelm, double value,
+                     double* const vec_arr);
+   
     // addition: vec1_arr + vec2_arr
     void Add(const double* const vec1_arr,
              const double* const vec2_arr,
