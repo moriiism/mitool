@@ -20,6 +20,9 @@ test_str: test_str.o
 test_time: test_time.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 
+test_rand_mt: test_rand_mt.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+
 .SUFFIXES:
 .SUFFIXES: .o .c .f .F .cc
 

@@ -34,6 +34,12 @@ HEADAS_VER=6.30.1
 export HEADAS=/soft/heasoft/${HEADAS_VER}/x86_64-pc-linux-gnu-libc2.17
 source $HEADAS/headas-init.sh
 export PGPLOT_TYPE=/xw
+#export PGPLOT_PS_WIDTH=7500
+#export PGPLOT_PS_HEIGHT=11000
+
+export PGPLOT_PS_WIDTH=30000
+export PGPLOT_PS_HEIGHT=44000
+
 
 ################################################################
 ################################################################
