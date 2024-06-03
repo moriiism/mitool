@@ -1,0 +1,381 @@
+#
+# install.txt
+#
+
+Installation steps are shown below.
+In this explanation, the user name is assumed to be "morii".
+The downloaded files will be stored in the sub-directory
+under "/home/morii/admin", and these files will be
+installed in the sub-directory of "/soft".
+CentOS 7 is assumed.
+
+#
+# screen
+#
+
+It takes too much time to build a root library. 
+So, use "screen" as follows.
+
+yum install screen
+
+% screen
+# detach
+Ctrl+a d
+
+# list session
+% screen -ls
+
+# re-attach
+% screen -r <session name>
+
+
+#
+# install some library by using yum
+#
+
+yum install openssl-devel
+yum install libX11-devel
+yum install libXpm-devel
+yum install libXft-devel
+yum install libXext-devel
+yum install libXt-devel
+yum install ncurses-devel
+yum install git make cmake 
+yum install gcc-c++ gcc
+yum install gcc-gfortran libgfortran
+yum install binutils python 
+yum install perl-devel
+
+#
+# install cmake
+# 
+
+https://cmake.org/
+cmake-3.23.1.tar.gz
+(download) --> /home/morii/admin/cmake/cmake-3.23.1.tar.gz
+% cd /home/morii/admin/cmake/
+% tar xvfz cmake-3.23.1.tar.gz
+
+(By root)
+# mkdir -p /soft/cmake/3.23.1
+# chown -R morii /soft/cmake/3.23.1
+
+% cd /home/morii/admin/cmake/cmake-3.23.1
+% ./configure --prefix=/soft/cmake/3.23.1
+% make
+% make install
+
+# edit ~/.bashrc, add alias.
+alias cmake='/soft/cmake/3.23.1/bin/cmake'
+
+#
+# install cmake
+#
+#
+#yum install epel-release
+#yum install --enablerepo='epel' cmake3
+#
+
+
+#
+# fitsio library
+#
+
+http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html
+(download) --> /home/morii/admin/cfitsio/cfitsio3410.tar.gz
+for example:
+  wget https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio3410.tar.gz \
+  --no-check-certificate
+
+(By root)
+# mkdir -p /soft/cfitsio/3410
+# chown morii /soft/cfitsio/3410
+
+(By morii)
+% cd /home/morii/admin/cfitsio
+% tar xvfz cfitsio3410.tar.gz
+% cd cfitsio
+
+./configure --prefix=/soft/cfitsio/3410
+make shared > make.log 2>&1 &
+tail -f make.log
+
+make install > make_install.log 2>&1 &
+tail -f make_install.log
+
+(By root)
+# chown -R root /soft/cfitsio/3410
+
+If you have already installed HEASOFT in your PC through source compile,
+you need not install cfitsio in this step.
+You can link the cfitsio library included in HEASOFT.
+
+
+# 
+# Installation of cern/root
+#
+
+Follow the instruction at https://root.cern.ch/ .
+To download source code of root, let's check the file list at
+https://root.cern/download/
+For example, on 2022/05/10, I found the newest version, 
+root_v6.26.02.source.tar.gz, but there is no corresponding centos7
+binary package. On the other hand, for the version 6.24.06,
+a centos7 binary package is listed.
+It suggests that installing that of version 6.26.02 to centos7 is difficult,
+but version 6.24.06 is possible.
+So, let's install version 6.24.06 in centos7.
+Struggle to install the newest version is a waste of time.
+
+
+# Download root_v6.24.06.source.tar.gz from 
+https://root.cern/download/root_v6.24.06.source.tar.gz
+---> /home/morii/admin/root/root_v6.24.06.source.tar.gz
+
+(By morii)
+% cd /home/morii/admin/root
+% tar xvfz root_v6.24.06.source.tar.gz
+---> root-6.24.06
+
+(By root)
+# mkdir -p /soft/root/6.24.06
+# chown morii /soft/root/6.24.06
+
+(By morii)
+% cd /home/morii/admin/root/
+% mkdir builddir_6.24.06
+% cd builddir_6.24.06
+
+% cmake ../root-6.24.06 -DCMAKE_INSTALL_PREFIX=/soft/root/6.24.06 \
+  -Dbuiltin_fftw3=ON -Dbuiltin_gsl=ON -Dmemstat=ON -Dminuit2=ON \
+  -Dgnuinstall=OFF -Drpath=ON
+
+# If rpath is set to OFF, errors something like below will happen, 
+# when linking root library to your own program.
+#   /usr/bin/ld: warning: libtbb.so.2, needed by /soft/root/6.24.06/lib/libImt.so, 
+#   not found (try using -rpath or -rpath-link)
+#   /usr/bin/ld: warning: libvdt.so, needed by /soft/root/6.24.06/lib/libROOTVecOps.so,
+#   not found (try using -rpath or -rpath-link)
+#   /soft/root/6.24.06/lib/libImt.so: undefined reference to 
+#   `tbb::task::note_affinity(unsigned short)'
+#   ....
+# -Dgnuinstall=OFF: location independent installation
+
+
+#-Dmathmore=ON
+#-Dgsl_shared=ON 
+#-Dgminimal=ON
+
+% cmake --build .
+( or % make -j 4)
+# At first, use the command "make -j <# of cores>",
+# then you can find some errors soon,
+# if your setup of compilation is incomplete.
+
+% cmake --build . --target install
+
+(By root)
+# chown -R root /soft/root/6.24.06
+
+#
+# Installation of GSL
+#
+
+# GSL is already included in cern/root by using 
+# -Dbuiltin_gsl=ON flag at the cmake step of the root installation.
+# However, it is difficult to use GSL functions contained
+# in the root library.
+# Here, GSL is installed directly.
+
+Follow the instruction at https://www.gnu.org/software/gsl/ .
+gsl-latest.tar.gz
+(download) --> /home/morii/admin/gsl/gsl-latest.tar.gz
+
+(By morii)
+% cd /home/morii/admin/gsl
+% tar xvfz gsl-latest.tar.gz
+---> gsl-2.7.1
+
+(By root)
+# mkdir -p /soft/gsl/2.7.1
+# chown morii /soft/gsl/2.7.1
+
+(By morii)
+% cd /home/morii/admin/gsl/gsl-2.7.1
+% ./configure --prefix=/soft/gsl/2.7.1
+% make
+% make install
+
+(By root)
+# chown -R root /soft/gsl/2.7.1
+
+
+#
+# blas library
+#
+
+blas is already included in GSL.
+But, here we use blas functions directly.
+
+http://www.netlib.org/blas/
+REFERENCE BLAS Version 3.10.0
+download -->
+/home/morii/admin/blas/blas-3.10.0.tgz
+
+(By root)
+# mkdir -p /soft/blas/3.10.0/lib
+# chown -R morii /soft/blas/3.10.0
+
+(By morii)
+cd /home/morii/admin/blas
+tar xvfz blas-3.7.0.tgz
+cd /home/morii/admin/blas/BLAS-3.10.0
+make > make.log 2>&1 & 
+output --->
+/home/morii/admin/blas/BLAS-3.10.0/blas_LINUX.a
+
+cp /home/morii/admin/blas/BLAS-3.10.0/blas_LINUX.a \
+/soft/blas/3.10.0/lib/libblas.a
+ranlib /soft/blas/3.10.0/lib/libblas.a
+
+(By root)
+# chown -R root /soft/blas/3.10.0
+
+
+#
+# lapack library
+#
+
+http://www.netlib.org/lapack/
+(download) ---> 
+/home/morii/admin/lapack/lapack-3.10.1.tar.gz
+
+(By root)
+# mkdir -p /soft/lapack/3.10.1/lib
+# chown -R morii /soft/lapack/3.10.1
+
+(By morii)
+cd /home/morii/admin/lapack
+tar xvfz lapack-3.10.1.tar.gz
+cd /home/morii/admin/lapack/lapack-3.10.1
+cp make.inc.example make.inc
+
+make > make.log 2>&1 & 
+
+# If you have errors in Testing step, set as follows:
+# ulimit -s 65000
+# and make again.
+
+output --->
+/home/morii/admin/lapack/lapack-3.10.1/
+liblapack.a  libtmglib.a  librefblas.a
+
+cp /home/morii/admin/lapack/lapack-3.10.1/liblapack.a \
+   /home/morii/admin/lapack/lapack-3.10.1/libtmglib.a \
+   /home/morii/admin/lapack/lapack-3.10.1/librefblas.a \
+   /soft/lapack/3.10.1/lib
+ranlib /soft/lapack/3.10.1/lib/liblapack.a
+ranlib /soft/lapack/3.10.1/lib/libtmglib.a
+ranlib /soft/lapack/3.10.1/lib/librefblas.a
+
+(By root)
+# chown -R root /soft/lapack/3.10.1
+
+
+
+#
+# Installation of mitool
+#
+
+(By root)
+# mkdir /soft/mitool
+# chown morii /soft/mitool
+
+cd /soft/mitool
+mkdir YYMMDD
+cd YYMMDD
+git clone https://<your account name>@github.com/moriiism/mitool.git
+
+emacs Makefile.in &
+emacs setup/setup.sh &
+
+cd /soft/mitool/YYMMDD
+
+source setup/setup.sh
+make > make.log 2>&1 &
+tail -f make.log
+
+make test > make_test.log 2>&1 &
+tail -f make_test.log
+
+# Check make.log and remove compile errors and warnings
+# If you find bugs, please contact with Mikio Morii.
+
+---------------------------------------------------------------------
+
+#
+# Optional steps
+#
+
+#
+# heasoft
+#
+
+https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
+# select mission: MAXI and Suzaku
+# qdp is included in XANADU package.
+(download) --> /home/morii/admin/heasoft/heasoft-6.30.1src.tar.gz
+
+% cd /home/morii/admin/heasoft/
+% tar xvfz heasoft-6.30.1src.tar.gz
+
+(By root)
+# mkdir -p /soft/heasoft/6.30.1
+# chown -R morii /soft/heasoft/6.30.1
+
+(By morii)
+## New compiler is neccessary.
+## If you install new gcc compiler, set as follows:
+% export PATH=/soft/gcc/9.4.0/bin:$PATH
+% export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/9.4.0/lib64
+## Otherwise, set as follows:
+# yum install centos-release-scl-rh
+# yum install -y devtoolset-7
+% scl enable devtoolset-7 bash
+## You can check the location of gcc compiler by
+% which gcc
+
+## Use screen
+% screen
+
+% cd /home/morii/admin/heasoft/heasoft-6.30.1/BUILD_DIR
+% ./configure --prefix=/soft/heasoft/6.30.1 > config.txt 2>&1 &
+% make > build.log 2>&1 &
+% make install > install.log 2>&1 &
+
+
+#
+# OpenBLAS library
+#
+
+http://www.openblas.net/
+https://github.com/xianyi/OpenBLAS/wiki/Download
+---> 
+/home/morii/admin/OpenBLAS/xianyi-OpenBLAS-v0.2.19-2-gbcfc298.zip
+
+(By morii)
+cd /home/morii/admin/OpenBLAS
+unzip xianyi-OpenBLAS-v0.2.19-2-gbcfc298.zip
+
+(By root)
+# mkdir -p /soft/OpenBLAS/bcfc298
+# chown -R morii /soft/OpenBLAS/bcfc298
+
+(By morii)
+cd /home/morii/admin/OpenBLAS/xianyi-OpenBLAS-bcfc298
+make > make.log 2>&1 & 
+make PREFIX=/soft/OpenBLAS/bcfc298 install
+
+(By root)
+# chown -R root /soft/OpenBLAS/bcfc298
+
