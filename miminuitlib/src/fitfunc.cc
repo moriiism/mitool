@@ -390,19 +390,19 @@ void FitFunc::GenParSearch1d(const FitStat* const* const* const fit_stat_arr,
         sprintf(title_tail, "%2.2d", index_par);
             
         char chi2_title[kLineSize];
-        sprintf(chi2_title, "chi2_%s", title_tail);
+        sprintf(chi2_title, "chi2_%.5s", title_tail);
         hist_chi2_arr[ipar] = new HistDataNerr1d(chi2_title);
 
         char valid_title[kLineSize];
-        sprintf(valid_title, "valid_%s", title_tail);
+        sprintf(valid_title, "valid_%.5s", title_tail);
         hist_valid_arr[ipar] = new HistDataNerr1d(valid_title);
 
         char edm_title[kLineSize];
-        sprintf(edm_title, "edm_%s", title_tail);
+        sprintf(edm_title, "edm_%.5s", title_tail);
         hist_edm_arr[ipar] = new HistDataNerr1d(edm_title);
 
         char flag_bad_neg_title[kLineSize];
-        sprintf(flag_bad_neg_title, "flag_bad_neg_%s", title_tail);
+        sprintf(flag_bad_neg_title, "flag_bad_neg_%.5s", title_tail);
         hist_flag_bad_neg_arr[ipar] = new HistDataNerr1d(flag_bad_neg_title);
     }
 
@@ -455,7 +455,7 @@ void FitFunc::GenParSearch1d(const FitStat* const* const* const fit_stat_arr,
         for(int inum = 0; inum < num_index1; inum ++){
             int index1 = chi2plot_par->GetIndex1ArrElm(ipar, inum);
             char index1_title[kLineSize];
-            sprintf(index1_title, "index1_%s_%2.2d", title_tail, index1);
+            sprintf(index1_title, "index1_%.5s_%2.2d", title_tail, index1);
             hist_index1_arr[ipar][inum] = new HistDataNerr1d(index1_title);
         }
     }
@@ -652,19 +652,19 @@ void FitFunc::GenParSearch2d(const FitStat* const* const* const* const fit_stat_
         sprintf(title_tail, "%2.2d-%2.2d", index0, index1);
             
         char chi2_title[kLineSize];
-        sprintf(chi2_title, "chi2_cont_%s", title_tail);
+        sprintf(chi2_title, "chi2_cont_%.10s", title_tail);
         hist_chi2_cont_arr[icont] = new HistDataNerr2d(chi2_title);
 
         char valid_title[kLineSize];
-        sprintf(valid_title, "valid_cont_%s", title_tail);
+        sprintf(valid_title, "valid_cont_%.10s", title_tail);
         hist_valid_cont_arr[icont] = new HistDataNerr2d(valid_title);
 
         char edm_title[kLineSize];
-        sprintf(edm_title, "edm_cont_%s", title_tail);
+        sprintf(edm_title, "edm_cont_%.10s", title_tail);
         hist_edm_cont_arr[icont] = new HistDataNerr2d(edm_title);
 
         char flag_bad_neg_title[kLineSize];
-        sprintf(flag_bad_neg_title, "flag_bad_neg_cont_%s", title_tail);
+        sprintf(flag_bad_neg_title, "flag_bad_neg_cont_%.10s", title_tail);
         hist_flag_bad_neg_cont_arr[icont] = new HistDataNerr2d(flag_bad_neg_title);
     }
 
@@ -737,7 +737,7 @@ void FitFunc::GenParSearch2d(const FitStat* const* const* const* const fit_stat_
         for(int inum = 0; inum < num_index2; inum ++){
             int index2 = chi2plot_cont_par->GetIndex2ArrElm(icont, inum);
             char index2_title[kLineSize];
-            sprintf(index2_title, "index2-%2.2d_cont_%s", index2, title_tail);
+            sprintf(index2_title, "index2-%2.2d_cont_%.10s", index2, title_tail);
             hist_index2_cont_arr[icont][inum] = new HistDataNerr2d(index2_title);
         }
     }
@@ -871,8 +871,8 @@ void FitFunc::GenFitStatHG(FILE* fp_log, MinFcn* const minfcn, const FitParam* c
         if(NULL == chi2plot_par &&
            NULL == chi2plot_cont_par){
             if(1 == function_minimum.IsValid() &&
-               ! isnan(function_minimum.Edm()) &&
-               ! isinf(function_minimum.Edm())   ){
+               ! std::isnan(function_minimum.Edm()) &&
+               ! std::isinf(function_minimum.Edm())   ){
                 GetAsymErr(minfcn, fit_param,
                            function_minimum,                       
                            fit_stat,
@@ -1252,8 +1252,8 @@ void FitFunc::GenFitStatHG(FILE* fp_log, MinFcn* const minfcn, const FitParam* c
                                                                      tolerance, maxfcn);
         if(1 == fit_param_for_fit_again->IsCalcTerr()){
             if(1 == function_minimum.IsValid() &&
-               ! isnan(function_minimum.Edm()) &&
-               ! isinf(function_minimum.Edm())   ){
+               ! std::isnan(function_minimum.Edm()) &&
+               ! std::isinf(function_minimum.Edm())   ){
                 GetAsymErr(minfcn, fit_param_for_fit_again,
                            function_minimum,
                            fit_stat_for_fit_again,

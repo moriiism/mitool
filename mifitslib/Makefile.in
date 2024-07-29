@@ -12,9 +12,9 @@
 #	-I/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/include
 #CFITSIO_LIB := -L/soft/heasoft/6.16/x86_64-unknown-linux-gnu-libc2.17/lib -lcfitsio_3.37
 
-CFITSIO_INC := -I/soft/heasoft/heasoft-6.30.1/x86_64-pc-linux-gnu-libc2.31/include
+CFITSIO_INC := -I/soft/heasoft/6.33.2/x86_64-pc-linux-gnu-libc2.39/include
 
-CFITSIO_LIB := -L/soft/heasoft/heasoft-6.30.1/x86_64-pc-linux-gnu-libc2.31/lib -lcfitsio
+CFITSIO_LIB := -L/soft/heasoft/6.33.2/x86_64-pc-linux-gnu-libc2.39/lib -lcfitsio
 
 ### mifitslib
 MIFITSLIB_DIR := ${MITOOL_DIR}/mifitslib

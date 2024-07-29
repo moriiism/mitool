@@ -46,7 +46,7 @@ double MinFcn::GetUpMinfcn(double value, string mode, int as_npar)
     }
     //  double up_minfcn = ROOT::Math::chisquared_quantile(confidence_level, as_npar);
     //    double up_minfcn = ROOT::MathMore::chisquared_quantile(confidence_level, as_npar);
-    double up_minfcn = ROOT::MathMore::chisquared_quantile(confidence_level, as_npar);
+    double up_minfcn = ROOT::Math::chisquared_quantile(confidence_level, as_npar);
     return up_minfcn;
 }
 

@@ -2,7 +2,9 @@
 #define MORIIISM_MITOOL_MIMINUITLIB_MINFCN_H_
 
 #include "Minuit2/FCNBase.h"
-#include "Math/QuantFuncMathMore.h"
+//#include "Math/QuantFuncMathMore.h"
+#include "Math/QuantFuncMathCore.h"
+
 
 #include "mir_func.h"
 #include "mir_hist1d_nerr.h"

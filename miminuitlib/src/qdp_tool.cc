@@ -191,10 +191,10 @@ void MimQdpTool::MkQdpCont(const HistData2d* const h2d,
     sprintf(cmd_lst, "CONT  1 LSTYL ");
     sprintf(cmd_lw, "CONT  1 LWID ");
     for(int icont = 0; icont < ncont; icont++){
-        sprintf(cmd_cont, "%s  %.15e  ", cmd_cont, cont_level_arr[icont]);
-        sprintf(cmd_col,  "%s  %d  ", cmd_col, icont + 1);
-        sprintf(cmd_lst,  "%s  %d  ", cmd_lst, 1);
-        sprintf(cmd_lw,   "%s  %d  ", cmd_lw,  5);
+        sprintf(cmd_cont, "%.100s  %.15e  ", cmd_cont, cont_level_arr[icont]);
+        sprintf(cmd_col,  "%.100s  %d  ", cmd_col, icont + 1);
+        sprintf(cmd_lst,  "%.100s  %d  ", cmd_lst, 1);
+        sprintf(cmd_lw,   "%.100s  %d  ", cmd_lw,  5);
     }
     fprintf(fp, "%s\n", cmd_cont);
     fprintf(fp, "%s\n", cmd_col);
